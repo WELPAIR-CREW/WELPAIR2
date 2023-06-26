@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,10 +63,14 @@ public class InventoryController {
         System.out.println("-------------컨트롤러 1-2 -------------");
         System.out.println("searchCode = " + searchCode);
 
-        System.out.println(inventoryService);
-        List<ProductDTO> productList = inventoryService.searchProductByCode(searchCode);
-        System.out.println("==================== 1-2 =============");
-        model.addAttribute("productList", productList);
+        if(searchCode != null){
+            List<ProductDTO> productList = inventoryService.searchProductByCode(searchCode);
+            System.out.println("==================== 1-2 =============");
+            model.addAttribute("productList", productList);
+        } else {
+            model.addAttribute("productList", Collections.emptyList());
+        }
+
         return "admin/inventory/admin_inventory";
     }
 
