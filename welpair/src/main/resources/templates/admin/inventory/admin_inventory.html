@@ -37,12 +37,13 @@
   <div class="section-content">
     <div class="section-title">재고현황</div>
 
-    <!-- 1.현재기준 간단 기본 정보 출력 (★수정 필요★)-->
-    <div class="section-invenMain">
+    <!-- 1.현재기준 간단 기본 정보 출력 -->
+    <div class="section-invenMain" id="getInventoryInfo">
       <span class="section-invenMain-list"><strong>총 재고수량</strong></span>
-      <span><p id="totalInvenAmount"></p></span>
+      <span><p id="totalInvenAmount" th:text="${totalInvenAmount}"></p></span>
       <span class="section-invenMain-list"><strong>위험재고 상품수</strong></span>
-      <span><p id="alertStock"></p></span>
+      <span><p id="alertStock" th:text="${alertStock}"></p></span>
+
     </div>
 
     <!-- 2. 상품코드 검색하여 결과 값 출력 -->
@@ -51,7 +52,7 @@
           <input name="searchCode" id="searchCode" type="text" class="section-historySearch-input product-code" placeholder="상품 코드 입력">
       </span>
       <div class="section-invenMain-search-btn">
-        <input type="submit" id="productCodeInput" class="btn_basic" value="검색">
+        <button type="submit" id="productCodeInput" class="btn_basic">검색</button>
       </div>
     </form>
     <div>
@@ -83,50 +84,28 @@
 
 
   // 1-1. 기본 정보 출력
-  function fetchInvenInfo() {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        var inventoryInfo = JSON.parse(xhr.responseText);
-        document.getElementById("totalInvenAmount").innerText = inventoryInfo.totalInvenAmount;
-        document.getElementById("alertStock").innerText = inventoryInfo.alertStock;
+
+  $(document).ready(function() {
+    $.ajax({
+      url: "/inventory/getInventoryInfo",
+      dataType: "json",
+      method: "GET",
+      success: function(response) {
+
+        $("#totalInvenAmount").text(response.totalInvenAmount.toLocaleString());
+        $("#alertStock").text(response.alertStock.toLocaleString());
+
+        console.log(response);
+        console.log(response.totalInvenAmount);
+        console.log(response.alertStock);
+      },
+      error: function(xhr, status, error) {
+        console.log(xhr);
+        console.log(status);
+        console.log(error);
       }
-    };
-    xhr.open("POST", "/getInventoryInfo", true);
-    xhr.send();
-  }
-  window.addEventListener("load", function() {
-    fetchInvenInfo();
+    });
   });
-
-
-  // // 1-2. 상품코드 검색
-  // $('#productCodeInput').click(function() {
-  //
-  //   let productCode = $("#searchCode").val();
-  //   let data = { productCode : productCode };
-  //
-  //     $.ajax({
-  //       url: "/inventory/admin_inventory",
-  //       method: "post",
-  //       data: data,
-  //       success: function (response) {  // 요청이 성공한 경우 실행할 함수
-  //         console.log("AJAX 요청 성공");
-  //         console.log(response);  // 서버로부터의 응답 데이터
-  //
-  //       },
-  //       error: function (status, error) {  // 요청이 실패한 경우 실행할 함수
-  //         console.log("AJAX 요청 실패");
-  //         console.log(status);  // 오류 상태
-  //         console.log(error);  // 오류 메시지
-  //       }
-  //     });
-  //
-  // });
-
-
-
-
 
 </script>
 </body>

@@ -9,7 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -24,45 +27,28 @@ public class InventoryController {
     }
 
 
-//    @GetMapping("{url}")
-//    public String adminInventory(@PathVariable String url) {
-//        return "admin/inventory/" + url;
-//    }
-
-
     /**
      * 재고관리 메뉴 (ng)
      * 1. 재고현황 페이지
      * 1-1. 상단부 현재기준 현황 출력 (총 재고수량, 위험재고 상품수)
      */
     @GetMapping("/getInventoryInfo")
-    public String getInvenInfo(Model model){
+    @ResponseBody
+    public Map<String, Integer> getInvenInfo(Model model){
         System.out.println("-------------컨트롤러 1-1 -------------");
 
         int totalInvenAmount = inventoryService.getTotalInventoryAmount();
         int alertStock = inventoryService.getNumberOfAlertStock();
 
-        model.addAttribute("totalInvenAmount", totalInvenAmount);
-        model.addAttribute("alertStock", alertStock);
+        Map<String, Integer> inventoryInfo = new HashMap<>();
+        inventoryInfo.put("totalInvenAmount", totalInvenAmount);
+        inventoryInfo.put("alertStock", alertStock);
 
         System.out.println("totalInvenAmount = " + totalInvenAmount);
         System.out.println("alertStock = " + alertStock);
 
-        return "admin/inventory/admin_inventory";
+        return inventoryInfo;
     }
-
-
-//    @PostMapping("/getInventoryInfo")
-//    public Map<String, Integer> getInventoryInfo(){
-//        System.out.println("-------------컨트롤러 1-1 -------------");
-//        Map<String, Integer> inventoryInfo = new HashMap<>();
-//        inventoryInfo.put("totalInvenAmount", inventoryService.getTotalInventoryAmount());
-//        inventoryInfo.put("alertStock", inventoryService.getNumberOfAlertStock());
-//        return inventoryInfo;
-//    }
-
-
-
 
     /**
      * 재고관리 메뉴 (ng)
@@ -72,9 +58,9 @@ public class InventoryController {
 
     @GetMapping("admin_inventory")
     public String searchProductByCode(Model model, @RequestParam(required = false) String searchCode) {
+
         System.out.println("-------------컨트롤러 1-2 -------------");
         System.out.println("searchCode = " + searchCode);
-
 
         System.out.println(inventoryService);
         List<ProductDTO> productList = inventoryService.searchProductByCode(searchCode);
@@ -82,6 +68,7 @@ public class InventoryController {
         model.addAttribute("productList", productList);
         return "admin/inventory/admin_inventory";
     }
+
 
     /**
      * 재고관리 메뉴 (ng)
