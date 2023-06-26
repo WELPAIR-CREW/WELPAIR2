@@ -6,6 +6,7 @@ import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -23,6 +24,7 @@ public class OrderServiceImpl implements OrderService {
         return sellProductMapper.findSellProductById(productId);
     }
 
+    @Transactional
     @Override
     public int addcart(String empNo) {
         return orderMapper.addcart(empNo);
@@ -33,6 +35,7 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.selectCartNo();
     }
 
+    @Transactional
     @Override
     public int addCartSellProduct(CartSellProductDTO cartSellProduct) {
         return orderMapper.addCartSellProduct(cartSellProduct);

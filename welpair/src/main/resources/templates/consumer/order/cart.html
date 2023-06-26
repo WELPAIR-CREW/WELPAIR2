@@ -9,13 +9,12 @@
     <link rel="stylesheet" href="../common/css/main.css">
     <link rel="stylesheet" href="../common/css/footer.css">
 
-    <!-- script -->
     <script src="../common/js/static/include.js"></script>
 
     <title>cart</title>
 </head>
 <!-- 헤더 -->
-<div data-include-html="../admin/header_admin.html" class="include"></div>
+<div data-include-html="/admin/header_admin" class="include"></div>
 
 <!-- 장바구니 시작 -->
 
@@ -25,16 +24,13 @@
 
     <!-- 카트 컨테이너 시작 -->
     <div id="cart_container">
-
         <!-- 상품 컨테이너 시작 -->
         <div id="prd_container" class="prd_box">
-
             <!-- 카트상품 헤더 -->
             <div class="title_cart_header">
                 <!-- 카트상품 타이틀 -->
                 <div id="title_cart">장바구니</div>
             </div>
-
             <!-- 카트상품 선택박스  -->
             <!-- <div> -->
             <ul class="cart_option">
@@ -50,7 +46,6 @@
                     <button type="button" class="btn_del"><span>선택삭제</span></button>
                 </li>
             </ul>
-
             <!-- 카트상품 옵션카테고리 -->
             <div class="cart_option_box">
                 <ul class="cart_option_ul">
@@ -71,6 +66,22 @@
                     이벤트 발생시 생기는 리스트임
                     기본케이스
                 -->
+                    <table class="cart_info_box">
+                        <tr class="cart_order_prd">
+                            <td>
+                                <input type="checkbox" class="cart_select">
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+
+
+                    </table>
+
                     <li id="cart_basic_case-1">
                         <!-- 상품 info 박스 -->
                         <div class="cart_info_box">
@@ -179,7 +190,7 @@
 
 
 <!-- footer -->
-<div data-include-html="../admin/footer.html" class="include"></div>
+<div data-include-html="/admin/footer" class="include"></div>
 </body>
 
 </html>
