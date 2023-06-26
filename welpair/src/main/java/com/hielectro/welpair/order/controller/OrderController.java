@@ -40,7 +40,7 @@ public class OrderController {
 
         // 그 전에 판매상품 ID를 통해 실제 존재하는 상품이며, 수량이 정상적인 수량인지 체크한다.
         SellProductDTO sellProduct =
-                orderServiceImpl.checkoutSellProductId(cartSellProduct.getSellProductId());
+                orderServiceImpl.findSellProductById(cartSellProduct.getSellProductId());
 
         // 회원정보도 조회한다.
 //        MemberDTO member = orderService.checkoutMemberById(empNo);

@@ -10,5 +10,5 @@ import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 public interface SellProductMapper {
     List<SellProductDTO> findSellProductByPageNo(int pageNo);
     int sellProductTotalCount();
-    int findSellProductById(String productId);
+    SellProductDTO findSellProductById(String productId);
 }
