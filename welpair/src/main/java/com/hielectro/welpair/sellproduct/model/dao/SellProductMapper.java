@@ -1,12 +1,13 @@
-package com.hielectro.welpair.product.model.dao;
+package com.hielectro.welpair.sellproduct.model.dao;
 
-import com.hielectro.welpair.product.model.dto.SellProductDTO;
 import org.apache.ibatis.annotations.Mapper;
+
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 
 import java.util.List;
 
 @Mapper
-public interface ProductMapper {
+public interface SellProductMapper {
     List<SellProductDTO> findSellProductByPageNo(int pageNo);
     int sellProductTotalCount();
 }
