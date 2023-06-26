@@ -1,0 +1,53 @@
+
+html {
+    margin: auto;
+    width: 1440px;
+
+}
+
+
+/* 랑크 흔적 보라색 없애기 */
+a { text-decoration: none; color: black; }
+a:visited { text-decoration: none; }
+a:hover { text-decoration: none; }
+a:focus { text-decoration: none; }
+a:hover, a:active { text-decoration: none; }
+
+
+
+.payment_result_container {
+    text-align: center;
+
+    align-content: center;
+    
+}
+
+.text_container {
+    transform: translateX(50%);
+    transform: translateY(50%);
+    /* width: 400px; */
+    height: 400px;
+    font-weight: bold;
+    font-size: 30px;
+
+    margin-bottom: 200px;
+}
+
+.btn {
+
+    text-align: center;
+}
+
+
+button {
+    display: inline-block;
+    font-size: 30px;
+    margin: 20px;
+    width: 250px;
+    height: 70px;
+    background-color: black;
+    color: white;
+    border-radius: 6px;
+
+}
+

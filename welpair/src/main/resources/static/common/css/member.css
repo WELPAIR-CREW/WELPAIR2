@@ -1,0 +1,464 @@
+/* @main.css 설정에 맞게 클래스명 수정하기 */
+/* @div 범주 수정 */
+/* @너비 높이 위치 색상 통일하기 */
+/* @공통요소 메인과 병합, 따로 작성해야하는 것만 */
+
+
+/* 하이퍼링크 색 */
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+a:hover {
+    color: #d9d9d9;
+}
+
+/* 체크박스 체크시 색상 */
+input[type=checkbox] {
+    accent-color: lavender;
+    
+}
+
+
+.container {
+
+    width: 1280px;
+    height: 656px;
+
+    /* 수평 가운데 정렬 */
+    margin: 0 auto;
+    margin-top: 50px;
+
+    /* 하위 div요소들이 가로방향으로 위치하도록 */
+    display: flex;
+}
+
+
+.navs {
+    /* main 복붙값*/
+    box-sizing: border-box;
+    width: 200px;
+    height: 588px;
+    background-color: #f8f7f7;
+    text-align: right;
+    padding: 60px 0px;
+    padding-right: 26px;
+}
+
+/* main 복붙값*/
+.navs>.nav-menu:not(:first-child) {
+    margin-top: 36px;
+}
+
+/* main 복붙값*/
+.nav-menu {
+    font-size: 18px
+}
+
+
+
+
+.section-title {
+    /* main 복붙값*/
+    height: 54px;
+    font-size: 26px;
+    font-weight: bold;
+    border-bottom: 4px solid black;
+
+    margin-left: 30px;
+    margin-bottom: -30px;
+}
+
+
+
+
+.contents {
+    /* main 복붙값*/
+    box-sizing: border-box;
+    margin-left: 32px;
+    /* width: 940px; */
+    width: 1000px;
+    height: 656px;
+
+    /* 가운데 정렬 */
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+
+}
+
+
+.over-table {
+    /*  플렉스 컨테이너의 시작 부분에 (교차축) 요소를 정렬 (수직 배치됨) */
+    align-self: flex-start;
+    margin-left: 100px;
+    margin-bottom: 10px;
+
+    font-size: 20px;
+}
+
+.count-row {
+    margin-right: 20px;
+}
+
+.under-table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-top: 10px;
+}
+
+.search-input {
+    border: 1px solid #A9A9A9;
+    border-radius: 20px;
+    padding: 3px;
+    margin-bottom: 8px;
+
+    height: 16px;
+}
+
+.button-circle {
+    background: white;
+    border: 1px solid #A9A9A9;
+    border-radius: 20px;
+    padding: 3px;
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+.paging {
+    font-size: 16px;
+}
+
+
+
+.button-square1 {
+    color: white;
+    background: #333333;
+    border-radius: 6px;
+    padding: 3px;
+    cursor: pointer;
+
+    margin-left: 270px;
+    font-size: 17px;
+}
+
+
+
+/* 테이블 요소 */
+.checkbox-cell {
+    border: none;
+    background: none;
+    transform: scale(1.5);
+
+    padding-right: 14px;
+}
+
+
+
+
+
+table {
+    /* 이웃한 셀 테두리는 하나로 합치기 */
+    border-collapse: collapse;
+    /* 데이터 길이에 따라 열 너비 가변 */
+    table-layout: auto;
+
+    width: 900px;
+    font-size: 18px;
+
+}
+
+th {
+    background: #e9e9e9;
+
+    /* 셀 내용과 테두리 사이 공간*/
+    padding: 8px;
+    /* 셀 테두리 */
+    text-align: center;
+
+}
+
+
+td {
+
+    /* 셀 내용과 테두리 사이 공간*/
+    padding: 8px;
+    /* 셀 테두리 */
+    text-align: center;
+
+}
+
+
+
+
+
+/* 토글 버튼 */
+.toggle {
+    display: inline-block;
+    border: 2px solid #d9d9d9;
+    border-radius: 20px;
+    padding: 4px;
+    background-color: #ffffff;
+    /* 커서 변화 */
+    cursor: pointer;
+    /* 버튼테두리 색 변화 */
+    transition: border-color 0.3s ease;
+
+    font-size: 17px;
+}
+
+.toggle.clicked {
+    border-color: #4F378B;
+    color: #4F378B;
+}
+
+.toggle:hover {
+    background-color: #e9e9e9;
+    border: 2px solid #4F378B;
+}
+
+
+
+
+
+/* member-regist1 */
+
+.over-table2 {
+    /*  플렉스 컨테이너의 시작 부분에 (교차축) 요소를 정렬 (수직 배치됨) */
+    align-self: flex-start;
+    margin-left: 60px;
+    margin-bottom: 10px;
+
+    font-size: 20px;
+}
+
+#calendar {
+    margin-left: 150px;
+    margin-bottom: -5px;
+}
+
+.select-date {
+    font-size: 16px;
+}
+
+.button-square2 {
+    background: #ffffff;
+    border: 2px solid #d9d9d9;
+    border-radius: 6px;
+    padding: 3px;
+    cursor: pointer;
+
+    /* margin-left: 270px; */
+    font-size: 14px;
+}
+
+
+
+
+/* member-regist2 */
+.form-group {
+
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    width: 150px;
+    text-align: left;
+    margin-right: 10px;
+}
+
+.form-group input {
+    border-radius: 6px;
+    height: 35px;
+    width: 280px;
+    font-size: 18px;
+    padding-left: 10px;
+    border: 1px solid rgb(158, 158, 158);
+}
+
+.form-group input:focus {
+    border-color: #e9e9e9;
+    background: #e9e9e9;
+    outline:none;
+}
+
+.wide-button {
+    background: #ffffff;
+    border-radius: 6px;
+    width: 224px;
+    height: 45px;
+    font-size: 18px;
+    margin-top: 20px;
+    border: 1.5px solid #333333;
+}
+
+
+.wide-button.dark {
+    color:#ffffff;
+    background: #333333;
+    cursor: pointer;
+}
+
+
+/* member-permission */
+.button-square3 {
+    font-size: 18px;
+    color: white;
+    background: #333333;
+    border-radius: 6px;
+    padding: 3px;
+    cursor: pointer;
+    outline: none;
+    border: 1px solid #333333;
+}
+
+.button-square3.second {
+    background-color: white;
+    border: 1px solid #A9A9A9;
+    color: #000000;
+}
+
+.buttons {
+    margin-left: 570px;
+}
+
+
+/* member-givePoint */
+
+.container.long {
+    /* height: 656px; 
+    +244만큼 페이지 길이 추가 */
+    height: 900px;
+}
+
+.navs.long {
+    /* height: 588px; 동일하게 추가 */
+    height: 832px;
+}
+
+.section-title.long { 
+    /* 타이틀과 컨텐츠 간격 조정*/
+    margin-bottom: 50px;
+}
+
+.search-list.top {
+    /* align-self: flex-start; */
+    margin-left: auto;
+    margin-right: 60px;
+    margin-bottom: 10px;
+}
+
+
+
+#form-point {
+    margin-top: 50px;
+    align-self: flex-start;
+    margin-left: 50px;
+    font-size: 18px;
+}
+
+#amount-summary {
+    color: rgb(158, 7, 228);
+}
+
+
+
+.form-group2 {
+
+    font-size: 16px;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.form-group2 > :first-child {
+    width: 130px;
+}
+
+
+.form-group2 label {
+    font-weight: bold;
+    /* width: 150px; */
+    text-align: left;
+    margin-right: 10px;
+}
+
+.form-group2 select {
+    margin-left: -8px;
+}
+
+.form-group2 input {
+    border-radius: 6px;
+    width: 100px;
+    font-size: 16px;
+    padding-left: 10px;
+    border: 1px solid #333333;
+    margin-right: 10px;
+
+    margin-left: -8px;
+}
+
+.form-group2 input:focus {
+    outline:none;
+    border: 2px solid rgb(158, 7, 228);
+}
+
+.button-square3.point {
+    font-size: 14px;
+    margin-left: 15px;
+}
+
+.button-square3.point:hover {
+    border-color: rgb(154, 84, 186);
+    background-color: rgb(154, 84, 186);
+}
+
+
+/* givePointHistory */
+.under-table.givepoint-history1 {
+    margin-top: 15px;
+}
+
+.small-title {
+    font-size: 20px;
+    font-weight: bold;
+
+    align-self: flex-start;
+    margin-left: 50px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    
+}
+
+.small-title2 {
+
+    font-size: 18px;
+    align-self: flex-start;
+    margin-left: 55px;
+    margin-bottom: 10px;
+}
+
+/* givePointHistory2 */
+#table-givepointhistory2 {
+
+    margin-top:0;
+    margin-bottom:auto;
+}
+
+#summary-givepointhistory2 {
+    align-self: flex-start;
+    margin-left: 700px;
+    font-size: 18px;
+
+    margin-top: -100px;
+    margin-bottom: auto;
+} 
