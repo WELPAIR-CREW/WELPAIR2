@@ -9,5 +9,5 @@ public interface SellProductService {
 
     public int sellProductTotalCount();
 
-    public int findSellProductById(String productId);
+    public SellProductDTO findSellProductById(String productId);
 }

@@ -45,7 +45,7 @@ public class SellProductController {
     
     @PostMapping("findSellProductById")
     @ResponseBody
-    public int findSellProductById(@RequestParam String id) {
+    public SellProductDTO findSellProductById(@RequestParam String id) {
         return productService.findSellProductById(id);
     }
 }

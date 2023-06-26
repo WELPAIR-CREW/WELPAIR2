@@ -24,7 +24,7 @@ public class SellProductServiceImpl implements SellProductService {
     }
 
     @Override
-    public int findSellProductById(String productId) {
+    public SellProductDTO findSellProductById(String productId) {
         return productMapper.findSellProductById(productId);
     }
 }
