@@ -65,7 +65,7 @@
            AND RN &lt;= ( ${ pageNo } * 10)
 
     </select>
-    <select id='findSellProductById' resultType="_int">
+    <select id='findSellProductById' resultMap="SellProductResultMap">
         SELECT
                *
           FROM T_SELL_PRODUCT
