@@ -1,0 +1,33 @@
+footer {
+    position: relative;
+    display: flex;
+    width: 1440px;
+    height: 222px;
+    bottom: 0%;
+    border-top: 2px solid black;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+footer > * {
+    position: absolute;
+}
+
+.footer-image {
+    width: 130px;
+    height: 23px;
+    left: 140px;
+    top: 60px;
+}
+
+#company {
+    left: 340px;
+    top: 60px;
+}
+
+#address {
+    left: 340px;
+    top: 104px;
+}

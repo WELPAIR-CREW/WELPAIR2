@@ -1,0 +1,376 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+section {
+    display: flex;
+    width: 1280px;
+    height: 656px;
+    /* margin: 0 auto; */
+    margin-top: 50px;
+}
+
+input {border: 1px solid black;}
+
+.inven-list {
+    position: relative;
+    width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* left navi */
+.section-nav {
+    box-sizing: border-box;
+    width: 200px;
+    height: 588px;
+    background-color: #f8f7f7;
+    text-align: right;
+    padding: 60px 0px;
+    padding-right: 26px;
+}
+
+.section-nav>.section-nav-category:not(:first-child) {margin-top: 36px;}
+
+.section-nav-category {font-size: 18px}
+
+/* contents */
+.section-content {
+    position: relative;
+    box-sizing: border-box;
+    padding-bottom: 10px;
+    margin-left: 30px;
+    width: 1050px;
+    height: auto;
+}
+
+.section-title {
+    height: 54px;
+    font-size: 26px;
+    font-weight: bold;
+    border-bottom: 4px solid black;
+}
+
+
+
+/* 재고관리 메인- 재고현황*/
+.section-invenMain{
+	display: flex;
+	justify-content: space-between;
+	list-style-type: none;
+	padding: 0;
+	margin: 30px 50px 200px 50px;
+	flex-basis: 33%;
+	font-size: 20px;
+	text-align: center;
+    align-items: center;
+}
+
+.section-invenMain-list{
+	margin: 10px;
+	font-size: 20px;
+	font-weight: bold;
+
+}
+
+.section-invenMain-search{
+    display:flex;
+    margin: 30px;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+}
+
+.section-invenMain-search-btn {
+    display:flex;
+    align-items: center;
+    width: 200px;
+    height: 33px;
+    margin-left: 10px;
+}
+
+.section-invenMain-search-table {
+	margin: 5px 20px 20px 20px;
+	position: relative;
+	width: 960px;
+    height: auto;
+    /* margin: 30px 0 20px 0; */
+    border: 1px solid #D9D9D9;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.section-invenMain-search-table th {
+	background-color: #e2e2e2;
+	height: 33px;
+	border: 1px solid #D9D9D9;
+}
+
+.section-invenMain-search-table input[type='checkbox'] {
+    width: 22px;
+    height: 30px;
+    border: 1px solid #757575;
+    vertical-align: middle;
+}
+
+
+
+
+
+
+/* 검색 영역- 등록 */
+
+.section-regSearch {
+    margin: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+}
+
+
+.section-regSearch-line1 {
+    display: flex;
+    margin-top: 40px;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+.section-regSearch-line2  {
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+    text-align: left;
+    justify-content: space-between;
+    
+}
+.section-regSearch-span {
+    width: 300px;
+    height: 33px;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.section-regSearch-input {
+    box-sizing: border-box;
+    width: 180px;
+    height: 33px;
+    border-radius: 6px;
+    font-size: 16px;
+    padding: 0px 16px;
+}
+
+.option1{
+    width: 130px;
+}
+.option2{
+    width: 100px;
+}
+
+.date{
+    box-sizing: border-box;
+    width: 160px;
+    height: 33px;
+    border-radius: 6px;
+    font-size: 16px;
+    padding: 0px 16px;
+}
+
+.amount{
+    width: 80px;
+}
+
+.section-regSearch-date{
+    width: 90px;
+    height: 30px;
+    align-items: center;
+    /* justify-content: space-betwehen; */
+    /* margin-left: 10px; */
+}
+
+
+.section-regSearchResult-table {
+	margin: 30px;
+	position:relative;
+	width: 960px;
+    height: auto;
+    table-layout: fixed;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    border: 1px solid #D9D9D9;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.section-regSearchResult-table th {
+	background-color: #e2e2e2;
+	height: 33px;
+    width: 20%;
+	border: 1px solid #D9D9D9;
+}
+
+.section-regSearchResult-table th.column1 {
+    width: 40px;
+}
+.section-regSearchResult-table th.column8 {
+    width: 80px;
+}
+.section-regSearchResult-table input[type='number'] {
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    border: 1px none #D9D9D9;
+    vertical-align: middle;
+}
+
+
+
+
+/* 검색 영역 - 내역 */
+
+.section-historySearch {
+    margin: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+}
+
+.section-historySearch-line1 {
+    display: flex;
+    margin-top: 40px;
+    align-items: center;
+    text-align: left;
+    justify-content: space-between;
+    
+}
+.section-historySearch-line2  {
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+    text-align: left;
+    justify-content: space-between;
+    
+}
+.section-historySearch-span {
+    width: 300px;
+    height: 33px;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.section-historySearch-input {
+    box-sizing: border-box;
+    width: 150px;
+    height: 33px;
+    border-radius: 6px;
+    font-size: 16px;
+    padding: 0px 16px;
+}
+
+.date{
+    box-sizing: border-box;
+    width: 150px;
+    height: 33px;
+    border-radius: 6px;
+    font-size: 16px;
+    padding: 0px 16px;
+}
+
+
+.section-historySearchResult-table {
+	margin: 30px;
+	position:relative;
+	width: 960px;
+    height: auto;
+    table-layout: fixed;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    border: 1px solid #D9D9D9;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.section-historySearchResult-table th {
+	background-color: #e2e2e2;
+	height: 33px;
+    width: 20%;
+	border: 1px solid #D9D9D9;
+}
+
+.section-historySearchResult-table td {
+	height: 33px;
+}
+
+
+
+/* 기타 공용 */
+
+
+.btn_basic {
+    width: 80px;
+    height: 33px;
+    border-radius: 6px;
+    margin-left: 10px;
+    background-color: #333333;
+    color: white;
+}
+
+.btn_basic2 {
+    width: 80px;
+    height: 33px;
+    border-radius: 6px;
+    margin-left: 10px;
+    background-color: #333333;
+    color: white;
+    float: right;
+    
+}
+
+
+
+
+.category-list {
+    display: flex;
+    height: 40px;
+    align-items: center;
+    justify-content: end;
+    margin-right: 210px;
+    font-size: 18px;
+}
+
+
+
+.paging1 {
+    display: flex;
+    position: relative;
+    align-items: center;
+    bottom: 0px;
+    width: 250px;
+    left: 380px;
+    height: 33px;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #A9A9A9;
+}
+
+.paging1 span:not(:first-child) {
+    margin-left: 20px;
+}
+.paging {
+    display: flex;
+    position: relative;
+    align-items: center;
+    bottom: 0px;
+    width: 100%;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #A9A9A9;
+}
+.paging span:not(:first-child) {
+    margin-left: 20px;
+}
