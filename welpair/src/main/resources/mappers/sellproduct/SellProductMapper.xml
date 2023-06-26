@@ -61,7 +61,7 @@
                           LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
                           LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
              )
-         WHERE RN > ( ${ pageNo } - 1 * 10)
+         WHERE RN &gt; ( ${ pageNo } - 1 * 10)
            AND RN &lt;= ( ${ pageNo } * 10)
     </select>
 </mapper>
