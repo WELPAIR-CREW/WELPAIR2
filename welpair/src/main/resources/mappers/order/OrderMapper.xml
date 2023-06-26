@@ -6,7 +6,7 @@
 
     <!-- MemberDTO resultMap
     나중에 수정해야 함 -->
-    <resultMap type="MemberDTO" id="memberResultMap">
+    <resultMap type="com.hielectro.welpair.order.model.dto.MemberDTO" id="memberResultMap">
         <id property="empNo" column="EMP_NO"/>
         <result property="memPwd" column="MEM_PWD"/>
         <result property="registDate" column="REGIST_DATE"/>
@@ -15,7 +15,7 @@
     </resultMap>
 
     <!-- OrderDTO resultMap-->
-    <resultMap type="OrderDTO" id="orderResultMap">
+    <resultMap type="com.hielectro.welpair.order.model.dto.OrderDTO" id="orderResultMap">
         <id property="orderNo" column="PRODUCT_ORDER_NO"/>
         <result property="orderDate" column="ORDER_NO"/>
         <result property="totalPrice" column="SELL_PRODUCT_ID"/>
@@ -28,7 +28,7 @@
     </resultMap>
 
     <!-- ProductorderDTO resultMap-->
-    <resultMap type="ProductOrderDTO" id="productOrderResultMap">
+    <resultMap type="com.hielectro.welpair.order.model.dto.ProductOrderDTO" id="productOrderResultMap">
         <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
         <result property="orderNo" column="ORDER_NO"/>
         <result property="sellProductId" column="SELL_PRODUCT_ID"/>

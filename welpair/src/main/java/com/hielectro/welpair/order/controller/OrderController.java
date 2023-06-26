@@ -4,6 +4,8 @@ import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
 import com.hielectro.welpair.order.model.service.OrderService;
 import com.hielectro.welpair.order.model.service.OrderServiceImpl;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.logging.Log;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
+@Slf4j
 @Controller
 @RequestMapping({"/order"})
 public class OrderController {
@@ -28,6 +32,8 @@ public class OrderController {
     public String defaultLocation(@PathVariable("id") String url) {
         return "/consumer/order/" + url;
     }
+
+
 
     // 카트인서트용 메소드
     @ResponseBody
@@ -86,6 +92,8 @@ public class OrderController {
         } else {   // 무언가 잘못된 상품조회222
             System.out.println("장바구니 담기 실패1111");
             resultMap.put("failMessage", "장바구니 담기 실패");
+            log.info("log 확인");
+
             return resultMap;
         }
     }
