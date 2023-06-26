@@ -39,6 +39,8 @@
         <association property="Sellproduct" resultMap="sellProductResultMap"/>
     </resultMap>
 
+
+
     <!-- sellProductDTO resultMap-->
 <!--    <resultMap type="SellProductDTO" id="sellProductResultMap">-->
 <!--        <id property="sellProductId" column="SELL_PRODUCT_ID"/>-->
@@ -60,14 +62,6 @@
 <!--        <result property="nation" column="PRODUCT_NATION"/>-->
 <!--        <result property="categoryCode" column="CATEGORY_CODE"/>-->
 <!--    </resultMap>-->
-
-    <!-- 상품이 존재하는지 조회 -->
-    <select id="checkoutSellProductId" resultMap="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
-        SELECT
-            *
-        FROM T_SELL_PRODUCT
-        WHERE SELL_PRODUCT_ID = #{sellProductId}
-    </select>
 
     <!-- 회원이 존재하는지 조회 -->
     <select id="checkoutMemberById" resultMap="memberResultMap">

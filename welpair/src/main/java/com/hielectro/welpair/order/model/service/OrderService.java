@@ -7,7 +7,7 @@ import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 public interface OrderService {
 
 
-    public SellProductDTO checkoutSellProductId(String sellProductId);
+    public SellProductDTO findSellProductById(String productId);
 
     public int addcart(String empNo);
 

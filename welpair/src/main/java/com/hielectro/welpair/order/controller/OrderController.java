@@ -39,6 +39,7 @@ public class OrderController {
         System.out.println("선택상품 : " + cartSellProduct);
 
         // 그 전에 판매상품 ID를 통해 실제 존재하는 상품이며, 수량이 정상적인 수량인지 체크한다.
+
         SellProductDTO sellProduct =
                 orderServiceImpl.findSellProductById(cartSellProduct.getSellProductId());
 

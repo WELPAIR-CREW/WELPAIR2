@@ -19,8 +19,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public int findSellProductById(String sellProductId) {
-        return sellProductMapper.findSellProductById(sellProductId);
+    public SellProductDTO findSellProductById(String productId) {
+        return sellProductMapper.findSellProductById(productId);
     }
 
     @Override
