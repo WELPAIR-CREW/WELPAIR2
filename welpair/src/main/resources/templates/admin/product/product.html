@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>판매상품 관리</title>
+    <link rel="stylesheet" href="../common/css/header.css">
+    <link rel="stylesheet" href="../common/css/main.css">
+    <link rel="stylesheet" href="../common/css/footer.css">
+    <script src="../common/js/static/include.js"></script>
+    <script src="../common/js/sellProductLoad.js"></script>
+</head>
+
+<body>
+<div data-include-html="/admin/header_admin" class="include"></div>
+<section>
+    <div class="section-nav">
+        <div class="section-nav-category"><b>상품관리</b></div>
+        <div class="section-nav-category">상품등록</div>
+        <div class="section-nav-category">리뷰관리</div>
+        <div class="section-nav-category">문의관리</div>
+    </div>
+    <div class="section-content">
+        <div class="section-title">상품관리</div>
+        <div class="section-selectbox">
+            <div class="section-selectbox area1">
+                    <span class="section-selectbox-span">판매상품코드
+                        <input type="text" class="section-selectbox-input product-code" placeholder="상품코드입력">
+                    </span>
+                <span class="section-selectbox-span">판매상품명
+                        <input type="text" class="section-selectbox-input name" placeholder="상품명입력">
+                    </span>
+                <button class="button first-button">판매상품검색</button>
+            </div>
+            <div class="section-selectbox area2">
+                    <span class="section-selectbox-span">대분류
+                        <select name="large" id="select-large" class="section-selectbox-select">
+                        </select>
+                    </span>
+
+                <span class="section-selectbox-span">중분류
+                        <select name="medium" id="select-medium" class="section-selectbox-select">
+                        </select>
+                    </span>
+
+                <span class="section-selectbox-span">소분류
+                        <select name="small" id="select-small" class="section-selectbox-select">
+
+                        </select>
+                    </span>
+                <button class="button first-button">판매상품삭제</button>
+            </div>
+        </div>
+        <div class="table_container">
+
+            <table class="section-product-table">
+                <colgroup>
+                    <col style="min-width: 50px;">
+                    <col style="min-width: 170px;">
+                    <col style="min-width: 170px;">
+                    <col style="min-width: 170px;">
+                    <col style="min-width: 170px;">
+                    <col style="min-width: 170px;">
+                    <col style="min-width: 170px;">
+                </colgroup>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>판매상품코드</th>
+                    <th>상품코드</th>
+                    <th>할인율</th>
+                    <th>판매여부</th>
+                    <th>판매페이지</th>
+                    <th>판매이지제목</th>
+                </tr>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="paging">
+            <span>&lt;</span>
+            <span style="color: #4D4D4D;">1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+            <span>&gt;</span>
+        </div>
+    </div>
+</section>
+<div data-include-html="/admin/footer" class="include"></div>
+</body>
+
+</html>
