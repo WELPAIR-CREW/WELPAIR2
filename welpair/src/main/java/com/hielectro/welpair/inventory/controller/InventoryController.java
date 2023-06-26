@@ -3,6 +3,7 @@ package com.hielectro.welpair.inventory.controller;
 
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.inventory.model.service.InventoryService;
+import com.hielectro.welpair.inventory.model.service.InventoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +22,10 @@ public class InventoryController {
     }
 
 
-    @GetMapping("{url}")
-    public String adminInventory(@PathVariable String url) {
-        return "admin/inventory/" + url;
-    }
+//    @GetMapping("{url}")
+//    public String adminInventory(@PathVariable String url) {
+//        return "admin/inventory/" + url;
+//    }
 
 
     /**
@@ -32,7 +33,7 @@ public class InventoryController {
      * 1. 재고현황 페이지
      * 1-1. 상단부 현재기준 현황 출력 (총 재고수량, 위험재고 상품수)
      */
-    @PostMapping("/getInventoryInfo")
+    @GetMapping("/getInventoryInfo")
     public String getInvenInfo(Model model){
         System.out.println("-------------컨트롤러 1-1 -------------");
 
@@ -66,14 +67,16 @@ public class InventoryController {
      * 1. 재고현황 페이지
      * 1-2. 하단부 상품 코드 검색 시 해당 상품의 간단한 정보 출력
      */
-    @PostMapping("inventory/admin_inventory")
-    public String searchProductByCode(Model model, @RequestParam("productCode") String searchCode) {
+
+    @GetMapping("admin_inventory")
+    public String searchProductByCode(Model model, @RequestParam(required = false) String searchCode) {
         System.out.println("-------------컨트롤러 1-2 -------------");
         System.out.println("searchCode = " + searchCode);
+        System.out.println(inventoryService);
         List<ProductDTO> productList = inventoryService.searchProductByCode(searchCode);
         System.out.println("==================== 1-2 =============");
         model.addAttribute("productList", productList);
-        return "inventory/admin_inventory";
+        return "admin/inventory/admin_inventory";
     }
 
     /**
@@ -83,9 +86,9 @@ public class InventoryController {
      *      상품코드, 상품명, 카테고리 선택 후 검색 시 등록 대상 리스트 출력
      */
     @PostMapping("inventory/admin_inventory_regist")
-    public String stockRegistSerch(Model model, @ModelAttribute("productCode") String productCode,
-                                   @ModelAttribute("productName") String productName,
-                                   @ModelAttribute("category") String categoryName){
+    public String stockRegistSerch(Model model, @RequestParam("productCode") String productCode,
+                                   @RequestParam("productName") String productName,
+                                   @RequestParam("category") String categoryName){
         System.out.println("-------------컨트롤러 2-1 -------------");
         System.out.println("productCode = " + productCode);
         System.out.println("productName = " + productName);

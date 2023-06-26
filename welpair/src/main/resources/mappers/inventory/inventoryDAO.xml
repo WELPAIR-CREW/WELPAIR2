@@ -65,7 +65,9 @@
          FROM T_PRODUCT A
          JOIN T_CATEGORY B ON B.CATEGORY_CODE = A.CATEGORY_CODE
 --             WHERE A.PRODUCT_CODE = 'P000002'
+        <if test="searchCode != null">
         WHERE A.PRODUCT_CODE = #{ searchCode }
+        </if>
     </select>
 
 
