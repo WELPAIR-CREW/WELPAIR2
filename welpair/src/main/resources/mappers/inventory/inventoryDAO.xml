@@ -2,23 +2,23 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hielectro.wellpair.semitest.model.dao.InventoryDAO">
+<mapper namespace="com.hielectro.welpair.inventory.model.dao.InventoryDAO">
 
     <!-- 1-2 -->
-    <resultMap type="com.hielectro.wellpair.semitest.model.dto.ProductDTO" id="searchInvenResultMap">
+    <resultMap type="com.hielectro.welpair.inventory.model.dto.ProductDTO" id="searchInvenResultMap">
         <id property="productCode" column="PRODUCT_CODE"/>
         <result property="productName" column="PRODUCT_NAME"/>
         <result property="productAmount" column="PRODUCT_AMOUNT"/>
         <association property="categoryCode" resultMap="categoryDTO"/>
     </resultMap>
 
-    <resultMap id="categoryDTO" type="com.hielectro.wellpair.semitest.model.dto.CategoryDTO">
+    <resultMap id="categoryDTO" type="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
         <id property="categoryCode" column="CATEGORY_CODE"/>
         <result property="categoryName" column="CATEGORY_NAME"/>
     </resultMap>
 
     <!-- 2-1 -->
-    <resultMap type="com.hielectro.wellpair.semitest.model.dto.ProductDTO" id="stockRegistSerchResultMap">
+    <resultMap type="com.hielectro.welpair.inventory.model.dto.ProductDTO" id="stockRegistSerchResultMap">
         <id property="productCode" column="PRODUCT_CODE"/>
         <result property="productName" column="PRODUCT_NAME"/>
         <association property="categoryCode" resultMap="categoryDTO"/>
@@ -26,14 +26,14 @@
 
 
     <!--  -->
-    <resultMap type="com.hielectro.wellpair.semitest.model.dto.StockDTO" id="stockResultMap">
+    <resultMap type="com.hielectro.welpair.inventory.model.dto.StockDTO" id="stockResultMap">
         <id property="productCode" column="PRODUCT_CODE"/>
         <result property="productName" column="PRODUCT_NAME"/>
         <result property="stockType" column="STOCK_TYPE"/>
         <result property="stockDate" column="STOCK_DATE"/>
         <result property="stockAmount" column="STOCK_AMOUNT"/>
         <result property="productAmount" column="STOCK_TYPE"/>
-        <association property="productCode" javaType="com.hielectro.wellpair.semitest.model.dto.ProductDTO">
+        <association property="productCode" javaType="com.hielectro.welpair.inventory.model.dto.ProductDTO">
             <result property="productAmount" column="PRODUCT_AMOUNT"/>
         </association>
     </resultMap>
