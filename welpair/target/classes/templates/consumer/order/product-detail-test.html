@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+</head>
+<body>
+
+<h3>상세상품 페이지</h3>
+
+<!-- 상품상세페이지에서 장바구니 버튼 클릭시 아래의 값들이 넘어온다 가정 -->
+
+  <label>판매상품 ID : </label><input type="text" name="sellProductId" id="sellProductId"><br>
+  <label>카트 수량 : </label><input type="text" name="cartAmount" id="cartAmount"><br>
+  <label>회원 ID : </label><input type="text" name="empNo" id="empNo"><br>
+
+  <input type="button" value="전송" class="add-cart">
+
+    <script>
+
+      $(".add-cart").click(function (){
+
+        let sellProductId = $("#sellProductId").val();
+        let cartAmount = $("#cartAmount").val();
+        let empNo = $("#empNo").val();
+
+        let data = {
+          sellProductId : sellProductId,
+          cartAmount : cartAmount,
+          empNo : empNo
+        };
+
+            $.ajax({
+                url: "/order/product-detail-test",  // AJAX 요청을 보낼 URL
+                method: "POST",  // 요청 메서드 (POST, GET 등)
+                data: data,
+                success: function (response) {  // 요청이 성공한 경우 실행할 함수
+                    console.log("AJAX 요청 성공");
+                    console.log(response);  // 서버로부터의 응답 데이터
+                    alert(response.successMessage);
+                },
+                error: function (status, error) {  // 요청이 실패한 경우 실행할 함수
+                    console.log("AJAX 요청 실패");
+                    console.log(status);  // 오류 상태
+                    console.log(error);  // 오류 메시지
+                  alert(response["failMessage"]);
+                }
+            });
+
+        });
+
+
+    </script>
+
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.hielectro.welpair.order.model.dto;
 
-import java.sql.Date;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import lombok.*;
 
 import javax.validation.constraints.Min;
 

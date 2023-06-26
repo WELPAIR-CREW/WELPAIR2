@@ -2,12 +2,12 @@ package com.hielectro.welpair.order.model.service;
 
 
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
-import com.hielectro.welpair.order.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 
 public interface OrderService {
 
 
-    public SellProductDTO checkoutSellProductId(String sellProductId);
+    public SellProductDTO findSellProductById(String productId);
 
     public int addcart(String empNo);
 

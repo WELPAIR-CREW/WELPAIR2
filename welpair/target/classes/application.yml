@@ -1,0 +1,35 @@
+
+#server port
+server:
+  port: 8888
+
+
+
+# oracle config
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@oracle.coffit.site:1521:xe
+    username: C##WELPAIRTEST
+    password: WELPAIRTEST
+  thymeleaf:
+      prefix: classpath:/templates/
+      suffix: .html
+      cache: false
+      check-template-location: true
+
+  image:
+      image-dir: src/main/resources
+
+# mybatis config
+mybatis:
+  mapper-locations: mappers/**/*.xml
+  # alias Setting
+  type-aliases-package: com.hielectro.welpair
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
