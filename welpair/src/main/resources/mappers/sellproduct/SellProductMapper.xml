@@ -65,7 +65,7 @@
            AND RN &lt;= ( ${ pageNo } * 10)
 
     </select>
-    <select id='existSellProductById' resultMap="_int">
+    <select id='findSellProductById' resultType="_int">
         SELECT
                COUNT(*)
           FROM T_SELL_PRODUCT
