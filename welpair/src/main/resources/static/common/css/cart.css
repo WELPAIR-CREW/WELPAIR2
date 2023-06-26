@@ -30,13 +30,11 @@ a:active {
 
 }
 
-/* li 공통  */
-li {
-	list-style-type: none;
+table {
+	border: none;
 }
 
-
-li[id^=cart_basic] {
+tr {
 	margin-bottom: 10px;
 }
 
@@ -103,6 +101,7 @@ input[type=checkbox] {
 	width: 1150px;
 	height: 23px;
 	margin: 20px 0px;
+	text-align: center;
 }
 
 .cart_option_ul {
