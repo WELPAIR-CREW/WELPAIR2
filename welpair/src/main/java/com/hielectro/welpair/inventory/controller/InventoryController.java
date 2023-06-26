@@ -3,8 +3,7 @@ package com.hielectro.welpair.inventory.controller;
 
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.inventory.model.service.InventoryService;
-import com.hielectro.welpair.inventory.model.service.InventoryServiceImpl;
-import groovy.util.logging.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +14,7 @@ import java.util.List;
 @Controller
 @Slf4j
 @RequestMapping("/inventory")
+
 public class InventoryController {
     private final InventoryService inventoryService;
 
