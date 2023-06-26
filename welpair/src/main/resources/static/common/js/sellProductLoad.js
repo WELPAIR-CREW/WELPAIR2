@@ -36,7 +36,7 @@ function createTableCell(text) {
 }
 
 function sellProductCount() {
-    let url = "/product/sellproductcount"
+    let url = "/sellproduct/totalcount"
     let method = 'post'
 
     call(url, method, null)
@@ -46,7 +46,7 @@ function sellProductCount() {
 
 function sellProductLoad(sellProductTotalCount) {
 
-    let url = "/product/sellproductlist/" + sellProductTotalCount;
+    let url = "/sellproduct/sellproductlist/" + sellProductTotalCount;
     let method = 'get';
 
     call(url, method, null)
