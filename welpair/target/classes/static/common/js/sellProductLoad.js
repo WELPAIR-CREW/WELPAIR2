@@ -1,8 +1,7 @@
 let sellProductTotalCount;
 
-document.addEventListener("DOMContentLoaded", async function() {
-    Promise.all(sellProductCount(), sellProductLoad(1));
-});
+sellProductCount();
+sellProductLoad();
 
 function call(url, method, request) {
     let options = {
@@ -36,7 +35,7 @@ function createTableCell(text) {
 }
 
 function sellProductCount() {
-    let url = "/sellproduct/totalcount"
+    let url = "/sellproduct/totalCount"
     let method = 'post'
 
     call(url, method, null)
@@ -44,9 +43,9 @@ function sellProductCount() {
         .catch(error => console.log(error))
 }
 
-function sellProductLoad(sellProductTotalCount) {
+function sellProductLoad(pageNo = 1) {
 
-    let url = "/sellproduct/sellproductlist/" + sellProductTotalCount;
+    let url = "/sellproduct/sellproductlist/" + pageNo;
     let method = 'get';
 
     call(url, method, null)

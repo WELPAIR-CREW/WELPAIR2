@@ -117,6 +117,11 @@ input[type=checkbox] {
     border: 1px solid #A9A9A9;
     border-radius: 20px;
     padding: 3px;
+<<<<<<< HEAD
+=======
+    padding-left: 8px;
+    padding-right: 8px;
+>>>>>>> 01710b774e2f7a120c06afd12bfd15a16c1be865
     margin-bottom: 8px;
 
     height: 16px;
