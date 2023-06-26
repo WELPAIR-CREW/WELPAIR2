@@ -2,7 +2,7 @@ package com.hielectro.welpair.order.model.dao;
 
 
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
-import com.hielectro.welpair.order.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

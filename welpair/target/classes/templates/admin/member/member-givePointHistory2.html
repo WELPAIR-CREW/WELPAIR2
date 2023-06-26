@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>복지포인트지급이력2</title>
+    <link rel="stylesheet" href="../../CSS/header.css">
+    <!-- <link rel="stylesheet" href="../../CSS/main.css"> -->
+    <link rel="stylesheet" href="../../CSS/footer.css">
+    <link rel="stylesheet" href="../../CSS/member.css">
+    <script src="../../src/static/include.js"></script>
+</head>
+
+<body>
+    <!-- header -->
+    <div data-include-html="./header_admin.html" class="include"></div>
+
+    <div class="container">
+
+        <div class="navs">
+
+            <div class="nav-menu"><a href="../../HTML/admin/member-view.html">회원조회</a></div>
+            <div class="nav-menu"><a href="../../HTML/admin/member-regist1.html">회원등록</a></div>
+            <div class="nav-menu"><a href="../../HTML/admin/member-permission.html">가입승인</a></div>
+            <div class="nav-menu"><b>복지포인트지급</b></div>
+            <div class="nav-menu"><a href="../../HTML/admin/member-givePointHistory1.html">복지포인트지급이력</a></div>
+        </div>
+
+        <div class="box">
+            <div class="section-title">복지포인트 지급</div>
+
+            <div class="contents">
+
+                <span class="small-title">&#8251 상세조회</span>
+
+                <span class="small-title2">
+                    <!-- 상세보기를 선택한 행의 지급일, 지급사유가 동적으로 표시되는곳 -->
+                    <span>2023.07.01</span>
+                    <span>정기지급</span>
+                </span>
+        
+                <table id="table-givepointhistory2">
+                    <thead>
+                        <tr>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>부서</th>
+                            <th>직급</th>
+                            <th>근속연수</th>
+                            <th>지급액</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <!-- @@@ 수업코드-타임리프 템플릿 표현식
+                        <tr th:each="menu: ${ menuList }">
+                            <td th:text="${ menu.code}"></td>
+                            <td th:text="${ menu.name}"></td>
+                            <td th:text="${ menu.price}"></td>
+                            <td th:text="${ menu.categoryCode}"></td>
+                            <td th:text="${ menu.orderableStatus}"></td>
+                        </tr> -->
+
+                        <tr>
+                            <td>P231011</td>
+                            <td>홍길동</td>
+                            <td>영업</td>
+                            <td>사원</td>
+                            <td>1</td>
+                            <td>1,000,000</td>
+                        </tr>
+                        <tr>
+                            <td>P231012</td>
+                            <td>유관순</td>
+                            <td>영업</td>
+                            <td>차장</td>
+                            <td>9</td>
+                            <td>1,000,000</td>
+                        </tr>
+                        <tr>
+                            <td>P231013</td>
+                            <td>김선달</td>
+                            <td>영업</td>
+                            <td>대리</td>
+                            <td>4</td>
+                            <td>1,000,000</td>
+                        </tr>
+                        <tr>
+                            <td>P231014</td>
+                            <td>윤봉길</td>
+                            <td>영업</td>
+                            <td>사원</td>
+                            <td>1</td>
+                            <td>1,000,000</td>
+                        </tr>
+                        <tr>
+                            <td>P231015</td>
+                            <td>임꺽정</td>
+                            <td>영업</td>
+                            <td>과장</td>
+                            <td>7</td>
+                            <td>1,000,000</td>
+                        </tr>
+                        <tr>
+                            <td>P231016</td>
+                            <td>장보고</td>
+                            <td>영업</td>
+                            <td>과장</td>
+                            <td>6</td>
+                            <td>1,000,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div id="summary-givepointhistory2">
+                    <div class="form-group2">
+                        <span>
+                            <label>지급회원 수 : </label>
+                        </span>
+                        <span class="count">
+                            <span>nn</span><label>명</label>
+                        </span>
+                    </div>
+
+                    <div class="form-group2">
+                        <span>
+                            <label>지급액 합계 : </label>
+                        </span>
+                        <span class="count">
+                            <span>10,000,000</span><label>원</label>
+                        </span>
+                    </div>
+                </div>
+
+
+            </div> <!--컨텐츠-->
+
+        </div> <!--박스-->
+
+    </div> <!--컨테이너-->
+
+
+    <!-- footer -->
+    <div data-include-html="./footer.html" class="include"></div>
+
+
+    
+</body>
+
+</html>

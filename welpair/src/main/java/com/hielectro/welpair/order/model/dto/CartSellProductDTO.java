@@ -1,5 +1,6 @@
 package com.hielectro.welpair.order.model.dto;
 
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import lombok.*;
 
 @NoArgsConstructor

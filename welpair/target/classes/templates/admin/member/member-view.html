@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원조회</title>
+    <link rel="stylesheet" href="../../../static/common/css/header.css">
+    <link rel="stylesheet" href="../../../static/common/css/footer.css">
+    <link rel="stylesheet" href="../../../static/common/css/member.css">
+    <script src="../../src/static/include.js"></script>
+</head>
+
+<body>
+    <!-- header -->
+    <div data-include-html="../header_admin.html" class="include"></div>
+
+    <div class="container">
+
+        <div class="navs">
+
+            <div class="nav-menu"><b>회원조회</b></div>
+            <div class="nav-menu"><a href="../../HTML/admin/member-regist1.html">회원등록</a></div>
+            <div class="nav-menu"><a href="../../HTML/admin/member-permission.html">가입승인</a></div>
+            <div class="nav-menu"><a href="../../HTML/admin/member-givePoint.html">복지포인트지급</a></div>
+            <div class="nav-menu"><a href="../../HTML/admin/member-givePointHistory1.html">복지포인트지급이력</a></div>
+        </div>
+
+        <div class="box">
+            <div class="section-title">회원조회</div>
+
+            <div class="contents"> <!-- 테이블, 테이블 위, 테이블 아래-->
+                <div class="over-table">
+                    <!-- @동적으로 값이 들어갈 곳-->
+                    <label class="count-row">전체 : <span id="member-value">nn</span>명</label>
+                    <label class="count-row">상태변경 : <span id="member-value">nn</span>명</label>
+
+                    <!-- 토글버튼:클릭시 toggleButton()함수 실행 -->
+                    <button id="toggleButton" class="toggle" onclick="toggleButton()">퇴사/계약만료만 조회</button>
+
+                    <button class="button-square1">계정삭제</button>
+                </div>
+
+                <table>
+                    <thead> <!-- 제목 행-->
+                        <tr>
+                            <th class="checkbox-cell"><input type="checkbox" id="select-all"></th>
+                            <th>등록일</th>
+                            <th>상태</th>
+                            <th>아이디 </th>
+                            <th>이름</th>
+                            <th>이메일</th>
+                            <th>연락처</th>
+                        </tr>
+                    </thead>
+                    <tbody> <!-- 10개 행 -->
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>2023.07.01</td>
+                            <td>-</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>2023.06.01</td>
+                            <td>-</td>
+                            <td>P231010</td>
+                            <td>홍길동</td>
+                            <td>hong123@hielectronics.com</td>
+                            <td>010-1234-5678</td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>2023.05.01</td>
+                            <td>퇴사</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>2023.04.01</td>
+                            <td>계약만료</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>2023.03.01</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>2023.02.01</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>2023.01.01</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>2023.01.01</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>2023.01.01</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>2023.01.01</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+
+
+                </table>
+
+                <div class="under-table">
+                    <div class="search-list">
+                        <input type="text" class="search-input">
+                        <button class="button-circle">검색</button>
+                    </div>
+
+                    <div class="paging">
+                        <span>&lt;</span>
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>&gt;</span>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- footer -->
+    <div data-include-html="../footer.html" class="include"></div>
+
+
+    <!-- @전체선택 체크박스 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let selectAllCheckbox = document.getElementById('select-all');
+            let everyCheckbox = document.querySelectorAll('tbody td.checkbox-cell input[type="checkbox"]');
+
+            selectAllCheckbox.addEventListener('click', function () {
+                var isChecked = selectAllCheckbox.checked;
+
+                everyCheckbox.forEach(function (checkbox) {
+                    checkbox.checked = isChecked;
+                });
+            });
+        });
+
+    // @토글버튼 스크립트
+        let tButton = document.getElementById('toggleButton');
+        let isClicked = false;
+
+        function toggleButton() {
+            isClicked = !isClicked;
+
+            //classList의 toggle메소드:
+            //isClicked가 true면 clicked 클래스(CSS적용을 위한 클래스) 추가
+            //isClicked가 false면 clicked 클래스 제거
+            tButton.classList.toggle('clicked', isClicked);
+        }
+    </script>
+
+</body>
+
+</html>
