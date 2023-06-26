@@ -10,14 +10,14 @@ import org.springframework.test.context.ContextConfiguration;
 
 import com.hielectro.welpair.configuration.MybatisConfiguration;
 import com.hielectro.welpair.configuration.WelpairApplication;
-import com.hielectro.welpair.product.model.dao.ProductMapper;
+import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
 
 @SpringBootTest
 @ContextConfiguration(classes = {MybatisConfiguration.class, WelpairApplication.class})
 public class ProductMapperTests {
 
     @Autowired
-    private ProductMapper productMapper;
+    private SellProductMapper productMapper;
 
     @Test
     @DisplayName("Mapper 의존성 주입 확인")
