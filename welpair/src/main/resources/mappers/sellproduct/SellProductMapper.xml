@@ -67,7 +67,7 @@
     </select>
     <select id='findSellProductById' resultType="_int">
         SELECT
-               COUNT(*)
+               *
           FROM T_SELL_PRODUCT
          WHERE SELL_PRODUCT_ID = ${ productId }
     </select>
