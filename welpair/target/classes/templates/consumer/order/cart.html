@@ -4,17 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <!-- css -->
-    <link rel="stylesheet" href="../common/css/cart.css">
+    <!-- <link rel="stylesheet" href="../common/css/cart.css">
     <link rel="stylesheet" href="../common/css/header.css">
     <link rel="stylesheet" href="../common/css/main.css">
-    <link rel="stylesheet" href="../common/css/footer.css">
+    <link rel="stylesheet" href="../common/css/footer.css"> -->
 
-    <script src="../common/js/static/include.js"></script>
+
+        <link rel="stylesheet" href="../../../static/common/css/cart.css">
+    <link rel="stylesheet" href="../../../static/common/css/header.css">
+    <link rel="stylesheet" href="../../../static/common/css/main.css">
+    <link rel="stylesheet" href="../../../static/common/css/footer.css">
+
+
+
+    <!-- <script src="../common/js/static/include.js"></script> -->
+    <script src="../../../static/common/js/static/include.js"></script>
 
     <title>cart</title>
 </head>
 <!-- 헤더 -->
-<div data-include-html="/admin/header_admin" class="include"></div>
+<!-- <div data-include-html="/admin/header_admin" class="include"></div> -->
+<div data-include-html="../../admin/header_admin.html" class="include"></div>
 
 <!-- 장바구니 시작 -->
 
@@ -54,7 +64,7 @@
                 <table class="cart_info_box">
 
                     <tr class="cart_option_box">
-                        <td class="cart_option1">total :</td>
+                        <td class="cart_option1">total:</td>
                         <td class="cart_option2"></td>
                         <td class="cart_option3">상품정보</td>
                         <td class="cart_option4">수량(변경)</td>
@@ -64,6 +74,65 @@
                     </tr>
 
                     <!-- 상품 정보 구역(체크박스,썸네일,정보,수량) -->
+                    <tr class="cart_order_prd">
+                        <td>
+                            <!-- 상품선택 체크박스 -->
+                            <input type="checkbox" class="cart_select">
+                        </td>
+                        <td>
+                            <!-- 상품썸네일 구역 -->
+                            <div class="cart_thumb_box">
+                                <!-- 상품썸네일 이미지-->
+                                <span class="cart_thumb_img"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <!-- 상품이름 작성구역  -->
+                            <div class="prd_name">가나다라마바사아자차카타파하가나다라마바아차자차<br>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="prd_util">
+                                <div class="prd_util_wrap">
+                                    <!-- 수량 입력 박스 -->
+                                    <input type="number" class="item_count_box" min="1" max="100" title="상품수량"
+                                           placeholder="1">
+                                    <!-- 수량 플러스 버튼 -->
+                                    <button type="button" class="bnt_plus">
+                                        <img src="../common/images/bnt_plus.png" alt="">
+                                    </button>
+                                    <!-- 수량 마이너스 버튼 -->
+                                    <button type="button" class="bnt_min">
+                                        <img src="../common/images/bnt_min.png" alt="">
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <!-- 상품금액 -->
+                            <div class="cart_order_price">
+                                <div class="price_box">
+                                    9,999,999원
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="cart_order_delivery">
+                                <div class="delivery_box">
+                                    0원
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <!-- 총금액 작성구역 -->
+                            <div class="cart_order_total_price">
+                                <div class="totla_price_box">
+                                    9,999,999원
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
                     <tr class="cart_order_prd">
                         <td>
                             <!-- 상품선택 체크박스 -->
@@ -166,7 +235,8 @@
 
 
 <!-- footer -->
-<div data-include-html="/admin/footer" class="include"></div>
+<!-- <div data-include-html="/admin/footer" class="include"></div> -->
+<div data-include-html="../../admin/footer.html" class="include"></div>
 </body>
 
 </html>

@@ -6,7 +6,7 @@
 
     <!-- MemberDTO resultMap
     나중에 수정해야 함 -->
-    <resultMap type="com.hielectro.welpair.order.model.dto.MemberDTO" id="memberResultMap">
+    <resultMap type="com.hielectro.welpair.member.model.dto.MemberDTO" id="memberResultMap">
         <id property="empNo" column="EMP_NO"/>
         <result property="memPwd" column="MEM_PWD"/>
         <result property="registDate" column="REGIST_DATE"/>
@@ -90,7 +90,7 @@
     </select>
 
     <!-- cartSellProduct 테이블 삽입 -->
-    <insert id="addCartSellProduct" parameterType="CartSellProductDTO">
+    <insert id="addCartSellProduct" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
         INSERT
         INTO T_CART_SELL_PRODUCT A
             (

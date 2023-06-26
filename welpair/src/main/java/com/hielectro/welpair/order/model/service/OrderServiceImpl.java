@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -20,8 +22,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public SellProductDTO findSellProductById(String productId) {
-        return sellProductMapper.findSellProductById(productId);
+    public List<SellProductDTO> findSellProductByCode(String productId) {
+        return sellProductMapper.findSellProductByCode(productId);
     }
 
     @Transactional
