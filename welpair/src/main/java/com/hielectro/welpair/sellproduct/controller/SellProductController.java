@@ -1,18 +1,19 @@
-package com.hielectro.welpair.product.controller;
+package com.hielectro.welpair.sellproduct.controller;
 
-import com.hielectro.welpair.product.model.dto.SellProductDTO;
-import com.hielectro.welpair.product.model.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/product")
-public class ProductController {
-    private final ProductService productService;
+public class SellProductController {
+    private final SellProductServiceImpl productService;
 
-    public ProductController(ProductService productService) {
+    public SellProductController(SellProductServiceImpl productService) {
         this.productService = productService;
     }
 

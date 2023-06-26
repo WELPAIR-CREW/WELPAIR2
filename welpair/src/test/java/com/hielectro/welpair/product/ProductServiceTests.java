@@ -10,13 +10,13 @@ import org.springframework.test.context.ContextConfiguration;
 
 import com.hielectro.welpair.configuration.MybatisConfiguration;
 import com.hielectro.welpair.configuration.WelpairApplication;
-import com.hielectro.welpair.product.model.service.ProductService;
+import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
 
 @SpringBootTest
 @ContextConfiguration(classes = {MybatisConfiguration.class, WelpairApplication.class})
 public class ProductServiceTests {
     @Autowired
-    ProductService productService;
+    SellProductServiceImpl productService;
 
     @Test
     @DisplayName("Service 의존성 주입 확인")

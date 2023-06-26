@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>재고 관리</title>
+  <link rel="stylesheet" href="/CSS/header.css">
+  <link rel="stylesheet" href="/CSS/main.css">
+  <link rel="stylesheet" href="/CSS/footer.css">
+  <link rel="stylesheet" href="/CSS/inventory.css">
+  <script src="/src/static/include.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://malsup.github.io/jquery.form.js"></script>
+</head>
+
+<body>
+<div data-include-html="./header_admin.html" class="include"></div>
+
+<!-- 왼쪽 메뉴 베너 -->
+<section>
+  <div class="section-nav">
+    <div class="section-nav-category">
+      <a href="./admin_inventory.html"><b>재고관리</b></a>
+    </div>
+    <div class="section-nav-category">
+      <a href="./admin_inventory_register.html">입출고등록</a>
+    </div>
+    <div class="section-nav-category">
+      <a href="./admin_inventory_search.html">입출고내역</a>
+    </div>
+  </div>
+
+  <!-- 컨텐츠 영역 시작 -->
+  <div class="section-content">
+    <div class="section-title">재고현황</div>
+
+    <!-- 1.현재기준 간단 기본 정보 출력 (★수정 필요★)-->
+    <div class="section-invenMain">
+      <span class="section-invenMain-list"><strong>총 재고수량</strong></span>
+      <span><p id="totalInvenAmount"></p></span>
+      <span class="section-invenMain-list"><strong>위험재고 상품수</strong></span>
+      <span><p id="alertStock"></p></span>
+    </div>
+
+    <!-- 2. 상품코드 검색하여 결과 값 출력 -->
+    <!--    <form class="section-invenMain-search" id="searchForm" method="POST" action="HTML/admin/admin_inventory">-->
+    <form class="section-invenMain-search" id="searchForm" method="GET" action="/HTML/admin/admin_inventory">
+      <span class="section-invenMain-search-span">상품코드
+          <input name="productCode" id="searchCode" type="text" class="section-historySearch-input product-code" placeholder="상품 코드 입력">
+      </span>
+      <div class="section-invenMain-search-btn">
+        <button type="submit" id="productCodeInput" class="btn_basic">검색</button>
+      </div>
+    </form>
+    <div>
+      <table class="section-invenMain-search-table">
+        <tr>
+          <th>상품코드</th>
+          <th>상품명</th>
+          <th>카테고리</th>
+          <th>총 재고수량</th>
+        </tr>
+        <tbody>
+          <tr th:each="inven: ${ productList }">
+            <td th:text="${inven.productCode}"></td>
+            <td th:text="${inven.productName}"></td>
+            <td th:text="${inven.categoryCode.categoryName}"></td>
+            <td th:text="${inven.productAmount}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- footer -->
+<div data-include-html="./footer.html" class="include"></div>
+
+<!-- 스크립트 시작-->
+<script>
+
+  // function fetchInvenInfo() {
+  //   fetch("/getInventoryInfo")
+  //           .then(function(response) {
+  //             if (response.ok) {
+  //               return response.json();
+  //             } else {
+  //               throw new Error("Network response was not OK");
+  //             }
+  //           })
+  //           .then(function(data) {
+  //             document.getElementById("totalInvenAmount").innerText = data.totalInvenAmount;
+  //             document.getElementById("alertStock").innerText = data.alertStock;
+  //           })
+  //           .catch(function(error) {
+  //             console.error("Error fetching inventory info:", error);
+  //           });
+  // }
+
+
+  <!-- 검색한 상품코드 결과 출력 -->
+  function fetchInvenInfo() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var inventoryInfo = JSON.parse(xhr.responseText);
+        document.getElementById("totalInvenAmount").innerText = inventoryInfo.totalInvenAmount;
+        document.getElementById("alertStock").innerText = inventoryInfo.alertStock;
+      }
+    };
+    xhr.open("POST", "/getInventoryInfo", true);
+    xhr.send();
+  }
+  window.addEventListener("load", function() {
+    fetchInvenInfo();
+  });
+
+
+
+  const option = {
+    dataType : 'json',
+    url: "inventory/admin_inventory",
+    type: "POST",
+    success: function(data) {
+      alert("검색 성공")
+      console.log(data);
+    },
+    error: function(error) {
+      alert("Search failed", error);
+    }
+  };
+
+  $('#searchForm').submit(function() {
+    $(this).ajaxSubmit(option);
+    return false;
+  });
+
+  $('#searchForm').submit(function(event) {
+    event.preventDefault(); // Prevent default form submission behavior
+
+    var form = $(this);
+    var url = form.attr('action');
+    var formData = form.serialize();
+
+    var option = {
+      type: "POST",
+      url: url,
+      data: formData,
+      success: function(response) {
+        console.log(response);
+      },
+      error: function(xhr, status, error) {
+        console.error(error);
+      }
+    };
+
+    $.ajax(option);
+
+    form[0].reset(); // Reset the form fields
+  });
+
+/*  $('#searchForm').submit(function(event) {
+    event.preventDefault(); // Prevent default form submission behavior
+
+    var form = $(this);
+    var url = form.attr('action');
+    var formData = form.serialize();
+
+    var option = {
+      type: "POST",
+      url: url,
+      data: formData,
+      success: function(response) {
+        // Clear the table before appending new search results
+        $('#searchResultTable tbody').empty();
+
+        // Append the new search results to the table
+        response.forEach(function(productList) {
+          var row = '<tr>' +
+                  '<td>' + productList.productCode + '</td>' +
+                  '<td>' + productList.productName + '</td>' +
+                  '<td>' + productList.categoryCode.categoryName + '</td>' +
+                  '<td>' + productList.productAmount + '</td>' +
+                  '</tr>';
+          $('#searchResultTable tbody').append(row);
+        });
+      },
+      error: function(xhr, status, error) {
+        console.error(error);
+      }
+    };
+
+    $.ajax(option);
+
+    form[1].reset(); // Reset the second form fields
+  });*/
+
+
+
+</script>
+</body>
+</html>
