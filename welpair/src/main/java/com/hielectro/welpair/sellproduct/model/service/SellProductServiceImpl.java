@@ -22,4 +22,9 @@ public class SellProductServiceImpl implements SellProductService {
     public int sellProductTotalCount() {
         return productMapper.sellProductTotalCount();
     }
+
+    @Override
+    public SellProductDTO findSellProductById(String productId) {
+        return productMapper.findSellProductById(productId);
+    }
 }

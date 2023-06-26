@@ -1,15 +1,15 @@
 package com.hielectro.welpair.sellproduct.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
 
-import java.util.List;
-
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/sellproduct")
 public class SellProductController {
     private final SellProductServiceImpl productService;
 
@@ -19,7 +19,7 @@ public class SellProductController {
 
     @GetMapping({"{id}"})
     public String defaultLocation(@PathVariable("id") String url) {
-        return "admin/product/" + url;
+        return "admin/sellproduct/" + url;
     }
 
     @GetMapping(value = "sellproductlist/{pageNo}", produces = "application/json;charset=utf-8")
@@ -36,5 +36,11 @@ public class SellProductController {
         int result = productService.sellProductTotalCount();
         System.out.println(result);
         return result;
+    }
+
+    @PostMapping("findSellProductById")
+    @ResponseBody
+    public SellProductDTO findSellProductById(@RequestParam String id) {
+        return productService.findSellProductById(id);
     }
 }
