@@ -4,7 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hielectro.welpair.order.model.dao.OrderMapper">
 
-    <!-- MemberDTO resultMap-->
+    <!-- MemberDTO resultMap
+    나중에 수정해야 함 -->
     <resultMap type="MemberDTO" id="memberResultMap">
         <id property="empNo" column="EMP_NO"/>
         <result property="memPwd" column="MEM_PWD"/>

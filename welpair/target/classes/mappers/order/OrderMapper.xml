@@ -38,27 +38,17 @@
         <association property="Sellproduct" resultMap="sellProductResultMap"/>
     </resultMap>
 
-    <!-- sellProductDTO resultMap-->
-    <resultMap type="SellProductDTO" id="sellProductResultMap">
-        <id property="sellProductId" column="SELL_PRODUCT_ID"/>
-        <result property="productCode" column="PRODUCT_CODE"/>
-        <result property="discount" column="DISCOUNT"/>
-        <result property="isSell" column="IS_SELL"/>
-
-        <association property="product" resultMap="productResultMap"/>
-    </resultMap>
-
     <!-- ProductDTO resultMap-->
-    <resultMap type="ProductDTO" id="productResultMap">
-        <id property="code" column="PRODUCT_CODE"/>
-        <result property="name" column="PRODUCT_NAME"/>
-        <result property="status" column="PRODUCT_STATUS"/>
-        <result property="amount" column="PRODUCT_AMOUNT"/>
-        <result property="price" column="PRODUCT_PRICE"/>
-        <result property="option" column="PRODUCT_OPTION"/>
-        <result property="nation" column="PRODUCT_NATION"/>
-        <result property="categoryCode" column="CATEGORY_CODE"/>
-    </resultMap>
+<!--    <resultMap type="ProductDTO" id="productResultMap">-->
+<!--        <id property="code" column="PRODUCT_CODE"/>-->
+<!--        <result property="name" column="PRODUCT_NAME"/>-->
+<!--        <result property="status" column="PRODUCT_STATUS"/>-->
+<!--        <result property="amount" column="PRODUCT_AMOUNT"/>-->
+<!--        <result property="price" column="PRODUCT_PRICE"/>-->
+<!--        <result property="option" column="PRODUCT_OPTION"/>-->
+<!--        <result property="nation" column="PRODUCT_NATION"/>-->
+<!--        <result property="categoryCode" column="CATEGORY_CODE"/>-->
+<!--    </resultMap>-->
 
     <!-- 상품이 존재하는지 조회 -->
     <select id="checkoutSellProductId" resultMap="sellProductResultMap">
