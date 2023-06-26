@@ -41,7 +41,7 @@ public class InventoryController {
 
         int totalInvenAmount = inventoryService.getTotalInventoryAmount();
         int alertStock = inventoryService.getNumberOfAlertStock();
-        log.i
+
         model.addAttribute("totalInvenAmount", totalInvenAmount);
         model.addAttribute("alertStock", alertStock);
 
