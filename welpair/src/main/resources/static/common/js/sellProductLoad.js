@@ -104,3 +104,10 @@ function sellProductLoad(pageNo = 1) {
 
     document.createElement('a').href = 'javascript:void(0)';
 }
+
+window.onload(searchSellProduct)
+
+function searchSellProduct() {
+    let search = document.querySelector(".first-button")
+    console.log(search);
+}

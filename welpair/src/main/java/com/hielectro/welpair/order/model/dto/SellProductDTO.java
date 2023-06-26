@@ -1,7 +1,12 @@
 package com.hielectro.welpair.order.model.dto;
 
-import com.hielectro.welpair.product.model.dto.ProductDTO;
-import lombok.*;
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
