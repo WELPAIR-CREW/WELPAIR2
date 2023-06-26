@@ -4,7 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hielectro.welpair.order.model.dao.OrderMapper">
 
-    <!-- MemberDTO resultMap-->
+    <!-- MemberDTO resultMap
+    나중에 수정해야 함 -->
     <resultMap type="MemberDTO" id="memberResultMap">
         <id property="empNo" column="EMP_NO"/>
         <result property="memPwd" column="MEM_PWD"/>
@@ -38,6 +39,16 @@
         <association property="Sellproduct" resultMap="sellProductResultMap"/>
     </resultMap>
 
+    <!-- sellProductDTO resultMap-->
+<!--    <resultMap type="SellProductDTO" id="sellProductResultMap">-->
+<!--        <id property="sellProductId" column="SELL_PRODUCT_ID"/>-->
+<!--        <result property="productCode" column="PRODUCT_CODE"/>-->
+<!--        <result property="discount" column="DISCOUNT"/>-->
+<!--        <result property="isSell" column="IS_SELL"/>-->
+
+<!--        <association property="product" resultMap="productResultMap"/>-->
+<!--    </resultMap>-->
+
     <!-- ProductDTO resultMap-->
 <!--    <resultMap type="ProductDTO" id="productResultMap">-->
 <!--        <id property="code" column="PRODUCT_CODE"/>-->
@@ -51,7 +62,7 @@
 <!--    </resultMap>-->
 
     <!-- 상품이 존재하는지 조회 -->
-    <select id="checkoutSellProductId" resultMap="sellProductResultMap">
+    <select id="checkoutSellProductId" resultMap="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
         SELECT
             *
         FROM T_SELL_PRODUCT
