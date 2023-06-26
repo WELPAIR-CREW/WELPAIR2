@@ -4,6 +4,7 @@ package com.hielectro.welpair.inventory.controller;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.inventory.model.service.InventoryService;
 import com.hielectro.welpair.inventory.model.service.InventoryServiceImpl;
+import groovy.util.logging.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@Slf4j
 @RequestMapping("/inventory")
 public class InventoryController {
     private final InventoryService inventoryService;
@@ -39,7 +41,7 @@ public class InventoryController {
 
         int totalInvenAmount = inventoryService.getTotalInventoryAmount();
         int alertStock = inventoryService.getNumberOfAlertStock();
-
+        log.i
         model.addAttribute("totalInvenAmount", totalInvenAmount);
         model.addAttribute("alertStock", alertStock);
 
@@ -72,6 +74,8 @@ public class InventoryController {
     public String searchProductByCode(Model model, @RequestParam(required = false) String searchCode) {
         System.out.println("-------------컨트롤러 1-2 -------------");
         System.out.println("searchCode = " + searchCode);
+
+
         System.out.println(inventoryService);
         List<ProductDTO> productList = inventoryService.searchProductByCode(searchCode);
         System.out.println("==================== 1-2 =============");

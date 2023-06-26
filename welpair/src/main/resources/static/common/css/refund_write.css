@@ -1,0 +1,127 @@
+@charset "UTF-8";
+body {
+    width: 1440px;
+    margin: auto;
+
+}
+* {
+    
+    font-size: 20px;
+}
+
+.refund_writer_container{
+    margin: auto;
+	width: 1196px;
+}
+
+.refund_header {
+    height: 55px;
+    margin-top: 90px;
+    display: flex;
+    border-bottom: 4px solid black;
+    font-size: 22px;
+    font-weight: bold;
+    align-items: flex-end;
+
+}
+
+.refund_title {
+    font-size: 26px;
+    margin: 0px 0px 20px 10px;
+}
+
+div[class*=subtitle] {
+
+    margin: 0px 0px 20px 20px;
+}
+
+.refund_subtitle1, .refund_subtitle2 {
+    color: gray;
+    
+}
+
+.refund_body {
+    font-size: 0;
+    margin: 30px 0px 0px 30px;
+}
+
+.refund_body input, textarea {
+    margin-right: 10px;
+    border-radius: 6px;
+    resize: none;
+}
+
+
+div[class$=_category]  {
+    width: 170px;
+    height: 50px;
+    font-size: 20px;
+
+}
+
+input[type=text]{
+    height: 50px;
+}
+
+.refund_orderNo, .refund_reason, .refund_contitle, 
+.refund_content {
+    margin: 0px 0px;
+    display: flex;
+    align-items: baseline;
+
+}
+
+.orderNo_load, .reason_select > select {
+    width: 250px;
+    height: 50px;
+    text-align: center;
+}
+.contitle_write {
+    width: 900px;
+}
+
+.content_write {
+    width: 900px;
+    min-height: 300px;
+}
+
+.refund_file {
+    margin: 10px 0px;
+    display: flex;
+}
+
+.file_name {
+    width: 740px;
+}
+
+button {
+    width: 150px;
+    height: 50px;
+}
+
+.submit {
+    width: 400px;
+    margin: 30px 0px 30px 450px;
+    
+
+}
+input[type=button] {
+    width: 150px;
+    height: 50px;
+    
+
+}
+
+input[type=submit] {
+    width: 150px;
+    height: 50px;
+    background-color: black;
+    color: white;
+}
+
+
+
+
+
+
+

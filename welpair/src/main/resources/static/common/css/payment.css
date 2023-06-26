@@ -1,0 +1,227 @@
+@charset "UTF-8";
+
+* {
+    vertical-align: middle;
+}
+
+/* 랑크 흔적 보라색 없애기 */
+a { text-decoration: none; color: black; }
+a:visited { text-decoration: none; }
+a:hover { text-decoration: none; }
+a:focus { text-decoration: none; }
+a:hover, a:active { text-decoration: none; }
+
+/* 각 구역 */
+.payment_container{
+    margin: auto;
+	width: 1196px;
+}
+.order_prd_area {
+    height: 350px;
+}
+.orderer_area {
+    /* height: 185px; */
+    /* vertical-align: middle; */
+}
+.recipient_area {
+    /* height: 560px; */
+}
+.pay_area {
+    height: 460px;
+    /* vertical-align: middle; */
+}
+
+/* 각 구역 컨텐츠박스 */
+div[class$=contentsbox], .info_table{
+    margin: 20px 0px;
+}
+
+div[class^="title"] {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+/* 소제목 공통 */
+div[class*=title] {
+    margin-top: 30px;
+    width: 1170px;
+    height: 54px;
+	border-bottom: 4px solid black;
+}
+
+.inputbox, .labelbox {
+    margin: 10px 0px;
+}
+
+/* 라벨(인포라벨링)박스 */
+.labelbox, div[class*=paybox] {
+    width: 170px; 
+    height: 50px; 
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+
+
+
+/* 입력박스 스타일 */
+input[class^=inputbox], select{
+    height: 50px;
+    border-radius: 6px;
+    border: solid 1px gray;
+    color: gray;
+}
+
+/* input check박스 공통 */
+input[type=checkbox] {
+	width: 23px;
+	height: 23px;
+}
+
+/* ----------- 공통------------ */
+
+.order_prd_ul {
+    height: 30px;
+    display: flex;
+    list-style-type: none;
+    font-size: 14px;
+}
+
+.order_prd_li_1 {
+    width: 90px;
+}
+.order_prd_li_2 {
+    width: 385px;
+}
+.order_prd_li_3 {
+    width: 175px;
+}
+
+input[type=button] {
+    height: 50px;
+    width: 150px;
+    border: solid 1px gray;
+    border-radius: 6px;
+    font-size: 20px;
+}
+
+.inputbox_name, .inputbox_phone, .inputbox_addBasic {
+    width: 400px;
+}
+
+#recipientAddress, .inputbox_addZipcode, .inputbox_delivery_date  {
+    width: 200px;
+}
+
+.inputbox_addDetail, .inputbox_delivery_text {
+    width: 780px;
+}
+
+.inputbox_delivery_date {
+    font-size: 20px;
+}
+
+/* 결제수단 구역 */
+
+.pay_contentsbox {
+    
+    display: flex;
+    font: bold;
+    font-size: 20px;
+}
+
+.pay_contentsbox  > div {
+    height: 70px;
+}
+
+
+div[class*=rest] {
+    display: inline-block;
+    width: 170px;
+    height: 70px;
+}
+
+
+div[id$=Point], div[id$=Price] {
+    text-align: right;
+}
+
+.usePointBox {
+    height: 50px;
+    width: 200px;
+    border: solid 1px gray;
+    border-radius: 6px;
+    font-size: 20px;
+    text-align: right;
+}
+
+
+
+
+/* .creditCard, .kakaoPay {
+    width: 100px;
+    height: 100px;
+    border: 1px dashed gray;
+} */
+
+
+
+/* input[type=radio] {
+    width: 47%;
+    height : 45px;
+    border: 1px solid #EAE7E7;
+    border-radius: 10px;
+    display: none;
+}
+#creditCard + label {
+    
+    cursor: pointer; 
+    line-height: 30px; 
+    padding-left: 30px; 
+    position: relative;
+    background: url('../img/creditCard.png')  no-repeat; 
+} */
+
+.payMethod_select {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.payMethod_select input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+span[class$=_custom] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100px;
+    width: 100px;
+    /* border-radius: 50%; */
+}
+
+span[class^=creditCard]{
+    background-image: url('images/creditCard.png');
+    background-repeat: no-repeat;
+}
+
+span[class^=kakaoPay]{
+    background-image: url('images/kakaopay_medium.png');
+    background-repeat: no-repeat;
+}
+
+.payMethod_select input:checked ~ .checkmark {
+    background-color: #2196F3;
+}

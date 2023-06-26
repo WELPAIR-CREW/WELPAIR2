@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hielectro.welpair.order.model.dao.OrderMapper">
+
+    <!-- MemberDTO resultMap
+    나중에 수정해야 함 -->
+    <resultMap type="MemberDTO" id="memberResultMap">
+        <id property="empNo" column="EMP_NO"/>
+        <result property="memPwd" column="MEM_PWD"/>
+        <result property="registDate" column="REGIST_DATE"/>
+        <result property="pointBalance" column="POINT_BALANCE"/>
+        <result property="memAuth" column="MEM_AUTH"/>
+    </resultMap>
+
+    <!-- OrderDTO resultMap-->
+    <resultMap type="OrderDTO" id="orderResultMap">
+        <id property="orderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="orderDate" column="ORDER_NO"/>
+        <result property="totalPrice" column="SELL_PRODUCT_ID"/>
+        <result property="addressId" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="deliveryType" column="PRODUCT_ORDER_PRICE"/>
+        <result property="memberNo" column="DELIVERY_DATE"/>
+
+        <association property="member" resultMap="sellProductResultMap"/>
+        <collection property="productOrderList" resultMap="productOrderResultMap"/>
+    </resultMap>
+
+    <!-- ProductorderDTO resultMap-->
+    <resultMap type="ProductOrderDTO" id="productOrderResultMap">
+        <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="orderNo" column="ORDER_NO"/>
+        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="productOrderAmount" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="productOrderPrice" column="PRODUCT_ORDER_PRICE"/>
+        <result property="deliveryDate" column="DELIVERY_DATE"/>
+
+        <association property="Sellproduct" resultMap="sellProductResultMap"/>
+    </resultMap>
+
+
+
+    <!-- sellProductDTO resultMap-->
+<!--    <resultMap type="SellProductDTO" id="sellProductResultMap">-->
+<!--        <id property="sellProductId" column="SELL_PRODUCT_ID"/>-->
+<!--        <result property="productCode" column="PRODUCT_CODE"/>-->
+<!--        <result property="discount" column="DISCOUNT"/>-->
+<!--        <result property="isSell" column="IS_SELL"/>-->
+
+<!--        <association property="product" resultMap="productResultMap"/>-->
+<!--    </resultMap>-->
+
+    <!-- ProductDTO resultMap-->
+<!--    <resultMap type="ProductDTO" id="productResultMap">-->
+<!--        <id property="code" column="PRODUCT_CODE"/>-->
+<!--        <result property="name" column="PRODUCT_NAME"/>-->
+<!--        <result property="status" column="PRODUCT_STATUS"/>-->
+<!--        <result property="amount" column="PRODUCT_AMOUNT"/>-->
+<!--        <result property="price" column="PRODUCT_PRICE"/>-->
+<!--        <result property="option" column="PRODUCT_OPTION"/>-->
+<!--        <result property="nation" column="PRODUCT_NATION"/>-->
+<!--        <result property="categoryCode" column="CATEGORY_CODE"/>-->
+<!--    </resultMap>-->
+
+    <!-- 회원이 존재하는지 조회 -->
+    <select id="checkoutMemberById" resultMap="memberResultMap">
+        SELECT * FROM T_MEMBER
+        WHERE EMP_NO = #{empNo}
+    </select>
+
+    <!-- cart 테이블 삽입 -->
+    <insert id="addcart">
+        INSERT
+        INTO T_CART A
+            (
+            A.CART_NO,
+            A.EMP_NO
+            )
+        VALUES
+            (
+            'CR' || LPAD(SEQ_CART_NO.NEXTVAL, 6, '0'),
+            #{ empNo }
+            )
+    </insert>
+
+    <!-- cart 테이블 pk 조회 -->
+    <select id="selectCartNo">
+        SELECT 'CR' || LPAD(SEQ_CART_NO.CURRVAL, 6, '0') FROM DUAL
+    </select>
+
+    <!-- cartSellProduct 테이블 삽입 -->
+    <insert id="addCartSellProduct" parameterType="CartSellProductDTO">
+        INSERT
+        INTO T_CART_SELL_PRODUCT A
+            (
+            A.CART_NO,
+            A.SELL_PRODUCT_ID,
+            A.CART_AMOUNT,
+            A.DELIVERY_PRICE
+        )
+        VALUES
+            (
+            #{cartNo},
+            #{sellProductId},
+            #{cartAmount},
+            DEFAULT
+            )
+    </insert>
+
+</mapper>

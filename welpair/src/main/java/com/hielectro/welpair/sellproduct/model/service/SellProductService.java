@@ -8,4 +8,6 @@ public interface SellProductService {
     public List<SellProductDTO> findSellProductByPageNo(int pageNo);
 
     public int sellProductTotalCount();
+
+    public SellProductDTO findSellProductById(String productId);
 }

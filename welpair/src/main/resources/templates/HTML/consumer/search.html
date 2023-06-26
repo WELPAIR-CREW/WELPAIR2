@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상세검색</title>
+    <link rel="stylesheet" href="/CSS/header.css">
+    <link rel="stylesheet" href="/CSS/main.css">
+    <link rel="stylesheet" href="/CSS/footer.css">
+    <link rel="stylesheet" href="/CSS/search.css">
+    <script src="/src/static/include.js"></script>
+
+
+</head>
+<!-- 헤더 -->
+<body>
+    <div data-include-html="./header.html" class="include"></div>
+
+    <!-- 검색 결과 시작 -->
+    <section>
+
+        <!-- 타이틀바디 -->
+        <div class="section-content">
+            <div class="section-title">상세검색</div>
+
+            <form>
+                <div class="section-detailSearch">
+                    <!-- 상세 검색 옵션 -->
+                    <div class="section-detailSearch-line1">
+                        <div>
+                            <span class="section-detailSearch-span">상품명
+                                <input type="text" class="section-detailSearch-input" placeholder="상품명입력">
+                            </span>
+                            <span class="section-detailSearch-span">카테고리
+                                <select id="category" class="section-detailSearch-input option1">
+                                    <option value="">선택</option>
+                                    <option value="카테고리1">TV</option>
+                                    <option value="카테고리2">냉장고</option>
+                                    <option value="카테고리3">에어컨</option>
+                                    <option value="카테고리4">인덕션</option>
+                                </select>
+                            </span>
+                            <span class="section-detailSearch-input">가격
+                                <input type="number" name="minPrice" class="section-detailSearch-input price" placeholder="최소 금액">
+                                <span>~</span>
+                                <input type="number" name="maxPrice" class="section-detailSearch-input price" placeholder="최대 금액">
+                            </span>
+                            <span>
+                                <input clas="searchCheck" type="checkbox"> 결과 내 검색
+                            </span>
+                            <span>
+                                <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
+                                <input class="btn_basic" type="submit" value="검색">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- 검색 수량, 정렬 기준 -->
+
+            <!-- 검색 결과 리스트 -->
+            <div class="section-searchResult">
+                <div>
+                    <ul>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                        <li class="section-searchResult-product">
+                            <a href="#">
+                                <img src="#" alt="">
+                            </a>
+                            <div class="product-info">
+                                <div class="searchProdTitle"><span>상품명</span></div>
+                                <div class="searchProdPrice"><span>10,000원</span></div>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
+
+            <!-- 페이징 -->
+            <div class="paging">
+                <span>&lt;</span>
+                <span style="color: #4D4D4D;">1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+                <span>5</span>
+                <span>&gt;</span>
+            </div> 
+        </div>
+    </section>
+
+    
+    <!-- footer -->
+    <div id="footerwrap">
+        <div data-include-html="./footer.html" class="include"></div>
+    </div>
+</body>
+</html>
