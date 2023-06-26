@@ -63,5 +63,12 @@
              )
          WHERE RN &gt; ( ${ pageNo } - 1 * 10)
            AND RN &lt;= ( ${ pageNo } * 10)
+
+    </select>
+    <select id='existSellProductById' resultMap="_int">
+        SELECT
+               COUNT(*)
+          FROM T_SELL_PRODUCT
+         WHERE SELL_PRODUCT_ID = ${ productId }
     </select>
 </mapper>

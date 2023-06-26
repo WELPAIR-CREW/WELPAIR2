@@ -10,4 +10,5 @@ import java.util.List;
 public interface SellProductMapper {
     List<SellProductDTO> findSellProductByPageNo(int pageNo);
     int sellProductTotalCount();
+    int existSellProductById(String productId);
 }
