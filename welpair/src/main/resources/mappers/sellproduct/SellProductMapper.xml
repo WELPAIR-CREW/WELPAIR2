@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hielectro.welpair.product.model.dao.ProductMapper">
-    <resultMap id="SellProductResultMap" type="com.hielectro.welpair.product.model.dto.SellProductDTO">
+<mapper namespace="com.hielectro.welpair.sellproduct.model.dao.SellProductMapper">
+    <resultMap id="SellProductResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
         <id property="id" column="SELL_PRODUCT_ID"/>
         <result property="code" column="PRODUCT_CODE"/>
         <result property="discount" column="DISCOUNT"/>
@@ -12,19 +12,19 @@
         <collection property="sellItemPageList" resultMap="SellItemPageDTO"/>
     </resultMap>
 
-    <resultMap id="SellItemPageDTO" type="com.hielectro.welpair.product.model.dto.SellItemPageDTO">
+    <resultMap id="SellItemPageDTO" type="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
         <id property="no" column="SELL_PAGE_NO"/>
         <id property="id" column="SELL_PRODUCT_ID"/>
 
         <association property="sellPage" resultMap="SellPageDTO"/>
     </resultMap>
 
-    <resultMap id="SellPageDTO" type="com.hielectro.welpair.product.model.dto.SellPageDTO">
+    <resultMap id="SellPageDTO" type="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
         <id property="no" column="SELL_PAGE_NO"/>
         <result property="title" column="SELL_PAGE_TITLE"/>
     </resultMap>
 
-    <select id="sellProductCount" resultType="_int">
+    <select id="sellProductTotalCount" resultType="_int">
         SELECT
                COUNT(*)
         FROM (
@@ -61,7 +61,14 @@
                           LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
                           LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
              )
-         WHERE RN > ( ${ pageNo } - 1 * 10)
+         WHERE RN &gt; ( ${ pageNo } - 1 * 10)
            AND RN &lt;= ( ${ pageNo } * 10)
+
+    </select>
+    <select id='findSellProductById' resultType="_int">
+        SELECT
+               COUNT(*)
+          FROM T_SELL_PRODUCT
+         WHERE SELL_PRODUCT_ID = ${ productId }
     </select>
 </mapper>

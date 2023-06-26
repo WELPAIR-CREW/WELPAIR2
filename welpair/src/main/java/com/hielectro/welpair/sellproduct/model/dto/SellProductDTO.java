@@ -1,4 +1,4 @@
-package com.hielectro.welpair.product.model.dto;
+package com.hielectro.welpair.sellproduct.model.dto;
 
 import lombok.*;
 
