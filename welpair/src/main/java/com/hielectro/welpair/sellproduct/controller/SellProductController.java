@@ -1,13 +1,10 @@
 package com.hielectro.welpair.sellproduct.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
@@ -34,11 +31,17 @@ public class SellProductController {
         return sellProductList;
     }
 
-    @PostMapping("totalcount")
+    @PostMapping("totalCount")
     @ResponseBody
     public int getSellProductCount() {
         int result = productService.sellProductTotalCount();
         System.out.println(result);
         return result;
+    }
+
+    @PostMapping("search")
+    @ResponseBody
+    public List<SellProductDTO> findSellProductByCode(@RequestBody Object code) {
+        return productService.findSellProductByCode((String) code);
     }
 }

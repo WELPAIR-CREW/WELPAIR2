@@ -1,0 +1,97 @@
+# Created at 2023-06-26T14:08:39.475
+TestSet has not finished before stream error has appeared >> initializing exit by non-null configuration: null
+java.io.EOFException
+	at java.base/java.io.DataInputStream.readInt(DataInputStream.java:397)
+	at org.apache.maven.surefire.booter.MasterProcessCommand.decode(MasterProcessCommand.java:115)
+	at org.apache.maven.surefire.booter.CommandReader$CommandRunnable.run(CommandReader.java:391)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+
+# Created at 2023-06-26T14:08:41.391
+Unexpected IOException with stream: 2023-06-26 14:08:41.390  INFO 91944 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+
+
+# Created at 2023-06-26T14:08:43.550
+Unexpected IOException with stream: 2023-06-26 14:08:43.549  INFO 91944 --- [           main] c.h.welpair.product.ProductMapperTests   : Started ProductMapperTests in 8.617 seconds (JVM running for 10.446)
+
+
+# Created at 2023-06-26T14:08:43.589
+Unexpected IOException: 5,1,com.hielectro.welpair.product.ProductMapperTests,dependency,null,null,null
+
+
+# Created at 2023-06-26T14:08:44.298
+Unexpected IOException: 6,1,com.hielectro.welpair.product.ProductMapperTests,dependency,null,null,null
+
+
+# Created at 2023-06-26T14:08:44.301
+Unexpected IOException: 5,1,com.hielectro.welpair.product.ProductMapperTests,test,null,null,null
+
+
+# Created at 2023-06-26T14:08:44.320
+Unexpected IOException: 7,1,com.hielectro.welpair.product.ProductMapperTests,test,null,Result Maps collection does not contain value for com.hielectro.welpair.sellproduct.model.dto.SellProductDTO,null,Result Maps collection does not contain value for com.hielectro.welpair.sellproduct.model.dto.SellProductDTO,ProductMapperTests.test:31 \00BB IllegalArgument Result Maps collection does not c...,java.lang.IllegalArgumentException: Result Maps collection does not contain value for com.hielectro.welpair.sellproduct.model.dto.SellProductDTO\000A\0009at com.hielectro.welpair.product.ProductMapperTests.test(ProductMapperTests.java:31)\000A
+
+
+# Created at 2023-06-26T14:08:44.324
+Unexpected IOException: 2,1,org.apache.maven.surefire.junitplatform.JUnitPlatformProvider,com.hielectro.welpair.product.ProductMapperTests,null,null,null
+
+
+# Created at 2023-06-26T14:08:44.326
+Unexpected IOException: 1,1,org.apache.maven.surefire.junitplatform.JUnitPlatformProvider,com.hielectro.welpair.product.ProductServiceTests,null,null,null
+
+
+# Created at 2023-06-26T14:08:44.330
+Unexpected IOException with stream: 2023-06-26 14:08:44.329  INFO 91944 --- [           main] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [com.hielectro.welpair.product.ProductServiceTests]: no resource found for suffixes {-context.xml, Context.groovy}.
+
+
+# Created at 2023-06-26T14:08:44.335
+Unexpected IOException with stream: 2023-06-26 14:08:44.335  INFO 91944 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener, org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener, org.springframework.security.test.context.support.ReactorContextTestExecutionListener]
+
+
+# Created at 2023-06-26T14:08:44.338
+Unexpected IOException with stream: 2023-06-26 14:08:44.337  INFO 91944 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@32513dea, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@5d0e703a, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@7f77e065, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@6f655dbd, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@546083d6, org.springframework.test.context.support.DirtiesContextTestExecutionListener@7ac1b6c0, org.springframework.test.context.transaction.TransactionalTestExecutionListener@3a751535, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@7fb82f73, org.springframework.test.context.event.EventPublishingTestExecutionListener@2f166d61, org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener@5896b9f5, org.springframework.security.test.context.support.ReactorContextTestExecutionListener@4ad8d36f, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@74a5bef0, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@68c4a860, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@570ed9c, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@93f15f6, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@5034681f, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@1dfe5dd1]
+
+
+# Created at 2023-06-26T14:08:44.343
+Unexpected IOException: 5,1,com.hielectro.welpair.product.ProductServiceTests,test,null,null,null
+
+
+# Created at 2023-06-26T14:08:44.348
+Unexpected IOException: 6,1,com.hielectro.welpair.product.ProductServiceTests,test,null,null,null
+
+
+# Created at 2023-06-26T14:08:44.351
+Unexpected IOException: 5,1,com.hielectro.welpair.product.ProductServiceTests,test2,null,null,null
+
+
+# Created at 2023-06-26T14:08:44.357
+Unexpected IOException: 7,1,com.hielectro.welpair.product.ProductServiceTests,test2,null,Result Maps collection does not contain value for com.hielectro.welpair.sellproduct.model.dto.SellProductDTO,null,Result Maps collection does not contain value for com.hielectro.welpair.sellproduct.model.dto.SellProductDTO,ProductServiceTests.test2:30 \00BB IllegalArgument Result Maps collection does not...,java.lang.IllegalArgumentException: Result Maps collection does not contain value for com.hielectro.welpair.sellproduct.model.dto.SellProductDTO\000A\0009at com.hielectro.welpair.product.ProductServiceTests.test2(ProductServiceTests.java:30)\000A
+
+
+# Created at 2023-06-26T14:08:44.359
+Unexpected IOException: 2,1,org.apache.maven.surefire.junitplatform.JUnitPlatformProvider,com.hielectro.welpair.product.ProductServiceTests,null,null,null
+
+
+# Created at 2023-06-26T14:08:44.360
+Unexpected IOException: 1,1,org.apache.maven.surefire.junitplatform.JUnitPlatformProvider,com.hielectro.welpair.WelpairApplicationTests,null,null,null
+
+
+# Created at 2023-06-26T14:08:44.363
+Unexpected IOException with stream: 2023-06-26 14:08:44.362  INFO 91944 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.hielectro.welpair.WelpairApplicationTests], using SpringBootContextLoader
+
+
+# Created at 2023-06-26T14:08:44.365
+Unexpected IOException with stream: 2023-06-26 14:08:44.364  INFO 91944 --- [           main] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [com.hielectro.welpair.WelpairApplicationTests]: no resource found for suffixes {-context.xml, Context.groovy}.
+
+
+# Created at 2023-06-26T14:08:44.367
+Unexpected IOException with stream: 2023-06-26 14:08:44.366  INFO 91944 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.hielectro.welpair.WelpairApplicationTests]: WelpairApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+
+
+# Created at 2023-06-26T14:08:44.390
+Unexpected IOException: 7,1,com.hielectro.welpair.WelpairApplicationTests,com.hielectro.welpair.WelpairApplicationTests,null,Unable to find a @SpringBootConfiguration\002C you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test,null,Unable to find a @SpringBootConfiguration\002C you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test,WelpairApplicationTests \00BB IllegalState Unable to find a @SpringBootConfigurati...,java.lang.IllegalStateException: Unable to find a @SpringBootConfiguration\002C you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test\000A
+
+
+# Created at 2023-06-26T14:08:44.392
+Unexpected IOException: 2,1,org.apache.maven.surefire.junitplatform.JUnitPlatformProvider,com.hielectro.welpair.WelpairApplicationTests,null,null,null
+
+

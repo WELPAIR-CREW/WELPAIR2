@@ -41,13 +41,13 @@
 
 
     <!-- 1-1 -->
-    <select id="getTotalInventoryAmount" resultType="java.lang.Integer">
+    <select id="getTotalInventoryAmount" resultType="_int">
         SELECT
                SUM(PRODUCT_AMOUNT) AS 총재고수량
           FROM T_PRODUCT
     </select>
 
-    <select id="getNumberOfAlertStock" resultType="java.lang.Integer">
+    <select id="getNumberOfAlertStock" resultType="_int">
         SELECT
                COUNT(*) AS 위험재고수량
           FROM T_PRODUCT
@@ -64,8 +64,9 @@
              , A.PRODUCT_AMOUNT
          FROM T_PRODUCT A
          JOIN T_CATEGORY B ON B.CATEGORY_CODE = A.CATEGORY_CODE
---             WHERE A.PRODUCT_CODE = 'P000002'
+         <if test=" searchCode != null">
         WHERE A.PRODUCT_CODE = #{ searchCode }
+         </if>
     </select>
 
 

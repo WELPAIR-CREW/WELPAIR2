@@ -1,0 +1,351 @@
+/* @charset "UTF-8"; */
+
+/* 랑크 흔적 보라색 없애기 */
+a {
+	text-decoration: none;
+	color: black;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+a:focus {
+	text-decoration: none;
+}
+
+a:hover,
+a:active {
+	text-decoration: none;
+}
+
+/* 전체 장바구니 페이지 공통 */
+#cart_container {
+	width: 1196px;
+	margin: auto;
+
+}
+
+table {
+	border: none;
+}
+
+tr {
+	margin-bottom: 10px;
+}
+
+/* input check박스 공통 */
+input[type=checkbox] {
+	width: 23px;
+	height: 23px;
+}
+
+/* 장바구니 상품부분 박스 */
+.prd_box {
+	background: white;
+	/* margin-bottom: 50px; */
+
+}
+
+/* 장바구니 헤더 */
+.title_cart_header {
+	height: 54px;
+	width: 1170px;
+	margin-top: 90px;
+	border-bottom: 4px solid black;
+}
+
+/* 장바구니 타이틀 부분 */
+#title_cart {
+	/* 위치 설정 */
+	/* top: 91px; */
+	/* 텍스트 스타일 */
+	text-align: left;
+	font-size: 26px;
+	font-weight: bold;
+}
+
+/* 전체선택, 선택삭제 체크박스 구역 */
+.cart_option {
+	margin: 30px 0px;
+	list-style-type: none;
+	font-size: 16px;
+
+}
+
+/* 전체선택 체크박스 */
+.cart_option>li {
+	display: inline-flex;
+	align-items: center;
+}
+
+#all_select {
+	vertical-align: top;
+}
+
+/* 선택삭제 버튼 */
+.btn_del {
+	margin-left: 30px;
+	background-color: #00000000;
+	text-align: center;
+	border: 0 none;
+	font-size: 16px;
+}
+
+/* 상품 옵션 카테고리 박스 */
+.cart_option_box {
+	width: 1150px;
+	height: 23px;
+	margin: 20px 0px;
+	text-align: center;
+}
+
+.cart_option_ul {
+	list-style-type: none;
+
+	display: inline-flex;
+	/* 수직, 수평 정렬 */
+	align-items: center;
+	vertical-align: middle;
+	text-align: center;
+	font-size: 14px;
+}
+
+#cart_option1 {
+	width: 90px;
+}
+
+#cart_option2 {
+	width: 385px;
+}
+
+#cart_option3,
+#cart_option4,
+#cart_option5,
+#cart_option6 {
+	width: 174px;
+}
+
+/* 상품 목록 박스 */
+.order_cart_list {
+	overflow: scroll;
+	/* IE scroll 숨김 */
+	width: 1210px;
+	max-height: 740px;
+
+}
+
+/* 내부스크롤바 안보이게 하기 */
+.order_cart_list::-webkit-scrollbar {
+	display: none;
+	width: 0 !important;
+}
+
+
+
+/* 상품 info 박스 수평정렬 */
+li[id^=cart_basic_case-] div {
+	display: inline-flex;
+	/* 수직, 수평 정렬 */
+	align-items: center;
+	vertical-align: middle;
+}
+
+/* cart info 박스  */
+.cart_info_box {
+	width: 1150px;
+	height: 70px;
+	margin-top: 50px;
+}
+
+/* 썸네일+상품이름+수량 info 구역 */
+.cart_order_prd {
+	/* margin-top: 50px; */
+	width: 650px;
+	height: 96px;
+}
+
+/* 품목 체크박스 */
+.cart_select {
+	width: 23px;
+	height: 23px;
+}
+
+.cart_order_prd>a {
+	margin-left: 30px;
+	width: 420px;
+	text-decoration-line: none;
+}
+
+/* 썸네일이미지박스 */
+.cart_thumb_box {
+	width: 103px;
+	height: 96px;
+	border: solid 1px;
+	border-radius: 6px;
+}
+
+.prd_name {
+	width: 300px;
+	height: 46px;
+	margin-left: 5px;
+}
+
+/* 수량변경 구역 */
+.prd_util {
+	width: 174px;
+	height: 46px;
+	text-align-last: center;
+	align-content: center;
+	text-align: center;
+}
+
+.prd_util_wrap {
+	margin-left: 37px;
+	/* margin: 0px 20px; */
+}
+
+/* 수량박스 */
+.item_count_box {
+	border-radius: 6px;
+}
+
+input[type='number']::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	height: 46px;
+}
+
+/* 수량변경 버튼 */
+.prd_util div>button {
+	width: 26px;
+	margin-left: 5px;
+	border: none;
+}
+
+.price_area {
+	text-align: right;
+}
+
+/* 상품 단품 금액 */
+.cart_order_price {
+	width: 154px;
+	height: 46px;
+	margin: 0PX 20px 0px 10px;
+	justify-content: space-around;
+}
+
+/* 배송비 */
+.cart_order_delivery {
+	width: 154px;
+	height: 46px;
+	margin-right: 20px;
+	color: gray;
+	justify-content: space-around;
+
+}
+
+/* 상품 total 금액 */
+.cart_order_total_price {
+	width: 154px;
+	height: 46px;
+	margin-right: 20px;
+	justify-content: space-around;
+	font-weight: bold;
+}
+
+/* 예상결제정보 구역 */
+#exptpay_container {
+	margin-top: 50px;
+	height: 197px;
+}
+
+/* 예상결제정보 헤더 */
+.exptpay_header {
+	font-size: 25px;
+	font-weight: bold;
+	width: 1170px;
+	height: 54px;
+	/* 텍스트 스타일 */
+	text-align: left;
+	border-bottom: 4px solid black;
+}
+
+/* 예상결제정보  타이틀 부분 */
+.exptpay_header {
+	font-size: 26px;
+	font-weight: bold;
+}
+
+
+
+/* 예상결제금액 박스 */
+.exptpay_box {
+	width: 100%;
+	display: flex;
+
+}
+
+/* 예상결제정보 인포 */
+.exptpay_pricebox div,
+.exptpay_pricebox div {
+
+	width: 80%;
+	margin: 10px 50px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+
+/* 금액옵션 */
+.exptpay_price_option {
+	height: 50px;
+	width: 100%;
+	font-size: 24px;
+	font-weight: bold;
+	text-align: center;
+	display: inline-flex;
+}
+
+#del_option {
+	color: gray;
+}
+
+/* 출력금액 */
+.exptpay_price {
+	height: 50px;
+	width: 100%;
+	font-size: 24px;
+	font-weight: bold;
+	text-align: center;
+	display: inline-flex;
+}
+
+#exptpay_del {
+	color: gray;
+}
+
+.exptpay_price3, .total_option {
+	color: #4F378B;
+}
+
+/* 버튼박스 */
+.bnt_order {
+	width: 20%;
+	height: 80px;
+	margin-top: 30px;
+}
+
+.bnt_order>button {
+	width: 130px;
+	height: 80px;
+	font-size: 24px;
+	/* font-weight: bold; */
+	background-color: black;
+	color: white;
+	border-radius: 6px;
+
+}
