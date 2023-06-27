@@ -5,4 +5,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface MemberService {
+    Object countAllMember();
+
+
+    Object countChangeMember();
 }
