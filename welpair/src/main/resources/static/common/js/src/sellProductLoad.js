@@ -33,8 +33,14 @@ function createTable(data) {
             // SellProductDTO 출력 (각 행에 모두 출력)
             const sellProductKeys = Object.keys(sellProduct);
             sellProductKeys.forEach(key => {
-                if (key === 'sellItemPageList') return;
-                tr.append(createTableCell(sellProduct[key]));
+                if (key === 'sellItemPageList' || key === 'product') return;
+                if (key === 'code') {
+
+                    tr.append(createTableCell(sellProduct['product']['productName']))
+                } else {
+
+                    tr.append(createTableCell(sellProduct[key]));
+                }
             });
 
             // SellItemPageDTO 출력
