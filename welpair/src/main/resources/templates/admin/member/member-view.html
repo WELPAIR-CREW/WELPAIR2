@@ -6,25 +6,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원조회</title>
-    <link rel="stylesheet" href="../../../static/common/css/header.css">
-    <link rel="stylesheet" href="../../../static/common/css/footer.css">
-    <link rel="stylesheet" href="../../../static/common/css/member.css">
-    <script src="../../src/static/include.js"></script>
+<!--    <link rel="stylesheet" href="../../../static/common/css/header.css">-->
+<!--    <link rel="stylesheet" href="../../../static/common/css/footer.css">-->
+<!--    <link rel="stylesheet" href="../../../static/common/css/member.css">-->
+<!--    <script src="../../../static/common/js/static/include.js"></script>-->
+
+    <link rel="stylesheet" href="/static/common/css/footer.css">
+    <link rel="stylesheet" href="/static/common/css/header.css">
+    <link rel="stylesheet" href="/static/common/css/member.css">
+    <link rel="stylesheet" href="/static/common/css/main.css">
+    <script src="/static/common/js/static/include.js"></script>
 </head>
 
 <body>
     <!-- header -->
-    <div data-include-html="../header_admin.html" class="include"></div>
+<!--    <div data-include-html="../header_admin.html" class="include"></div>-->
+    <div data-include-html="admin/header_admin.html" class="include"></div>
 
     <div class="container">
 
         <div class="navs">
 
             <div class="nav-menu"><b>회원조회</b></div>
-            <div class="nav-menu"><a href="../../HTML/admin/member-regist1.html">회원등록</a></div>
-            <div class="nav-menu"><a href="../../HTML/admin/member-permission.html">가입승인</a></div>
-            <div class="nav-menu"><a href="../../HTML/admin/member-givePoint.html">복지포인트지급</a></div>
-            <div class="nav-menu"><a href="../../HTML/admin/member-givePointHistory1.html">복지포인트지급이력</a></div>
+            <div class="nav-menu"><a href="./member-regist1.html">회원등록</a></div>
+            <div class="nav-menu"><a href="./member-permission.html">가입승인</a></div>
+            <div class="nav-menu"><a href="./member-givePoint.html">복지포인트지급</a></div>
+            <div class="nav-menu"><a href="member-givePointHistory1.html">복지포인트지급이력</a></div>
         </div>
 
         <div class="box">
@@ -33,8 +40,8 @@
             <div class="contents"> <!-- 테이블, 테이블 위, 테이블 아래-->
                 <div class="over-table">
                     <!-- @동적으로 값이 들어갈 곳-->
-                    <label class="count-row">전체 : <span id="member-value">nn</span>명</label>
-                    <label class="count-row">상태변경 : <span id="member-value">nn</span>명</label>
+                    <label class="count-row">전체 : <span class="member-value">nn</span>명</label>
+                    <label class="count-row">상태변경 : <span class="member-value">nn</span>명</label>
 
                     <!-- 토글버튼:클릭시 toggleButton()함수 실행 -->
                     <button id="toggleButton" class="toggle" onclick="toggleButton()">퇴사/계약만료만 조회</button>
@@ -178,7 +185,8 @@
 
 
     <!-- footer -->
-    <div data-include-html="../footer.html" class="include"></div>
+<!--    <div data-include-html="../footer.html" class="include"></div>-->
+    <div data-include-html="admin/footer.html" class="include"></div>
 
 
     <!-- @전체선택 체크박스 -->
