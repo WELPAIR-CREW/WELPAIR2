@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hielectro.welpair.member.model.dao.MemberMapper">
+
+    <resultMap type="com.hielectro.welpair.member.model.dto.MemberDTO" id="memberResultMap">
+        <id property="empNo" column="EMP_NO"/>
+        <result property="memPwd" column="MEM_PWD"/>
+        <result property="registDate" column="REGIST_DATE"/>
+        <result property="pointBalance" column="POINT_BALANCE"/>
+        <result property="memAuth" column="MEM_AUTH"/>
+    </resultMap>
+
+    <select id="checkoutMemberById" resultMap="memberResultMap">
+        SELECT * FROM T_MEMBER
+        WHERE EMP_NO = #{empNo}
+    </select>
+
+</mapper>

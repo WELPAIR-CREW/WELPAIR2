@@ -1,6 +1,7 @@
 package com.hielectro.welpair.sellproduct.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class SellProductController {
         return sellProductList;
     }
 
-    @PostMapping("totalcount")
+    @PostMapping("totalCount")
     @ResponseBody
     public int getSellProductCount() {
         int result = productService.sellProductTotalCount();
@@ -38,9 +39,9 @@ public class SellProductController {
         return result;
     }
 
-    @PostMapping("findSellProductById")
+    @PostMapping("search")
     @ResponseBody
-    public SellProductDTO findSellProductById(@RequestParam String id) {
-        return productService.findSellProductById(id);
+    public List<SellProductDTO> findSellProductByCode(@RequestBody Object code) {
+        return productService.findSellProductByCode((String) code);
     }
 }

@@ -193,9 +193,21 @@ li[id^=cart_basic_case-] div {
 .prd_name {
 	width: 300px;
 	height: 46px;
+	display: inline-flex;
+}
+
+.prd_pageTitle {
+	width: 180px;
+	height: 25px;
 	margin-left: 5px;
 }
 
+.prd_productName {
+	color: gray;
+	height: 20px;
+	width: 100px;
+	font-size: 20px;
+}
 /* 수량변경 구역 */
 .prd_util {
 	width: 174px;
