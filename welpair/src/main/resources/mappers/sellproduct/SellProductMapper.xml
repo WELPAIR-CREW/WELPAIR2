@@ -9,7 +9,13 @@
         <result property="discount" column="DISCOUNT"/>
         <result property="isSell" column="IS_SELL"/>
 
+        <association property="product" resultMap="ProductDTO"></association>
         <collection property="sellItemPageList" resultMap="SellItemPageDTO"/>
+    </resultMap>
+
+    <resultMap id="ProductDTO" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
+        <id property="productCode" column="PRODUCT_CODE"/>
+        <result property="productName" column="PRODUCT_NAME"/>
     </resultMap>
 
     <resultMap id="SellItemPageDTO" type="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
@@ -44,7 +50,7 @@
     <select id="findSellProductByPageNo" resultMap="SellProductResultMap">
         SELECT
                 SELL_PRODUCT_ID
-             ,  PRODUCT_CODE
+             ,  PRODUCT_NAME
              ,  DISCOUNT
              ,  IS_SELL
              ,  SELL_PAGE_NO
@@ -52,17 +58,18 @@
         FROM (
                  SELECT ROWNUM AS RN
                       ,  SELL_PRODUCT_ID
-                      ,  PRODUCT_CODE
+                      ,  PRODUCT_NAME
                       ,  DISCOUNT
                       ,  IS_SELL
                       ,  SELL_PAGE_NO
                       ,  SELL_PAGE_TITLE
                  FROM T_SELL_PRODUCT
+                          LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
                           LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
                           LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
              )
-         WHERE RN &gt; ( ${ pageNo } - 1 * 10)
-           AND RN &lt;= ( ${ pageNo } * 10)
+         WHERE RN &gt; ( #{ pageNo } - 1 * 10)
+           AND RN &lt;= ( #{ pageNo } * 10)
 
     </select>
     <select id='findSellProductByCode' resultMap="SellProductResultMap">
@@ -71,15 +78,28 @@
         FROM (
                  SELECT ROWNUM AS RN
                       ,  SELL_PRODUCT_ID
-                      ,  PRODUCT_CODE
+                      ,  PRODUCT_NAME
                       ,  DISCOUNT
                       ,  IS_SELL
                       ,  SELL_PAGE_NO
                       ,  SELL_PAGE_TITLE
                  FROM T_SELL_PRODUCT
+                          LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
                           LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
                           LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
              )
-         WHERE SELL_PRODUCT_ID = #{ sellProductCode }
+         WHERE   1=1
+        <if test="code != ''">
+           AND  SELL_PRODUCT_ID = #{ code }
+        </if>
+        <if test="name != ''">
+           AND PRODUCT_NAME LIKE '%' || #{ name } || '%'
+        </if>
     </select>
+
+    <delete id="delete">
+        DELETE
+          FROM  T_SELL_PRODUCT
+         WHERE  SELL_PRODUCT_ID = #{ id }
+    </delete>
 </mapper>
