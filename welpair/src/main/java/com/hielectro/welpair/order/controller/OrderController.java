@@ -53,12 +53,14 @@ public class OrderController {
 
         // 1. 정상 수량인지 체크
         if(cartSellProduct.getCartAmount() < 1 ){
-            resultMap.add("failMessage", "수량이 잘못되었습니다.");
+            resultMap.put("failMessage", "수량이 잘못되었습니다.");
             return resultMap;
         }
+
         // 2. 판매상품 ID를 통해 실제 존재하는 상품인지 조회
         List<SellProductDTO> sellProduct =
                 orderService.findSellProductByCode(cartSellProduct.getSellProductId());
+        else if(sellProduct){
 
 
         // 아이디 체크는 생략하자.(로그인이 됐다면 존재하는 회원이기에 통과)
@@ -69,6 +71,9 @@ public class OrderController {
         // 회원정보를 조회하여 카트가 생성되어있으면 카트번호를 조회해온다. 없는 경우 생성한다.
         member = orderService.checkoutMemberCartById(empNo);
 //        System.out.println(member);
+
+        }
+
 
 
         if (cartSellProduct.getCartAmount() > 0 && sellProduct != null) {
