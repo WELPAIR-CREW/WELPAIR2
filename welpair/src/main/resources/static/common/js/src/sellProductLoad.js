@@ -1,35 +1,7 @@
 import {includeHTML} from './include.js'
+import {call} from './App.js'
 
 let sellProductTotalCount;
-
-sellProductCount();
-sellProductTableLoad();
-includeHTML();
-
-function call(url, method, request) {
-    let options = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        method: method
-    };
-
-    if (request) {
-        options.body = JSON.stringify(request);
-    }
-
-    return fetch(url, options)
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            return Promise.reject(response);
-        })
-        .catch(error => {
-            console.log(error);
-            return Promise.reject(error);
-        })
-}
 
 function createTableCell(text) {
     const td = document.createElement("td");
@@ -165,3 +137,7 @@ headerCheckBox.addEventListener('click', function() {
     const items = document.querySelectorAll("tbody input");
     items.forEach(item => item.checked = headerCheckBox.checked);
 })
+
+sellProductCount();
+sellProductTableLoad();
+includeHTML();
