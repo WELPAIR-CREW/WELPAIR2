@@ -96,6 +96,7 @@ public class InventoryController {
             if (productCode != null || productName != null || categoryCode != null) {
 //                List<ProductDTO> stockList = inventoryService.stockRegistSerch(productCode, productName, categoryCode);
                 List<ProductDTO> stockList = inventoryService.stockRegistSerch(product);
+
                 model.addAttribute("stockList", stockList);
 
                 //System.out.println("------ 컨트롤러 back ------");
@@ -109,11 +110,40 @@ public class InventoryController {
             return "admin/inventory/admin_inventory_register";
         }
 
+    @PostMapping("admin_inventory_register")
+    @ResponseBody
+    public List<ProductDTO> stockRegistSerch1(@ModelAttribute ProductDTO product) {
+        List<ProductDTO> stockList = null;
+        try {
+
+            String productCode = product.getProductCode();
+            String productName = product.getProductName();
+            String categoryCode = product.getCategoryCode();
+            System.out.println("-------------컨트롤러 2-2 -------------");
+            System.out.println("productCode = " + product.getProductCode());
+            System.out.println("productName = " + product.getProductName());
+            System.out.println("categoryCode = " + product.getCategoryCode());
+
+            if (productCode != null || productName != null || categoryCode != null) {
+//                List<ProductDTO> stockList = inventoryService.stockRegistSerch(productCode, productName, categoryCode);
+                stockList = inventoryService.stockRegistSerch(product);
+
+
+                System.out.println("------ 컨트롤러 back backback------");
+                System.out.println("stockList = " + stockList);
+            } else {
+            }
+        } catch(TemplateInputException e){
+            e.printStackTrace();
+        }
+        return stockList;
+    }
     /**
      * 재고관리 메뉴 (ng)
      * 2. 입출고등록 페이지
      * 2-2. 입출고 등록
      */
+
 
 
 
