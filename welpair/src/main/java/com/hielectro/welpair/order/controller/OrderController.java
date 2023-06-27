@@ -1,36 +1,27 @@
 package com.hielectro.welpair.order.controller;
 
-import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
 import com.hielectro.welpair.order.model.service.OrderService;
-import com.hielectro.welpair.order.model.service.OrderServiceImpl;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.ibatis.mapping.ResultMap;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 @Slf4j
 @Controller
 @RequestMapping({"/order"})
 public class OrderController {
     private final OrderService orderService;
-    private final MessageSource messageSource;
 
-    public OrderController(OrderService orderService, MessageSource messageSource) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.messageSource = messageSource;
     }
 
     // default 매핑 메소드
@@ -44,8 +35,8 @@ public class OrderController {
     // 카트인서트용 메소드
     @ResponseBody
     @PostMapping(value = "/product-detail-test", produces = "application/json; charset=utf-8")
-    public Map<String, String> addCart(HttpSession session, @ModelAttribute CartSellProductDTO cartSellProduct,
-                                       @RequestParam("empNo") String empNo) // session - 로그인된 사용자만 받기
+    public Map<String, String> addCart(@ModelAttribute CartSellProductDTO cartSellProduct,
+                                       @RequestParam("empNo") String empNo)
     {
         // 카트별판매상품dto를 통해 매상품id와 수량 정보와, 회원정보ID가 넘어온다.
         System.out.println("선택상품 : " + cartSellProduct);
@@ -78,7 +69,7 @@ public class OrderController {
             // 장바구니 미생성 회원
             if(cart == null) {
                 // 장바구니 테이블을 생성한다.
-                int result = orderService.makeCart(empNo);
+                orderService.makeCart(empNo);
                 // 다시 장바구니 정보 조회
                 cart = orderService.checkoutCartByMemberId(empNo);
                 // 장바구니(카트) 넘버를 세팅한다.

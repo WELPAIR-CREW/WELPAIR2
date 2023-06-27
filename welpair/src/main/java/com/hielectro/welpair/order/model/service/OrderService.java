@@ -1,7 +1,6 @@
 package com.hielectro.welpair.order.model.service;
 
 
-import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
