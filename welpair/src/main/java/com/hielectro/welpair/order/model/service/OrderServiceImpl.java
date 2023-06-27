@@ -48,4 +48,9 @@ public class OrderServiceImpl implements OrderService {
     public CartDTO checkoutCartByMemberId(String empNo) {
         return orderMapper.checkoutCartByMemberId(empNo);
     }
+
+    @Override
+    public int checkoutCartProductById(CartSellProductDTO cartSellProduct) {
+        return orderMapper.checkoutCartProductById(cartSellProduct);
+    }
 }

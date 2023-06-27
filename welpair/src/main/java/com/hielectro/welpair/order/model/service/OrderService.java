@@ -20,4 +20,6 @@ public interface OrderService {
     public int addCartSellProduct(CartSellProductDTO cartSellProduct);
 
     CartDTO checkoutCartByMemberId(String empNo);
+
+    int checkoutCartProductById(CartSellProductDTO cartSellProduct);
 }

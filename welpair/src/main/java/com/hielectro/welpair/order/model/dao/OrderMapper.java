@@ -18,4 +18,6 @@ public interface OrderMapper {
     int makeCart(String empNo);
 
     CartDTO checkoutCartByMemberId(String empNo);
+
+    int checkoutCartProductById(CartSellProductDTO cartSellProduct);
 }
