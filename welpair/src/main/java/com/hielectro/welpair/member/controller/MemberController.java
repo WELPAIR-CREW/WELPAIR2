@@ -30,9 +30,9 @@ public class MemberController {
     @ModelAttribute
     public String getMemberList(Model model) {
 
-        List<MemberDTO> memberList = memberService.getMemberList();
+//        List<MemberDTO> memberList = memberService.getMemberList();
 
-        model.addAttribute("memberList", memberList);
+//        model.addAttribute("memberList", memberList);
 
         return "admin/member/member-view";
     }

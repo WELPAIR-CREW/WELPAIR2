@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public interface MemberService {
 
-    public List<MemberDTO> getMemberList() {
-        MemberServiceImpl.getMemberList();
-    }
+//    public List<MemberDTO> getMemberList() {
+//        MemberServiceImpl.getMemberList();
+//    }
 }
