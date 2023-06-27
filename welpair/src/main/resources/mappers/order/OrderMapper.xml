@@ -33,12 +33,11 @@
 
     <!-- cart member 조회 -->
     <select id="checkoutCartByMemberId" resultMap="cartResultMap">
-        SELECT * FROM T_CART
+        SELECT * FROM T_CART WHERE EMP_NO = #{ empNo }
     </select>
 
-
     <!-- cart 테이블 삽입 -->
-    <insert id="addcart">
+    <insert id="makeCart">
         INSERT
         INTO T_CART A
             (
@@ -66,7 +65,7 @@
             A.SELL_PRODUCT_ID,
             A.CART_AMOUNT,
             A.DELIVERY_PRICE
-        )
+            )
         VALUES
             (
             #{cartNo},

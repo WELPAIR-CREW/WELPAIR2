@@ -60,10 +60,6 @@ public class OrderController {
         MemberDTO member = (MemberDTO)session.getAttribute("member");
         System.out.println("회원아이디 : " + member.getEmpNo());
 
-        // 회원정보를 조회하여 카트가 생성되어있으면 카트번호를 조회해온다. 없는 경우 생성한다.
-//        CartDTO cart = orderService.checkoutCartByMemberId(empNo);
-//        System.out.println(member);
-
         // 상품 조회
         List<SellProductDTO> sellProductList =
                 orderService.findSellProductByCode(cartSellProduct.getSellProductId());
@@ -72,6 +68,7 @@ public class OrderController {
         if(member == null ){
             // 로그인 페이지로 이동
             mv.setViewName("redirect:/consumer/member");
+            resultMap.put("failMessage", mv.getViewName());
             return resultMap;
         }
         // 2. 정상 수량인지 체크
@@ -84,45 +81,39 @@ public class OrderController {
             resultMap.put("failMessage", "판매중인 상품이 아닙니다.");
             return resultMap;
         }
-        else if (cartSellProduct.getCartAmount() > 0 && sellProductList != null) {
+        else {
 
-            // 회원번호를 통해 장바구니 테이블 pk를 생성한다.
-//            int result1 = orderServiceImpl.addcart(member.getEmpNo());
-            int result1 = orderService.addcart(empNo);
+            // 회원정보를 조회하여 카트가 생성되어있으면 카트번호를 조회해온다. 없는 경우 생성한다.
+            CartDTO cart = orderService.checkoutCartByMemberId(empNo);
+            System.out.println(cart);
 
-            // 생성된 장바구니 PK를 불러온다.
-            String cartNo = orderService.selectCartNo();
+            // 장바구니 미생성 회원
+            if(cart == null) {
+            // 장바구니 테이블을 생성한다.
+            int result = orderService.makeCart(empNo);
+            // 다시 장바구니 정보 조회
+            cart = orderService.checkoutCartByMemberId(empNo);
+            // 장바구니(카트) 넘버를 세팅한다.
+            cartSellProduct.setCartNo(cart.getCartNo());
+            }
 
-            // 불러온 PK를 카트별판매상품 테이블에 담는다.(배송비 빼고 다 담김)
-            cartSellProduct.setCartNo(cartNo);
-            System.out.println("선택상품 : " + cartSellProduct);
-
-            // 카트별판매상품 테이블에 데이터를 담는다.
+            // cartSellProduct 테이블 데이터 삽입하러 가기
             int result = orderService.addCartSellProduct(cartSellProduct);
 
             if (result > 0) {
                 //장바구니 담기 성공시
                 System.out.println("장바구니 담기 성공1111");
-
-                resultMap.put("successMessage", "장바구니 담기 성공");
+                resultMap.put("successMessage", "장바구니 담기에 성공하였습니다.");
                 return resultMap;
 
-            } else {   // 무언가 잘못된 입력111
+            } else {   // 실패
+                log.info("log 확인");
                 System.out.println("장바구니 담기 실패2222");
-                resultMap.put("failMessage", "장바구니 담기 실패");
+                resultMap.put("failMessage", "장바구니 담기에 실패하였습니다. 다시 시도해주세요.");
                 return resultMap;
             }
-        } else {   // 무언가 잘못된 상품조회222
-            System.out.println("장바구니 담기 실패1111");
-            resultMap.put("failMessage", "장바구니 담기 실패");
-            log.info("log 확인");
-
-            return resultMap;
         }
     }
-
-
-
 }
 
 
