@@ -9,7 +9,7 @@
         <id property="productCode" column="PRODUCT_CODE"/>
         <result property="productName" column="PRODUCT_NAME"/>
         <result property="productAmount" column="PRODUCT_AMOUNT"/>
-        <association property="categoryCode" resultMap="categoryDTO"/>
+        <association property="category" resultMap="categoryDTO"/>
     </resultMap>
 
     <resultMap id="categoryDTO" type="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
@@ -21,7 +21,7 @@
     <resultMap type="com.hielectro.welpair.inventory.model.dto.ProductDTO" id="stockRegistSerchResultMap">
         <id property="productCode" column="PRODUCT_CODE"/>
         <result property="productName" column="PRODUCT_NAME"/>
-        <association property="categoryCode" resultMap="categoryDTO"/>
+        <association property="category" resultMap="categoryDTO"/>
     </resultMap>
 
 
@@ -41,13 +41,13 @@
 
 
     <!-- 1-1 -->
-    <select id="getTotalInventoryAmount" resultType="java.lang.Integer">
+    <select id="getTotalInventoryAmount" resultType="_int">
         SELECT
                SUM(PRODUCT_AMOUNT) AS 총재고수량
           FROM T_PRODUCT
     </select>
 
-    <select id="getNumberOfAlertStock" resultType="java.lang.Integer">
+    <select id="getNumberOfAlertStock" resultType="_int">
         SELECT
                COUNT(*) AS 위험재고수량
           FROM T_PRODUCT
@@ -64,8 +64,9 @@
              , A.PRODUCT_AMOUNT
          FROM T_PRODUCT A
          JOIN T_CATEGORY B ON B.CATEGORY_CODE = A.CATEGORY_CODE
---             WHERE A.PRODUCT_CODE = 'P000002'
+         <if test=" searchCode != null">
         WHERE A.PRODUCT_CODE = #{ searchCode }
+         </if>
     </select>
 
 
@@ -73,36 +74,24 @@
 
     <select id="stockRegistSerch" resultMap="stockRegistSerchResultMap">
         SELECT
-               A.PRODUCT_CODE AS 상품코드
-             , A.PRODUCT_NAME AS 상품명
-             , B.CATEGORY_NAME AS 카테고리명
+               A.PRODUCT_CODE
+             , A.PRODUCT_NAME
+             , B.CATEGORY_NAME
           FROM T_PRODUCT A
           JOIN T_CATEGORY B ON B.CATEGORY_CODE = A.CATEGORY_CODE
          WHERE 1=1
-        <if test="productCode != null">
+        <if test="productCode != null and productCode != ''">
             AND A.PRODUCT_CODE = #{productCode}
         </if>
-        <if test="productName != null">
+        <if test="productName != null and productName != ''">
             AND A.PRODUCT_NAME = #{productName}
         </if>
-        <if test="categoryName != null">
-            AND B.CATEGORY_NAME = #{categoryName}
+        <if test="categoryCode != null and categoryCode != ''">
+            AND A.CATEGORY_CODE = #{categoryCode}
         </if>
     </select>
 
 
 
 
-
-<!--    <select id="searchAllStock" resultMap="stockResultMap">-->
-<!--        SELECT-->
-<!--               B.PRODUCT_CODE AS 상품코드-->
-<!--             , B.PRODUCT_NAME AS 상품명-->
-<!--             , A.STOCK_TYPE AS 등록구분-->
-<!--             , A.STOCK_DATE AS 입고일-->
-<!--             , A.STOCK_AMOUNT AS 등록수량-->
-<!--             , B.PRODUCT_AMOUNT AS 재고수량-->
-<!--          FROM T_STOCK A-->
-<!--         RIGHT JOIN T_PRODUCT B on B.PRODUCT_CODE = A.PRODUCT_CODE;-->
-<!--    </select>-->
 </mapper>

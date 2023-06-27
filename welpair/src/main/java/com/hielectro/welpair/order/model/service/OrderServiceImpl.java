@@ -1,5 +1,6 @@
 package com.hielectro.welpair.order.model.service;
 
+import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.order.model.dao.OrderMapper;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
@@ -41,5 +42,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int addCartSellProduct(CartSellProductDTO cartSellProduct) {
         return orderMapper.addCartSellProduct(cartSellProduct);
+    }
+
+    //
+    @Override
+    public MemberDTO checkoutCartByMemberId(String empNo) {
+        return null;
     }
 }

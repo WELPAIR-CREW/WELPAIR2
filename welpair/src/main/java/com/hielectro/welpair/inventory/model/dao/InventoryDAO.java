@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-@Repository
 @Mapper
 public interface InventoryDAO {
 
@@ -19,11 +18,9 @@ public interface InventoryDAO {
     /* 1-2 */
     List<ProductDTO> searchProductByCode(String searchCode);
 
-
     /* 2-1 */
-    List<ProductDTO> stockRegistSerch(@Param("productCode") String productCode,
-                                      @Param("productName") String productName,
-                                      @Param("categoryName") String categoryName);
+    List<ProductDTO> stockRegistSerch(ProductDTO product);
+//    List<ProductDTO> stockRegistSerch(String productCode, String productName, String refCategoryName, String categoryName);
 
 
 

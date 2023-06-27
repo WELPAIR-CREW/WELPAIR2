@@ -6,28 +6,29 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>입출고내역</title>
-  <link rel="stylesheet" href="/CSS/header.css">
-  <link rel="stylesheet" href="/CSS/main.css">
-  <link rel="stylesheet" href="/CSS/footer.css">
-  <link rel="stylesheet" href="/CSS/inventory.css">
-  <script src="/src/static/include.js"></script>
+    <link rel="stylesheet" href="/common/css/main.css">
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/inventory.css">
+    <script src="/common/js/static/include.js"></script>
+
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 </head>
 
 <body>
-<div data-include-html="./header_admin.html" class="include"></div>
+<div data-include-html="/admin/header_admin" class="include"></div>
 
 <!-- 왼쪽 메뉴 베너 -->
 <section>
   <div class="section-nav">
     <div class="section-nav-category">
-      <a href="/HTML/admin/admin_inventory.html">재고관리</a>
+      <a href="./admin_inventory.html">재고관리</a>
     </div>
     <div class="section-nav-category">
-      <a href="/HTML/admin/admin_inventory_register.html">입출고등록</a>
+      <a href="./admin_inventory_register.html">입출고등록</a>
     </div>
     <div class="section-nav-category">
-      <a href="/HTML/admin/admin_inventory_search.html"><b>입출고내역</b></a>
+      <a href="./admin_inventory_search.html"><b>입출고내역</b></a>
     </div>
   </div>
 
@@ -70,7 +71,7 @@
           </div>
           <div>
             <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
-            <input class="btn_basic" type="submit" value="검색">
+            <input class="btn_basic" type="button" value="검색">
           </div>
         </div>
       </div>
@@ -114,7 +115,7 @@
 </section>
 
 <!-- footer -->
-<div data-include-html="./footer.html" class="include"></div>
+<div data-include-html="/admin/footer" class="include"></div>
 <script>
 
 
