@@ -8,9 +8,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/delivery")
 public class DeliveryController {
 
-    @GetMapping("deliverymain")
-    public String deliveryMain(){
+    /* 배송 전체 현황 */
+    @GetMapping("delivery_main")
+    public String deliveryMain() {
 
         return "admin/delivery/delivery_main";
+
+    }
+
+    /* 상품준비중 */
+    @GetMapping("delivery_prepare")
+    public String deliveryprepare() {
+
+        return "admin/delivery/delivery_prepare";
+
+    }
+
+    /* 배송중 */
+    @GetMapping("delivery_transit")
+    public String deliverytransit() {
+
+        return "admin/delivery/delivery_transit";
+
+    }
+
+    /* 배송완료 */
+    @GetMapping("delivery_complete")
+    public String deliverycomplete() {
+
+        return "admin/delivery/delivery_complete";
+
     }
 }
