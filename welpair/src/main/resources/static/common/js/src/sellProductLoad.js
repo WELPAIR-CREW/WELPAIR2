@@ -159,3 +159,9 @@ function deleteSellProduct() {
 
     })
 }
+
+const headerCheckBox = document.querySelector("thead input");
+headerCheckBox.addEventListener('click', function() {
+    const items = document.querySelectorAll("tbody input");
+    items.forEach(item => item.checked = headerCheckBox.checked);
+})
