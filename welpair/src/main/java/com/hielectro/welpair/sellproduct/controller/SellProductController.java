@@ -44,4 +44,15 @@ public class SellProductController {
     public List<SellProductDTO> findSellProductByCode(@RequestBody Map<String, String> request) {
         return productService.findSellProductByCode(request);
     }
+
+    @PostMapping("delete")
+    @ResponseBody
+    public int delete(@RequestBody List<String> request) {
+        System.out.println(request);
+        try {
+            return productService.delete(request);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -61,8 +61,8 @@
                           LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
                           LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
              )
-         WHERE RN &gt; ( ${ pageNo } - 1 * 10)
-           AND RN &lt;= ( ${ pageNo } * 10)
+         WHERE RN &gt; ( #{ pageNo } - 1 * 10)
+           AND RN &lt;= ( #{ pageNo } * 10)
 
     </select>
     <select id='findSellProductByCode' resultMap="SellProductResultMap">
@@ -88,4 +88,10 @@
            AND PRODUCT_CODE LIKE '%' || #{ name } || '%'
         </if>
     </select>
+
+    <delete id="delete">
+        DELETE
+          FROM  T_SELL_PRODUCT
+         WHERE  SELL_PRODUCT_ID = #{ id }
+    </delete>
 </mapper>

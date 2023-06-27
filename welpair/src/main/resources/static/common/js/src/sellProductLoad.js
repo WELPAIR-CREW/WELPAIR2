@@ -114,7 +114,10 @@ function sellProductTableLoad(pageNo = 1) {
     document.createElement('a').href = 'javascript:void(0)';
 }
 
-window.onload = searchSellProduct
+window.addEventListener('load', function() {
+    searchSellProduct();
+    deleteSellProduct();
+})
 
 function searchSellProduct() {
     let searchBtn = document.querySelector(".first-button")
@@ -122,15 +125,37 @@ function searchSellProduct() {
         const code = document.querySelector(".product-code").value
         const name = document.querySelector(".name").value
 
-        const items = {code, name};
+        const map = {code, name};
         if (code === '' && name === '') {
             sellProductTableLoad()
             return;
         }
 
-        call("/sellproduct/search", "post", items)
+        call("/sellproduct/search", "post", map)
             .then(data => {
                 createTable(data);
             })
+    })
+}
+
+function deleteSellProduct() {
+    let deleteBtn = document.querySelectorAll(".first-button")[1];
+    deleteBtn.addEventListener('click', function () {
+
+        const items = document.querySelectorAll("tbody input");
+        const request = [...items].filter(item => item.checked)
+            .map(item => item.parentElement.nextElementSibling.textContent);
+        console.log(request);
+
+        call("/sellproduct/delete", "post", request)
+            .then(data => {
+                if (data > 0) {
+                    alert("삭제에 성공하였습니다.");
+                    sellProductTableLoad();
+                } else {
+                    alert("삭제에 실패하였습니다.");
+                }
+            })
+
     })
 }

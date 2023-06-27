@@ -28,4 +28,21 @@ public class SellProductServiceImpl implements SellProductService {
     public List<SellProductDTO> findSellProductByCode(Map<String, String> productId) {
         return productMapper.findSellProductByCode(productId);
     }
+
+    @Override
+    public int delete(List<String> request) throws Exception {
+        int size = request.size();
+        int result = 0;
+
+        System.out.println("service : " + request);
+        for (int i = 0; i < size; i++) {
+            result += productMapper.delete(request.get(i));
+        }
+
+        if (result != size) {
+            throw new IllegalStateException();
+        }
+
+        return result;
+    }
 }

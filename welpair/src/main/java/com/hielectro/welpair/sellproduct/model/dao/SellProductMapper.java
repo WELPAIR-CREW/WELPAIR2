@@ -12,4 +12,6 @@ public interface SellProductMapper {
     List<SellProductDTO> findSellProductByPageNo(int pageNo);
     int sellProductTotalCount();
     List<SellProductDTO> findSellProductByCode(Map<String, String> sellProductCode);
+
+    int delete(String id);
 }
