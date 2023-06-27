@@ -6,4 +6,9 @@ import java.util.List;
 @Mapper
 public interface MemberMapper {
     List<MemberDTO> getMemberList();
+
+
+    int totalMemberCount();
+
+    int expiredMemberCount();
 }

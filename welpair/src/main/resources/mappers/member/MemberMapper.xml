@@ -17,7 +17,7 @@
     </select>
 
 
-    <!-- 1. 회원조회 - 회원목록 -->
+    <!-- 1-1. 회원조회 - 회원목록 -->
     <resultMap id="memberListResultMap" type="com.hielectro.welpair.member.model.dto.MemberDTO">
         <id property="empNo" column="EMP_NO"/>
         <result property="memPwd" column="MEM_PWD"/>
@@ -61,7 +61,18 @@
           JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
     </select>
 
-
+<!-- 1-2. 회원조회 - 전체, 퇴사 회원수 표시 -->
+    <select id="totalMemberCount" resultType="int">
+        SELECT
+                COUNT(*)
+          FROM T_MEMBER
+    </select>
+    <select id="expiredMemberCount" resultType="int">
+        SELECT COUNT(*)
+        FROM T_MEMBER M
+                 JOIN T_EMPLOYEE E on M.EMP_NO = E.EMP_NO
+        WHERE E.IS_EXPIRE = 'Y'
+    </select>
 
 
 </mapper>

@@ -19,4 +19,14 @@ public class MemberServiceImpl implements MemberService {
     public List<MemberDTO> getMemberList() {
         return memberMapper.getMemberList();
     }
+
+    @Override
+    public int totalMemberCount() {
+        return memberMapper.totalMemberCount();
+    }
+
+    @Override
+    public int expiredMemberCount() {
+        return memberMapper.expiredMemberCount();
+    }
 }

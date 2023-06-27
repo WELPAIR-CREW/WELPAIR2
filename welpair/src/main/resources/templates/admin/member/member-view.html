@@ -34,9 +34,9 @@
 
             <div class="contents"> <!-- 테이블, 테이블 위, 테이블 아래-->
                 <div class="over-table">
-                    <!-- @동적으로 값이 들어갈 곳-->
-                    <label class="count-row">전체 : <span th:text="${ totalMember }" class="member-value"></span>명</label>
-                    <label class="count-row">상태변경 : <span th:text="${ changedMember }" class="member-value"></span>명</label>
+
+                    <label class="count-row">전체 : <span th:text="${ totalMemberCount }" class="member-value"></span>명</label>
+                    <label class="count-row">상태변경 : <span th:text="${ expiredMemberCount }" class="member-value"></span>명</label>
 
                     <!-- 토글버튼:클릭시 toggleButton()함수 실행 -->
                     <button id="toggleButton" class="toggle" onclick="toggleButton()">퇴사/계약만료만 조회</button>
