@@ -80,6 +80,12 @@
                           LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
                           LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
              )
-         WHERE SELL_PRODUCT_ID = #{ sellProductCode }
+         WHERE   1=1
+        <if test="code != ''">
+           AND  SELL_PRODUCT_ID = #{ code }
+        </if>
+        <if test="name != ''">
+           AND PRODUCT_CODE LIKE '%' || #{ name } || '%'
+        </if>
     </select>
 </mapper>

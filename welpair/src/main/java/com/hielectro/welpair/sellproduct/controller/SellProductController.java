@@ -23,7 +23,7 @@ public class SellProductController {
         return "admin/sellproduct/" + url;
     }
 
-    @GetMapping(value = "sellproductlist/{pageNo}", produces = "application/json;charset=utf-8")
+    @GetMapping(value = "list/{pageNo}", produces = "application/json;charset=utf-8")
     @ResponseBody
     public List<SellProductDTO> getProductList(@PathVariable int pageNo) {
         List<SellProductDTO> sellProductList = productService.findSellProductByPageNo(pageNo);
@@ -41,7 +41,7 @@ public class SellProductController {
 
     @PostMapping("search")
     @ResponseBody
-    public List<SellProductDTO> findSellProductByCode(@RequestBody Object code) {
-        return productService.findSellProductByCode((String) code);
+    public List<SellProductDTO> findSellProductByCode(@RequestBody Map<String, String> request) {
+        return productService.findSellProductByCode(request);
     }
 }
