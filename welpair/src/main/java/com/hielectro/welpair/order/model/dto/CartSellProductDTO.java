@@ -15,5 +15,5 @@ public class CartSellProductDTO {
     private int cartAmount;         // 수량
     private int deliveryPrice;      // 배송비
 
-    private SellProductDTO sellProduct; // 판매상품 dto
+//    private SellProductDTO sellProduct; // 판매상품 dto
 }

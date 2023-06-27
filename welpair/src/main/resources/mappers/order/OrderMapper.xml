@@ -27,6 +27,22 @@
         <collection property="productOrderList" resultMap="productOrderResultMap"/>
     </resultMap>
 
+    <resultMap type="com.hielectro.welpair.order.model.dto.CartDTO" id="cartResultMap">
+        <id property="cartNo" column="CART_NO"/>
+        <result property="empNo" column="EMP_NO"/>
+
+        <association property="member" resultMap="memberResultMap"/>
+        <collection property="cartSellProductList" resultMap="cartSellProductResultMap"/>
+    </resultMap>
+
+    <resultMap type="com.hielectro.welpair.order.model.dto.CartSellProductDTO" id="cartSellProductResultMap">
+        <id property="cartNo" column="CART_NO"/>
+        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="cartAmount" column="CART_AMOUNT"/>
+        <result property="deliveryPrice" column="DELIVERY_PRICE"/>
+    </resultMap>
+
+
     <!-- 회원이 존재하는지 조회 -->
     <select id="checkoutMemberById" resultMap="memberResultMap">
         SELECT * FROM T_MEMBER
