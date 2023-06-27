@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.exceptions.TemplateInputException;
 
-import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Controller
 @Slf4j
-@RequestMapping("/inventory")
+@RequestMapping("/inventory/")
 
 public class InventoryController {
     private final InventoryService inventoryService;
@@ -81,19 +81,33 @@ public class InventoryController {
      * 2-1. 등록할 상품 검색
      *      상품코드, 상품명, 카테고리 선택 후 검색 시 등록 대상 리스트 출력
      */
-    @PostMapping("inventory/admin_inventory_regist")
-    public String stockRegistSerch(Model model, @RequestParam("productCode") String productCode,
-                                   @RequestParam("productName") String productName,
-                                   @RequestParam("category") String categoryName){
-        System.out.println("-------------컨트롤러 2-1 -------------");
-        System.out.println("productCode = " + productCode);
-        System.out.println("productName = " + productName);
-        System.out.println("categoryName = " + categoryName);
+    @GetMapping("admin_inventory_register")
+    public String stockRegistSerch(Model model,@ModelAttribute ProductDTO product) {
+        try {
 
-        List<ProductDTO> stockList = inventoryService.stockRegistSerch(productCode, productName, categoryName);
-        model.addAttribute("stockList", stockList);
+            String productCode = product.getProductCode();
+            String productName = product.getProductName();
+            String categoryCode = product.getCategoryCode();
+            System.out.println("-------------컨트롤러 2-1 -------------");
+            System.out.println("productCode = " + product.getProductCode());
+            System.out.println("productName = " + product.getProductName());
+            System.out.println("categoryCode = " + product.getCategoryCode());
 
-        System.out.println("stockList = " + stockList);
-        return "admin/inventory/admin_inventory_register";
+            if (productCode != null || productName != null || categoryCode != null) {
+//                List<ProductDTO> stockList = inventoryService.stockRegistSerch(productCode, productName, categoryCode);
+                List<ProductDTO> stockList = inventoryService.stockRegistSerch(product);
+                model.addAttribute("stockList", stockList);
+
+                //System.out.println("------ 컨트롤러 back ------");
+                System.out.println("stockList = " + stockList);
+            } else {
+                model.addAttribute("stockList", Collections.emptyList());
+            }
+            } catch(TemplateInputException e){
+                e.printStackTrace();
+            }
+            return "admin/inventory/admin_inventory_register";
+        }
+
     }
-}
+

@@ -16,7 +16,8 @@ public interface InventoryService {
     List<ProductDTO> searchProductByCode(String searchCode);
 
     /* 2-1 */
-    List<ProductDTO> stockRegistSerch(String productCode, String productName, String categoryName);
+    List<ProductDTO> stockRegistSerch(ProductDTO product);
+//    List<ProductDTO> stockRegistSerch(String productCode, String productName, String refCategoryName, String categoryCode);
 
     List<StockDTO> searchAllStock();
 }

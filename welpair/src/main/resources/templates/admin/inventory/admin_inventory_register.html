@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -11,39 +11,37 @@
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/inventory.css">
     <script src="/common/js/static/include.js"></script>
-    <script src="/src/inven/invenRegist.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 </head>
 
 <body>
-    <div data-include-html="/admin/header_admin" class="include"></div>
+<div data-include-html="/admin/header_admin" class="include"></div>
 
 <!-- 왼쪽 메뉴 베너 -->
-    <section>
-        <div class="section-nav">
-            <div class="section-nav-category">
-                <a href="./admin_inventory.html">재고관리</a>
-            </div>
-            <div class="section-nav-category">
-                <a href="./admin_inventory_register.html"><b>입출고등록</b></a>
-            </div>
-            <div class="section-nav-category">
-                <a href="./admin_inventory_search.html">입출고내역</a>
-            </div>
+<section>
+    <div class="section-nav">
+        <div class="section-nav-category">
+            <a href="./admin_inventory.html"><b>재고관리</b></a>
         </div>
+        <div class="section-nav-category">
+            <a href="./admin_inventory_register.html">입출고등록</a>
+        </div>
+        <div class="section-nav-category">
+            <a href="/inventory/admin_inventory_search">입출고내역</a>
+        </div>
+    </div>
+
 
         <!-- 컨텐츠 영역 시작 -->
 
         <div class="section-content">
             <div class="section-title">입출고등록</div>
-
-            <!-- 1. 입출고등록 대상 상품 검색 -->
             <div class="section-regSearch">
 
-                <!-- 첫번째 라인 -->
+                <!-- 2-1. 입출고등록 대상 상품 검색 (★ 상위 카테고리 추후 추가)-->
                 <div class="section-regSearch-line1">
-                    <form action="/admin_inventory_register" method="post">
+                    <form action="/inventory/admin_inventory_register">
                         <div>
                             <span class="section-regSearch-span">상품코드
                                 <input type="text" name="productCode" class="section-regSearch-input" placeholder="상품코드입력">
@@ -51,13 +49,13 @@
                             <span class="section-regSearch-span">상품명
                                 <input type="text" name="productName" class="section-regSearch-input" placeholder="상품명입력">
                             </span>
-                            <span class="section-regSearch-span">상위카테고리
-                                <select name="refCategoryCode" class="section-regSearch-input option1">
-                                    <option value="">선택</option>
-                                    <option value="1">대형</option>
-                                    <option value="2">소형</option>
-                                </select>
-                            </span>
+<!--                            <span class="section-regSearch-span">상위카테고리-->
+<!--                                <select name="refCategoryCode" class="section-regSearch-input option1">-->
+<!--                                    <option value="">선택</option>-->
+<!--                                    <option value="1">대형</option>-->
+<!--                                    <option value="2">소형</option>-->
+<!--                                </select>-->
+<!--                            </span>-->
                             <span class="section-regSearch-span">카테고리
                                 <select name="categoryCode" class="section-regSearch-input option1">
                                     <option value="">선택</option>
@@ -70,14 +68,12 @@
                                     <option value="9">인덕션</option>
                                 </select>
                             </span>
-                        </div>
-                        <div>
                             <button type="submit" class="btn_basic">검색</button>
                         </div>
                     </form>
                 </div>
 
-                <!-- 두번째 라인 -->
+                <!-- 2-2. 검색 결과 리스트 대상 상품 등록 -->
                 <form id="inventory-form">
                     <div class="section-regSearch-line2">
                         <div>
@@ -113,22 +109,27 @@
                     <th class="column1"><input type="checkbox"></th>
                     <th>상품코드</th>
                     <th>상품명</th>
+<!--                    <th>상위카테고리</th>-->
                     <th>카테고리</th>
                     <th>등록구분</th>
                     <th>입고일자</th>
                     <th>비고</th>
                     <th class="column8">수량</th>
                 </tr>
-                <tr th:each="stock: ${ stockList }">
-                    <td class="column1"><input type="checkbox"></td>
-                    <td th:text="${ stock.productCode }"></td>
-                    <td th:text="${ stock.productName }"></td>
-                    <td th:text="${ stock.categoryName }"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="column8"><input type="number" name="amount" min="0" max="100" step="1"></td>
-                </tr>
+                <tbody>
+                <th:b
+                    <tr th:each="stock: ${ stockList }">
+                        <td class="column1"><input type="checkbox"></td>
+                        <td th:text="${ stock.productCode }"></td>
+                        <td th:text="${ stock.productName }"></td>
+<!--                        <td th:text="${ stock.refCategoryCode.categoryName }"></td>-->
+                        <td th:text="${ stock.category.categoryName }"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="column8"><input type="number" name="amount" min="0" max="100" step="1"></td>
+                    </tr>
+                </tbody>
             </table>
 
             <div class="section-regSearch">
@@ -156,142 +157,43 @@
 <!-- 스크립트 시작-->
 <script>
 
-    // 테스트 1
-
-    // Submit form and retrieve search results
-    $(document).ready(function() {
-        $('form').on('submit', function(event) {
-            event.preventDefault();
-
-            // Gather search criteria
-            const productCode = $('input[name="productCode"]').val();
-            const productName = $('input[name="productName"]').val();
-            const refCategoryCode = $('select[name="refCategoryCode"]').val();
-            const categoryCode = $('select[name="categoryCode"]').val();
-
-            // Send AJAX request to the server with search criteria
-            $.ajax({
-                url: "inventory/admin_inventory_regist", // Replace with the actual URL to handle the server-side search
-                type: 'POST',
-                data: {
-                    productCode: productCode,
-                    productName: productName,
-                    refCategoryCode: refCategoryCode,
-                    categoryCode: categoryCode
-                },
-                success: function(response) {
-                    // Clear previous search results
-                    $('.section-regSearchResult-table tbody').empty();
-
-                    // Iterate over the retrieved data and populate the search result table
-                    for (let i = 0; i < response.length; i++) {
-                        const stock = response[i];
-                        const productCode = stock.productCode;
-                        const productName = stock.productName;
-                        const categoryName = stock.categoryName;
-
-                        // Create a new row with the retrieved data
-                        const newRow = `
-                              <tr>
-                                <td class="column1"><input type="checkbox"></td>
-                                <td>${productCode}</td>
-                                <td>${productName}</td>
-                                <td>${categoryName}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="column8"><input type="number" name="amount" min="0" max="100" step="1"></td>
-                              </tr>
-                            `;
-
-                        // Append the new row to the search result table
-                        $('.section-regSearchResult-table tbody').append(newRow);
-                    }
-                },
-                error: function(error) {
-                    console.error('Error occurred during search:', error);
-                }
-            });
-        });
-    });
 
 
 
 
 
-
+    // 일괄버튼
+    //
     // $(document).ready(function() {
-    //     // Handle re-enter button click event
-    //     $('input[type="reset"]').click(function(e) {
-    //         e.preventDefault(); // Prevent the form from being submitted
+    //     $('form').on('submit', function(event) {
+    //         event.preventDefault();
     //
-    //         $('#inventory-form')[0].reset();
+    //         const regOption = $('#invenRegOption1').val();
+    //         const inDate = $('#invenRegInDate').val();
+    //         const remarks = $('.section-regSearch-input.option').val();
+    //         const quantity = $('.section-regSearch-input.amount').val();
     //
-    //         $('.section-regSearchResult-table tr:not(:first)').each(function() {
-    //             $(this).find('input[type="number"]').val('');
+    //         const tableRows = $('.section-regSearchResult-table tbody tr:not(:first)');
     //
-    //             var quantityCell = $(this).find('td.column8');
-    //             var quantityInput = quantityCell.find('input[type="number"]');
-    //             quantityInput.val('');
-    //             quantityCell.text('');
-    //             quantityCell.append(quantityInput);
+    //         tableRows.each(function(index) {
+    //             const row = $(this);
+    //             const cells = row.find('td');
     //
-    //             var registrationCell = $(this).find('td:nth-child(5)');
-    //             var receiptCell = $(this).find('td:nth-child(6)');
-    //             var remarksCell = $(this).find('td:nth-child(7)');
+    //             cells.eq(4).text(regOption);
+    //             cells.eq(5).text(inDate);
+    //             cells.eq(6).text(remarks);
+    //             cells.eq(7).find('input').val(quantity);
+    //             });
     //
-    //             registrationCell.text('');
-    //             receiptCell.text('');
-    //             remarksCell.text('');
+    //         $.ajax({
+    //             url: 'your-server-url',
+    //             type: 'POST',
+    //             data: $('form').serialize(),
     //         });
     //     });
     // });
 
-
-  // 리셋 버튼
-  // function resetTable() {
-  //     var form = document.getElementById("inventory-form");
-  //     form.reset();
-
-  //     var inputFields = table.querySelectorAll('input[type="number"]');
-  //     inputFields.forEach(function (input) {
-  //         input.value = input.getAttribute('value');
-  //     });
-  // };
-
-
-    /* 일괄버튼 */
-
-    $(document).ready(function() {
-        $('form').on('submit', function(event) {
-            event.preventDefault();
-
-            const regOption = $('#invenRegOption1').val();
-            const inDate = $('#invenRegInDate').val();
-            const remarks = $('.section-regSearch-input.option').val();
-            const quantity = $('.section-regSearch-input.amount').val();
-
-            const tableRows = $('.section-regSearchResult-table tbody tr:not(:first)');
-
-            tableRows.each(function(index) {
-                const row = $(this);
-                const cells = row.find('td');
-
-                cells.eq(4).text(regOption);
-                cells.eq(5).text(inDate);
-                cells.eq(6).text(remarks);
-                cells.eq(7).find('input').val(quantity);
-                });
-
-            $.ajax({
-                url: 'your-server-url',
-                type: 'POST',
-                data: $('form').serialize(),
-            });
-        });
-    });
-
-  // 등록 버튼
+  // 등록버튼
 
     $(document).ready(function() {
         $('.btn_basic2').on('click', function(event) {
