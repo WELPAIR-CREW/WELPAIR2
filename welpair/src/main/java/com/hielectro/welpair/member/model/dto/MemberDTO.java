@@ -1,7 +1,5 @@
 package com.hielectro.welpair.member.model.dto;
-
 import lombok.*;
-
 import java.sql.Date;
 
 @NoArgsConstructor
@@ -17,7 +15,6 @@ public class MemberDTO {
     private int pointBalance;
     private String memAuth;
 
-
-
+    private EmployeeDTO employee;
 
 }
