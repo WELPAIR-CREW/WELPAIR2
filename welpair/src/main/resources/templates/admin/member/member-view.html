@@ -57,96 +57,96 @@
                         </tr>
                     </thead>
                     <tbody> <!-- 10개 행 -->
-                        <tr>
+                        <tr th:each="member:${memberList}">
                             <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.07.01</td>
-                            <td>-</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td th:text="${member.registDate}"></td>
+                            <td th:text="${member.status}"></td>
+                            <td th:text="${member.id}"></td>
+                            <td th:text="${member.name}"></td>
+                            <td th:text="${member.email}"></td>
+                            <td th:text="${member.phone}"></td>
                         </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.06.01</td>
-                            <td>-</td>
-                            <td>P231010</td>
-                            <td>홍길동</td>
-                            <td>hong123@hielectronics.com</td>
-                            <td>010-1234-5678</td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.05.01</td>
-                            <td>퇴사</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.04.01</td>
-                            <td>계약만료</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.03.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.02.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.01.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.01.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.01.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.01.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+<!--                        <tr>-->
+<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
+<!--                            <td>2023.06.01</td>-->
+<!--                            <td>-</td>-->
+<!--                            <td>P231010</td>-->
+<!--                            <td>홍길동</td>-->
+<!--                            <td>hong123@hielectronics.com</td>-->
+<!--                            <td>010-1234-5678</td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
+<!--                            <td>2023.05.01</td>-->
+<!--                            <td>퇴사</td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
+<!--                            <td>2023.04.01</td>-->
+<!--                            <td>계약만료</td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
+<!--                            <td>2023.03.01</td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
+<!--                            <td>2023.02.01</td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
+<!--                            <td>2023.01.01</td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
+<!--                            <td>2023.01.01</td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
+<!--                            <td>2023.01.01</td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
+<!--                            <td>2023.01.01</td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                            <td></td>-->
+<!--                        </tr>-->
 
                     </tbody>
 

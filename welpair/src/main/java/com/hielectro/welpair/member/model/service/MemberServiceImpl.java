@@ -1,15 +1,26 @@
 package com.hielectro.welpair.member.model.service;
 
 
-public class MemberServiceImpl implements MemberService {
-    @Override
-    public Object countAllMember() {
+import com.hielectro.welpair.member.model.dao.MemberMapper;
+import com.hielectro.welpair.member.model.dto.MemberDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 
-        return null;
+import java.util.List;
+
+public class MemberServiceImpl implements MemberService {
+
+    private final MemberMapper memberMapper;
+
+    @Autowired
+    public MemberServiceImpl(MemberMapper memberMapper) {
+        this.memberMapper = memberMapper;
     }
 
+
+
+
     @Override
-    public Object countChangeMember() {
-        return null;
+    public List<MemberDTO> getMemberList() {
+        return memberMapper.getMemberList();
     }
 }
