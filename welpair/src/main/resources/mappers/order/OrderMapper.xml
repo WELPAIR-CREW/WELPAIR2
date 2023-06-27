@@ -4,16 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hielectro.welpair.order.model.dao.OrderMapper">
 
-    <!-- MemberDTO resultMap
-    나중에 수정해야 함 -->
-    <resultMap type="com.hielectro.welpair.member.model.dto.MemberDTO" id="memberResultMap">
-        <id property="empNo" column="EMP_NO"/>
-        <result property="memPwd" column="MEM_PWD"/>
-        <result property="registDate" column="REGIST_DATE"/>
-        <result property="pointBalance" column="POINT_BALANCE"/>
-        <result property="memAuth" column="MEM_AUTH"/>
-    </resultMap>
-
     <!-- OrderDTO resultMap-->
     <resultMap type="com.hielectro.welpair.order.model.dto.OrderDTO" id="orderResultMap">
         <id property="orderNo" column="PRODUCT_ORDER_NO"/>
@@ -30,8 +20,6 @@
     <resultMap type="com.hielectro.welpair.order.model.dto.CartDTO" id="cartResultMap">
         <id property="cartNo" column="CART_NO"/>
         <result property="empNo" column="EMP_NO"/>
-
-        <association property="member" resultMap="memberResultMap"/>
         <collection property="cartSellProductList" resultMap="cartSellProductResultMap"/>
     </resultMap>
 
@@ -43,11 +31,11 @@
     </resultMap>
 
 
-    <!-- 회원이 존재하는지 조회 -->
-    <select id="checkoutMemberById" resultMap="memberResultMap">
-        SELECT * FROM T_MEMBER
-        WHERE EMP_NO = #{empNo}
+    <!-- cart member 조회 -->
+    <select id="checkoutCartByMemberId" resultMap="cartResultMap">
+        SELECT * FROM T_CART
     </select>
+
 
     <!-- cart 테이블 삽입 -->
     <insert id="addcart">
