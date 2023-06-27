@@ -136,6 +136,7 @@
                 <div class="section-regSearch-btn">
                     <input class="btn_basic2" type="submit" value="등록">
                 </div>
+
               <!-- 페이징 -->
                 <div class="paging1">
                     <span>&lt;</span>
@@ -162,36 +163,36 @@
 
 
 
-    // 일괄버튼
-    //
-    // $(document).ready(function() {
-    //     $('form').on('submit', function(event) {
-    //         event.preventDefault();
-    //
-    //         const regOption = $('#invenRegOption1').val();
-    //         const inDate = $('#invenRegInDate').val();
-    //         const remarks = $('.section-regSearch-input.option').val();
-    //         const quantity = $('.section-regSearch-input.amount').val();
-    //
-    //         const tableRows = $('.section-regSearchResult-table tbody tr:not(:first)');
-    //
-    //         tableRows.each(function(index) {
-    //             const row = $(this);
-    //             const cells = row.find('td');
-    //
-    //             cells.eq(4).text(regOption);
-    //             cells.eq(5).text(inDate);
-    //             cells.eq(6).text(remarks);
-    //             cells.eq(7).find('input').val(quantity);
-    //             });
-    //
-    //         $.ajax({
-    //             url: 'your-server-url',
-    //             type: 'POST',
-    //             data: $('form').serialize(),
-    //         });
-    //     });
-    // });
+    일괄버튼
+
+    $(document).ready(function() {
+        $('form').on('submit', function(event) {
+            event.preventDefault();
+
+            const regOption = $('#invenRegOption1').val();
+            const inDate = $('#invenRegInDate').val();
+            const remarks = $('.section-regSearch-input.option').val();
+            const quantity = $('.section-regSearch-input.amount').val();
+
+            const tableRows = $('.section-regSearchResult-table tbody tr:not(:first)');
+
+            tableRows.each(function(index) {
+                const row = $(this);
+                const cells = row.find('td');
+
+                cells.eq(4).text(regOption);
+                cells.eq(5).text(inDate);
+                cells.eq(6).text(remarks);
+                cells.eq(7).find('input').val(quantity);
+                });
+
+            $.ajax({
+                url: '/inventory/admin_inventory_register',
+                type: 'POST',
+                data: $('form').serialize(),
+            });
+        });
+    });
 
   // 등록버튼
 
@@ -207,18 +208,18 @@
                 const row = $(this);
                 const cells = row.find('td');
 
-                const productCode = cells.eq(1).text();
-                const productName = cells.eq(2).text();
-                const category = cells.eq(3).text();
+                // const productCode = cells.eq(1).text();
+                // const productName = cells.eq(2).text();
+                // const category = cells.eq(3).text();
                 const registrationClassification = cells.eq(4).text();
                 const receiptDate = cells.eq(5).text();
                 const remarks = cells.eq(6).text();
                 const quantity = cells.eq(7).find('input').val();
 
                 rowData.push({
-                    productCode: productCode,
-                    productName: productName,
-                    category: category,
+                    // productCode: productCode,
+                    // productName: productName,
+                    // category: category,
                     registrationClassification: registrationClassification,
                     receiptDate: receiptDate,
                     remarks: remarks,
@@ -227,7 +228,7 @@
             });
 
             $.ajax({
-                url: 'your-server-url', // Replace with the actual URL to handle the server-side data transmission
+                url: '/inventory/admin_inventory_register', // Replace with the actual URL to handle the server-side data transmission
                 type: 'POST',
                 data: JSON.stringify(rowData), // Convert the rowData array to JSON and send it to the server
                 contentType: 'application/json', // Set the content type to JSON

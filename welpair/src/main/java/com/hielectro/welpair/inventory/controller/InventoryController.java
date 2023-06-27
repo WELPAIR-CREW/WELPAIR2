@@ -109,5 +109,17 @@ public class InventoryController {
             return "admin/inventory/admin_inventory_register";
         }
 
+    /**
+     * 재고관리 메뉴 (ng)
+     * 2. 입출고등록 페이지
+     * 2-2. 입출고 등록
+     */
+
+
+
+
+
+
+
     }
 
