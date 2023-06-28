@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hielectro.welpair.order.model.dao.CartMapper">
+
+
+    <!-- OrderDTO resultMap-->
+    <resultMap type="com.hielectro.welpair.order.model.dto.OrderDTO" id="orderResultMap">
+        <id property="orderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="orderDate" column="ORDER_NO"/>
+        <result property="totalPrice" column="SELL_PRODUCT_ID"/>
+        <result property="addressId" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="deliveryType" column="PRODUCT_ORDER_PRICE"/>
+        <result property="memberNo" column="DELIVERY_DATE"/>
+
+        <collection property="productOrderList" resultMap="productOrderResultMap"/>
+    </resultMap>
+
+    <resultMap type="com.hielectro.welpair.order.model.dto.CartDTO" id="cartResultMap">
+        <id property="cartNo" column="CART_NO"/>
+        <result property="empNo" column="EMP_NO"/>
+        <collection property="cartSellProductList" resultMap="cartSellProductResultMap"/>
+    </resultMap>
+
+    <resultMap type="com.hielectro.welpair.order.model.dto.CartSellProductDTO" id="cartSellProductResultMap">
+        <id property="cartNo" column="CART_NO"/>
+        <id property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="cartAmount" column="CART_AMOUNT"/>
+        <result property="deliveryPrice" column="DELIVERY_PRICE"/>
+    </resultMap>
+
+    <resultMap id="SellProductResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
+        <id property="id" column="SELL_PRODUCT_ID"/>
+        <result property="code" column="PRODUCT_CODE"/>
+        <result property="discount" column="DISCOUNT"/>
+        <result property="isSell" column="IS_SELL"/>
+    </resultMap>
+
+    <!-- cartSellProduct 카트에 담긴 기존 상품 조회 -->
+    <select id="checkoutCartProductById" resultType="_int" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
+        SELECT count(*)
+        FROM T_CART_SELL_PRODUCT A
+        WHERE CART_NO = #{cartNo}
+          AND SELL_PRODUCT_ID = #{ sellProductId }
+
+
+    </select>
+
+    <!-- cart member 조회 -->
+    <select id="checkoutCartByMemberId" resultMap="cartResultMap">
+        SELECT * FROM T_CART WHERE EMP_NO = #{ empNo }
+    </select>
+
+
+    <!-- cart 테이블 삽입 -->
+    <insert id="makeCart">
+        INSERT
+        INTO T_CART A
+            (
+            A.CART_NO,
+            A.EMP_NO
+            )
+        VALUES
+            (
+            'CR' || LPAD(SEQ_CART_NO.NEXTVAL, 6, '0'),
+            #{ empNo }
+            )
+    </insert>
+
+    <!-- cart 테이블 pk 조회 -->
+    <select id="selectCartNo">
+        SELECT 'CR' || LPAD(SEQ_CART_NO.CURRVAL, 6, '0') FROM DUAL
+    </select>
+
+    <!-- cartSellProduct 테이블 삽입 -->
+    <insert id="addCartSellProduct" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
+        INSERT
+        INTO T_CART_SELL_PRODUCT A
+            (
+            A.CART_NO,
+            A.SELL_PRODUCT_ID,
+            A.CART_AMOUNT,
+            A.DELIVERY_PRICE
+            )
+        VALUES
+            (
+            #{cartNo},
+            #{sellProductId},
+            #{cartAmount},
+            DEFAULT
+            )
+    </insert>
+
+    <!-- 상품 판매여부 조회 -->
+    <select id="isSellProductById" resultMap="SellProductResultMap">
+        select *
+        from T_SELL_PRODUCT
+        where SELL_PRODUCT_ID = #{sellProductId}
+
+    </select>
+
+
+
+    <resultMap  id="cartResultMap" type="com.hielectro.welpair.order.model.dto.CartDTO">
+        <id property="cartNo" column="CART_NO"/>
+        <result property="empNo" column="EMP_NO"/>
+    </resultMap>
+    <resultMap  id="cartSellProductResultMap" type="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
+        <id property="cartNo" column="CART_NO"/>
+        <id property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="cartAmount" column="CART_AMOUNT"/>
+        <result property="deliveryPrice" column="DELIVERY_PRICE"/>
+    </resultMap>
+    <resultMap id="SellProductResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
+        <id property="id" column="SELL_PRODUCT_ID"/>
+        <result property="code" column="PRODUCT_CODE"/>
+        <result property="discount" column="DISCOUNT"/>
+        <result property="isSell" column="IS_SELL"/>
+<!--        <collection property="sellItemPageList" resultMap="SellItemPageResultMap"/>-->
+
+    </resultMap>
+    <resultMap id="SellItemPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
+        <id property="no" column="SELL_PAGE_NO"/>
+        <id property="id" column="SELL_PRODUCT_ID"/>
+    </resultMap>
+    <resultMap id="SellPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
+        <id property="no" column="SELL_PAGE_NO"/>
+        <result property="title" column="SELL_PAGE_TITLE"/>
+    </resultMap>
+<!--    <resultMap id="ProductResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">-->
+<!--        <id property="productCode" column="PRODUCT_CODE"/>-->
+<!--        <result property="productName" column="PRODUCT_NAME"/>-->
+<!--        <result property="productStatus" column="PRODUCT_STATUS"/>-->
+<!--        <result property="productAmount" column="PRODUCT_AMOUNT"/>-->
+<!--        <result property="productPrice" column="PRODUCT_PRICE"/>-->
+<!--        <result property="productOption" column="PRODUCT_OPTION"/>-->
+<!--        <result property="productNation" column="PRODUCT_NATION"/>-->
+<!--        <result property="categoryCode" column="CATEGORY_CODE"/>-->
+<!--    </resultMap>-->
+
+    <resultMap id="cartGeneralResultMap" type="com.hielectro.welpair.order.model.dto.CartGeneralDTO">
+        <association property="cart" resultMap="cartResultMap"/>
+        <association property="cartSellProduct" resultMap="cartSellProductResultMap"/>
+        <association property="sellProduct" resultMap="SellProductResultMap"/>
+        <association property="sellItemPage" resultMap="SellItemPageResultMap"/>
+        <association property="sellPage" resultMap="SellPageResultMap"/>
+<!--        <association property="sellImage" resultMap="SellImageResultMap"/>-->
+<!--        <association property="product" resultMap="ProductResultMap"/>-->
+    </resultMap>
+
+
+    <select id="cartAllInfoSelect" resultMap="cartGeneralResultMap">
+        SELECT *
+          FROM T_CART A,
+               T_CART_SELL_PRODUCT B,
+               T_SELL_PRODUCT C,
+               T_SELL_ITEM_PAGE D,
+               T_SELL_PAGE E
+--                T_SELL_IMAGE F,
+--                T_PRODUCT G
+         WHERE A.EMP_NO = #{empNo}
+           AND A.CART_NO = B.CART_NO(+)
+           AND B.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID(+)
+           AND C.SELL_PRODUCT_ID = D.SELL_PRODUCT_ID(+)
+--            AND C.PRODUCT_CODE = G.PRODUCT_CODE(+)
+           AND D.SELL_PAGE_NO = E.SELL_PAGE_NO(+)
+--            AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
+    </select>
+
+
+
+</mapper>

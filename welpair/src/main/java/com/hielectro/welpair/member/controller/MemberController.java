@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping(value="/member")
+@RequestMapping("/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -22,10 +22,8 @@ public class MemberController {
     }
 
 
-
     //1. 회원조회 - 회원목록
-    @GetMapping("memberview")
-    @ModelAttribute
+    @GetMapping("member-view")
     public String getMemberList(Model model) {
 
         List<MemberDTO> memberList = memberService.getMemberList();
@@ -33,7 +31,6 @@ public class MemberController {
 
         return "admin/member/member-view";
     }
-
 
 
     @RequestMapping(value = "/regist")
