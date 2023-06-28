@@ -19,8 +19,8 @@
 <body>
 <div data-include-html="/admin/header_admin" class="include"></div>
 
-<!-- 왼쪽 메뉴 베너 -->
 <section>
+    <!-- 왼쪽 메뉴 베너 -->
     <div class="section-nav">
         <div class="section-nav-category">
             <a href="/inventory/admin_inventory">재고관리</a>
@@ -35,13 +35,11 @@
 
 
         <!-- 컨텐츠 영역 시작 -->
-
         <div class="section-content">
             <div class="section-title">입출고등록</div>
             <div class="section-regSearch">
 
-                <!-- ajax 테스트 -->
-                <!-- 2-1. 입출고등록 대상 상품 검색 (★ 상위 카테고리 추후 추가)-->
+                <!-- 2-1. 입출고등록 대상 상품 검색 -->
                 <div class="section-regSearch-line1">
                     <form action="/inventory/admin_inventory_register">
                         <div>
@@ -73,7 +71,7 @@
                     <div class="section-regSearch-line2">
                         <div>
                             <span class="section-regSearch-span">등록구분
-                                <select id="invenRegOption1" class="section-regSearch-input option2">
+                                <select id="inventypeOption" class="section-regSearch-input option2">
                                     <option value="stockType" id="stockType">선택</option>
                                     <option name="invenIn" value="입고">입고</option>
                                     <option name="invenOut" value="출고">출고</option>
@@ -92,7 +90,6 @@
                         <div>
                             <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
                             <input class="btn_basic" id="allOption" type="button" value="일괄반영">
-<!--                            <input class="btn_basic" id="allOption" type="button" value="일괄반영" onclick="insertAllOption()">-->
                         </div>
                     </div>
                 </form>
@@ -113,8 +110,7 @@
                         <th class="column8">수량</th>
                     </tr>
                 </thead>
-                <tbody>
-                </tbody>
+                <tbody></tbody>
             </table>
 
             <div class="section-regSearch">
@@ -137,38 +133,34 @@
         </div>
     </section>
 
-<!-- footer -->
-<div data-include-html="/admin/footer" class="include"></div>
+    <!-- footer -->
+    <div data-include-html="/admin/footer" class="include"></div>
 
 
-<!-- 스크립트 시작-->
-<script th:inline="javascript">
-    let currentPage = 1;
-    let rowsPerPage = 10;
+    <!-- 스크립트 시작-->
+    <script th:inline="javascript">
+        let currentPage = 1;
+        let rowsPerPage = 10;
 
-// 검색 버튼 비동기
+    // 검색 버튼
 
-$("#sendInvenSearch").click(function (){
+    $("#sendInvenSearch").click(function (){
 
-    let productCode = $("#productCode").val();
-    let productName = $("#productName").val();
-    let categoryCode = $("#categoryCode").val();
+        let productCode = $("#productCode").val();
+        let productName = $("#productName").val();
+        let categoryCode = $("#categoryCode").val();
 
-    let data = {
-        productCode : productCode,
-        productName : productName,
-        categoryCode : categoryCode
-    };
+        let data = {
+            productCode : productCode,
+            productName : productName,
+            categoryCode : categoryCode
+        };
+
         $.ajax({
             url: "/inventory/admin_inventory_register",
             data : data,
             type : 'post',
             success: function (data){
-
-                let startIndex = (currentPage - 1) * rowsPerPage;
-                let endIndex = startIndex + rowsPerPage;
-                let paginatedData = data.slice(startIndex, endIndex);
-
 
                 $("#searchResultTable tbody").empty();
 
@@ -188,118 +180,114 @@ $("#sendInvenSearch").click(function (){
             error: function (error) {
                 alert(error);
             }
-
-
-        });
-
-
-    });
-
-
-    // 일괄반영 버튼
-
-$("#allOption").click(function (){
-
-    let stockType = $("#invenRegOption1 option:selected").val();
-    let stockDate = $("#stockDate").val();
-    let stockComment = $("#stockComment").val();
-    let stockAmount = $("#stockAmount").val();
-
-
-        // Iterate over each row in the table body
-        $("#searchResultTable tbody tr").each(function() {
-            let row = $(this);
-
-            row.find("td:eq(4)").text(stockType);
-            row.find("td:eq(5)").text(stockDate);
-            row.find("td:eq(6)").text(stockComment);
-            row.find("td:eq(7)").text(stockAmount);
         });
     });
 
-  // 등록버튼
 
-    $(document).ready(function() {
-        $('.btn_basic2').on('click', function(event) {
-            event.preventDefault();
+        // 일괄반영 버튼
 
-            let tableRows = $('.section-regSearchResult-table tbody tr');
+    $("#allOption").click(function (){
 
-            let rowData = [];
+        let stockType = $("#inventypeOption option:selected").val();
+        let stockDate = $("#stockDate").val();
+        let stockComment = $("#stockComment").val();
+        let stockAmount = $("#stockAmount").val();
 
-            tableRows.each(function() {
+
+            // Iterate over each row in the table body
+            $("#searchResultTable tbody tr").each(function() {
                 let row = $(this);
-                let isChecked = row.find('input[type="checkbox"]').prop('checked');
 
-                if (isChecked) {
-                    let cells = row.find('td');
-                    let productCode = cells.eq(1).text();
-                    let stockType = cells.eq(4).text();
-                    let stockDate = cells.eq(5).text();
-                    let stockComment = cells.eq(6).text();
-                    let stockAmount = cells.eq(7).text();
-
-                    if (stockType === '입고') {
-                        stockAmount = parseInt(stockAmount);
-                    } else if (stockType === '출고') {
-                        stockAmount = -parseInt(stockAmount);
-                    }
-
-                    rowData.push({
-                        productCode: productCode,
-                        stockType: stockType,
-                        stockDate: stockDate,
-                        stockComment: stockComment,
-                        stockAmount: stockAmount
-                    });
-                }
+                row.find("td:eq(4)").text(stockType);
+                row.find("td:eq(5)").text(stockDate);
+                row.find("td:eq(6)").text(stockComment);
+                row.find("td:eq(7)").text(stockAmount);
             });
+        });
 
-            if (rowData.length > 0) {
-                $.ajax({
-                    url: '/inventory/stockRegist',
-                    type: 'POST',
-                    data: JSON.stringify(rowData),
-                    contentType: 'application/json',
+      // 등록버튼
 
-                    success: function (response) {
-                        alert("등록 완료");
-                        location.reload();
-                    },
-                    error: function (error) {
-                        alert("등록 실패");
+        $(document).ready(function() {
+            $('.btn_basic2').on('click', function(event) {
+                event.preventDefault();
+
+                let tableRows = $('.section-regSearchResult-table tbody tr');
+
+                let rowData = [];
+
+                tableRows.each(function() {
+                    let row = $(this);
+                    let isChecked = row.find('input[type="checkbox"]').prop('checked');
+
+                    if (isChecked) {
+                        let cells = row.find('td');
+                        let productCode = cells.eq(1).text();
+                        let stockType = cells.eq(4).text();
+                        let stockDate = cells.eq(5).text();
+                        let stockComment = cells.eq(6).text();
+                        let stockAmount = cells.eq(7).text();
+
+                        if (stockType === '입고') {
+                            stockAmount = parseInt(stockAmount);
+                        } else if (stockType === '출고') {
+                            stockAmount = -parseInt(stockAmount);
+                        }
+
+                        rowData.push({
+                            productCode: productCode,
+                            stockType: stockType,
+                            stockDate: stockDate,
+                            stockComment: stockComment,
+                            stockAmount: stockAmount
+                        });
                     }
                 });
-            }else{
-                alert("선택 항목 없음");
-            }
+
+                if (rowData.length > 0) {
+                    $.ajax({
+                        url: '/inventory/stockRegist',
+                        type: 'POST',
+                        data: JSON.stringify(rowData),
+                        contentType: 'application/json',
+
+                        success: function (response) {
+                            alert("등록 완료");
+                            location.reload();
+                        },
+                        error: function (error) {
+                            alert("등록 실패");
+                        }
+                    });
+                }else{
+                    alert("선택 항목 없음");
+                }
+            });
         });
-    });
 
 
 
 
-  // 입고 일자 오늘로
-    $(document).ready(function() {
+      // 입고 일자 오늘로
+        $(document).ready(function() {
 
-    let currentDate = new Date().toISOString().split('T')[0];
+        let currentDate = new Date().toISOString().split('T')[0];
 
-    $('#invenRegInDate').val(currentDate);
-    });
-
-
-  // 체크박스
-
-    $(document).ready(function() {
-        $('.section-regSearchResult-table th input[type="checkbox"]').on('click', function() {
-            let isChecked = $(this).prop('checked');
-
-            $('.section-regSearchResult-table td input[type="checkbox"]').prop('checked', isChecked);
+        $('#invenRegInDate').val(currentDate);
         });
-    });
+
+
+      // 체크박스
+
+        $(document).ready(function() {
+            $('.section-regSearchResult-table th input[type="checkbox"]').on('click', function() {
+                let isChecked = $(this).prop('checked');
+
+                $('.section-regSearchResult-table td input[type="checkbox"]').prop('checked', isChecked);
+            });
+        });
 
 
 
-</script>
+    </script>
 </body>
 </html>
