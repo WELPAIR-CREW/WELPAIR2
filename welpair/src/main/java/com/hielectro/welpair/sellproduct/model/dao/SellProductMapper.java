@@ -9,9 +9,7 @@ import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 
 @Mapper
 public interface SellProductMapper {
-    List<SellProductDTO> findSellProductByPageNo(int pageNo);
-    int sellProductTotalCount();
-    List<SellProductDTO> findSellProductByCode(Map<String, String> sellProductCode);
-
+    int sellProductSearchCount(Map<String, String> search);
+    List<SellProductDTO> selectProductList(Map<String, String> sellProductCode);
     int delete(String id);
 }
