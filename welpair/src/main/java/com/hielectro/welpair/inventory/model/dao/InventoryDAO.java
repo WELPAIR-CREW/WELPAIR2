@@ -18,14 +18,12 @@ public interface InventoryDAO {
     /* 1-2 */
     List<ProductDTO> searchProductByCode(String searchCode);
 
-
     /* 2-1 */
-    List<ProductDTO> stockRegistSerch(String productCode,
-                                      String productName,
-                                      String categoryName);
+    List<ProductDTO> stockRegistSerch(ProductDTO product);
 
+    /* 2-2 */
+    int stockRegist(StockDTO stock);
 
-
-    List<StockDTO> searchAllStock();
-
+    /* 3-1 */
+    List<StockDTO> historySearch(StockDTO stock);
 }

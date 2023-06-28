@@ -27,6 +27,6 @@ public class ProductServiceTests {
     @Test
     @DisplayName("리턴값의 Null 여부 확인")
     public void test2() {
-        assertNotNull(productService.findSellProductByPageNo(1));
+        assertNotNull(productService.sellProductListByPageNo(1));
     }
 }
