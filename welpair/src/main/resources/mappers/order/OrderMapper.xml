@@ -13,7 +13,6 @@
         <result property="deliveryType" column="PRODUCT_ORDER_PRICE"/>
         <result property="memberNo" column="DELIVERY_DATE"/>
 
-<!--        <association property="member" resultMap="sellProductResultMap"/> 추가후 다시 주석풀기-->
         <collection property="productOrderList" resultMap="productOrderResultMap"/>
     </resultMap>
 
@@ -30,6 +29,12 @@
         <result property="deliveryPrice" column="DELIVERY_PRICE"/>
     </resultMap>
 
+    <resultMap id="SellProductResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
+        <id property="id" column="SELL_PRODUCT_ID"/>
+        <result property="code" column="PRODUCT_CODE"/>
+        <result property="discount" column="DISCOUNT"/>
+        <result property="isSell" column="IS_SELL"/>
+    </resultMap>
 
     <!-- cartSellProduct 카트에 담긴 기존 상품 조회 -->
     <select id="checkoutCartProductById" resultType="_int" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
@@ -45,6 +50,7 @@
     <select id="checkoutCartByMemberId" resultMap="cartResultMap">
         SELECT * FROM T_CART WHERE EMP_NO = #{ empNo }
     </select>
+
 
     <!-- cart 테이블 삽입 -->
     <insert id="makeCart">
@@ -84,5 +90,13 @@
             DEFAULT
             )
     </insert>
+
+    <!-- 상품 판매여부 조회 -->
+    <select id="isSellProductById" resultMap="SellProductResultMap">
+        select *
+          from T_SELL_PRODUCT
+         where SELL_PRODUCT_ID = #{sellProductId}
+
+    </select>
 
 </mapper>

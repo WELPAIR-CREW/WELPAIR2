@@ -23,4 +23,7 @@ public interface InventoryDAO {
 
     /* 2-2 */
     int stockRegist(StockDTO stock);
+
+    /* 3-1 */
+    List<StockDTO> historySearch(StockDTO stock);
 }

@@ -75,9 +75,22 @@ public class InventoryServiceImpl implements InventoryService{
         return result;
     }
 
+    /* 3-1 */
+    @Override
+    public List<StockDTO> historySearch(StockDTO stock) {
+        System.out.println("========== 서비스 3-1 in ==========");
+        System.out.println("stockNo = " + stock.getStockNo());
+        System.out.println("productCode = " + stock.getProductCode());
+        System.out.println("productName = " + stock.getProduct().getProductName());
+        System.out.println("stockType = " + stock.getStockType());
+        System.out.println("stockDate = " + stock.getStockDate());
+        System.out.println("stockAmount = " + stock.getStockAmount());
+        System.out.println("productAmount = " + stock.getProduct().getProductAmount());
+        System.out.println("stockComment = " + stock.getStockComment());
 
+        List<StockDTO> result = inventoryDAO.historySearch(stock);
+        System.out.println("========== 서비스 3-1 out ==========");
 
-
-
-
+        return result;
+    }
 }

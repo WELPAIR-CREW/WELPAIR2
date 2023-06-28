@@ -22,4 +22,7 @@ public interface InventoryService {
     /* 2-2 */
     @Transactional
     int stockRegist(List<StockDTO> stockList);
+
+    /* 3-1 */
+    List<StockDTO> historySearch(StockDTO stock);
 }
