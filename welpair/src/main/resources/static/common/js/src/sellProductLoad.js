@@ -1,32 +1,7 @@
+import {includeHTML} from './include.js'
+import {call} from './App.js'
+
 let sellProductTotalCount;
-
-sellProductCount();
-sellProductLoad();
-
-function call(url, method, request) {
-    let options = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        method: method
-    };
-
-    if (request) {
-        options.body = JSON.stringify(request);
-    }
-
-    return fetch(url, options)
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            return Promise.reject(response);
-        })
-        .catch(error => {
-            console.log(error);
-            return Promise.reject(error);
-        })
-}
 
 function createTableCell(text) {
     const td = document.createElement("td");
@@ -58,8 +33,14 @@ function createTable(data) {
             // SellProductDTO 출력 (각 행에 모두 출력)
             const sellProductKeys = Object.keys(sellProduct);
             sellProductKeys.forEach(key => {
-                if (key === 'sellItemPageList') return;
-                tr.append(createTableCell(sellProduct[key]));
+                if (key === 'sellItemPageList' || key === 'product') return;
+                if (key === 'code') {
+
+                    tr.append(createTableCell(sellProduct['product']['productName']))
+                } else {
+
+                    tr.append(createTableCell(sellProduct[key]));
+                }
             });
 
             // SellItemPageDTO 출력
@@ -95,9 +76,9 @@ function createTable(data) {
     }
 }
 
-function sellProductLoad(pageNo = 1) {
+function sellProductTableLoad(pageNo = 1) {
 
-    let url = "/sellproduct/sellproductlist/" + pageNo;
+    let url = "/sellproduct/list/" + pageNo;
     let method = 'get';
 
     call(url, method, null)
@@ -111,7 +92,10 @@ function sellProductLoad(pageNo = 1) {
     document.createElement('a').href = 'javascript:void(0)';
 }
 
-window.onload = searchSellProduct
+window.addEventListener('load', function() {
+    searchSellProduct();
+    deleteSellProduct();
+})
 
 function searchSellProduct() {
     let searchBtn = document.querySelector(".first-button")
@@ -119,17 +103,47 @@ function searchSellProduct() {
         const code = document.querySelector(".product-code").value
         const name = document.querySelector(".name").value
 
+        const map = {code, name};
         if (code === '' && name === '') {
-            alert("")
+            sellProductTableLoad()
             return;
         }
 
-        if (code !== '') {
-
-            call("/sellproduct/search", "post", code)
-                .then(data => {
-                    createTable(data);
-                })
-        }
+        call("/sellproduct/search", "post", map)
+            .then(data => {
+                createTable(data);
+            })
     })
 }
+
+function deleteSellProduct() {
+    let deleteBtn = document.querySelectorAll(".first-button")[1];
+    deleteBtn.addEventListener('click', function () {
+
+        const items = document.querySelectorAll("tbody input");
+        const request = [...items].filter(item => item.checked)
+            .map(item => item.parentElement.nextElementSibling.textContent);
+        console.log(request);
+
+        call("/sellproduct/delete", "post", request)
+            .then(data => {
+                if (data > 0) {
+                    alert("삭제에 성공하였습니다.");
+                    sellProductTableLoad();
+                } else {
+                    alert("삭제에 실패하였습니다.");
+                }
+            })
+
+    })
+}
+
+const headerCheckBox = document.querySelector("thead input");
+headerCheckBox.addEventListener('click', function() {
+    const items = document.querySelectorAll("tbody input");
+    items.forEach(item => item.checked = headerCheckBox.checked);
+})
+
+sellProductCount();
+sellProductTableLoad();
+includeHTML();

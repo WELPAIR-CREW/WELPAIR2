@@ -7,16 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원조회</title>
 
-    <link rel="stylesheet" href="/static/common/css/footer.css">
-    <link rel="stylesheet" href="/static/common/css/header.css">
-    <link rel="stylesheet" href="/static/common/css/member.css">
-    <link rel="stylesheet" href="/static/common/css/main.css">
-    <script src="/static/common/js/static/include.js"></script>
+<!-- 제이쿼리, CSS, JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/main.css">
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/member.css">
+    <script src="/common/js/static/include.js"></script>
 </head>
 
 <body>
     <!-- header -->
-    <div data-include-html="admin/header_admin.html" class="include"></div>
+    <div data-include-html="/admin/header_admin" class="include"></div>
 
     <div class="container">
 
@@ -34,9 +36,9 @@
 
             <div class="contents"> <!-- 테이블, 테이블 위, 테이블 아래-->
                 <div class="over-table">
-                    <!-- @동적으로 값이 들어갈 곳-->
-                    <label class="count-row">전체 : <span th:text="${ totalMember }" class="member-value"></span>명</label>
-                    <label class="count-row">상태변경 : <span th:text="${ changedMember }" class="member-value"></span>명</label>
+
+                    <label class="count-row">전체 : <span th:text="${ totalMemberCount }" class="member-value"></span>명</label>
+                    <label class="count-row">상태변경 : <span th:text="${ expiredMemberCount }" class="member-value"></span>명</label>
 
                     <!-- 토글버튼:클릭시 toggleButton()함수 실행 -->
                     <button id="toggleButton" class="toggle" onclick="toggleButton()">퇴사/계약만료만 조회</button>
@@ -45,112 +47,28 @@
                 </div>
 
                 <table>
-                    <thead> <!-- 제목 행-->
+                    <thead>
                         <tr>
                             <th class="checkbox-cell"><input type="checkbox" id="select-all"></th>
                             <th>등록일</th>
-                            <th>상태</th>
-                            <th>아이디 </th>
+                            <th>퇴사여부</th>
+                            <th>아이디</th>
                             <th>이름</th>
                             <th>이메일</th>
                             <th>연락처</th>
                         </tr>
                     </thead>
-                    <tbody> <!-- 10개 행 -->
+                    <tbody> <!-- 10행. 페이징처리 필요-->
                         <tr th:each="member:${memberList}">
                             <td class="checkbox-cell"><input type="checkbox"></td>
                             <td th:text="${member.registDate}"></td>
-                            <td th:text="${member.status}"></td>
-                            <td th:text="${member.id}"></td>
-                            <td th:text="${member.name}"></td>
-                            <td th:text="${member.email}"></td>
-                            <td th:text="${member.phone}"></td>
+                            <td th:text="${member.employee.isExpire}"></td>
+                            <td th:text="${member.empNo}"></td>
+                            <td th:text="${member.employee.empName}"></td>
+                            <td th:text="${member.employee.empEmail}"></td>
+                            <td th:text="${member.employee.empPhone}"></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.06.01</td>-->
-<!--                            <td>-</td>-->
-<!--                            <td>P231010</td>-->
-<!--                            <td>홍길동</td>-->
-<!--                            <td>hong123@hielectronics.com</td>-->
-<!--                            <td>010-1234-5678</td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.05.01</td>-->
-<!--                            <td>퇴사</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.04.01</td>-->
-<!--                            <td>계약만료</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.03.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.02.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.01.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.01.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.01.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.01.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-
                     </tbody>
-
-
                 </table>
 
                 <div class="under-table">
@@ -180,8 +98,7 @@
 
 
     <!-- footer -->
-<!--    <div data-include-html="../footer.html" class="include"></div>-->
-    <div data-include-html="admin/footer.html" class="include"></div>
+    <div data-include-html="/admin/footer" class="include"></div>
 
 
     <!-- @전체선택 체크박스 -->

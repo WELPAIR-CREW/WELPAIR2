@@ -18,7 +18,9 @@ public class ProductDTO {
     private int productPrice;
     private String productOption;
     private String productNation;
-    private CategoryDTO categoryCode;
+    private String categoryCode;
+
+    private CategoryDTO category;
 
     private List<StockDTO> StockList;
 

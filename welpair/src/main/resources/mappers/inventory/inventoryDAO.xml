@@ -9,7 +9,7 @@
         <id property="productCode" column="PRODUCT_CODE"/>
         <result property="productName" column="PRODUCT_NAME"/>
         <result property="productAmount" column="PRODUCT_AMOUNT"/>
-        <association property="categoryCode" resultMap="categoryDTO"/>
+        <association property="category" resultMap="categoryDTO"/>
     </resultMap>
 
     <resultMap id="categoryDTO" type="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
@@ -21,7 +21,7 @@
     <resultMap type="com.hielectro.welpair.inventory.model.dto.ProductDTO" id="stockRegistSerchResultMap">
         <id property="productCode" column="PRODUCT_CODE"/>
         <result property="productName" column="PRODUCT_NAME"/>
-        <association property="categoryCode" resultMap="categoryDTO"/>
+        <association property="category" resultMap="categoryDTO"/>
     </resultMap>
 
 
@@ -74,36 +74,46 @@
 
     <select id="stockRegistSerch" resultMap="stockRegistSerchResultMap">
         SELECT
-               A.PRODUCT_CODE AS 상품코드
-             , A.PRODUCT_NAME AS 상품명
-             , B.CATEGORY_NAME AS 카테고리명
+               A.PRODUCT_CODE
+             , A.PRODUCT_NAME
+             , B.CATEGORY_NAME
           FROM T_PRODUCT A
           JOIN T_CATEGORY B ON B.CATEGORY_CODE = A.CATEGORY_CODE
          WHERE 1=1
-        <if test="productCode != null">
+        <if test="productCode != null and productCode != ''">
             AND A.PRODUCT_CODE = #{productCode}
         </if>
-        <if test="productName != null">
+        <if test="productName != null and productName != ''">
             AND A.PRODUCT_NAME = #{productName}
         </if>
-        <if test="categoryName != null">
-            AND B.CATEGORY_NAME = #{categoryName}
+        <if test="categoryCode != null and categoryCode != ''">
+            AND A.CATEGORY_CODE = #{categoryCode}
         </if>
     </select>
 
+    
+    <!-- 2-2. -->
+
+<!--    <insert id="stockRegist" parameterType="com.hielectro.welpair.inventory.model.dto.StockDTO">-->
+    <insert id="stockRegist" parameterType="com.hielectro.welpair.inventory.model.dto.StockDTO">
+    INSERT INTO T_STOCK A (
+        A.STOCK_NO
+      , A.STOCK_TYPE
+      , A.PRODUCT_CODE
+      , A.STOCK_DATE
+      , A.STOCK_AMOUNT
+      , A.STOCK_COMMENT
+    )
+    VALUES
+    (
+        'S' || EXTRACT(YEAR FROM CURRENT_DATE) || LPAD(EXTRACT(MONTH FROM CURRENT_DATE), 2, '0') || LPAD(SEQ_STOCK_NO.NEXTVAL, 4, '0')
+      , #{ stockType }
+      , #{ productCode }
+      , #{ stockDate }
+      , #{ stockAmount }
+      , #{ stockComment }
+    )
+    </insert>
 
 
-
-
-<!--    <select id="searchAllStock" resultMap="stockResultMap">-->
-<!--        SELECT-->
-<!--               B.PRODUCT_CODE AS 상품코드-->
-<!--             , B.PRODUCT_NAME AS 상품명-->
-<!--             , A.STOCK_TYPE AS 등록구분-->
-<!--             , A.STOCK_DATE AS 입고일-->
-<!--             , A.STOCK_AMOUNT AS 등록수량-->
-<!--             , B.PRODUCT_AMOUNT AS 재고수량-->
-<!--          FROM T_STOCK A-->
-<!--         RIGHT JOIN T_PRODUCT B on B.PRODUCT_CODE = A.PRODUCT_CODE;-->
-<!--    </select>-->
 </mapper>

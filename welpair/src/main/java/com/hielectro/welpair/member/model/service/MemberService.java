@@ -1,15 +1,18 @@
 package com.hielectro.welpair.member.model.service;
 
 import com.hielectro.welpair.member.model.dto.MemberDTO;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface MemberService {
 
-    public List<MemberDTO> getMemberList() {
-        MemberServiceImpl.getMemberList();
-    }
+    //1-1. 회원조회 - 회원목록
+    List<MemberDTO> getMemberList();
+
+    //1-2. 회원조회 - 전체, 퇴사 회원수
+    int totalMemberCount();
+    int expiredMemberCount();
+
+
 }

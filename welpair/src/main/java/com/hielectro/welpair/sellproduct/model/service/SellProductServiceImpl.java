@@ -1,6 +1,7 @@
 package com.hielectro.welpair.sellproduct.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,24 @@ public class SellProductServiceImpl implements SellProductService {
     }
 
     @Override
-    public List<SellProductDTO> findSellProductByCode(String productId) {
+    public List<SellProductDTO> findSellProductByCode(Map<String, String> productId) {
         return productMapper.findSellProductByCode(productId);
+    }
+
+    @Override
+    public int delete(List<String> request) throws Exception {
+        int size = request.size();
+        int result = 0;
+
+        System.out.println("service : " + request);
+        for (int i = 0; i < size; i++) {
+            result += productMapper.delete(request.get(i));
+        }
+
+        if (result != size) {
+            throw new IllegalStateException();
+        }
+
+        return result;
     }
 }

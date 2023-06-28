@@ -12,6 +12,9 @@ import com.hielectro.welpair.configuration.MybatisConfiguration;
 import com.hielectro.welpair.configuration.WelpairApplication;
 import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SpringBootTest
 @ContextConfiguration(classes = {MybatisConfiguration.class, WelpairApplication.class})
 public class ProductMapperTests {
@@ -35,6 +38,6 @@ public class ProductMapperTests {
     @Test
     @DisplayName("판매상품 Code 검색 출력 테스트")
     public void test2() {
-        assertNotNull(productMapper.findSellProductByCode("SP15"));
+        assertNotNull(productMapper.findSellProductByCode(new HashMap<String, String>()));
     }
 }
