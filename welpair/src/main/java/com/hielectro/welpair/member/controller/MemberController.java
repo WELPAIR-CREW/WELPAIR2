@@ -8,9 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-//import java.lang.reflect.Member;
 import java.util.List;
 
 @Controller
@@ -19,23 +16,24 @@ public class MemberController {
 
     private final MemberService memberService;
 
-
     @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
-    //회원조회 목록
+
+
+    //1. 회원조회 - 회원목록
     @GetMapping("memberview")
     @ModelAttribute
     public String getMemberList(Model model) {
 
-//        List<MemberDTO> memberList = memberService.getMemberList();
-
-//        model.addAttribute("memberList", memberList);
+        List<MemberDTO> memberList = memberService.getMemberList();
+        model.addAttribute("memberList", memberList);
 
         return "admin/member/member-view";
     }
+
 
 
     @RequestMapping(value = "/regist")
