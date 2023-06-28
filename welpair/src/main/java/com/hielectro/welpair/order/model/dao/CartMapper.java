@@ -24,6 +24,4 @@ public interface CartMapper {
 
     SellProductDTO isSellProductById(String sellProductId);
     List<CartGeneralDTO> cartAllInfoSelect(String empNo);
-
-    int testCartAllInfoSelect(String empNo);
 }

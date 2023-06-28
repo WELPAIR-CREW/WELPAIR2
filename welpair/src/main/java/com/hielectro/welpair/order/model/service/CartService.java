@@ -10,8 +10,6 @@ import java.util.List;
 public interface CartService {
     List<CartGeneralDTO> cartAllInfoSelect(String empNo);
 
-    int testCartAllInfoSelect(String empNo);
-
     public int makeCart(String empNo);
 
     public String selectCartNo();

@@ -59,8 +59,4 @@ public class CartServiceImpl implements CartService {
         return cartMapper.cartAllInfoSelect(empNo);
     }
 
-    @Override
-    public int testCartAllInfoSelect(String empNo) {
-        return cartMapper.testCartAllInfoSelect(empNo);
-    }
 }
