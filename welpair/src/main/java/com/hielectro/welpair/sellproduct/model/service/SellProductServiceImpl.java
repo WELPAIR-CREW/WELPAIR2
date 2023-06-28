@@ -16,17 +16,14 @@ public class SellProductServiceImpl implements SellProductService {
         this.productMapper = productMapper;
     }
 
-    public List<SellProductDTO> findSellProductByPageNo(int pageNo) {
-        return productMapper.findSellProductByPageNo(pageNo);
-    }
-
-    public int sellProductTotalCount() {
-        return productMapper.sellProductTotalCount();
+    @Override
+    public int sellProductSearchCount(Map<String, String> search) {
+        return productMapper.sellProductSearchCount(search);
     }
 
     @Override
-    public List<SellProductDTO> findSellProductByCode(Map<String, String> productId) {
-        return productMapper.findSellProductByCode(productId);
+    public List<SellProductDTO> selectProductList(Map<String, String> productId) {
+        return productMapper.selectProductList(productId);
     }
 
     @Override

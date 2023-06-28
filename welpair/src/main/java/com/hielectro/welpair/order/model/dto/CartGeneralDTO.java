@@ -17,11 +17,14 @@ public class CartGeneralDTO {
 
     private CartDTO cart;
     private CartSellProductDTO cartSellProduct;
-    private SellProductDTO sellProduct;
+    private SellProductDTO sellProduct ;
     private SellItemPageDTO sellItemPage;
     private SellPageDTO sellPage;
-//    private SellImageDTO sellImage;
+
+
+//    private SellImageDTO sellImage = new SellImageDTO();
     private ProductDTO product;
+
 
 }
 

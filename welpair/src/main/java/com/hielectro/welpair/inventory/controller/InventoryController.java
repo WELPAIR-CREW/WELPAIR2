@@ -1,6 +1,4 @@
 package com.hielectro.welpair.inventory.controller;
-
-
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.inventory.model.dto.StockDTO;
 import com.hielectro.welpair.inventory.model.service.InventoryService;
@@ -19,7 +17,6 @@ import java.util.*;
 @Controller
 @Slf4j
 @RequestMapping("/inventory/")
-
 public class InventoryController {
     private final InventoryService inventoryService;
     private final MessageSource messageSource;
@@ -30,7 +27,6 @@ public class InventoryController {
         this.messageSource = messageSource;
     }
 
-
     /**
      * 재고관리 메뉴 (ng)
      * 1. 재고현황 페이지
@@ -39,7 +35,6 @@ public class InventoryController {
     @GetMapping("/getInventoryInfo")
     @ResponseBody
     public Map<String, Integer> getInvenInfo(){
-//    public Map<String, Integer> getInvenInfo(Model model){
         System.out.println("-------------컨트롤러 1-1 in -------------");
 
         int totalInvenAmount = inventoryService.getTotalInventoryAmount();
@@ -61,7 +56,6 @@ public class InventoryController {
      * 1. 재고현황 페이지
      * 1-2. 하단부 상품 코드 검색 시 해당 상품의 간단한 정보 출력
      */
-
     @GetMapping("admin_inventory")
     public String searchProductByCode(Model model, @RequestParam(required = false) String searchCode) {
 
@@ -137,8 +131,6 @@ public class InventoryController {
         return stockList;
     }
 
-
-
     /**
      * 재고관리 메뉴 (ng)
      * 2. 입출고등록 페이지
@@ -157,8 +149,6 @@ public class InventoryController {
         if(result > 0){
 
             rttr.addFlashAttribute("successMessage", "입출고 등록 성공");
-//            rttr.addFlashAttribute("successMessage", messageSource.getMessage("stockRegist", null, locale));
-//            System.out.println("messageSource = " + messageSource);
             System.out.println("-------------컨트롤러 2-2 out -------------");
         } else {
             rttr.addFlashAttribute("failMessage", "입출고 등록 실패");
@@ -172,9 +162,87 @@ public class InventoryController {
 
 
 
+    /**
+     * 재고관리 메뉴 (ng)
+     * 3. 입출고내역
+     * 3-1. 입출고내역 검색
+     *      상품코드, 상품명, 카테고리 선택 후 검색 시 입출고 내역 조회
+     */
+    @GetMapping("admin_inventory_search")
+    public String StockhistorySearch(Model model,@ModelAttribute StockDTO stock) {
 
+        try {
 
+            System.out.println("-------------컨트롤러 3-1 in -------------");
+//            System.out.println("stockNo = " + stock.getStockNo());
+//            System.out.println("productCode = " + stock.getProductCode());
+//            System.out.println("productName = " + stock.getProduct().getProductName());
+//            System.out.println("stockType = " + stock.getStockType());
+//            System.out.println("stockDate = " + stock.getStockDate());
+//            System.out.println("stockAmount = " + stock.getStockAmount());
+//            System.out.println("productAmount = " + stock.getProduct().getProductAmount());
+//            System.out.println("stockComment = " + stock.getStockComment());
 
+            String stockNo = stock.getStockNo();
+            String productCode = stock.getProductCode();
+//            String productName = stock.getProduct().getProductName();
+            String stockType = stock.getStockType();
+            Date stockDate = stock.getStockDate();
+            int stockAmount = stock.getStockAmount();
+//            int productAmount = stock.getProduct().getProductAmount();
+            String stockComment = stock.getStockComment();
+
+//            if (productCode != null || productName != null || stockComment != null || stockType != null || stockComment != null || stockDate != null) {
+            if (productCode != null || stockComment != null || stockType != null || stockComment != null || stockDate != null) {
+                List<StockDTO> stockList = inventoryService.historySearch(stock);
+                model.addAttribute("stockList", stockList);
+                System.out.println("-------------컨트롤러 3-1 out -------------");
+            } else {
+                model.addAttribute("stockList", Collections.emptyList());
+            }
+        } catch(TemplateInputException e){
+            e.printStackTrace();
+        }
+
+        return "admin/inventory/admin_inventory_search";
+    }
+
+    @PostMapping("admin_inventory_search")
+    @ResponseBody
+    public List<StockDTO> historySearch(@ModelAttribute StockDTO stock) {
+
+        List<StockDTO> stockList = null;
+        try {
+            String stockNo = stock.getStockNo();
+            String productCode = stock.getProductCode();
+            String productName = stock.getProduct().getProductName();
+            String stockType = stock.getStockType();
+            Date stockDate = stock.getStockDate();
+            int stockAmount = stock.getStockAmount();
+            int productAmount = stock.getProduct().getProductAmount();
+            String stockComment = stock.getStockComment();
+
+            System.out.println("-------------컨트롤러 3-1 in -------------");
+            System.out.println("stockNo = " + stock.getStockNo());
+            System.out.println("productCode = " + stock.getProductCode());
+            System.out.println("productName = " + stock.getProduct().getProductName());
+            System.out.println("stockType = " + stock.getStockType());
+            System.out.println("stockDate = " + stock.getStockDate());
+            System.out.println("stockAmount = " + stock.getStockAmount());
+            System.out.println("productAmount = " + stock.getProduct().getProductAmount());
+            System.out.println("stockComment = " + stock.getStockComment());
+
+            if (productCode != null || productName != null || stockComment != null || stockType != null || stockComment != null || stockDate != null) {
+                stockList = inventoryService.historySearch(stock);
+                System.out.println("-------------컨트롤러 3-1 out -------------");
+            } else {
+            }
+        } catch(TemplateInputException e){
+            e.printStackTrace();
+        }
+
+        return stockList;
+    }
 
 
     }
