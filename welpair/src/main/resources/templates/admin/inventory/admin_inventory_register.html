@@ -13,6 +13,7 @@
     <script src="/common/js/static/include.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
 </head>
 
 <body>
@@ -22,10 +23,10 @@
 <section>
     <div class="section-nav">
         <div class="section-nav-category">
-            <a href="./admin_inventory.html"><b>재고관리</b></a>
+            <a href="/inventory/admin_inventory">재고관리</a>
         </div>
         <div class="section-nav-category">
-            <a href="./admin_inventory_register.html">입출고등록</a>
+            <a href="/inventory/admin_inventory_register"><b>입출고등록</b></a>
         </div>
         <div class="section-nav-category">
             <a href="/inventory/admin_inventory_search">입출고내역</a>
@@ -39,25 +40,19 @@
             <div class="section-title">입출고등록</div>
             <div class="section-regSearch">
 
+                <!-- ajax 테스트 -->
                 <!-- 2-1. 입출고등록 대상 상품 검색 (★ 상위 카테고리 추후 추가)-->
                 <div class="section-regSearch-line1">
                     <form action="/inventory/admin_inventory_register">
                         <div>
                             <span class="section-regSearch-span">상품코드
-                                <input type="text" name="productCode" class="section-regSearch-input" placeholder="상품코드입력">
+                                <input type="text" name="productCode" id="productCode" class="section-regSearch-input" placeholder="상품코드입력">
                             </span>
                             <span class="section-regSearch-span">상품명
-                                <input type="text" name="productName" class="section-regSearch-input" placeholder="상품명입력">
+                                <input type="text" name="productName" id="productName" class="section-regSearch-input" placeholder="상품명입력">
                             </span>
-<!--                            <span class="section-regSearch-span">상위카테고리-->
-<!--                                <select name="refCategoryCode" class="section-regSearch-input option1">-->
-<!--                                    <option value="">선택</option>-->
-<!--                                    <option value="1">대형</option>-->
-<!--                                    <option value="2">소형</option>-->
-<!--                                </select>-->
-<!--                            </span>-->
                             <span class="section-regSearch-span">카테고리
-                                <select name="categoryCode" class="section-regSearch-input option1">
+                                <select name="categoryCode" id="categoryCode" class="section-regSearch-input option1">
                                     <option value="">선택</option>
                                     <option value="3">TV</option>
                                     <option value="4">에어컨</option>
@@ -68,7 +63,7 @@
                                     <option value="9">인덕션</option>
                                 </select>
                             </span>
-                            <button type="submit" class="btn_basic">검색</button>
+                            <button id="sendInvenSearch" class="btn_basic" type="button">검색</button>
                         </div>
                     </form>
                 </div>
@@ -79,25 +74,26 @@
                         <div>
                             <span class="section-regSearch-span">등록구분
                                 <select id="invenRegOption1" class="section-regSearch-input option2">
-                                    <option value="">선택</option>
+                                    <option value="stockType" id="stockType">선택</option>
                                     <option name="invenIn" value="입고">입고</option>
                                     <option name="invenOut" value="출고">출고</option>
                                 </select>
                             </span>
-                        <span id="invenRegOption2" class="section-regSearch-span">입고일자
-                            <input type="date" name="invenRegInDate" class="section-regSearch-input date" id="invenRegInDate">
+                            <span id="invenRegOption2" class="section-regSearch-span">입고일자
+                            <input type="date" name="stockDate" id="stockDate" class="section-regSearch-input date">
                         </span>
-                        <span class="section-regSearch-span">비고
-                            <input type="text" class="section-regSearch-input option" placeholder="비고입력">
+                            <span class="section-regSearch-span">비고
+                            <input type="text" name="stockComment" id="stockComment" class="section-regSearch-input option" placeholder="비고입력">
                         </span>
-                        <span class="section-regSearch-span">수량
-                            <input class="section-regSearch-input amount" type="number" name="amount" min="0" max="100" step="1" value="0">
+                            <span class="section-regSearch-span">수량
+                            <input class="section-regSearch-input amount" type="number" name="stockAmount" id="stockAmount" min="0" max="1000" step="1" value="0">
                         </span>
-                      </div>
-                      <div>
-                        <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
-                        <input class="btn_basic" type="submit" value="일괄반영" onclick="insertAllOption()">
-                      </div>
+                        </div>
+                        <div>
+                            <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
+                            <input class="btn_basic" id="allOption" type="button" value="일괄반영">
+<!--                            <input class="btn_basic" id="allOption" type="button" value="일괄반영" onclick="insertAllOption()">-->
+                        </div>
                     </div>
                 </form>
             </div>
@@ -105,30 +101,19 @@
             <!-- 입출고등록용 검색 테이블 -->
 
             <table id="searchResultTable" class="section-regSearchResult-table">
-                <tr>
-                    <th class="column1"><input type="checkbox"></th>
-                    <th>상품코드</th>
-                    <th>상품명</th>
-<!--                    <th>상위카테고리</th>-->
-                    <th>카테고리</th>
-                    <th>등록구분</th>
-                    <th>입고일자</th>
-                    <th>비고</th>
-                    <th class="column8">수량</th>
-                </tr>
-                <tbody>
-                <th:b
-                    <tr th:each="stock: ${ stockList }">
-                        <td class="column1"><input type="checkbox"></td>
-                        <td th:text="${ stock.productCode }"></td>
-                        <td th:text="${ stock.productName }"></td>
-<!--                        <td th:text="${ stock.refCategoryCode.categoryName }"></td>-->
-                        <td th:text="${ stock.category.categoryName }"></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td class="column8"><input type="number" name="amount" min="0" max="100" step="1"></td>
+                <thead>
+                    <tr>
+                        <th class="column1"><input type="checkbox"></th>
+                        <th>상품코드</th>
+                        <th>상품명</th>
+                        <th>카테고리</th>
+                        <th>등록구분</th>
+                        <th>입고일자</th>
+                        <th>비고</th>
+                        <th class="column8">수량</th>
                     </tr>
+                </thead>
+                <tbody>
                 </tbody>
             </table>
 
@@ -136,6 +121,8 @@
                 <div class="section-regSearch-btn">
                     <input class="btn_basic2" type="submit" value="등록">
                 </div>
+
+
               <!-- 페이징 -->
                 <div class="paging1">
                     <span>&lt;</span>
@@ -155,43 +142,80 @@
 
 
 <!-- 스크립트 시작-->
-<script>
+<script th:inline="javascript">
+    let currentPage = 1;
+    let rowsPerPage = 10;
+
+// 검색 버튼 비동기
+
+$("#sendInvenSearch").click(function (){
+
+    let productCode = $("#productCode").val();
+    let productName = $("#productName").val();
+    let categoryCode = $("#categoryCode").val();
+
+    let data = {
+        productCode : productCode,
+        productName : productName,
+        categoryCode : categoryCode
+    };
+        $.ajax({
+            url: "/inventory/admin_inventory_register",
+            data : data,
+            type : 'post',
+            success: function (data){
+
+                let startIndex = (currentPage - 1) * rowsPerPage;
+                let endIndex = startIndex + rowsPerPage;
+                let paginatedData = data.slice(startIndex, endIndex);
 
 
+                $("#searchResultTable tbody").empty();
+
+                $.each(data, function (index, stock) {
+                    let row = $("<tr></tr>");
+                    row.append("<td><input type='checkbox'></td>");
+                    row.append("<td>" + stock.productCode + "</td>");
+                    row.append("<td>" + stock.productName + "</td>");
+                    row.append("<td>" + stock.category.categoryName + "</td>");
+                    row.append("<td></td>");
+                    row.append("<td></td>");
+                    row.append("<td></td>");
+                    row.append("<td></td>");
+                    $("#searchResultTable tbody").append(row);
+                });
+            },
+            error: function (error) {
+                alert(error);
+            }
 
 
+        });
 
 
-    // 일괄버튼
-    //
-    // $(document).ready(function() {
-    //     $('form').on('submit', function(event) {
-    //         event.preventDefault();
-    //
-    //         const regOption = $('#invenRegOption1').val();
-    //         const inDate = $('#invenRegInDate').val();
-    //         const remarks = $('.section-regSearch-input.option').val();
-    //         const quantity = $('.section-regSearch-input.amount').val();
-    //
-    //         const tableRows = $('.section-regSearchResult-table tbody tr:not(:first)');
-    //
-    //         tableRows.each(function(index) {
-    //             const row = $(this);
-    //             const cells = row.find('td');
-    //
-    //             cells.eq(4).text(regOption);
-    //             cells.eq(5).text(inDate);
-    //             cells.eq(6).text(remarks);
-    //             cells.eq(7).find('input').val(quantity);
-    //             });
-    //
-    //         $.ajax({
-    //             url: 'your-server-url',
-    //             type: 'POST',
-    //             data: $('form').serialize(),
-    //         });
-    //     });
-    // });
+    });
+
+
+    // 일괄반영 버튼
+
+$("#allOption").click(function (){
+
+    let stockType = $("#invenRegOption1 option:selected").val();
+    let stockDate = $("#stockDate").val();
+    let stockComment = $("#stockComment").val();
+    let stockAmount = $("#stockAmount").val();
+
+
+        // Iterate over each row in the table body
+        $("#searchResultTable tbody tr").each(function() {
+            let row = $(this);
+
+            row.find("td:eq(4)").text(stockType);
+            row.find("td:eq(5)").text(stockDate);
+            row.find("td:eq(6)").text(stockComment);
+            row.find("td:eq(7)").text(stockAmount);
+        });
+    });
 
   // 등록버튼
 
@@ -199,47 +223,56 @@
         $('.btn_basic2').on('click', function(event) {
             event.preventDefault();
 
-            const tableRows = $('.section-regSearchResult-table tbody tr:not(:first)');
+            let tableRows = $('.section-regSearchResult-table tbody tr');
 
-            const rowData = [];
+            let rowData = [];
 
-            tableRows.each(function(index) {
-                const row = $(this);
-                const cells = row.find('td');
+            tableRows.each(function() {
+                let row = $(this);
+                let isChecked = row.find('input[type="checkbox"]').prop('checked');
 
-                const productCode = cells.eq(1).text();
-                const productName = cells.eq(2).text();
-                const category = cells.eq(3).text();
-                const registrationClassification = cells.eq(4).text();
-                const receiptDate = cells.eq(5).text();
-                const remarks = cells.eq(6).text();
-                const quantity = cells.eq(7).find('input').val();
+                if (isChecked) {
+                    let cells = row.find('td');
+                    let productCode = cells.eq(1).text();
+                    let stockType = cells.eq(4).text();
+                    let stockDate = cells.eq(5).text();
+                    let stockComment = cells.eq(6).text();
+                    let stockAmount = cells.eq(7).text();
 
-                rowData.push({
-                    productCode: productCode,
-                    productName: productName,
-                    category: category,
-                    registrationClassification: registrationClassification,
-                    receiptDate: receiptDate,
-                    remarks: remarks,
-                    quantity: quantity
-                });
-            });
+                    if (stockType === '입고') {
+                        stockAmount = parseInt(stockAmount);
+                    } else if (stockType === '출고') {
+                        stockAmount = -parseInt(stockAmount);
+                    }
 
-            $.ajax({
-                url: 'your-server-url', // Replace with the actual URL to handle the server-side data transmission
-                type: 'POST',
-                data: JSON.stringify(rowData), // Convert the rowData array to JSON and send it to the server
-                contentType: 'application/json', // Set the content type to JSON
-
-                success: function(response) {
-                    alert("등록 완료");
-                    location.reload();
-                },
-                error: function(error) {
-                    alert("등록 실패");
+                    rowData.push({
+                        productCode: productCode,
+                        stockType: stockType,
+                        stockDate: stockDate,
+                        stockComment: stockComment,
+                        stockAmount: stockAmount
+                    });
                 }
             });
+
+            if (rowData.length > 0) {
+                $.ajax({
+                    url: '/inventory/stockRegist',
+                    type: 'POST',
+                    data: JSON.stringify(rowData),
+                    contentType: 'application/json',
+
+                    success: function (response) {
+                        alert("등록 완료");
+                        location.reload();
+                    },
+                    error: function (error) {
+                        alert("등록 실패");
+                    }
+                });
+            }else{
+                alert("선택 항목 없음");
+            }
         });
     });
 
@@ -249,7 +282,7 @@
   // 입고 일자 오늘로
     $(document).ready(function() {
 
-    const currentDate = new Date().toISOString().split('T')[0];
+    let currentDate = new Date().toISOString().split('T')[0];
 
     $('#invenRegInDate').val(currentDate);
     });
@@ -259,11 +292,13 @@
 
     $(document).ready(function() {
         $('.section-regSearchResult-table th input[type="checkbox"]').on('click', function() {
-            const isChecked = $(this).prop('checked');
+            let isChecked = $(this).prop('checked');
 
             $('.section-regSearchResult-table td input[type="checkbox"]').prop('checked', isChecked);
         });
     });
+
+
 
 </script>
 </body>

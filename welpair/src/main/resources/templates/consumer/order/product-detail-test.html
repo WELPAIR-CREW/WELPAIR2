@@ -40,13 +40,13 @@
                 success: function (response) {  // 요청이 성공한 경우 실행할 함수
                     console.log("AJAX 요청 성공");
                     console.log(response);  // 서버로부터의 응답 데이터
-                    alert(response.successMessage);
+                    alert(response.message);
                 },
                 error: function (status, error) {  // 요청이 실패한 경우 실행할 함수
                     console.log("AJAX 요청 실패");
                     console.log(status);  // 오류 상태
                     console.log(error);  // 오류 메시지
-                  alert(response["failMessage"]);
+                  alert(response["message"]);
                 }
             });
 

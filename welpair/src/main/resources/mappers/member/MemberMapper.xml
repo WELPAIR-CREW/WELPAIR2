@@ -11,10 +11,70 @@
         <result property="pointBalance" column="POINT_BALANCE"/>
         <result property="memAuth" column="MEM_AUTH"/>
     </resultMap>
-
     <select id="checkoutMemberById" resultMap="memberResultMap">
         SELECT * FROM T_MEMBER
         WHERE EMP_NO = #{empNo}
     </select>
+
+
+    <!-- 1-1. 회원조회 - 회원목록 -->
+<!--    <resultMap id="memberListResultMap" type="com.hielectro.welpair.member.model.dto.MemberDTO">-->
+<!--        <id property="empNo" column="EMP_NO"/>-->
+<!--        <result property="memPwd" column="MEM_PWD"/>-->
+<!--        <result property="registDate" column="REGIST_DATE"/>-->
+<!--        <result property="pointBalance" column="POINT_BALANCE"/>-->
+<!--        <result property="memAuth" column="MEM_AUTH"/>-->
+<!--        <association property="employee" resultMap="employeeListResultMap"/>-->
+<!--    </resultMap>-->
+<!--    <resultMap id="employeeListResultMap" type="com.hielectro.welpair.member.model.dto.EmployeeDTO">-->
+<!--        <id property="empNo" column="EMP_NO"/>-->
+<!--        <result property="empName" column="EMP_NAME"/>-->
+<!--        <result property="empEmail" column="EMP_EMAIL"/>-->
+<!--        <result property="empPhone" column="EMP_PHONE"/>-->
+<!--    </resultMap>-->
+
+<!-- 위와 같은 결과  ( 위는 분리하여관리, 재상용 용이 / 아래는 가독성 )-->
+    <resultMap id="memberListResultMap" type="com.hielectro.welpair.member.model.dto.MemberDTO">
+        <id property="empNo" column="EMP_NO"/>
+        <result property="memPwd" column="MEM_PWD"/>
+        <result property="registDate" column="REGIST_DATE"/>
+        <result property="pointBalance" column="POINT_BALANCE"/>
+        <result property="memAuth" column="MEM_AUTH"/>
+        <association property="employee" javaType="com.hielectro.welpair.member.model.dto.EmployeeDTO">
+            <result property="empNo" column="EMP_NO"/>
+            <result property="empName" column="EMP_NAME"/>
+            <result property="empEmail" column="EMP_EMAIL"/>
+            <result property="empPhone" column="EMP_PHONE"/>
+            <result property="isExpire" column="IS_EXPIRE"/>
+        </association>
+    </resultMap>
+
+    <select id="getMemberList" resultMap="memberListResultMap">
+        SELECT M.EMP_NO
+             , M.MEM_PWD
+             , M.REGIST_DATE
+             , M.POINT_BALANCE
+             , M.MEM_AUTH
+             , E.EMP_NAME
+             , E.EMP_EMAIL
+             , E.EMP_PHONE
+             , E.IS_EXPIRE
+          FROM T_MEMBER M
+          JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
+    </select>
+
+<!-- 1-2. 회원조회 - 전체, 퇴사 회원수 표시 -->
+    <select id="totalMemberCount" resultType="int">
+        SELECT
+                COUNT(*)
+          FROM T_MEMBER
+    </select>
+    <select id="expiredMemberCount" resultType="int">
+        SELECT COUNT(*)
+        FROM T_MEMBER M
+                 JOIN T_EMPLOYEE E on M.EMP_NO = E.EMP_NO
+        WHERE E.IS_EXPIRE = 'Y'
+    </select>
+
 
 </mapper>

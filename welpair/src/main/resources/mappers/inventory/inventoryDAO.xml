@@ -91,7 +91,29 @@
         </if>
     </select>
 
+    
+    <!-- 2-2. -->
 
+<!--    <insert id="stockRegist" parameterType="com.hielectro.welpair.inventory.model.dto.StockDTO">-->
+    <insert id="stockRegist" parameterType="com.hielectro.welpair.inventory.model.dto.StockDTO">
+    INSERT INTO T_STOCK A (
+        A.STOCK_NO
+      , A.STOCK_TYPE
+      , A.PRODUCT_CODE
+      , A.STOCK_DATE
+      , A.STOCK_AMOUNT
+      , A.STOCK_COMMENT
+    )
+    VALUES
+    (
+        'S' || EXTRACT(YEAR FROM CURRENT_DATE) || LPAD(EXTRACT(MONTH FROM CURRENT_DATE), 2, '0') || LPAD(SEQ_STOCK_NO.NEXTVAL, 4, '0')
+      , #{ stockType }
+      , #{ productCode }
+      , #{ stockDate }
+      , #{ stockAmount }
+      , #{ stockComment }
+    )
+    </insert>
 
 
 </mapper>

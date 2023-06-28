@@ -15,6 +15,7 @@ public class StockDTO {
     private String productCode;
     private String stockDate;
     private int stockAmount;
+    private String stockComment;
     private String categoryCode;
     private ProductDTO productDTO;
 }

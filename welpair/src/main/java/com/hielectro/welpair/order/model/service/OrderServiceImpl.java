@@ -1,11 +1,10 @@
 package com.hielectro.welpair.order.model.service;
 
-import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.order.model.dao.OrderMapper;
+import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +28,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public int addcart(String empNo) {
-        return orderMapper.addcart(empNo);
+    public int makeCart(String empNo) {
+        return orderMapper.makeCart(empNo);
     }
 
     @Override
@@ -46,7 +45,12 @@ public class OrderServiceImpl implements OrderService {
 
     //
     @Override
-    public MemberDTO checkoutCartByMemberId(String empNo) {
-        return null;
+    public CartDTO checkoutCartByMemberId(String empNo) {
+        return orderMapper.checkoutCartByMemberId(empNo);
+    }
+
+    @Override
+    public int checkoutCartProductById(CartSellProductDTO cartSellProduct) {
+        return orderMapper.checkoutCartProductById(cartSellProduct);
     }
 }

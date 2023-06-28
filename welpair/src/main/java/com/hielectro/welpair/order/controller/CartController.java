@@ -2,41 +2,72 @@ package com.hielectro.welpair.order.controller;
 
 
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
-import com.hielectro.welpair.order.model.service.OrderService;
+import com.hielectro.welpair.order.model.service.CartService;
+import org.apache.catalina.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Controller
-//@RequestMapping({"/cart"})
+@RequestMapping({"/"})
 public class CartController {
 
-    private final OrderService orderService;
+    private final CartService cartService;
 
-    private CartController(OrderService orderService){
-        this.orderService = orderService;
+    private CartController( CartService cartService){
+        this.cartService = cartService;
     }
 
-    @GetMapping("/cart")
-    public String cartList(Model model){
-        List<CartGeneralDTO> cartList = new ArrayList<>();
+    @GetMapping("cart")
+    public String cartList(Model model
+                         ,@AuthenticationPrincipal User user
+                           , @RequestParam("empNo") String empNo
+                           ){
 
-        cartList.add(new CartGeneralDTO());
+//        System.out.println(user);
+//        System.out.println(user.getUsername());
+
+        System.out.println(empNo);
+
+        // test 결과값 5
+        int result =  cartService.testCartAllInfoSelect(empNo);
+        System.out.println("test 결과값 : " + result);
+
+        // 해당 사번으로 조인 테이블 조회하기
+        List<CartGeneralDTO> cartList = cartService.cartAllInfoSelect(empNo);
+        System.out.println(cartList);
 
 
+        for(CartGeneralDTO cart : cartList) {
+            // 카트상품 단품 1개 가격 = 원가 * 할인율
+//            int price = (int) (product.getProductPrice() * (1-sellProduct.getDiscount()));
+        //    // 카트상품 단품별 총수량 가격합계
+//            int totalPrice = price * cartSellProduct.getCartAmount() + cartSellProduct.getDeliveryPrice();
+
+        }
+//
+//
+//
+//
+//        // 예상결제금액 : 단품별 합계 금액의 총 합계
+//        int exptPrice = 0;
+//        int exptDeliveryPrice = 0;
+//
+//        for(CartGeneralDTO cart : cartList){
+//            exptPrice += cart.getTotalPrice();
+//            exptDeliveryPrice += cart.getCartSellProduct().getDeliveryPrice();
+//        }
+//
+//        int exptTotalPrice = exptPrice + exptDeliveryPrice;
+//
 
 
-
-
-
-
-
-
-
-        return "/consumer/order/cart";
+        return "consumer/order/cart";
 
     }
 
