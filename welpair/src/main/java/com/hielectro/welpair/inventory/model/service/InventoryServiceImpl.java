@@ -36,8 +36,9 @@ public class InventoryServiceImpl implements InventoryService{
     @Override
     public List<ProductDTO> searchProductByCode(String searchCode){
 
-        System.out.println("------------------- 서비스 1-2 -------------------");
+        System.out.println("========== 서비스 1-2 in ==========");
         System.out.println("searchCode = " + searchCode);
+        System.out.println("========== 서비스 1-2 out ==========");
         return inventoryDAO.searchProductByCode(searchCode);
 
     }
@@ -45,32 +46,38 @@ public class InventoryServiceImpl implements InventoryService{
     /* 2-1 */
     @Override
     public List<ProductDTO> stockRegistSerch(ProductDTO product) {
-        System.out.println("------------------- 서비스 2-1 -------------------");
+        System.out.println("========== 서비스 2-1 in ==========");
         System.out.println("productCode = " + product.getProductCode());
         System.out.println("productName = " + product.getProductName());
         System.out.println("categoryCode = " + product.getCategoryCode());
 
-
         List<ProductDTO> result = inventoryDAO.stockRegistSerch(product);
-        System.out.println("Service : " + result);
+        System.out.println("========== 서비스 2-1 out ==========");
+
+        return result;
+    }
+
+    /* 2-2 */
+    @Override
+    public int stockRegist(List<StockDTO> stockList) {
+
+        int result = 0;
+        System.out.println("========== 서비스 2-2 in ==========");
+        System.out.println("stockList = " + stockList);
+
+        for (StockDTO stock : stockList) {
+            int num = inventoryDAO.stockRegist(stock);
+            result += num;
+        }
+
+        System.out.println("========== 서비스 2-2 out ==========");
+//        return inventoryDAO.stockRegist(stockList);
         return result;
     }
 
 
-//    }    public List<ProductDTO> stockRegistSerch(String productCode, String productName, String refCategoryName, String categoryName) {
-//        System.out.println("------------------- 서비스 2-1 -------------------");
-//        System.out.println("productCode = " + productCode);
-//        System.out.println("productName = " + productName);
-//        System.out.println("refCategoryName = " + refCategoryName);
-//        System.out.println("categoryName = " + categoryName);
-//
-//        return inventoryDAO.stockRegistSerch(productCode, productName, refCategoryName, categoryName);
-//    }
 
 
 
-    @Override
-    public List<StockDTO> searchAllStock() {
-        return inventoryDAO.searchAllStock();
-    }
+
 }

@@ -13,6 +13,7 @@
     <script src="/common/js/static/include.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
 </head>
 
 <body>
@@ -73,24 +74,25 @@
                         <div>
                             <span class="section-regSearch-span">등록구분
                                 <select id="invenRegOption1" class="section-regSearch-input option2">
-                                    <option value="">선택</option>
+                                    <option value="stockType" id="stockType">선택</option>
                                     <option name="invenIn" value="입고">입고</option>
                                     <option name="invenOut" value="출고">출고</option>
                                 </select>
                             </span>
                             <span id="invenRegOption2" class="section-regSearch-span">입고일자
-                            <input type="date" name="invenRegInDate" class="section-regSearch-input date" id="invenRegInDate">
+                            <input type="date" name="stockDate" id="stockDate" class="section-regSearch-input date">
                         </span>
                             <span class="section-regSearch-span">비고
-                            <input type="text" class="section-regSearch-input option" placeholder="비고입력">
+                            <input type="text" name="stockComment" id="stockComment" class="section-regSearch-input option" placeholder="비고입력">
                         </span>
                             <span class="section-regSearch-span">수량
-                            <input class="section-regSearch-input amount" type="number" name="amount" min="0" max="100" step="1" value="0">
+                            <input class="section-regSearch-input amount" type="number" name="stockAmount" id="stockAmount" min="0" max="1000" step="1" value="0">
                         </span>
                         </div>
                         <div>
                             <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
-                            <input class="btn_basic" type="submit" value="일괄반영" onclick="insertAllOption()">
+                            <input class="btn_basic" id="allOption" type="button" value="일괄반영">
+<!--                            <input class="btn_basic" id="allOption" type="button" value="일괄반영" onclick="insertAllOption()">-->
                         </div>
                     </div>
                 </form>
@@ -141,7 +143,8 @@
 
 <!-- 스크립트 시작-->
 <script th:inline="javascript">
-
+    let currentPage = 1;
+    let rowsPerPage = 10;
 
 // 검색 버튼 비동기
 
@@ -162,6 +165,11 @@ $("#sendInvenSearch").click(function (){
             type : 'post',
             success: function (data){
 
+                let startIndex = (currentPage - 1) * rowsPerPage;
+                let endIndex = startIndex + rowsPerPage;
+                let paginatedData = data.slice(startIndex, endIndex);
+
+
                 $("#searchResultTable tbody").empty();
 
                 $.each(data, function (index, stock) {
@@ -180,63 +188,93 @@ $("#sendInvenSearch").click(function (){
             error: function (error) {
                 alert(error);
             }
+
+
         });
+
+
     });
 
 
     // 일괄반영 버튼
 
+$("#allOption").click(function (){
 
+    let stockType = $("#invenRegOption1 option:selected").val();
+    let stockDate = $("#stockDate").val();
+    let stockComment = $("#stockComment").val();
+    let stockAmount = $("#stockAmount").val();
+
+
+        // Iterate over each row in the table body
+        $("#searchResultTable tbody tr").each(function() {
+            let row = $(this);
+
+            row.find("td:eq(4)").text(stockType);
+            row.find("td:eq(5)").text(stockDate);
+            row.find("td:eq(6)").text(stockComment);
+            row.find("td:eq(7)").text(stockAmount);
+        });
+    });
 
   // 등록버튼
-  //
-  //   $(document).ready(function() {
-  //       $('.btn_basic2').on('click', function(event) {
-  //           event.preventDefault();
-  //
-  //           const tableRows = $('.section-regSearchResult-table tbody tr:not(:first)');
-  //
-  //           const rowData = [];
-  //
-  //           tableRows.each(function(index) {
-  //               const row = $(this);
-  //               const cells = row.find('td');
-  //
-  //               // const productCode = cells.eq(1).text();
-  //               // const productName = cells.eq(2).text();
-  //               // const category = cells.eq(3).text();
-  //               const registrationClassification = cells.eq(4).text();
-  //               const receiptDate = cells.eq(5).text();
-  //               const remarks = cells.eq(6).text();
-  //               const quantity = cells.eq(7).find('input').val();
-  //
-  //               rowData.push({
-  //                   // productCode: productCode,
-  //                   // productName: productName,
-  //                   // category: category,
-  //                   registrationClassification: registrationClassification,
-  //                   receiptDate: receiptDate,
-  //                   remarks: remarks,
-  //                   quantity: quantity
-  //               });
-  //           });
-  //
-  //           $.ajax({
-  //               url: '/inventory/admin_inventory_register', // Replace with the actual URL to handle the server-side data transmission
-  //               type: 'POST',
-  //               data: JSON.stringify(rowData), // Convert the rowData array to JSON and send it to the server
-  //               contentType: 'application/json', // Set the content type to JSON
-  //
-  //               success: function(response) {
-  //                   alert("등록 완료");
-  //                   location.reload();
-  //               },
-  //               error: function(error) {
-  //                   alert("등록 실패");
-  //               }
-  //           });
-  //       });
-  //   });
+
+    $(document).ready(function() {
+        $('.btn_basic2').on('click', function(event) {
+            event.preventDefault();
+
+            let tableRows = $('.section-regSearchResult-table tbody tr');
+
+            let rowData = [];
+
+            tableRows.each(function() {
+                let row = $(this);
+                let isChecked = row.find('input[type="checkbox"]').prop('checked');
+
+                if (isChecked) {
+                    let cells = row.find('td');
+                    let productCode = cells.eq(1).text();
+                    let stockType = cells.eq(4).text();
+                    let stockDate = cells.eq(5).text();
+                    let stockComment = cells.eq(6).text();
+                    let stockAmount = cells.eq(7).text();
+
+                    if (stockType === '입고') {
+                        stockAmount = parseInt(stockAmount);
+                    } else if (stockType === '출고') {
+                        stockAmount = -parseInt(stockAmount);
+                    }
+
+                    rowData.push({
+                        productCode: productCode,
+                        stockType: stockType,
+                        stockDate: stockDate,
+                        stockComment: stockComment,
+                        stockAmount: stockAmount
+                    });
+                }
+            });
+
+            if (rowData.length > 0) {
+                $.ajax({
+                    url: '/inventory/stockRegist',
+                    type: 'POST',
+                    data: JSON.stringify(rowData),
+                    contentType: 'application/json',
+
+                    success: function (response) {
+                        alert("등록 완료");
+                        location.reload();
+                    },
+                    error: function (error) {
+                        alert("등록 실패");
+                    }
+                });
+            }else{
+                alert("선택 항목 없음");
+            }
+        });
+    });
 
 
 
@@ -244,7 +282,7 @@ $("#sendInvenSearch").click(function (){
   // 입고 일자 오늘로
     $(document).ready(function() {
 
-    const currentDate = new Date().toISOString().split('T')[0];
+    let currentDate = new Date().toISOString().split('T')[0];
 
     $('#invenRegInDate').val(currentDate);
     });
@@ -254,11 +292,13 @@ $("#sendInvenSearch").click(function (){
 
     $(document).ready(function() {
         $('.section-regSearchResult-table th input[type="checkbox"]').on('click', function() {
-            const isChecked = $(this).prop('checked');
+            let isChecked = $(this).prop('checked');
 
             $('.section-regSearchResult-table td input[type="checkbox"]').prop('checked', isChecked);
         });
     });
+
+
 
 </script>
 </body>

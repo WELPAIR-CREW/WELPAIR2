@@ -2,18 +2,19 @@ package com.hielectro.welpair.inventory.controller;
 
 
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
+import com.hielectro.welpair.inventory.model.dto.StockDTO;
 import com.hielectro.welpair.inventory.model.service.InventoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.exceptions.TemplateInputException;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @Slf4j
@@ -21,10 +22,12 @@ import java.util.Map;
 
 public class InventoryController {
     private final InventoryService inventoryService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public InventoryController(InventoryService inventoryService) {
+    public InventoryController(InventoryService inventoryService, MessageSource messageSource) {
         this.inventoryService = inventoryService;
+        this.messageSource = messageSource;
     }
 
 
@@ -35,8 +38,9 @@ public class InventoryController {
      */
     @GetMapping("/getInventoryInfo")
     @ResponseBody
-    public Map<String, Integer> getInvenInfo(Model model){
-        System.out.println("-------------컨트롤러 1-1 -------------");
+    public Map<String, Integer> getInvenInfo(){
+//    public Map<String, Integer> getInvenInfo(Model model){
+        System.out.println("-------------컨트롤러 1-1 in -------------");
 
         int totalInvenAmount = inventoryService.getTotalInventoryAmount();
         int alertStock = inventoryService.getNumberOfAlertStock();
@@ -47,6 +51,7 @@ public class InventoryController {
 
         System.out.println("totalInvenAmount = " + totalInvenAmount);
         System.out.println("alertStock = " + alertStock);
+        System.out.println("-------------컨트롤러 1-1 out -------------");
 
         return inventoryInfo;
     }
@@ -60,13 +65,13 @@ public class InventoryController {
     @GetMapping("admin_inventory")
     public String searchProductByCode(Model model, @RequestParam(required = false) String searchCode) {
 
-        System.out.println("-------------컨트롤러 1-2 -------------");
+        System.out.println("-------------컨트롤러 1-2 in -------------");
         System.out.println("searchCode = " + searchCode);
 
         if(searchCode != null){
             List<ProductDTO> productList = inventoryService.searchProductByCode(searchCode);
-            System.out.println("==================== 1-2 =============");
             model.addAttribute("productList", productList);
+        System.out.println("-------------컨트롤러 1-2 out -------------");
         } else {
             model.addAttribute("productList", Collections.emptyList());
         }
@@ -88,19 +93,16 @@ public class InventoryController {
             String productCode = product.getProductCode();
             String productName = product.getProductName();
             String categoryCode = product.getCategoryCode();
-            System.out.println("-------------컨트롤러 2-1 -------------");
+            System.out.println("-------------컨트롤러 2-1-1 in -------------");
             System.out.println("productCode = " + product.getProductCode());
             System.out.println("productName = " + product.getProductName());
             System.out.println("categoryCode = " + product.getCategoryCode());
 
             if (productCode != null || productName != null || categoryCode != null) {
-//                List<ProductDTO> stockList = inventoryService.stockRegistSerch(productCode, productName, categoryCode);
                 List<ProductDTO> stockList = inventoryService.stockRegistSerch(product);
 
                 model.addAttribute("stockList", stockList);
-
-                //System.out.println("------ 컨트롤러 back ------");
-                System.out.println("stockList = " + stockList);
+                System.out.println("-------------컨트롤러 2-1-1 out-------------");
             } else {
                 model.addAttribute("stockList", Collections.emptyList());
             }
@@ -119,18 +121,14 @@ public class InventoryController {
             String productCode = product.getProductCode();
             String productName = product.getProductName();
             String categoryCode = product.getCategoryCode();
-            System.out.println("-------------컨트롤러 2-2 -------------");
+            System.out.println("-------------컨트롤러 2-1-2 in -------------");
             System.out.println("productCode = " + product.getProductCode());
             System.out.println("productName = " + product.getProductName());
             System.out.println("categoryCode = " + product.getCategoryCode());
 
             if (productCode != null || productName != null || categoryCode != null) {
-//                List<ProductDTO> stockList = inventoryService.stockRegistSerch(productCode, productName, categoryCode);
                 stockList = inventoryService.stockRegistSerch(product);
-
-
-                System.out.println("------ 컨트롤러 back backback------");
-                System.out.println("stockList = " + stockList);
+            System.out.println("-------------컨트롤러 2-1-2 out -------------");
             } else {
             }
         } catch(TemplateInputException e){
@@ -138,11 +136,39 @@ public class InventoryController {
         }
         return stockList;
     }
+
+
+
     /**
      * 재고관리 메뉴 (ng)
      * 2. 입출고등록 페이지
      * 2-2. 입출고 등록
      */
+    @PostMapping("stockRegist")
+    public ModelAndView stockRegist (ModelAndView mv, @RequestBody List<StockDTO> stockList
+                                    , RedirectAttributes rttr, Locale locale){
+
+        System.out.println("-------------컨트롤러 2-2 in -------------");
+        System.out.println("stockList = " + stockList);
+        System.out.println("locale = " + locale);
+        int result = inventoryService.stockRegist(stockList);
+
+        System.out.println("result = " + result);
+        if(result > 0){
+
+            rttr.addFlashAttribute("successMessage", "입출고 등록 성공");
+//            rttr.addFlashAttribute("successMessage", messageSource.getMessage("stockRegist", null, locale));
+//            System.out.println("messageSource = " + messageSource);
+            System.out.println("-------------컨트롤러 2-2 out -------------");
+        } else {
+            rttr.addFlashAttribute("failMessage", "입출고 등록 실패");
+        }
+
+        mv.setViewName("redirect:/inventory/admin_inventory_register");
+
+        return mv;
+
+    }
 
 
 
