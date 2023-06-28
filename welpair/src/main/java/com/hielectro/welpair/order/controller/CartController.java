@@ -29,35 +29,42 @@ public class CartController {
                            , @RequestParam("empNo") String empNo
                            ){
 
-
 //        System.out.println(user);
 //        System.out.println(user.getUsername());
 
         System.out.println(empNo);
 
-        // test 결과값 1
-//        int result =  cartService.testCartAllInfoSelect(empNo);
-//        System.out.println("test 결과값 : " + result);
+        // test 결과값 5
+        int result =  cartService.testCartAllInfoSelect(empNo);
+        System.out.println("test 결과값 : " + result);
 
         // 해당 사번으로 조인 테이블 조회하기
         List<CartGeneralDTO> cartList = cartService.cartAllInfoSelect(empNo);
-        System.out.println(cartList);  // null ?????
+        System.out.println(cartList);
 
 
-//        cart.setCart();
-//        cartList.add();
+        for(CartGeneralDTO cart : cartList) {
+            // 카트상품 단품 1개 가격 = 원가 * 할인율
+//            int price = (int) (product.getProductPrice() * (1-sellProduct.getDiscount()));
+        //    // 카트상품 단품별 총수량 가격합계
+//            int totalPrice = price * cartSellProduct.getCartAmount() + cartSellProduct.getDeliveryPrice();
 
-        // 예상결제금액 : 단품별 합계 금액의 총 합계
-        int exptPrice = 0;
-        int exptDeliveryPrice = 0;
-
-        for(CartGeneralDTO cart : cartList){
-            exptPrice += cart.getTotalPrice();
-            exptDeliveryPrice += cart.getCartSellProduct().getDeliveryPrice();
         }
-
-        int exptTotalPrice = exptPrice + exptDeliveryPrice;
-
+//
+//
+//
+//
+//        // 예상결제금액 : 단품별 합계 금액의 총 합계
+//        int exptPrice = 0;
+//        int exptDeliveryPrice = 0;
+//
+//        for(CartGeneralDTO cart : cartList){
+//            exptPrice += cart.getTotalPrice();
+//            exptDeliveryPrice += cart.getCartSellProduct().getDeliveryPrice();
+//        }
+//
+//        int exptTotalPrice = exptPrice + exptDeliveryPrice;
+//
 
 
         return "consumer/order/cart";

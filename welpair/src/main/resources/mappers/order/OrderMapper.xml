@@ -13,7 +13,7 @@
         <result property="deliveryType" column="PRODUCT_ORDER_PRICE"/>
         <result property="memberNo" column="DELIVERY_DATE"/>
 
-        <association property="member" resultMap="sellProductResultMap"/>
+<!--        <association property="member" resultMap="sellProductResultMap"/> 추가후 다시 주석풀기-->
         <collection property="productOrderList" resultMap="productOrderResultMap"/>
     </resultMap>
 
@@ -25,7 +25,7 @@
 
     <resultMap type="com.hielectro.welpair.order.model.dto.CartSellProductDTO" id="cartSellProductResultMap">
         <id property="cartNo" column="CART_NO"/>
-        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <id property="sellProductId" column="SELL_PRODUCT_ID"/>
         <result property="cartAmount" column="CART_AMOUNT"/>
         <result property="deliveryPrice" column="DELIVERY_PRICE"/>
     </resultMap>

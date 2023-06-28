@@ -49,12 +49,12 @@ public class OrderController {
                 orderService.findSellProductByCode(cartSellProduct.getSellProductId());
 
 
-        // 1. 정상 수량인지 체크
+        // 1. 정상 수량인지 체크(프론트에서도 검증)
         if(cartSellProduct.getCartAmount() < 1 ){
             resultMap.put("message", "수량이 잘못되었습니다.");
             return resultMap;
         }
-        // 2. 판매상품 ID를 통해 실제 존재하는 상품인지 조회
+        // 2. 판매상품 ID를 통해 현재 판매중인 상품인지 조회
         else if(sellProductList.size() < 1 ){
             resultMap.put("message", "판매중인 상품이 아닙니다.");
             return resultMap;
