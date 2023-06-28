@@ -20,7 +20,7 @@ public class CartGeneralDTO {
     private final SellProductDTO sellProduct = new SellProductDTO();
     private final SellItemPageDTO sellItemPage = new SellItemPageDTO();
     private final SellPageDTO sellPage = new SellPageDTO();
-    private final SellImageDTO sellImage = new SellImageDTO();
+//    private final SellImageDTO sellImage = new SellImageDTO();
     private final ProductDTO product = new ProductDTO();
 
     // 카트상품 단품 1개 가격 = 원가 * 할인율
