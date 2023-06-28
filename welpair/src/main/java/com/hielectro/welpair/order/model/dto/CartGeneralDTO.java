@@ -25,6 +25,9 @@ public class CartGeneralDTO {
 //    private SellImageDTO sellImage = new SellImageDTO();
     private ProductDTO product;
 
+    private int price;
+    private int totalPrice;
+
 
 }
 
