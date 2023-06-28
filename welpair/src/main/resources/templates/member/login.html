@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <link rel="stylesheet" href="../CSS/login1.css">
+    <link rel="stylesheet" href="../CSS/footer.css">
+    <link rel="stylesheet" href="../CSS/header.css">
+    <link rel="stylesheet" href="../CSS/fontstyle.css">
+    <script src="http://code.jquery.com/jquery-3.7.0.min.js"></script>
+</head>
+<body>
+<!-- <div class="header1"></div> -->
+<div class="logo"><a href=""><img src="../img/title.png" alt=""></a></div>
+<div class="login-wrap">
+    <div>
+        <div class="login-title">로그인</div>
+        <form action="/member/login" method="post" id="loginForm">
+            <div class="input-id" name="">
+                <input type="text" placeholder="아이디를 입력하세요">
+            </div>
+            <div class="input-pwd">
+                <input type="password" placeholder="패스워드를 입력하세요">
+            </div>
+        </form>
+        <div class="btn-go">
+            <button type="submit" class="btn-login">로그인</button>
+        </div>
+        <div class="btn-regist">
+            <span class="regist-btn"><a href="../HTML/regist.html">회원가입</a></span>
+            <span class="find-info"><a href="../HTML/Findid.html">아이디찾기</a></span>
+            <span class="find-info"><a href="../HTML/FindPwd.html">비밀번호찾기</a></span>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div class="footer1"></div> -->
+</body>
+<script>
+    $('.header1').load('../HTML/consumer/header.html');
+    $('.footer1').load('../HTML/consumer/footer.html');
+
+    $('.btn-login').click(function(){
+        alert('로그인합니다.');
+    });
+</script>
+
+</html>
