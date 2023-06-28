@@ -17,3 +17,4 @@ public class SellImageDTO {
     private String detailImageOriginFileName;
     private String path;
     private Date createDate;
+}
