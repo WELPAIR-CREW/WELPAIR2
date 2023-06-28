@@ -138,6 +138,11 @@ input[type=checkbox] {
     font-size: 16px;
 }
 
+/* 선택한 페이징 넘버는 굵게 */
+.active-page {
+    font-weight: bold;
+}
+
 
 
 .button-square1 {
