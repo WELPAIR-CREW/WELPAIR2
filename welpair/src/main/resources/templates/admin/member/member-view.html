@@ -7,16 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원조회</title>
 
-    <link rel="stylesheet" href="/static/common/css/footer.css">
-    <link rel="stylesheet" href="/static/common/css/header.css">
-    <link rel="stylesheet" href="/static/common/css/member.css">
-    <link rel="stylesheet" href="/static/common/css/main.css">
-    <script src="/static/common/js/static/include.js"></script>
+<!-- 제이쿼리, CSS, JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/main.css">
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/member.css">
+    <script src="/common/js/static/include.js"></script>
 </head>
 
 <body>
     <!-- header -->
-    <div data-include-html="admin/header_admin.html" class="include"></div>
+    <div data-include-html="/admin/header_admin" class="include"></div>
 
     <div class="container">
 
@@ -66,91 +68,7 @@
                             <td th:text="${member.employee.empEmail}"></td>
                             <td th:text="${member.employee.empPhone}"></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.06.01</td>-->
-<!--                            <td>-</td>-->
-<!--                            <td>P231010</td>-->
-<!--                            <td>홍길동</td>-->
-<!--                            <td>hong123@hielectronics.com</td>-->
-<!--                            <td>010-1234-5678</td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.05.01</td>-->
-<!--                            <td>퇴사</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.04.01</td>-->
-<!--                            <td>계약만료</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.03.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.02.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.01.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.01.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.01.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td class="checkbox-cell"><input type="checkbox"></td>-->
-<!--                            <td>2023.01.01</td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
-
                     </tbody>
-
-
                 </table>
 
                 <div class="under-table">
@@ -180,8 +98,7 @@
 
 
     <!-- footer -->
-<!--    <div data-include-html="../footer.html" class="include"></div>-->
-    <div data-include-html="admin/footer.html" class="include"></div>
+    <div data-include-html="/admin/footer" class="include"></div>
 
 
     <!-- @전체선택 체크박스 -->

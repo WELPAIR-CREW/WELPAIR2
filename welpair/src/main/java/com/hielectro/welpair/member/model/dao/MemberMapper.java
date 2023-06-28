@@ -7,7 +7,6 @@ import java.util.List;
 public interface MemberMapper {
     List<MemberDTO> getMemberList();
 
-
     int totalMemberCount();
 
     int expiredMemberCount();
