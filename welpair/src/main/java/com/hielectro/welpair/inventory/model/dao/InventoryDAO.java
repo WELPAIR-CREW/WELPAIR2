@@ -20,10 +20,7 @@ public interface InventoryDAO {
 
     /* 2-1 */
     List<ProductDTO> stockRegistSerch(ProductDTO product);
-//    List<ProductDTO> stockRegistSerch(String productCode, String productName, String refCategoryName, String categoryName);
 
-
-
-    List<StockDTO> searchAllStock();
-
+    /* 2-2 */
+    int stockRegist(StockDTO stock);
 }
