@@ -8,6 +8,8 @@
     <title>회원조회</title>
 
 <!-- 제이쿼리, CSS, JS -->
+<!-- 아래는 확장자 안붙이고 여기는 확장자 붙이는 이유:
+        resources/static 하위 파일을 가리키기 위해서임  -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <link rel="stylesheet" href="/common/css/main.css">
     <link rel="stylesheet" href="/common/css/header.css">
@@ -17,6 +19,8 @@
 </head>
 
 <body>
+    <!-- resources/templates 하위의 파일을 가리킬때는 확장자를 쓰지 않음 -->
+    <!-- 리소스경로가 아니고 URL매핑임 그러므로 /admin...으로 매핑해놓은 Main컨트롤러가 일하게됨 -->
     <!-- header -->
     <div data-include-html="/admin/header_admin" class="include"></div>
 
@@ -25,10 +29,10 @@
         <div class="navs">
 
             <div class="nav-menu"><b>회원조회</b></div>
-            <div class="nav-menu"><a href="./member-regist1.html">회원등록</a></div>
-            <div class="nav-menu"><a href="./member-permission.html">가입승인</a></div>
-            <div class="nav-menu"><a href="./member-givePoint.html">복지포인트지급</a></div>
-            <div class="nav-menu"><a href="member-givePointHistory1.html">복지포인트지급이력</a></div>
+            <div class="nav-menu"><a href="regist">회원등록</a></div> <!-- 이렇게 URL매핑된 컨트롤러 메서드 실행됨 -->
+            <div class="nav-menu"><a href="permission">가입승인</a></div>
+            <div class="nav-menu"><a href="givePoint">복지포인트지급</a></div>
+            <div class="nav-menu"><a href="givePointHistory">복지포인트지급이력</a></div>
         </div>
 
         <div class="box">
@@ -77,15 +81,36 @@
                         <button class="button-circle">검색</button>
                     </div>
 
-                    <div class="paging">
-                        <span>&lt;</span>
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                        <span>4</span>
-                        <span>5</span>
-                        <span>&gt;</span>
+<!--                    <div class="paging">-->
+<!--                        <span class="previous-page">&lt;</span>-->
+<!--                        <span><a th:href="@{/member-view?currentPage=1}" th:class="${currentPage == 1 ? 'active-page' : ''}">1</a></span>-->
+<!--                        &lt;!&ndash; 이 요소를 클릭하면 currentPage 매개변수가 1~5로 설정된 /member-view URL로 요청을 보냄 &ndash;&gt;-->
+<!--                        &lt;!&ndash; true이면 요소에 CSS적용을 위한 'active-page'가 class속성으로 추가됨 false이면 빈문자열이 class속성으로 추가됨 &ndash;&gt;-->
+<!--                        <span><a th:href="@{/member-view?currentPage=2}" th:class="${currentPage == 2 ? 'active-page' : ''}">2</a></span>-->
+<!--                        <span><a th:href="@{/member-view?currentPage=3}" th:class="${currentPage == 3 ? 'active-page' : ''}">3</a></span>-->
+<!--                        <span><a th:href="@{/member-view?currentPage=4}" th:class="${currentPage == 4 ? 'active-page' : ''}">4</a></span>-->
+<!--                        <span><a th:href="@{/member-view?currentPage=5}" th:class="${currentPage == 5 ? 'active-page' : ''}">5</a></span>-->
+<!--                        <span class="next-page">&gt;</span>-->
+<!--                    </div>-->
 
+
+                    <!-- 표시되는 페이지 번호를 동적으로 바꿔 보여주기 위함 -->
+                    <div class="paging">
+<!--                    누르면 이전 페이지 세트(1~10)가 표시됨-->
+<!--                    <span class="previous-page">&lt;</span>-->
+                        <span class="previous-page" th:if="${currentPage > 1}">
+                            <a th:href="@{/member-view(currentPage=${currentPage - 1})}"><</a>
+                        </span>
+
+                        <span th:each="page, status : ${pages}" th:class="${currentPage == page ? 'active-page' : ''}">
+                            <a th:href="@{/member-view(currentPage=${page})}" th:text="${page}"></a>
+                        </span>
+
+<!--                    누르면 다음 페이지 세트(6~10)가 표시됨-->
+<!--                    <span class="next-page">&gt;</span>-->
+                        <span class="next-page" th:if="${currentPage < totalPages}">
+                            <a th:href="@{/member-view(currentPage=${currentPage + 1})}">&gt;</a>
+                        </span>
                     </div>
 
                 </div>
@@ -101,8 +126,14 @@
     <div data-include-html="/admin/footer" class="include"></div>
 
 
-    <!-- @전체선택 체크박스 -->
     <script>
+
+
+
+
+
+
+    <!-- @전체선택 체크박스 -->
         document.addEventListener('DOMContentLoaded', function () {
             let selectAllCheckbox = document.getElementById('select-all');
             let everyCheckbox = document.querySelectorAll('tbody td.checkbox-cell input[type="checkbox"]');
