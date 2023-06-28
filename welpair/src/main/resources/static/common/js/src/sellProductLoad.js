@@ -27,8 +27,13 @@ function createPaging() {
     paging.innerHTML = '';
 
     if (endPageNo < currentPageNo) {
-        startPageNo = currentPageNo / endPageNo * endPageNo + 1;
+        startPageNo = parseInt(currentPageNo / endPageNo) * endPageNo + 1;
         endPageNo *= 2;
+        selectSellProduct(currentPageNo);
+    } else if (startPageNo > currentPageNo) {
+        endPageNo /= 2;
+        startPageNo = parseInt(currentPageNo / startPageNo) * endPageNo + 1;
+        selectSellProduct(currentPageNo);
     }
 
     const createLink = (text) => {
@@ -53,7 +58,7 @@ function createPaging() {
         const span = document.createElement('span');
         const link = appendLink(i, span);
 
-        if (i === startPageNo) {
+        if (i === currentPageNo) {
             link.classList.add('select');
         }
 
@@ -67,6 +72,12 @@ function createPaging() {
 
     const updatePage = async (pageNumber) => {
         if (pageNumber === currentPageNo) return;
+        currentPageNo = pageNumber;
+
+        if (currentPageNo > endPageNo || currentPageNo < startPageNo) {
+            createPaging();
+            return;
+        }
 
         const selectedLink = document.querySelector('.select');
         selectedLink.classList.remove('select');
@@ -74,19 +85,18 @@ function createPaging() {
         const targetLink = pageLinks[pageNumber - startPageNo];
         targetLink.classList.add('select');
 
-        currentPageNo = pageNumber;
         await selectSellProduct(currentPageNo);
     };
 
-    leftLink.addEventListener('click', () => {
+    leftLink.addEventListener('click', async () => {
         if (currentPageNo > 1) {
-            updatePage(currentPageNo - 1);
+            await updatePage(currentPageNo - 1);
         }
     });
 
-    rightLink.addEventListener('click', () => {
+    rightLink.addEventListener('click', async () => {
         if (currentPageNo < maxPageNo) {
-            updatePage(currentPageNo + 1);
+            await updatePage(currentPageNo + 1);
         }
     });
 
