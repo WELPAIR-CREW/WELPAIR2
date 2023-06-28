@@ -2,7 +2,7 @@ import {includeHTML} from './include.js'
 import {call} from './App.js'
 
 const searchBtn = document.querySelector(".first-button")
-searchBtn.addEventListener('click', async function() {
+searchBtn.addEventListener('click', async function () {
     await fetchData();
 });
 
@@ -15,7 +15,7 @@ headerCheckBox.addEventListener('click', function () {
     items.forEach(item => item.checked = headerCheckBox.checked);
 })
 
-let currentPageNo = 0;
+let currentPageNo = 1;
 let maxPageNo = 0;
 let startPageNo = 0;
 let endPageNo = 0;
@@ -25,18 +25,77 @@ let name = null;
 function createPaging() {
     const paging = document.querySelector('.paging');
     paging.innerHTML = '';
-    for (let i = 0; i < maxPageNo && i < endPageNo; i++) {
-        const span = document.createElement('span');
-        const a = document.createElement('a');
-        a.textContent = i + 1;
-        a.href = 'javascript:void(0)';
-        a.addEventListener('click',
-            async function (e) {
-                await selectSellProduct(e.target.textContent);
-            })
-        span.append(a);
-        paging.append(span);
+
+    if (endPageNo < currentPageNo) {
+        startPageNo = currentPageNo / endPageNo * endPageNo + 1;
+        endPageNo *= 2;
     }
+
+    const createLink = (text) => {
+        const link = document.createElement('a');
+        link.textContent = text;
+        return link;
+    };
+
+    const appendLink = (text, parent) => {
+        const link = createLink(text);
+        parent.append(link);
+        return link;
+    };
+
+    const leftArrow = document.createElement('span');
+    const leftLink = appendLink('<', leftArrow);
+    paging.append(leftArrow);
+
+    const pageLinks = [];
+
+    for (let i = startPageNo; i <= maxPageNo && i <= endPageNo; i++) {
+        const span = document.createElement('span');
+        const link = appendLink(i, span);
+
+        if (i === startPageNo) {
+            link.classList.add('select');
+        }
+
+        paging.append(span);
+        pageLinks.push(link);
+    }
+
+    const rightArrow = document.createElement('span');
+    const rightLink = appendLink('>', rightArrow);
+    paging.append(rightArrow);
+
+    const updatePage = async (pageNumber) => {
+        if (pageNumber === currentPageNo) return;
+
+        const selectedLink = document.querySelector('.select');
+        selectedLink.classList.remove('select');
+
+        const targetLink = pageLinks[pageNumber - startPageNo];
+        targetLink.classList.add('select');
+
+        currentPageNo = pageNumber;
+        await selectSellProduct(currentPageNo);
+    };
+
+    leftLink.addEventListener('click', () => {
+        if (currentPageNo > 1) {
+            updatePage(currentPageNo - 1);
+        }
+    });
+
+    rightLink.addEventListener('click', () => {
+        if (currentPageNo < maxPageNo) {
+            updatePage(currentPageNo + 1);
+        }
+    });
+
+    pageLinks.forEach((link, index) => {
+        link.addEventListener('click', async function () {
+            if (link.classList.contains('select')) return;
+            await updatePage(startPageNo + index);
+        });
+    });
 }
 
 function createTableCell(text) {
@@ -113,12 +172,14 @@ async function fetchData() {
     code = document.querySelector(".product-code").value
     name = document.querySelector(".name").value
     const pageNo = 1;
-    const map = { code, name, pageNo };
+    const map = {code, name, pageNo};
 
+    // const urls = ['/sellproduct/count', '/sellproduct/list'];
     const urls = ['/sellproduct/count', '/sellproduct/list'];
     const requests = urls.map(url => call(url, 'post', map))
     const [data1, data2] = await Promise.all(requests)
 
+    currentPageNo = 1;
     setPagination(data1);
     createTable(data2);
     createPaging();

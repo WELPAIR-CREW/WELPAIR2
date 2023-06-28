@@ -250,4 +250,13 @@ td {
 .paging a {
     text-decoration: none;
     color: #A9A9A9;
+    cursor: pointer;
+}
+
+.paging .select {
+    color: #4D4D4D;
+}
+
+a.select {
+    cursor: default;
 }
