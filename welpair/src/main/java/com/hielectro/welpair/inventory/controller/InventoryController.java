@@ -100,11 +100,11 @@ public class InventoryController {
             } else {
                 model.addAttribute("stockList", Collections.emptyList());
             }
-            } catch(TemplateInputException e){
-                e.printStackTrace();
-            }
-            return "admin/inventory/admin_inventory_register";
-        }
+    } catch(TemplateInputException e){
+        e.printStackTrace();
+    }
+    return "admin/inventory/admin_inventory_register";
+}
 
     @PostMapping("admin_inventory_register")
     @ResponseBody
@@ -162,88 +162,44 @@ public class InventoryController {
 
 
 
+    @GetMapping("admin_inventory_search")
+    public String StockhistorySearch() {
+
+            System.out.println("-------------컨트롤러 3-1-1 in -------------");
+            System.out.println("-------------컨트롤러 3-1-1 out -------------");
+
+        return "admin/inventory/admin_inventory_search";
+    }
+
     /**
      * 재고관리 메뉴 (ng)
      * 3. 입출고내역
      * 3-1. 입출고내역 검색
      *      상품코드, 상품명, 카테고리 선택 후 검색 시 입출고 내역 조회
      */
-    @GetMapping("admin_inventory_search")
-    public String StockhistorySearch(Model model,@ModelAttribute StockDTO stock) {
-
-        try {
-
-            System.out.println("-------------컨트롤러 3-1 in -------------");
-//            System.out.println("stockNo = " + stock.getStockNo());
-//            System.out.println("productCode = " + stock.getProductCode());
-//            System.out.println("productName = " + stock.getProduct().getProductName());
-//            System.out.println("stockType = " + stock.getStockType());
-//            System.out.println("stockDate = " + stock.getStockDate());
-//            System.out.println("stockAmount = " + stock.getStockAmount());
-//            System.out.println("productAmount = " + stock.getProduct().getProductAmount());
-//            System.out.println("stockComment = " + stock.getStockComment());
-
-            String stockNo = stock.getStockNo();
-            String productCode = stock.getProductCode();
-//            String productName = stock.getProduct().getProductName();
-            String stockType = stock.getStockType();
-            Date stockDate = stock.getStockDate();
-            int stockAmount = stock.getStockAmount();
-//            int productAmount = stock.getProduct().getProductAmount();
-            String stockComment = stock.getStockComment();
-
-//            if (productCode != null || productName != null || stockComment != null || stockType != null || stockComment != null || stockDate != null) {
-            if (productCode != null || stockComment != null || stockType != null || stockComment != null || stockDate != null) {
-                List<StockDTO> stockList = inventoryService.historySearch(stock);
-                model.addAttribute("stockList", stockList);
-                System.out.println("-------------컨트롤러 3-1 out -------------");
-            } else {
-                model.addAttribute("stockList", Collections.emptyList());
-            }
-        } catch(TemplateInputException e){
-            e.printStackTrace();
-        }
-
-        return "admin/inventory/admin_inventory_search";
-    }
-
     @PostMapping("admin_inventory_search")
     @ResponseBody
-    public List<StockDTO> historySearch(@ModelAttribute StockDTO stock) {
+    public List<StockDTO> historySearch(Model model, @ModelAttribute StockDTO stock) {
 
+        System.out.println("-------------컨트롤러 3-1-2 in -------------");
+        System.out.println("stock = " + stock);
+        System.out.println("stock.getProductCode() = " + stock.getProductCode());
+
+        System.out.println("-------------컨트롤러 3-1-2 -------------");
         List<StockDTO> stockList = null;
-        try {
-            String stockNo = stock.getStockNo();
-            String productCode = stock.getProductCode();
-            String productName = stock.getProduct().getProductName();
-            String stockType = stock.getStockType();
-            Date stockDate = stock.getStockDate();
-            int stockAmount = stock.getStockAmount();
-            int productAmount = stock.getProduct().getProductAmount();
-            String stockComment = stock.getStockComment();
+        if (stock != null) {
+            stockList = inventoryService.historySearch(stock);
+            System.out.println("stockList = " + stockList);
 
-            System.out.println("-------------컨트롤러 3-1 in -------------");
-            System.out.println("stockNo = " + stock.getStockNo());
-            System.out.println("productCode = " + stock.getProductCode());
-            System.out.println("productName = " + stock.getProduct().getProductName());
-            System.out.println("stockType = " + stock.getStockType());
-            System.out.println("stockDate = " + stock.getStockDate());
-            System.out.println("stockAmount = " + stock.getStockAmount());
-            System.out.println("productAmount = " + stock.getProduct().getProductAmount());
-            System.out.println("stockComment = " + stock.getStockComment());
-
-            if (productCode != null || productName != null || stockComment != null || stockType != null || stockComment != null || stockDate != null) {
-                stockList = inventoryService.historySearch(stock);
-                System.out.println("-------------컨트롤러 3-1 out -------------");
-            } else {
-            }
-        } catch(TemplateInputException e){
-            e.printStackTrace();
+            model.addAttribute("stockList", stockList);
+            System.out.println("-------------컨트롤러 3-1-2 out -------------");
+        } else {
+            model.addAttribute("stockList", Collections.emptyList());
         }
-
         return stockList;
     }
 
 
-    }
+
+}
 
