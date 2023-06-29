@@ -162,7 +162,7 @@ input {
 
 .section-selectbox-span {
     display: flex;
-    width: 250px;
+    width: 230px;
     height: 33px;
     justify-content: space-between;
     align-items: center;
@@ -247,6 +247,12 @@ td {
     word-wrap: break-word;
 }
 
+.section-nav a {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
 .paging a {
     text-decoration: none;
     color: #A9A9A9;
@@ -259,4 +265,8 @@ td {
 
 a.select {
     cursor: default;
+}
+
+section-nav a:hover {
+    color: #d9d9d9;
 }

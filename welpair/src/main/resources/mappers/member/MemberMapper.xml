@@ -49,20 +49,6 @@
         </association>
     </resultMap>
 
-<!--    <select id="getMemberList" resultMap="memberListResultMap">-->
-<!--        SELECT M.EMP_NO-->
-<!--             , M.MEM_PWD-->
-<!--             , M.REGIST_DATE-->
-<!--             , M.POINT_BALANCE-->
-<!--             , M.MEM_AUTH-->
-<!--             , E.EMP_NAME-->
-<!--             , E.EMP_EMAIL-->
-<!--             , E.EMP_PHONE-->
-<!--             , E.IS_EXPIRE-->
-<!--          FROM T_MEMBER M-->
-<!--          JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)-->
-<!--    </select>-->
-
 <!--페이징처리하여 보여줄 회원목록-->
     <select id="getMemberList" resultMap="memberListResultMap">
         SELECT *
@@ -77,22 +63,23 @@
                    , E.EMP_PHONE
                    , E.IS_EXPIRE
               FROM T_MEMBER M
-                       JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
-              ORDER BY M.EMP_NO)
+              JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
+              <if test='isExpired != null and isExpired.equals("Y")'>
+              WHERE E.IS_EXPIRE = 'Y'
+              ORDER BY M.EMP_NO
+              </if>
+              )
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
     </select>
 
 
-
-
-
-<!-- 1-2. 회원조회 - 전체, 퇴사 회원수 표시 -->
-    <select id="totalMemberCount" resultType="int">
+<!-- 전체회원수 조회 -->
+    <select id="totalMemberCount" resultType="_int" parameterType="hashmap">
         SELECT
                 COUNT(*)
-          FROM T_MEMBER
+          FROM T_MEMBER M
     </select>
-    <select id="expiredMemberCount" resultType="int">
+    <select id="expiredMemberCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
         FROM T_MEMBER M
                  JOIN T_EMPLOYEE E on M.EMP_NO = E.EMP_NO

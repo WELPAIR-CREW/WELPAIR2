@@ -7,9 +7,8 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class driverDTO {
+public class DeliveryStockDTO {
 
-    private int driverId;
-    private String driverName;
-    private String driverPhone;
+    private String stockNo;
+    private String productOrderNo;
 }

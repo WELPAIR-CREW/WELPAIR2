@@ -1,4 +1,6 @@
 package com.hielectro.welpair.member.model.service;
+import com.hielectro.welpair.member.controller.Pagenation;
+import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dao.MemberMapper;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,31 +21,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-//    @Override
-//    public List<MemberDTO> getMemberList() {
-//        return memberMapper.getMemberList();
-//    }
     @Override
-    public List<MemberDTO> getMemberList(int currentPage, int itemsPerPage) {
-
-        int startRow = (currentPage - 1) * itemsPerPage + 1;
-        int endRow = startRow + itemsPerPage - 1;
-//        return memberMapper.getMemberList(startRow, endRow);
-
-        Map<String, Integer> startAndEndRow = new HashMap<>();
-        startAndEndRow.put("startRow", startRow);
-        startAndEndRow.put("endRow", endRow);
-        return memberMapper.getMemberList(startAndEndRow);
+    public List<MemberDTO> getMemberList(SelectCriteria selectCriteria) {
+        List<MemberDTO> memberList = memberMapper.getMemberList(selectCriteria);
+        return memberList;
     }
 
 
     @Override
-    public int totalMemberCount() {
-        return memberMapper.totalMemberCount();
+    public int totalMemberCount(Map<String, String> searchMap) {
+        return memberMapper.totalMemberCount(searchMap);
     }
 
     @Override
-    public int expiredMemberCount() {
-        return memberMapper.expiredMemberCount();
+    public int expiredMemberCount(Map<String, String> searchMap) {
+        return memberMapper.expiredMemberCount(searchMap);
     }
+
 }

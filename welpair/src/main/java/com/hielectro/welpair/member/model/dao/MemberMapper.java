@@ -1,4 +1,5 @@
 package com.hielectro.welpair.member.model.dao;
+import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
@@ -6,12 +7,14 @@ import java.util.Map;
 
 @Mapper
 public interface MemberMapper {
-//    List<MemberDTO> getMemberList();
-//    List<MemberDTO> getMemberList(int startRow, int endRow);
-    List<MemberDTO> getMemberList(Map<String, Integer> startAndEndRow);
+
+    List<MemberDTO> getMemberList(SelectCriteria selectCriteria);
+
+    List<MemberDTO> getExpiredMemberList();
 
 
-    int totalMemberCount();
+    int totalMemberCount(Map<String, String> searchMap);
 
-    int expiredMemberCount();
+    int expiredMemberCount(Map<String, String> searchMap);
+
 }
