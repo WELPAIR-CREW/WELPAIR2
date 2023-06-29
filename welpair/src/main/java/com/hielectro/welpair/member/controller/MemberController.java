@@ -8,7 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/member")
@@ -23,24 +30,89 @@ public class MemberController {
 
 
     //1. 회원조회 - 회원목록
-    @GetMapping("member-view")
-    public String getMemberList(Model model) {
+    @GetMapping("/member-view")
+    public ModelAndView getMemberList(HttpServletRequest request, @RequestParam(required = false) String searchCondition, @RequestParam(required = false) String searchValue
+            , @RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView model) {
+                                //int currentPage: URL로 전달되는 현재 페이지 번호로 URL에 제공되지 않으면 1로 설정됨)
 
-        List<MemberDTO> memberList = memberService.getMemberList();
-        model.addAttribute("memberList", memberList);
+        System.out.println("test----------------- ");
+        Map<String, String> searchMap = new HashMap<>();
+        searchMap.put("searchCondition", searchCondition);
+        searchMap.put("searchValue", searchValue);
 
-        return "admin/member/member-view";
+        int totalMemberCount = memberService.totalMemberCount(searchMap); //총 항목 수(검색 조건 적용)
+        int expiredMemberCount = memberService.expiredMemberCount(searchMap); //퇴사한 직원 수
+        int itemsPerPage = 10; //페이지당 항목 수
+        int displayPageCount = 5; //표시할 페이지 번호 수
+
+        int totalPages = 0;
+        totalPages = (int) Math.ceil((double) totalMemberCount / itemsPerPage);
+
+
+        SelectCriteria selectCriteria = null;
+
+        if(searchCondition != null && !"".equals(searchCondition)) {
+            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, searchCondition, searchValue);
+        } else {
+            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount);
+        }
+
+        List<MemberDTO> memberList = memberService.getMemberList(selectCriteria);
+
+        //쿼리결과를 받아 DTO리스트에 담고 모델에 추가
+        model.addObject("memberList", memberList);
+        model.addObject("selectCriteria", selectCriteria);
+
+        //전체 회원 수, 퇴사한 회원 수
+        model.addObject("totalMemberCount", totalMemberCount);
+        model.addObject("expiredMemberCount", expiredMemberCount);
+
+        //페이지묶음
+//        int[][] pageSet = new int[totalMemberCount][5];
+//        for (int i=0; i<totalMemberCount; i++) {
+//            for (int j=0; j<5; j++) {
+//                pageSet[i][j] = i+1;
+//            }
+//        }
+
+        List<Integer> pageNumList = new ArrayList<>();
+        for (int i=1; i<=totalPages; i++) {
+            pageNumList.add(i);
+        }
+        model.addObject("pageNumbList", pageNumList);
+
+
+
+        model.setViewName("admin/member/member-view");
+        return model;
     }
 
 
-    @RequestMapping(value = "/regist")
-    public String memberRegist() {
+
+
+
+
+    @GetMapping("regist")
+    public String getEmpListForRegist() {
         return "admin/member/member-regist1";
 
     }
 
-    @RequestMapping(value = "/permission")
-    public String memberPermission() {
+    @GetMapping("permission")
+    public String getReqList() {
         return "admin/member/member-permission";
     }
+
+
+    @GetMapping("givePoint")
+    public String getMemberListForPoint() {
+        return "admin/member/member-givePoint";
+    }
+
+
+    @GetMapping("givePointHistory")
+    public String getPointHistoryList() {
+        return "admin/member/member-givePointHistory1";
+    }
+
 }
