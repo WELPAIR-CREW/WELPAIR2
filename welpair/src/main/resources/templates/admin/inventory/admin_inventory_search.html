@@ -115,8 +115,8 @@
         // 검색 버튼
         $("#historySearch").click(function (){
 
-            let productCode = $("#productCode").val();
-            let productName = $("#productName").val();
+            let productCode = $("#productCode").val().toUpperCase();
+            let productName = $("#productName").val().toUpperCase();
             let stockComment = $("#stockComment").val();
             let stockTypeDefalut = $("#stockType").val();
             let startDate = $("#startDate").val();

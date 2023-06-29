@@ -87,7 +87,7 @@
             AND A.PRODUCT_CODE = #{productCode}
         </if>
         <if test="productName != null and productName != ''">
-            AND A.PRODUCT_NAME = #{productName}
+            AND A.PRODUCT_NAME LIKE '%' || #{productName} || '%'
         </if>
         <if test="categoryCode != null and categoryCode != ''">
             AND A.CATEGORY_CODE = #{categoryCode}
@@ -147,7 +147,7 @@
             AND A.STOCK_DATE = #{stockDate}
         </if>
         <if test="product != null and product.productName != null and product.productName != ''">
-            AND B.PRODUCT_NAME = #{product.productName}
+            AND B.PRODUCT_NAME LIKE '%' || #{product.productName} || '%'
         </if>
     </select>
 

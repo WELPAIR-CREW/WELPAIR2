@@ -28,8 +28,7 @@ public class InventoryController {
     }
 
     /**
-     * 재고관리 메뉴 (ng)
-     * 1. 재고현황 페이지
+     * 재고관리 메뉴 (ng) 1. 재고현황 페이지
      * 1-1. 상단부 현재기준 현황 출력 (총 재고수량, 위험재고 상품수)
      */
     @GetMapping("/getInventoryInfo")
@@ -52,8 +51,7 @@ public class InventoryController {
     }
 
     /**
-     * 재고관리 메뉴 (ng)
-     * 1. 재고현황 페이지
+     * 재고관리 메뉴 (ng) 1. 재고현황 페이지
      * 1-2. 하단부 상품 코드 검색 시 해당 상품의 간단한 정보 출력
      */
     @GetMapping("admin_inventory")
@@ -74,38 +72,18 @@ public class InventoryController {
     }
 
 
-    /**
-     * 재고관리 메뉴 (ng)
-     * 2. 입출고등록 페이지
-     * 2-1. 등록할 상품 검색
-     *      상품코드, 상품명, 카테고리 선택 후 검색 시 등록 대상 리스트 출력
-     */
     @GetMapping("admin_inventory_register")
-    public String stockRegistSerch(Model model,@ModelAttribute ProductDTO product) {
-        try {
-
-            String productCode = product.getProductCode();
-            String productName = product.getProductName();
-            String categoryCode = product.getCategoryCode();
+    public String stockRegistSerch() {
             System.out.println("-------------컨트롤러 2-1-1 in -------------");
-            System.out.println("productCode = " + product.getProductCode());
-            System.out.println("productName = " + product.getProductName());
-            System.out.println("categoryCode = " + product.getCategoryCode());
-
-            if (productCode != null || productName != null || categoryCode != null) {
-                List<ProductDTO> stockList = inventoryService.stockRegistSerch(product);
-
-                model.addAttribute("stockList", stockList);
-                System.out.println("-------------컨트롤러 2-1-1 out-------------");
-            } else {
-                model.addAttribute("stockList", Collections.emptyList());
-            }
-    } catch(TemplateInputException e){
-        e.printStackTrace();
-    }
+            System.out.println("-------------컨트롤러 2-1-1 out-------------");
     return "admin/inventory/admin_inventory_register";
 }
 
+    /**
+     * 재고관리 메뉴 (ng) 2. 입출고등록 페이지
+     * 2-1. 등록할 상품 검색
+     *      상품코드, 상품명, 카테고리 선택 후 검색 시 등록 대상 리스트 출력
+     */
     @PostMapping("admin_inventory_register")
     @ResponseBody
     public List<ProductDTO> stockRegistSerch1(@ModelAttribute ProductDTO product) {
