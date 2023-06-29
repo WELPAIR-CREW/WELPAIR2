@@ -5,10 +5,7 @@ import com.hielectro.welpair.member.model.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,14 +29,15 @@ public class MemberController {
     //1. 회원조회 - 회원목록
     @GetMapping("/member-view")
     public ModelAndView getMemberList(HttpServletRequest request, @RequestParam(required = false) String searchCondition, @RequestParam(required = false) String searchValue
-            , @RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView model) {
+            , @RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView model
+            , @RequestParam(value="type", required = false) String isExpired) {
                                 //int currentPage: URL로 전달되는 현재 페이지 번호로 URL에 제공되지 않으면 1로 설정됨)
+                                //String isExpired: URL로 전달되는 값...버튼을 눌렀을때 추가됨되도록 타임리프의 속성으로 추가돼있음
 
-        System.out.println("test----------------- ");
         Map<String, String> searchMap = new HashMap<>();
         searchMap.put("searchCondition", searchCondition);
         searchMap.put("searchValue", searchValue);
-
+        System.out.println(isExpired);
         int totalMemberCount = memberService.totalMemberCount(searchMap); //총 항목 수(검색 조건 적용)
         int expiredMemberCount = memberService.expiredMemberCount(searchMap); //퇴사한 직원 수
         int itemsPerPage = 10; //페이지당 항목 수
@@ -51,11 +49,32 @@ public class MemberController {
 
         SelectCriteria selectCriteria = null;
 
-        if(searchCondition != null && !"".equals(searchCondition)) {
-            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, searchCondition, searchValue);
+// 원래코드
+//        if(searchCondition != null && !"".equals(searchCondition)) {
+//            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, searchCondition, searchValue, isExpired);
+//        } else {
+//            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, isExpired);
+//        }
+
+        if(isExpired != null) {
+
+            if(searchCondition != null && !"".equals(searchCondition)) {
+                selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, searchCondition, searchValue, isExpired);
+            } else {
+                selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, isExpired);
+            }
+
         } else {
-            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount);
+
+            if(searchCondition != null && !"".equals(searchCondition)) {
+                selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, searchCondition, searchValue);
+            } else {
+                selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount);
+            }
+
         }
+        System.out.println(selectCriteria.getIsExpired());
+
 
         List<MemberDTO> memberList = memberService.getMemberList(selectCriteria);
 
@@ -67,25 +86,22 @@ public class MemberController {
         model.addObject("totalMemberCount", totalMemberCount);
         model.addObject("expiredMemberCount", expiredMemberCount);
 
-        //페이지묶음
-//        int[][] pageSet = new int[totalMemberCount][5];
-//        for (int i=0; i<totalMemberCount; i++) {
-//            for (int j=0; j<5; j++) {
-//                pageSet[i][j] = i+1;
-//            }
-//        }
+        //퇴사한 회원만 가져오는지 확인
+        System.out.println(memberList);
 
+        //페이지묶음 - 지금은 전체 페이지를 다 가져오도록하는 코드임
         List<Integer> pageNumList = new ArrayList<>();
         for (int i=1; i<=totalPages; i++) {
             pageNumList.add(i);
         }
         model.addObject("pageNumbList", pageNumList);
 
-
-
         model.setViewName("admin/member/member-view");
+
         return model;
     }
+
+
 
 
 

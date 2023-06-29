@@ -5,15 +5,50 @@ import java.util.Map;
 
 public class Pagenation {
 
-    //검색어 없는 경우의 페이징 처리
+    //1.isExpired가 전달되지 않았을 경우
+    //1-1.검색어 없는 경우
     public static SelectCriteria getSelectCriteria(int currentPage, int totalMemberCount, int itemsPerPage, int displayPageCount) {
+        return getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, null, null, null);
+    }
+    //1-2.검색어 있는 경우
+    public static SelectCriteria getSelectCriteria(int currentPage, int totalMemberCount, int itemsPerPage, int displayPageCount
+            , String searchCondition, String searchValue) {
 
-        return getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, null, null);
+        int totalPages;
+        int startPage;
+        int endPage;
+        int startRow;
+        int endRow;
+        totalPages = (int) Math.ceil((double) totalMemberCount / itemsPerPage);
+        startPage = (int) (Math.ceil((double) currentPage / displayPageCount) - 1) * displayPageCount + 1;
+        endPage = startPage + displayPageCount - 1;
+        if(totalPages < endPage){
+            endPage = totalPages;
+        }
+        if(totalPages == 0 && endPage == 0) {
+            totalPages = startPage;
+            endPage = startPage;
+        }
+        startRow = (currentPage - 1) * itemsPerPage + 1;
+        endRow = startRow + itemsPerPage - 1;
+        SelectCriteria selectCriteria = new SelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount ,totalPages, startPage, endPage, startRow, endRow
+                , searchCondition, searchValue, null);
+        return selectCriteria;
     }
 
-    //검색어가 있는 경우 페이징 처리
+
+
+    //2.isExpired가 전달되었을 경우
+
+    //2-1.검색어 없는 경우의 페이징 처리
+    public static SelectCriteria getSelectCriteria(int currentPage, int totalMemberCount, int itemsPerPage, int displayPageCount, String isExpired) {
+
+        return getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, null, null, isExpired);
+    }
+
+    //2-2.검색어가 있는 경우 페이징 처리
     public static SelectCriteria getSelectCriteria(int currentPage, int totalMemberCount, int itemsPerPage, int displayPageCount
-                                                    , String searchCondition, String searchValue) {
+                                                    , String searchCondition, String searchValue, String isExpired) {
 
         int totalPages;	//총 페이지 수이자 마지막 페이지 번호에 해당
         int startPage;	//하나의 페이지에 보여질 페이지번호 세트에서 시작 페이지번호
@@ -53,11 +88,9 @@ public class Pagenation {
 
 
         SelectCriteria selectCriteria = new SelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount ,totalPages, startPage, endPage, startRow, endRow
-                                                            , searchCondition, searchValue);
+                                                            , searchCondition, searchValue, isExpired);
 
         return selectCriteria;
     }
-
-
 
 }

@@ -10,6 +10,8 @@ public interface MemberMapper {
 
     List<MemberDTO> getMemberList(SelectCriteria selectCriteria);
 
+    List<MemberDTO> getExpiredMemberList();
+
 
     int totalMemberCount(Map<String, String> searchMap);
 

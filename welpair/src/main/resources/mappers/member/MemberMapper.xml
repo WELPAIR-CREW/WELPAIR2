@@ -63,8 +63,12 @@
                    , E.EMP_PHONE
                    , E.IS_EXPIRE
               FROM T_MEMBER M
-                       JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
-              ORDER BY M.EMP_NO)
+              JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
+              <if test='isExpired != null and isExpired.equals("Y")'>
+              WHERE E.IS_EXPIRE = 'Y'
+              ORDER BY M.EMP_NO
+              </if>
+              )
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
     </select>
 

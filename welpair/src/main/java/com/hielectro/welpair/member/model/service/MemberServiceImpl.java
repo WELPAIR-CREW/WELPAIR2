@@ -1,4 +1,5 @@
 package com.hielectro.welpair.member.model.service;
+import com.hielectro.welpair.member.controller.Pagenation;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dao.MemberMapper;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
@@ -22,11 +23,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberDTO> getMemberList(SelectCriteria selectCriteria) {
-
         List<MemberDTO> memberList = memberMapper.getMemberList(selectCriteria);
         return memberList;
     }
-
 
 
     @Override

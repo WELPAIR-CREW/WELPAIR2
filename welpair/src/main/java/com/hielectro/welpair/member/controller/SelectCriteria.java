@@ -21,4 +21,6 @@ public class SelectCriteria {
     private int endRow;
     private String searchCondition; //검색 조건
     private String searchValue; //검색어
+
+    private String isExpired;
 }
