@@ -44,16 +44,16 @@
         <id property="no" column="SELL_PAGE_NO"/>
         <result property="title" column="SELL_PAGE_TITLE"/>
     </resultMap>
-    <!--    <resultMap id="ProductResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">-->
-    <!--        <id property="productCode" column="PRODUCT_CODE"/>-->
-    <!--        <result property="productName" column="PRODUCT_NAME"/>-->
-    <!--        <result property="productStatus" column="PRODUCT_STATUS"/>-->
-    <!--        <result property="productAmount" column="PRODUCT_AMOUNT"/>-->
-    <!--        <result property="productPrice" column="PRODUCT_PRICE"/>-->
-    <!--        <result property="productOption" column="PRODUCT_OPTION"/>-->
-    <!--        <result property="productNation" column="PRODUCT_NATION"/>-->
-    <!--        <result property="categoryCode" column="CATEGORY_CODE"/>-->
-    <!--    </resultMap>-->
+        <resultMap id="ProductResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
+            <id property="productCode" column="PRODUCT_CODE"/>
+            <result property="productName" column="PRODUCT_NAME"/>
+            <result property="productStatus" column="PRODUCT_STATUS"/>
+            <result property="productAmount" column="PRODUCT_AMOUNT"/>
+            <result property="productPrice" column="PRODUCT_PRICE"/>
+            <result property="productOption" column="PRODUCT_OPTION"/>
+            <result property="productNation" column="PRODUCT_NATION"/>
+            <result property="categoryCode" column="CATEGORY_CODE"/>
+        </resultMap>
 
     <resultMap id="cartGeneralResultMap" type="com.hielectro.welpair.order.model.dto.CartGeneralDTO">
         <association property="cart" resultMap="cartResultMap"/>
@@ -62,7 +62,7 @@
         <association property="sellItemPage" resultMap="SellItemPageResultMap"/>
         <association property="sellPage" resultMap="SellPageResultMap"/>
         <!--        <association property="sellImage" resultMap="SellImageResultMap"/>-->
-        <!--        <association property="product" resultMap="ProductResultMap"/>-->
+        <association property="product" resultMap="ProductResultMap"/>
     </resultMap>
 
 
@@ -131,19 +131,19 @@
 
     <select id="cartAllInfoSelect" resultMap="cartGeneralResultMap">
         SELECT *
-          FROM T_CART A,
-               T_CART_SELL_PRODUCT B,
-               T_SELL_PRODUCT C,
-               T_SELL_ITEM_PAGE D,
-               T_SELL_PAGE E
+          FROM   T_CART A
+               , T_CART_SELL_PRODUCT B
+               , T_SELL_PRODUCT C
+               , T_SELL_ITEM_PAGE D
+               , T_SELL_PAGE E
+               , T_PRODUCT G
 --                T_SELL_IMAGE F,
---                T_PRODUCT G
          WHERE A.EMP_NO = #{empNo}
            AND A.CART_NO = B.CART_NO(+)
            AND B.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID(+)
            AND C.SELL_PRODUCT_ID = D.SELL_PRODUCT_ID(+)
---            AND C.PRODUCT_CODE = G.PRODUCT_CODE(+)
            AND D.SELL_PAGE_NO = E.SELL_PAGE_NO(+)
+           AND C.PRODUCT_CODE = G.PRODUCT_CODE(+)
 --            AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
     </select>
 

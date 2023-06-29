@@ -1,6 +1,7 @@
 package com.hielectro.welpair.order.controller;
 
 
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.ValueExp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,29 +113,38 @@ public class CartController {
     }
 
 
+    // 회원 장바구니 불러오기 메소드
     @GetMapping("cart")
     public String cartList(Model model
-            ,@AuthenticationPrincipal User user
-            , @RequestParam("empNo") String empNo
+            , @AuthenticationPrincipal User user
+            , @RequestParam(value = "empNo", required = false) String empNo
     ){
 
+        // 1. 회원 정보 받아서 해당 회원의 장바구니 조회
 //        System.out.println(user);
 //        System.out.println(user.getUsername());
-
         System.out.println(empNo);
 
-        // 해당 사번으로 조인 테이블 조회하기
+        // 2. 장바구니 관련 테이블 리스트로 받아옴
         List<CartGeneralDTO> cartList = cartService.cartAllInfoSelect(empNo);
-        System.out.println(cartList);
+
+        // 3. 장바구니 상품정보 모델에 담아 뷰로 전달
+        model.addAttribute("cartList", cartList);
+
+//        for(CartGeneralDTO cart : cartList){
+////            cart.getSellPage().getTitle()
+////            exptPrice += cart.getTotalPrice();
+////            exptDeliveryPrice += cart.getCartSellProduct().getDeliveryPrice();
+//        }
+
+        return "consumer/order/cart.view";
+
+    }
 
 
-        for(CartGeneralDTO cart : cartList) {
-            // 카트상품 단품 1개 가격 = 원가 * 할인율
-//            int price = (int) (product.getProductPrice() * (1-sellProduct.getDiscount()));
-//            //    // 카트상품 단품별 총수량 가격합계
-//            int totalPrice = price * cartSellProduct.getCartAmount() + cartSellProduct.getDeliveryPrice();
-        }
-
+    // 수량변경시 가격변동 등 비동기처리 메소드
+    @PostMapping("cart/amount-change")
+    public String cartAmountChange(){
 
 
 //
@@ -149,9 +160,7 @@ public class CartController {
 //        int exptTotalPrice = exptPrice + exptDeliveryPrice;
 //
 
-
         return "consumer/order/cart";
-
     }
 
 
