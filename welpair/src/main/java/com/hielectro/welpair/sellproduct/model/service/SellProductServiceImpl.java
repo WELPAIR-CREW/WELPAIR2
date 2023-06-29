@@ -3,6 +3,8 @@ package com.hielectro.welpair.sellproduct.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import org.springframework.stereotype.Service;
 
 import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
@@ -22,8 +24,13 @@ public class SellProductServiceImpl implements SellProductService {
     }
 
     @Override
-    public List<SellProductDTO> selectProductList(Map<String, String> productId) {
+    public List<SellProductDetailDTO> selectProductList(Map<String, String> productId) {
         return productMapper.selectProductList(productId);
+    }
+
+    @Override
+    public List<ReviewManagerDTO> selectReviewList() {
+        return productMapper.selectReviewList();
     }
 
     @Override
