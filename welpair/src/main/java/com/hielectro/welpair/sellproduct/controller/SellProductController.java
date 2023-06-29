@@ -4,11 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/sellproduct")
@@ -25,12 +30,27 @@ public class SellProductController {
         return "admin/sellproduct/" + url;
     }
 
+    @GetMapping("review")
+    public String reviewLocation(Model model) {
+        List<ReviewManagerDTO> list = productService.selectReviewList();
+        list.forEach(item -> {
+            if (item.getContent().length() > 20) {
+                String content = item.getContent();
+                String subContent = content.substring(0, 20);
+
+                item.setContent(subContent.concat("..."));
+            }
+        });
+        model.addAttribute("list", list);
+        return "admin/sellproduct/review";
+    }
+
     @PostMapping(value = "list", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public List<SellProductDTO> productList(@RequestBody Map<String, String> request) {
+    public List<SellProductDetailDTO> productList(@RequestBody Map<String, String> request) {
         System.out.println("request : " + request);
-        List<SellProductDTO> sellProductList = productService.selectProductList(request);
-        System.out.println(sellProductList.size());
+        List<SellProductDetailDTO> sellProductList = productService.selectProductList(request);
+        System.out.println(sellProductList);
         return sellProductList;
     }
 
@@ -39,6 +59,7 @@ public class SellProductController {
     public Map<String, Integer> rowCount(@RequestBody(required = false) Map<String, String> request) {
         Map<String, Integer> response = new HashMap<>();
         int result = productService.sellProductSearchCount(request);
+        System.out.println("result : " + result);
         int maxPageNo = (int) Math.ceil((double) result / 10);
 
         response.put("maxPageNo", maxPageNo);

@@ -16,6 +16,9 @@
     <resultMap id="ProductDTO" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
         <id property="productCode" column="PRODUCT_CODE"/>
         <result property="productName" column="PRODUCT_NAME"/>
+        <result property="productStatus" column="PRODUCT_STATUS"/>
+        <result property="productPrice" column="PRODUCT_PRICE"/>
+        <result property="productOption" column="PRODUCT_OPTION"/>
     </resultMap>
 
     <resultMap id="SellItemPageDTO" type="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
@@ -29,34 +32,30 @@
         <id property="no" column="SELL_PAGE_NO"/>
         <result property="title" column="SELL_PAGE_TITLE"/>
     </resultMap>
+
+    <resultMap id="SellProductDetailDTO" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO">
+        <id property="id" column="SELL_PRODUCT_ID"/>
+        <result property="name" column="PRODUCT_NAME"/>
+        <result property="status" column="PRODUCT_STATUS"/>
+        <result property="price" column="PRODUCT_PRICE"/>
+        <result property="discount" column="DISCOUNT"/>
+        <result property="option" column="PRODUCT_OPTION"/>
+        <result property="pageNo" column="SELL_PAGE_NO"/>
+        <result property="title" column="SELL_PAGE_TITLE"/>
+    </resultMap>
+
+    <resultMap id="ReviewManagerDTO" type="com.hielectro.welpair.board.model.dto.ReviewManagerDTO">
+        <id property="id" column="SELL_PRODUCT_ID"/>
+        <result property="name" column="PRODUCT_NAME"/>
+        <result property="title" column="BOARD_TITLE"/>
+        <result property="content" column="BOARD_CONTENT"/>
+        <result property="date" column="BOARD_DATE"/>
+        <result property="time" column="BOARD_TIME"/>
+    </resultMap>
+
     <select id="sellProductSearchCount" resultType="_int">
         SELECT
-                COUNT(*)
-          FROM (
-                SELECT ROWNUM AS RN
-                , SELL_PRODUCT_ID
-                , PRODUCT_NAME
-                , DISCOUNT
-                , IS_SELL
-                , SELL_PAGE_NO
-                , SELL_PAGE_TITLE
-                FROM T_SELL_PRODUCT
-                LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
-                LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
-                LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
-                )
-         WHERE 1=1
-        <if test="code != '' and code != null">
-            AND SELL_PRODUCT_ID = #{ code }
-        </if>
-        <if test="name != '' and name != null">
-            AND PRODUCT_NAME LIKE '%' || #{ name } || '%'
-        </if>
-    </select>
-
-    <select id='selectProductList' resultMap="SellProductResultMap">
-        SELECT
-        *
+        COUNT(*)
         FROM (
         SELECT ROWNUM AS RN
         , SELL_PRODUCT_ID
@@ -77,10 +76,59 @@
         <if test="name != '' and name != null">
             AND PRODUCT_NAME LIKE '%' || #{ name } || '%'
         </if>
+    </select>
+
+    <select id='selectProductList' resultMap="SellProductDetailDTO">
+        SELECT
+        *
+        FROM (
+        SELECT ROWNUM AS RN
+        , SELL_PRODUCT_ID
+        , PRODUCT_NAME
+        , PRODUCT_STATUS
+        , PRODUCT_PRICE
+        , DISCOUNT
+        , PRODUCT_OPTION
+        , SELL_PAGE_NO
+        , SELL_PAGE_TITLE
+        FROM T_SELL_PRODUCT
+        LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
+        LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
+        LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
+        WHERE 1=1
+        <if test="code != '' and code != null">
+            AND SELL_PRODUCT_ID = #{ code }
+        </if>
+        <if test="name != '' and name != null">
+            AND PRODUCT_NAME LIKE '%' || #{ name } || '%'
+        </if>
+        )
         <if test="pageNo != '0' and pageNo != null">
+            WHERE 1=1
             AND RN &gt; ( (TO_NUMBER(#{ pageNo }) - 1) * 10)
             AND RN &lt;= ( TO_NUMBER(#{ pageNo }) * 10)
         </if>
+    </select>
+
+    <select id="selectReviewList" resultMap="ReviewManagerDTO">
+        SELECT
+            *
+        FROM (
+                 SELECT ROWNUM AS RN
+                      , SELL_PRODUCT_ID
+                      , PRODUCT_NAME
+                      , BOARD_TITLE
+                      , BOARD_CONTENT
+                      , TO_DATE(BOARD_DATE, 'RRRR-MM-DD') as BOARD_DATE
+                      , TO_CHAR(BOARD_DATE, 'HH24:MI:ss') as BOARD_TIME
+                 FROM T_SELL_PRODUCT
+                  LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
+                  LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
+                  LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
+                  LEFT JOIN T_REVIEW USING (SELL_PAGE_NO)
+                  LEFT JOIN T_BOARD USING (BOARD_NO)
+             )
+        WHERE BOARD_DATE IS NOT NULL
     </select>
 
     <delete id="delete">
