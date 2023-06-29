@@ -84,67 +84,33 @@
 
                 <div class="paging">
 
-
-<!-- 유틸리티를 사용하여 페이지 번호가 동적으로 바뀌는지 확인... -->
-<!--                    <span th:each="num: ${#numbers.sequence(1,5)}" th:class="${currentPage == page ? 'active-page' : ''}">-->
-<!--                        <a th:href="@{/member-view?currentPage= ${num}}" th:text="${num}"></a>-->
-<!--                    </span>-->
-
-
-                    <span><a th:href="@{/member/member-view?currentPage=1}"
-                             th:class="${currentPage == 1 ? 'active-page' : ''}">1</a></span>
-                    <!-- 이 요소를 클릭하면 currentPage 매개변수가 1~5로 설정된 /member-view URL로 요청을 보냄 -->
-                    <!-- true이면 요소에 CSS적용을 위한 'active-page'가 class속성으로 추가됨 false이면 빈문자열이 class속성으로 추가됨 -->
-                    <span><a th:href="@{/member/member-view?currentPage=2}"
-                             th:class="${currentPage == 2 ? 'active-page' : ''}">2</a></span>
-                    <span><a th:href="@{/member/member-view?currentPage=3}"
-                             th:class="${currentPage == 3 ? 'active-page' : ''}">3</a></span>
-                    <span><a th:href="@{/member/member-view?currentPage=4}"
-                             th:class="${currentPage == 4 ? 'active-page' : ''}">4</a></span>
-                    <span><a th:href="@{/member/member-view?currentPage=5}"
-                             th:class="${currentPage == 5 ? 'active-page' : ''}">5</a></span>
-                    <span><a th:href="@{/member/member-view?currentPage=6}"
-                             th:class="${currentPage == 6 ? 'active-page' : ''}">6</a></span>
-                    <span><a th:href="@{/member/member-view?currentPage=7}"
-                             th:class="${currentPage == 7 ? 'active-page' : ''}">7</a></span>
-                    <span>
-                        <a th:href="@{/member/member-view?currentPage=${selectCriteria.endPage}}" th:disabled="${selectCriteria.currentPage == selectCriteria.totalPages}">
-                            &gt;
-                        </a>
+                    <span th:each="page: ${pageNumbList}" th:class="${currentPage == page ? 'active-page' : ''}">
+                        <a th:href="|@{/member/member-view?currentPage=}${page}|" th:text="${page}"></a>
                     </span>
 
+<!--                    <span><a th:href="@{/member/member-view?currentPage=1}"-->
+<!--                             th:class="${currentPage == 1 ? 'active-page' : ''}">1</a></span>-->
+<!--                    &lt;!&ndash; 이 요소를 클릭하면 currentPage 매개변수가 1~5로 설정된 /member-view URL로 요청을 보냄 &ndash;&gt;-->
+<!--                    &lt;!&ndash; true이면 요소에 CSS적용을 위한 'active-page'가 class속성으로 추가됨 false이면 빈문자열이 class속성으로 추가됨 &ndash;&gt;-->
+<!--                    <span><a th:href="@{/member/member-view?currentPage=2}"-->
+<!--                             th:class="${currentPage == 2 ? 'active-page' : ''}">2</a></span>-->
+<!--                    <span><a th:href="@{/member/member-view?currentPage=3}"-->
+<!--                             th:class="${currentPage == 3 ? 'active-page' : ''}">3</a></span>-->
+<!--                    <span><a th:href="@{/member/member-view?currentPage=4}"-->
+<!--                             th:class="${currentPage == 4 ? 'active-page' : ''}">4</a></span>-->
+<!--                    <span><a th:href="@{/member/member-view?currentPage=5}"-->
+<!--                             th:class="${currentPage == 5 ? 'active-page' : ''}">5</a></span>-->
+<!--                    <span><a th:href="@{/member/member-view?currentPage=6}"-->
+<!--                             th:class="${currentPage == 6 ? 'active-page' : ''}">6</a></span>-->
+<!--                    <span><a th:href="@{/member/member-view?currentPage=7}"-->
+<!--                             th:class="${currentPage == 7 ? 'active-page' : ''}">7</a></span>-->
+<!--                    <span>-->
+<!--                        <a th:href="@{/member/member-view?currentPage=${selectCriteria.endPage}}" th:disabled="${selectCriteria.currentPage == selectCriteria.totalPages}">-->
+<!--                            &gt;-->
+<!--                        </a>-->
+<!--                    </span>-->
+
                 </div>
-
-
-<!--                 표시되는 페이지 번호를 동적으로 바꿔 보여주기 위함 -->
-<!--                                    <div class="paging">-->
-<!--                &lt;!&ndash;                    누르면 이전 페이지 세트(1~10)가 표시됨&ndash;&gt;-->
-
-<!--                                        <span class="previous-page" th:if="${currentPage > 1}">-->
-<!--                                            <a th:href="@{/member-view(currentPage=${currentPage - 1})}"><</a>-->
-<!--                                        </span>-->
-
-
-<!--                                        <span>-->
-<!--                                        <a th:href="@{/member/member-view?currentPage=${startPage}}" th:disabled="${currentPage == 1}">-->
-<!--                                            &lt;-->
-<!--                                        </a>-->
-<!--                                        </span>-->
-
-
-
-<!--                                        <span th:each="page, status : ${pages}" th:class="${currentPage == page ? 'active-page' : ''}">-->
-<!--                                            <a th:href="@{/member-view(currentPage=${page})}" th:text="${page}"></a>-->
-<!--                                        </span>-->
-<!--                                        -->
-
-<!--                &lt;!&ndash;                    누르면 다음 페이지 세트(6~10)가 표시됨&ndash;&gt;-->
-<!--                &lt;!&ndash;                    <span class="next-page">&gt;</span>&ndash;&gt;-->
-<!--                                        <span class="next-page" th:if="${currentPage < totalPages}">-->
-<!--                                            <a th:href="@{/member-view(currentPage=${currentPage + 1})}">&gt;</a>-->
-<!--                                        </span>-->
-<!--                                    </div>-->
-
             </div>
         </div>
 

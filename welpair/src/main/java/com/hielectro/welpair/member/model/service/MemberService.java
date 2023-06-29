@@ -14,5 +14,5 @@ public interface MemberService {
 
     //1-2. 회원조회 - 전체, 퇴사 회원수
     int totalMemberCount(Map<String, String> searchMap);
-    int expiredMemberCount();
+    int expiredMemberCount(Map<String, String> searchMap);
 }

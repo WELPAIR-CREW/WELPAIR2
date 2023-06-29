@@ -75,7 +75,7 @@
                 COUNT(*)
           FROM T_MEMBER M
     </select>
-    <select id="expiredMemberCount" resultType="_int">
+    <select id="expiredMemberCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
         FROM T_MEMBER M
                  JOIN T_EMPLOYEE E on M.EMP_NO = E.EMP_NO

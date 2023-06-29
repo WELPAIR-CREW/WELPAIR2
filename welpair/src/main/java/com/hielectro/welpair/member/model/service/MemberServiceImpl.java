@@ -35,8 +35,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public int expiredMemberCount() {
-        return memberMapper.expiredMemberCount();
+    public int expiredMemberCount(Map<String, String> searchMap) {
+        return memberMapper.expiredMemberCount(searchMap);
     }
 
 }

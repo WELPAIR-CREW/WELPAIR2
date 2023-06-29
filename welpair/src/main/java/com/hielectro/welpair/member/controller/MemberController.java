@@ -41,8 +41,12 @@ public class MemberController {
         searchMap.put("searchValue", searchValue);
 
         int totalMemberCount = memberService.totalMemberCount(searchMap); //총 항목 수(검색 조건 적용)
+        int expiredMemberCount = memberService.expiredMemberCount(searchMap); //퇴사한 직원 수
         int itemsPerPage = 10; //페이지당 항목 수
         int displayPageCount = 5; //표시할 페이지 번호 수
+
+        int totalPages = 0;
+        totalPages = (int) Math.ceil((double) totalMemberCount / itemsPerPage);
 
 
         SelectCriteria selectCriteria = null;
@@ -58,9 +62,34 @@ public class MemberController {
         //쿼리결과를 받아 DTO리스트에 담고 모델에 추가
         model.addObject("memberList", memberList);
         model.addObject("selectCriteria", selectCriteria);
+
+        //전체 회원 수, 퇴사한 회원 수
+        model.addObject("totalMemberCount", totalMemberCount);
+        model.addObject("expiredMemberCount", expiredMemberCount);
+
+        //페이지묶음
+//        int[][] pageSet = new int[totalMemberCount][5];
+//        for (int i=0; i<totalMemberCount; i++) {
+//            for (int j=0; j<5; j++) {
+//                pageSet[i][j] = i+1;
+//            }
+//        }
+
+        List<Integer> pageNumList = new ArrayList<>();
+        for (int i=1; i<=totalPages; i++) {
+            pageNumList.add(i);
+        }
+        model.addObject("pageNumbList", pageNumList);
+
+
+
         model.setViewName("admin/member/member-view");
         return model;
     }
+
+
+
+
 
 
     @GetMapping("regist")

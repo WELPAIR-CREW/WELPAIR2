@@ -13,6 +13,6 @@ public interface MemberMapper {
 
     int totalMemberCount(Map<String, String> searchMap);
 
-    int expiredMemberCount();
+    int expiredMemberCount(Map<String, String> searchMap);
 
 }
