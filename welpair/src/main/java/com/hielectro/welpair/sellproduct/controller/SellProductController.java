@@ -33,6 +33,14 @@ public class SellProductController {
     @GetMapping("review")
     public String reviewLocation(Model model) {
         List<ReviewManagerDTO> list = productService.selectReviewList();
+        list.forEach(item -> {
+            if (item.getContent().length() > 20) {
+                String content = item.getContent();
+                String subContent = content.substring(0, 20);
+
+                item.setContent(subContent.concat("..."));
+            }
+        });
         model.addAttribute("list", list);
         return "admin/sellproduct/review";
     }
