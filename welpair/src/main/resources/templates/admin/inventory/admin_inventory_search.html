@@ -133,12 +133,14 @@
             if (productCode != "" || productName != "" || stockComment != "" || stockTypeDefalut != "" || startDate != "" || endDate != "") {
 
                 alert("검색중???")
+                console.log(data);
                 $.ajax({
+
                     url: "/inventory/admin_inventory_search",
                     data: data,
                     type: 'post',
-                    contentType: 'application/json',
                     success: function (data) {
+                        console.log(data);
 
                         $("#searchResultTable tbody").empty();
 

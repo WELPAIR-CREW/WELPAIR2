@@ -183,6 +183,7 @@ public class InventoryController {
 
         System.out.println("-------------컨트롤러 3-1-2 in -------------");
         System.out.println("stock = " + stock);
+        System.out.println("stock.getProductCode() = " + stock.getProductCode());
 
         System.out.println("-------------컨트롤러 3-1-2 -------------");
         List<StockDTO> stockList = null;
