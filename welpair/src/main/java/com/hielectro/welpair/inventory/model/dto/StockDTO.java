@@ -23,8 +23,12 @@ public class StockDTO {
     private String categoryCode;
 
     private ProductDTO product;
-    private String productName;
-    private String productAmount;
+//    private String productName;
+    private int productAmount;
+
+
+    private Date startDate;
+    private Date endDate;
 
 
 }

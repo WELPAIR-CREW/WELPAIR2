@@ -3,6 +3,8 @@ import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.inventory.model.dto.StockDTO;
 import com.hielectro.welpair.inventory.model.service.InventoryService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.RequestContext;
+import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -10,8 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 import org.thymeleaf.exceptions.TemplateInputException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
@@ -121,15 +125,30 @@ public class InventoryController {
         System.out.println("-------------컨트롤러 2-2 in -------------");
         System.out.println("stockList = " + stockList);
         System.out.println("locale = " + locale);
+
+        System.out.println("값 꺼내기");
+        for (StockDTO stock : stockList) {
+
+            ProductDTO product = new ProductDTO();
+            product.setProductAmount(stock.getProductAmount());
+            System.out.println("product = " + product);
+            System.out.println("product.getProductAmount() = " + product.getProductAmount());
+        }
+
         int result = inventoryService.stockRegist(stockList);
 
         System.out.println("result = " + result);
-        if(result > 0){
-
-            rttr.addFlashAttribute("successMessage", "입출고 등록 성공");
+        if (result > 0) {
+            rttr.addFlashAttribute("resultMessage", "등록 성공" + result + "개 등록");
             System.out.println("-------------컨트롤러 2-2 out -------------");
+            mv.addObject( "resultMessage","등록 성공" + result + "개 등록");
+        } else if (result == -1) {
+            rttr.addFlashAttribute("resultMessage", "출고 등록 실패-수량 부족");
+            mv.addObject("resultMessage", "fail");
+
         } else {
-            rttr.addFlashAttribute("failMessage", "입출고 등록 실패");
+            rttr.addFlashAttribute("resultMessage", "등록 실패");
+            mv.addObject("resultMessage", "fail");
         }
 
         mv.setViewName("redirect:/inventory/admin_inventory_register");
@@ -137,6 +156,20 @@ public class InventoryController {
         return mv;
 
     }
+
+    @RequestMapping("admin_inventory_register")
+    public void registAlert(HttpServletRequest request) {
+
+        Map<String, ?> paramMap = RequestContextUtils.getInputFlashMap(request);
+        String message = null;
+
+        if (paramMap != null) {
+            message = (String) paramMap.get("resultMessage");
+        }
+    }
+
+
+
 
 
 
@@ -150,8 +183,7 @@ public class InventoryController {
     }
 
     /**
-     * 재고관리 메뉴 (ng)
-     * 3. 입출고내역
+     * 재고관리 메뉴 (ng) 3. 입출고내역
      * 3-1. 입출고내역 검색
      *      상품코드, 상품명, 카테고리 선택 후 검색 시 입출고 내역 조회
      */
@@ -162,6 +194,8 @@ public class InventoryController {
         System.out.println("-------------컨트롤러 3-1-2 in -------------");
         System.out.println("stock = " + stock);
         System.out.println("stock.getProductCode() = " + stock.getProductCode());
+        System.out.println("stock.getStartDate() = " + stock.getStartDate());
+        System.out.println("stock.getEndDate() = " + stock.getEndDate());
 
         System.out.println("-------------컨트롤러 3-1-2 -------------");
         List<StockDTO> stockList = null;
