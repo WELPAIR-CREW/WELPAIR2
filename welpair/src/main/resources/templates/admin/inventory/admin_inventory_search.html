@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/inventory.css">
     <script src="/common/js/static/include.js"></script>
-
+    <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 </head>
 
@@ -112,11 +112,24 @@
     <!-- 스크립트 시작-->
     <script th:inline="javascript">
 
+        // 날짜 기본값 반영
+        let today = new Date();
+        let startDate = new Date();
+        startDate.setDate(today.getDate() - 7);
+
+        let startDateString = startDate.toISOString().split('T')[0];
+        let endDateString = today.toISOString().split('T')[0];
+
+
+        $("#startDate").val(startDateString);
+        $("#endDate").val(endDateString);
+
+
         // 검색 버튼
         $("#historySearch").click(function (){
 
-            let productCode = $("#productCode").val();
-            let productName = $("#productName").val();
+            let productCode = $("#productCode").val().toUpperCase();
+            let productName = $("#productName").val().toUpperCase();
             let stockComment = $("#stockComment").val();
             let stockTypeDefalut = $("#stockType").val();
             let startDate = $("#startDate").val();
@@ -130,9 +143,8 @@
                     startDate: startDate,
                     endDate: endDate
                 };
-            if (productCode != "" || productName != "" || stockComment != "" || stockTypeDefalut != "" || startDate != "" || endDate != "") {
+            if (productCode != "" || productName != "" || stockComment != "" || stockTypeDefalut != "" || startDate != "" ||  endDate != "") {
 
-                alert("검색중???")
                 console.log(data);
                 $.ajax({
 
@@ -166,6 +178,11 @@
             } else {
                 alert("최소 1개 이상의 옵션 입력해야 함")
             }
+        });
+
+        // 테이블 정렬
+        $(document).ready(function() {
+            $('#searchResultTable').DataTable();
         });
     </script>
 </body>

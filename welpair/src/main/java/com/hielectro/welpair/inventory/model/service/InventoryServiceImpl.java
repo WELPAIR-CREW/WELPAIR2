@@ -1,12 +1,9 @@
 package com.hielectro.welpair.inventory.model.service;
-
-
 import com.hielectro.welpair.inventory.model.dao.InventoryDAO;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.inventory.model.dto.StockDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 
@@ -50,6 +47,7 @@ public class InventoryServiceImpl implements InventoryService{
         System.out.println("productCode = " + product.getProductCode());
         System.out.println("productName = " + product.getProductName());
         System.out.println("categoryCode = " + product.getCategoryCode());
+        System.out.println("productAmount = " + product.getProductAmount());
 
         List<ProductDTO> result = inventoryDAO.stockRegistSerch(product);
         System.out.println("========== 서비스 2-1 out ==========");
@@ -62,17 +60,47 @@ public class InventoryServiceImpl implements InventoryService{
     public int stockRegist(List<StockDTO> stockList) {
 
         int result = 0;
+        ProductDTO product = new ProductDTO();
+
         System.out.println("========== 서비스 2-2 in ==========");
         System.out.println("stockList = " + stockList);
 
+
+        System.out.println("for문 준비중");
         for (StockDTO stock : stockList) {
-            int num = inventoryDAO.stockRegist(stock);
-            result += num;
+            System.out.println("for문 시작");
+            product.setProductAmount(stock.getProductAmount());
+
+            if ("출고".equals(stock.getStockType())) {
+                System.out.println("출고임");
+                if (-(stock.getStockAmount()) > stock.getProductAmount()) {
+
+                    System.out.println("출고 수량 부족. 가능 수량 : " + stock.getProductAmount());
+                    System.out.println("========== 서비스 2-2 등록 실패 ==========");
+                    return -1;
+
+                } else {
+                    System.out.println("수량 넉넉해");
+                    int num = inventoryDAO.stockRegist(stock);
+                    result += num;
+                }
+            } else {
+                System.out.println("출고 아님");
+                int num = inventoryDAO.stockRegist(stock);
+                result += num;
+            }
+            System.out.println("========== 서비스 2-2 완료 ==========");
         }
 
-        System.out.println("========== 서비스 2-2 out ==========");
-//        return inventoryDAO.stockRegist(stockList);
-        return result;
+        if (result == stockList.size()) {
+            for (StockDTO stock : stockList) {
+                inventoryDAO.stockRegistUpdate(stock.getProductCode(), stock.getStockAmount());
+            }
+            System.out.println("========== 서비스 2-2 out ==========");
+            return result;
+        }else {
+            return 0;
+        }
     }
 
     /* 3-1 */
@@ -88,7 +116,8 @@ public class InventoryServiceImpl implements InventoryService{
         System.out.println("stockNo = " + stock.getStockNo());
         System.out.println("productCode = " + stock.getProductCode());
         System.out.println("stockType = " + stock.getStockType());
-        System.out.println("stockDate = " + stock.getStockDate());
+        System.out.println("startDate = " + stock.getStartDate());
+        System.out.println("endDate = " + stock.getEndDate());
         System.out.println("stockAmount = " + stock.getStockAmount());
         System.out.println("stockComment = " + stock.getStockComment());
 

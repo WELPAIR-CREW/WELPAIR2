@@ -21,6 +21,7 @@
     <resultMap type="com.hielectro.welpair.inventory.model.dto.ProductDTO" id="stockRegistSerchResultMap">
         <id property="productCode" column="PRODUCT_CODE"/>
         <result property="productName" column="PRODUCT_NAME"/>
+        <result property="productAmount" column="PRODUCT_AMOUNT"/>
         <association property="category" resultMap="categoryDTO"/>
     </resultMap>
 
@@ -79,6 +80,7 @@
         SELECT
                A.PRODUCT_CODE
              , A.PRODUCT_NAME
+             , A.PRODUCT_AMOUNT
              , B.CATEGORY_NAME
           FROM T_PRODUCT A
           JOIN T_CATEGORY B ON B.CATEGORY_CODE = A.CATEGORY_CODE
@@ -87,14 +89,13 @@
             AND A.PRODUCT_CODE = #{productCode}
         </if>
         <if test="productName != null and productName != ''">
-            AND A.PRODUCT_NAME = #{productName}
+            AND A.PRODUCT_NAME LIKE '%' || #{productName} || '%'
         </if>
         <if test="categoryCode != null and categoryCode != ''">
             AND A.CATEGORY_CODE = #{categoryCode}
         </if>
     </select>
 
-    
     <!-- 2-2. -->
     <insert id="stockRegist" parameterType="com.hielectro.welpair.inventory.model.dto.StockDTO">
     INSERT INTO T_STOCK A (
@@ -116,6 +117,12 @@
     )
     </insert>
 
+    <update id="stockRegistUpdate" parameterType="java.util.Map">
+        UPDATE T_PRODUCT
+           SET PRODUCT_AMOUNT = PRODUCT_AMOUNT + #{stockAmount}
+         WHERE PRODUCT_CODE = #{ productCode }
+    </update>
+
     <!-- 3-1. -->
     <select id="historySearch" resultMap="searchHistoryResultMap">
         SELECT
@@ -130,7 +137,7 @@
              , B.PRODUCT_AMOUNT
           FROM T_STOCK A
           JOIN T_PRODUCT B ON B.PRODUCT_CODE = A.PRODUCT_CODE
-        WHERE 1=1
+         WHERE A.STOCK_DATE BETWEEN #{startDate} AND (#{endDate} + 1)
         <if test="productCode != null and productCode != ''">
             AND A.PRODUCT_CODE = #{productCode}
         </if>
@@ -143,11 +150,8 @@
         <if test="stockType != null and stockType != ''">
             AND A.STOCK_TYPE = #{stockType}
         </if>
-        <if test="stockDate != null and stockDate != ''">
-            AND A.STOCK_DATE = #{stockDate}
-        </if>
         <if test="product != null and product.productName != null and product.productName != ''">
-            AND B.PRODUCT_NAME = #{product.productName}
+            AND B.PRODUCT_NAME LIKE '%' || #{product.productName} || '%'
         </if>
     </select>
 

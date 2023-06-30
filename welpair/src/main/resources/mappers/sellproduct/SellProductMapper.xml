@@ -131,7 +131,7 @@
         WHERE BOARD_DATE IS NOT NULL
     </select>
 
-    <delete id="delete">
+    <delete id="sellProductDelete">
         DELETE
         FROM T_SELL_PRODUCT
         WHERE SELL_PRODUCT_ID = #{ id }
