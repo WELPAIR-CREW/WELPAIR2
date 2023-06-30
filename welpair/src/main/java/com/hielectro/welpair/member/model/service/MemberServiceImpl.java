@@ -57,25 +57,22 @@ public class MemberServiceImpl implements MemberService {
 //
 //        return memberList;
 //    }
+
     @Override
-    @Transactional
-//    public void deleteMember(MemberDTO memberDTO, List<String> empNos) throws DeleteMemberException {
-    public void deleteMember(List<String> arr) throws DeleteMemberException {
+    @Transactional(rollbackFor = Exception.class) //어떤 예외가 발생하더라도 롤백하게함
+    public void deleteMember(List<String> empNos) throws DeleteMemberException {
 
         //아이디 목록을 가지고 반복문을 통해 딜리트해야한다
-        for(int i=0; i<arr.size(); i++) {
-            String empNo = String.valueOf(arr.get(i));
+        for(int i=0; i<empNos.size(); i++) {
+            String empNo = String.valueOf(empNos.get(i));
             int result = memberMapper.deleteMember(empNo);
 
             if(result > 0) {
                 System.out.println("계정삭제 성공");
             } else {
                 System.out.println("계정삭제 실패");
-                throw new DeleteMemberException("계정삭제 실패"); //예외발생시 롤백
+                throw new DeleteMemberException("계정삭제 실패"); //@Transactional에 의해 예외발생시 롤백
             }
         }
-
-//        int result = memberMapper.deleteMember(memberDTO.getEmpNo());
-
     }
 }

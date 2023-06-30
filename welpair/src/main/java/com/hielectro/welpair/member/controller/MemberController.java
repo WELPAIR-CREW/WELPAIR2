@@ -100,24 +100,15 @@ public class MemberController {
         return model;
     }
 
-    //계정삭제
-//    @DeleteMapping("/deleteMember")
-//    public ResponseEntity<List<MemberDTO>> deleteMember(@RequestBody MemberDTO memberDTO) throws DeleteMemberException {
-//
-////        List<MemberDTO> memberList = memberService.deleteMember(memberDTO, SelectCriteria);
-////        return ResponseEntity.ok(memberList);
-//    }
-
     @PostMapping("/deleteMember")
-    public String deleteMember(@ModelAttribute(value = "value") String arr) throws DeleteMemberException {
-                                    //폼으로 받을때는 @RequestParam 아님
-        System.out.println("확인 : " + arr);
+    public String deleteMember(@RequestParam ArrayList<String> empNos) throws DeleteMemberException {
 
-//        memberService.deleteMember(arr);
+        System.out.println("체크박스 체크된 사번의 배열이 잘 들어오는지 확인 : " + empNos);
+
+        memberService.deleteMember(empNos);
 
         return "redirect:/member/member-view"; //삭제 후 회원조회 페이지로 리다이렉트
     }
-
 
 
 

@@ -90,7 +90,7 @@
 <!-- 계정 삭제 -->
     <delete id="deleteMember" parameterType="String">
         DELETE
-        FROM TBL_MEMBER M
+        FROM T_MEMBER M
         WHERE M.EMP_NO = #{empNo}
     </delete>
 </mapper>

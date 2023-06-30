@@ -18,9 +18,5 @@ public interface MemberService {
     int totalMemberCount(Map<String, String> searchMap);
     int expiredMemberCount(Map<String, String> searchMap);
 
-    //계정 삭제
-//    List<MemberDTO> deleteMember(MemberDTO memberDTO, SelectCriteria selectCriteria) throws DeleteMemberException;
-//    void deleteMember(MemberDTO memberDTO) throws DeleteMemberException;
-//    void deleteMember(MemberDTO memberDTO, List<String> empNos) throws DeleteMemberException;
-    void deleteMember(List<String> arr) throws DeleteMemberException;
+    void deleteMember(List<String> empNos) throws DeleteMemberException;
 }
