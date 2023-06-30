@@ -136,7 +136,7 @@ public class CartController {
 
         }
 
-        return "consumer/order/cart.view";
+        return "consumer/order/cart";
 
     }
 
