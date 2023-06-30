@@ -1,28 +1,42 @@
+import { includeHTML } from './include.js'
+import {call, createPaging, createTable, pagination, setPagination} from './App.js'
 
-function createTable(data) {
-    document.querySelector(".section-product-table tbody").innerHTML = ''
+const searchBtn = document.querySelector(".first-button");
+searchBtn.addEventListener('click', fetchReviewListData);
 
-    for (let index in data) {
-        const items = data[index];
-        const tr = document.createElement("tr");
-        const keys = Object.keys(items);
-        keys.forEach(key => {
-            tr.append(createTableCell(items[key]));
-        });
+const headerCheckBox = document.querySelector("thead input");
+headerCheckBox.addEventListener('click', function () {
+    const items = document.querySelectorAll("tbody input");
+    items.forEach(item => item.checked = headerCheckBox.checked);
+})
 
-        // 체크박스 추가 (각 행에 모두 추가)
-        const td = document.createElement("td");
-        const input = document.createElement("input");
-        input.type = 'checkbox';
-        td.append(input);
-        tr.prepend(td);
+let code = null;
+let name = null;
 
-        document.querySelector(".section-product-table tbody").append(tr);
-    }
+async function fetchReviewListData() {
+    code = document.querySelector(".product-code").value
+    name = document.querySelector(".name").value
+    const pageNo = 1;
+    const map = {code, name, pageNo};
+
+    const urls = ['/sellproduct/reviewCountAPI', '/sellproduct/reviewListAPI'];
+    const requests = urls.map(url => call(url, 'post', map))
+    const [data1, data2] = await Promise.all(requests)
+
+    pagination.currentPageNo = 1;
+    setPagination(data1);
+    createTable(data2);
+    createPaging(selectReview);
 }
 
-function createTableCell(text) {
-    const td = document.createElement("td");
-    td.textContent = text;
-    return td;
+async function selectReview(pageNo = 1) {
+    const map = {code, name, pageNo};
+
+    call('/sellproduct/reviewListAPI', 'post', map)
+        .then(data => {
+            createTable(data)
+        })
 }
+
+await fetchReviewListData();
+includeHTML();

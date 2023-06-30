@@ -3,6 +3,7 @@ package com.hielectro.welpair.sellproduct.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,4 +17,8 @@ public interface SellProductMapper {
     List<ReviewManagerDTO> selectReviewList(Map<String, Object> searchMap);
     int sellProductDelete(String id);
     int reviewSearchCount(Map<String, Object> searchMap);
+
+    int qnaSearchCount(Map<String, Object> searchMap);
+
+    List<QnAManagerDTO> selectQnAList(Map<String, Object> searchMap);
 }

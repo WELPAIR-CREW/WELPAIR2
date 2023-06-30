@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상품 관리</title>
-    <link rel="stylesheet" href="../common/css/header.css">
-    <link rel="stylesheet" href="../common/css/main.css">
-    <link rel="stylesheet" href="../common/css/footer.css">
+    <title>리뷰관리</title>
+    <link rel="stylesheet" th:href="@{../common/css/header.css}">
+    <link rel="stylesheet" th:href="@{../common/css/main.css}">
+    <link rel="stylesheet" th:href="@{../common/css/footer.css}">
     <script th:src="@{../common/js/static/create.js}"></script>
     <script th:src="@{../common/js/static/include.js}"></script>
 </head>
@@ -23,7 +23,7 @@
         <div class="section-nav-category">판매상품등록</div>
         <div class="section-nav-category"><b>리뷰관리</b></div>
         <div class="section-nav-category">
-            <a href="/sellproduct/QnA">문의관리</a>
+            <a href="/sellproduct/QnA">상품문의관리</a>
         </div>
     </div>
     <div class="section-content">
@@ -53,19 +53,21 @@
         <div class="table_container">
             <table class="section-product-table">
                 <colgroup>
-                    <col style="width: 50px;">
-                    <col style="width: 120px;">
-                    <col style="width: 160px;">
-                    <col style="width: 200px;">
-                    <col style="width: 300px;">
-                    <col style="width: 90px">
-                    <col style="width: 90px">
+                    <col style="min-width: 50px;">
+                    <col style="min-width: 120px;">
+                    <col style="min-width: 160px;">
+                    <col style="min-width: 160px;">
+                    <col style="min-width: 200px;">
+                    <col style="min-width: 300px;">
+                    <col style="min-width: 100px">
+                    <col style="min-width: 100px">
                 </colgroup>
                 <thead>
 
                 <tr>
                     <th><input type="checkbox"></th>
-                    <th>판매상품코드</th>
+                    <th>글번호</th>
+                    <th>판매페이지</th>
                     <th>상품명</th>
                     <th>제목</th>
                     <th>내용</th>
@@ -81,7 +83,6 @@
         </div>
     </div>
 </section>
-<div data-include-html="/admin/footer" class="include"></div>
 <script th:inline="javascript">
     let data = [[${list}]];
     let paging = [[${paging}]];
@@ -89,5 +90,8 @@
     setPagination(paging);
     createPaging()
 </script>
+<div data-include-html="/admin/footer" class="include"></div>
+
 </body>
+
 </html>

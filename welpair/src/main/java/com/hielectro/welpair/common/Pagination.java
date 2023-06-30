@@ -2,6 +2,7 @@ package com.hielectro.welpair.common;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Pagination {
     private static int currentPageNo;
@@ -10,13 +11,15 @@ public class Pagination {
     private static int maxPageNo;
     private static int listLength;
     private static int limit = 10;
+    private static String url = "";
 
-    public static void init() {
+    public static void init(String requestURL) {
         currentPageNo = 1;
         startPageNo = 1;
         endPageNo = 5;
         maxPageNo = 1;
         listLength = 0;
+        url = requestURL;
     }
     
     public static Map<String, Integer> getParameter(int pageNo) {
@@ -36,8 +39,8 @@ public class Pagination {
         return getResultMap(response);
     }
 
-    public static int getLength() {
-        return listLength;
+    public static String getURL() {
+        return url;
     }
     private static Map<String, Integer> getResultMap(Map<String, Integer> response) {
         if (endPageNo < currentPageNo) {

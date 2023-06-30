@@ -3,6 +3,7 @@ package com.hielectro.welpair.sellproduct.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
@@ -17,4 +18,8 @@ public interface SellProductService {
     int sellProductDelete(List<String> request) throws Exception;
 
     int reviewSearchCount(Map<String, Object> searchMap);
+
+    List<QnAManagerDTO> selectQnAList(Map<String, Object> searchMap);
+
+    int qnaSearchCount(Map<String, Object> searchMap);
 }
