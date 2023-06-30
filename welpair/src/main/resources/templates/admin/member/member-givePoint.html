@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>복지포인트지급</title>
+    <link rel="stylesheet" href="../../../static/common/css/header.css">
+    <link rel="stylesheet" href="../../../static/common/css/footer.css">
+    <link rel="stylesheet" href="../../../static/common/css/member.css">
+    <script src="../../src/static/include.js"></script>
+</head>
+
+<body>
+    <!-- header -->
+    <div data-include-html="./header_admin.html" class="include"></div>
+
+    <div class="container long">
+
+        <div class="navs long">
+
+            <div class="nav-menu"><a href="./member-view.html">회원조회</a></div>
+            <div class="nav-menu"><a href="./member-regist1.html">회원등록</a></div>
+            <div class="nav-menu"><a href="./member-permission.html">가입승인</a></div>
+            <div class="nav-menu"><b>복지포인트지급</b></div>
+            <div class="nav-menu"><a href="./member-givePointHistory1.html">복지포인트지급이력</a></div>
+        </div>
+
+        <div class="box">
+            <div class="section-title long">복지포인트 지급</div>
+
+            <div class="contents">
+
+                    <div class="search-list top">
+                        <input type="text" class="search-input">
+                        <button class="button-circle">검색</button>
+                    </div>
+
+                    
+
+                <!-- 제목행의 6,7,8 열에 필터 적용하기 -->
+                <table id="table-givepoint">
+                    <thead>
+                        <tr>
+                            <th class="checkbox-cell"><input type="checkbox" id="select-all"></th>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>이메일</th>
+                            <th>연락처</th>
+                            <th>부서
+                                <select id="filter-dept">
+                                    <option value="all">All</option>
+                                    <option value="dept1">영업</option>
+                                    <option value="dept2">인사</option>
+                                </select>
+                            </th>
+                            <th>직급</th>
+                            <th>근속연수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>T232010</td>
+                            <td>홍길동</td>
+                            <td>hong123@hielectronics.com</td>
+                            <td>010-1234-5678</td>
+                            <td>영업</td>
+                            <td>사원</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>P232011</td>
+                            <td>유관순</td>
+                            <td>yu123@hielectronics.com</td>
+                            <td>010-1234-5679</td>
+                            <td>영업</td>
+                            <td>대리</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>P232012</td>
+                            <td>김선달</td>
+                            <td>kim123@hielectronics.com</td>
+                            <td>010-2233-5678</td>
+                            <td>영업</td>
+                            <td>사원</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>P141100</td>
+                            <td>정중하</td>
+                            <td>jung123@hielectronics.com</td>
+                            <td>010-3456-7894</td>
+                            <td>인사</td>
+                            <td>과장</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell"><input type="checkbox"></td>
+                            <td>P232000</td>
+                            <td>아무개</td>
+                            <td>mugae@hielectronics.com</td>
+                            <td>010-2233-5678</td>
+                            <td>인사</td>
+                            <td>대리</td>
+                            <td>5</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="under-table">
+                    <div class="paging">
+                        <span>&lt;</span>
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>&gt;</span>
+                    </div>
+                </div>
+                <form action="" method="post" id="form-point">
+                    <div class="form-group2">
+                        <span>
+                            <label>선택 회원 수</label>
+                        </span>
+                        <span class="count">
+                            <span>nn</span><label>명</label>
+                        </span>
+                    </div>
+
+                    <div class="form-group2">
+                        <label for="reason">지급 사유</label>
+                        <select name="pointreason" id="">
+                            <option value="general">정기지급</option>
+                            <option value="special">특별지급</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group2">
+                        <label for="pointforeachmem">회원당 지급액</label>
+                        <input type="number" id=amount-input step="1000000" min="0" max="9000000">
+                        <span id="amount-summary"></span>
+                    </div>
+
+                    <div class="form-group2">
+                        <span>
+                            <label>지급액 합계</label>
+                        </span>
+                        <span class="count">
+                            <span>10,000,000</span><label>원</label>
+                        </span>
+                        <button class="button-square3 point">지급하기</button>
+                    </div>
+                </form>
+
+            </div> <!--컨텐츠-->
+
+        </div> <!--박스-->
+
+    </div> <!--컨테이너-->
+
+
+    <!-- footer -->
+    <div data-include-html="./footer.html" class="include"></div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let selectAllCheckbox = document.getElementById('select-all');
+            let everyCheckbox = document.querySelectorAll('tbody td.checkbox-cell input[type="checkbox"]');
+    
+            selectAllCheckbox.addEventListener('click', function () {
+                let isChecked = selectAllCheckbox.checked;
+    
+                everyCheckbox.forEach(function (checkbox) {
+                    checkbox.checked = isChecked;
+                });
+            });
+        });
+
+
+        //@회원당지급액 입력시 요약하여 보여주기
+        const amountInput = document.getElementById('amount-input');
+        const amountSummary = document.getElementById('amount-summary');
+
+        amountInput.addEventListener('input', updateAmountSummary);
+
+        function updateAmountSummary() {
+            const amount = amountInput.value;
+            const summary = formatAmountSummary(amount);
+            amountSummary.textContent = summary;
+        }
+
+        function formatAmountSummary(amount) {
+            const baekman = 1000000;
+            const cheonman = 10000000;
+
+            if (amount >= baekman) {
+                const summary1 = (amount / baekman);
+                return `${summary1} 백만원`;
+            }
+
+            if (amount >= cheonman) {
+                const summary2 = (amount / cheonman);
+                return `${summary2} 천만원`;
+            }
+            return `${amount}원`;
+        }
+
+
+
+        // @테이블 제목행의 6,7,8열에 필터 적용시키기 (일단 6번째 열만) (모든 행이 숨겨지는 문제 발생, 테이블 위치 문제도 해결해야)
+        const filter = document.getElementById("filter-dept")
+        filter.addEventListener('change', function() {
+            const filterValue = this.value; //<select>에서 선택된 값을 filterValue에 저장
+            const rows = document.querySelectorAll('#table-givepoint tbody tr'); //필터링대상 행들을 변수에 저장
+
+            rows.forEach(row => {
+                const columnValue = row.querySelector('td:nth-child(6)').textContent;
+                if(columnValue === filterValue || filterValue === 'all') {
+                    row.style.display = ''; //기본 css설정대로 행이 표시된다
+                } else {
+                    row.style.display = 'none'; //해당 행이 보여지지 않는다
+                }
+            });
+        });
+    
+    </script>
+</body>
+
+
+</html>

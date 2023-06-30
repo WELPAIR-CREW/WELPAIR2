@@ -1,8 +1,6 @@
 package com.hielectro.welpair.member.model.dto;
-
 import lombok.*;
-
-import java.util.Date;
+import java.sql.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,11 +9,11 @@ import java.util.Date;
 @ToString
 public class MemberDTO {
 
-    private String empNo;           // 사원번호
-    private String memPwd;          // 비밀번호
-    private Date registDate;        // 가입일
-    private int pointBalance;       // 포인트
-    private String memAuth;         // 권한
+    private String empNo;
+    private String memPwd;
+    private Date registDate;
+    private int pointBalance;
+    private String memAuth;
 
     private EmployeeDTO employee;
 

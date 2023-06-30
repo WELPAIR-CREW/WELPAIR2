@@ -1,26 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>main</title>
+    <link rel="stylesheet" href="/common/css/main.css">
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+
+    <script src="/common/js/static/include.js"></script>
 </head>
+
 <body>
-
-<a href="/sellproduct/product">테스트</a>
-<a href="/sellproduct/QnA">테스트</a>
-<a href="/sellproduct/review">테스트</a>
-
-<br>
-<br>
-
-<a href="./admin/inventory/admin_inventory">재고관리</a>
-<a href="/inventory/admin_inventory_register">2</a>
-<a href="/inventory/admin_inventory_search">3</a>
-
-<br>
-<br>
-
-
+<div data-include-html="/consumer/header_consumer" class="include"></div>
+<main>
+    <div class="main-banner">
+    </div>
+    <br><br>
+    <div class="product-list">
+        <ul>
+            <li class="product">
+                <a href="#">
+                    <img src="#" alt="">
+                </a> Product1
+            </li>
+            <li class="product">
+                <a href="#">
+                    <img src="#" alt="">
+                </a> Product2
+            </li>
+            <li class="product">
+                <a href="#">
+                    <img src="#" alt="">
+                </a> Product3
+            </li>
+            <li class="product">
+                <a href="#">
+                    <img src="#" alt="">
+                </a> Product4
+            </li>
+            <li class="product">
+                <a href="#">
+                    <img src="#" alt="">
+                </a> Product5
+            </li>
+        </ul>
+        <ul>
+            <li class="product">
+                <a href="#">
+                    <img src="#" alt="">
+                </a>
+                Product1
+            </li>
+            <li class="product">
+                <a href="#">
+                    <img src="#" alt="">
+                </a>
+                Product2
+            </li>
+            <li class="product">
+                <a href="#">
+                    <img src="#" alt="">
+                </a>
+                Product3
+            </li>
+            <li class="product">
+                <a href="#">
+                    <img src="#" alt="">
+                </a>
+                Product4
+            </li>
+            <li class="product">
+                <a href="#">
+                    <img src="#" alt="">
+                </a>
+                Product5
+            </li>
+        </ul>
+    </div>
+    <br><br><br><br><br>
+</main>
+<div data-include-html="/admin/footer" class="include"></div>
 </body>
-
 </html>

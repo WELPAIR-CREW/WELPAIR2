@@ -2,6 +2,8 @@ package com.hielectro.welpair.inventory.model.dto;
 
 import lombok.*;
 
+import java.sql.Date;
+
 @NoArgsConstructor
 @AllArgsConstructor
 //@RequiredArgsConstructor
@@ -13,8 +15,20 @@ public class StockDTO {
     private String stockNo;
     private String stockType;
     private String productCode;
-    private String stockDate;
+    private Date stockDate;
     private int stockAmount;
+    private String stockComment;
+
+    private CategoryDTO category;
     private String categoryCode;
-    private ProductDTO productDTO;
+
+    private ProductDTO product;
+//    private String productName;
+    private int productAmount;
+
+
+    private Date startDate;
+    private Date endDate;
+
+
 }

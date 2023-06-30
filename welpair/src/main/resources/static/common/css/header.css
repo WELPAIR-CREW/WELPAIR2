@@ -99,3 +99,9 @@ img[alt="cart"] {
 .header-category>div>span {
     margin: 0 30px;
 }
+
+.header-category a {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}

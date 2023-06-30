@@ -12,6 +12,9 @@ import com.hielectro.welpair.configuration.MybatisConfiguration;
 import com.hielectro.welpair.configuration.WelpairApplication;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SpringBootTest
 @ContextConfiguration(classes = {MybatisConfiguration.class, WelpairApplication.class})
 public class ProductServiceTests {
@@ -27,6 +30,14 @@ public class ProductServiceTests {
     @Test
     @DisplayName("리턴값의 Null 여부 확인")
     public void test2() {
-        assertNotNull(productService.findSellProductByPageNo(1));
+        Map<String, String> map = new HashMap<>();
+        assertNotNull(productService.selectProductList(map));
+    }
+
+    @Test
+    @DisplayName("리뷰 데이터를 불러오는지 여부 확인")
+    public void test3() {
+        assertNotNull(productService.selectReviewList());
+        System.out.println(productService.selectReviewList());
     }
 }

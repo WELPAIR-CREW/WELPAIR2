@@ -1,9 +1,10 @@
 package com.hielectro.welpair.configuration;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan("com.hielectro.welpair")
+@MapperScan(basePackages = "com.hielectro.welpair", annotationClass = Mapper.class)
 public class MybatisConfiguration {
 }
