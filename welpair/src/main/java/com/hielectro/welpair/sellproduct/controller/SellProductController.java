@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
+import com.hielectro.welpair.common.Pagination;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,8 +32,24 @@ public class SellProductController {
     }
 
     @GetMapping("review")
-    public String reviewLocation(Model model) {
-        List<ReviewManagerDTO> list = productService.selectReviewList();
+    public String reviewLocation(Model model, @RequestParam(required = false) String id,
+                                 @RequestParam(required = false) String name, @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
+        Map<String, Object> searchMap = new HashMap<>();
+        Map<String, Integer> paging = null;
+        searchMap.put("id", id);
+        searchMap.put("name", name);
+
+        if (Pagination.getLength() == 0) {
+            Pagination.init();
+            int result = productService.reviewSearchCount(searchMap);
+            paging = Pagination.paging(result, currentPageNo);
+        } else {
+            paging = Pagination.getParameter(currentPageNo);
+        }
+
+        model.addAttribute("paging", paging);
+        searchMap.put("pageNo", currentPageNo);
+        List<ReviewManagerDTO> list = productService.selectReviewList(searchMap);
         list.forEach(item -> {
             if (item.getContent().length() > 20) {
                 String content = item.getContent();
@@ -41,6 +58,7 @@ public class SellProductController {
                 item.setContent(subContent.concat("..."));
             }
         });
+
         model.addAttribute("list", list);
         return "admin/sellproduct/review";
     }

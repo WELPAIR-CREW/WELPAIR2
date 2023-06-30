@@ -110,6 +110,37 @@
         </if>
     </select>
 
+    <select id="reviewSearchCount" resultType="_int">
+        SELECT
+            COUNT(*)
+        FROM (
+                 SELECT ROWNUM AS RN
+                      , SELL_PRODUCT_ID
+                      , PRODUCT_NAME
+                      , BOARD_TITLE
+                      , BOARD_CONTENT
+                      , TO_DATE(BOARD_DATE, 'RRRR-MM-DD') as BOARD_DATE
+                      , TO_CHAR(BOARD_DATE, 'HH24:MI:ss') as BOARD_TIME
+                 FROM T_SELL_PRODUCT
+                          LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
+                          LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
+                          LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
+                          LEFT JOIN T_REVIEW USING (SELL_PAGE_NO)
+                          LEFT JOIN T_BOARD USING (BOARD_NO)
+                 WHERE 1=1
+                 <if test="id != '' and id != null">
+                   AND SELL_PRODUCT_ID = #{ id }
+                 </if>
+                 <if test="name != '' and name != null">
+                   AND PRODUCT_NAME = #{ name }
+                 </if>
+             )
+        WHERE BOARD_DATE IS NOT NULL
+        <if test="pageNo != '0' and pageNo != null">
+            AND RN &gt; ( (TO_NUMBER(#{ pageNo }) - 1) * 10)
+            AND RN &lt;= ( TO_NUMBER(#{ pageNo }) * 10)
+        </if>
+    </select>
     <select id="selectReviewList" resultMap="ReviewManagerDTO">
         SELECT
             *
@@ -127,8 +158,19 @@
                   LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
                   LEFT JOIN T_REVIEW USING (SELL_PAGE_NO)
                   LEFT JOIN T_BOARD USING (BOARD_NO)
+                  WHERE 1=1
+                  <if test="id != '' and id != null">
+                   AND SELL_PRODUCT_ID = #{ id }
+                  </if>
+                  <if test="name != '' and name != null">
+                   AND PRODUCT_NAME = #{ name }
+                  </if>
              )
         WHERE BOARD_DATE IS NOT NULL
+        <if test="pageNo != '0' and pageNo != null">
+            AND RN &gt; ( (TO_NUMBER(#{ pageNo }) - 1) * 10)
+            AND RN &lt;= ( TO_NUMBER(#{ pageNo }) * 10)
+        </if>
     </select>
 
     <delete id="sellProductDelete">

@@ -13,6 +13,7 @@ import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 public interface SellProductMapper {
     int sellProductSearchCount(Map<String, String> search);
     List<SellProductDetailDTO> selectProductList(Map<String, String> sellProductCode);
-    List<ReviewManagerDTO> selectReviewList();
+    List<ReviewManagerDTO> selectReviewList(Map<String, Object> searchMap);
     int sellProductDelete(String id);
+    int reviewSearchCount(Map<String, Object> searchMap);
 }

@@ -29,8 +29,8 @@ public class SellProductServiceImpl implements SellProductService {
     }
 
     @Override
-    public List<ReviewManagerDTO> selectReviewList() {
-        return productMapper.selectReviewList();
+    public List<ReviewManagerDTO> selectReviewList(Map<String, Object> searchMap) {
+        return productMapper.selectReviewList(searchMap);
     }
 
     @Override
@@ -48,5 +48,10 @@ public class SellProductServiceImpl implements SellProductService {
         }
 
         return result;
+    }
+
+    @Override
+    public int reviewSearchCount(Map<String, Object> searchMap) {
+        return productMapper.reviewSearchCount(searchMap);
     }
 }

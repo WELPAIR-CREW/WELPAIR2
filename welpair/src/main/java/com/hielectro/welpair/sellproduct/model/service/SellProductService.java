@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 public interface SellProductService {
     public int sellProductSearchCount(Map<String, String> search);
     public List<SellProductDetailDTO> selectProductList(Map<String, String> productId);
-    List<ReviewManagerDTO> selectReviewList();
+    List<ReviewManagerDTO> selectReviewList(Map<String, Object> searchMap);
 
     @Transactional(rollbackFor = {Exception.class})
     int sellProductDelete(List<String> request) throws Exception;
+
+    int reviewSearchCount(Map<String, Object> searchMap);
 }
