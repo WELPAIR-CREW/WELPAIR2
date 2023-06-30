@@ -89,7 +89,7 @@ public class SellProductController {
         model.addAttribute("paging", paging);
         searchMap.put("pageNo", currentPageNo);
         List<QnAManagerDTO> list = productService.selectQnAList(searchMap);
-        
+
         list.forEach(item -> {
             if (item.getContent().length() > 20) {
                 String content = item.getContent();

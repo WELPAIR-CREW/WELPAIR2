@@ -47,6 +47,7 @@
     <resultMap id="ReviewManagerDTO" type="com.hielectro.welpair.board.model.dto.ReviewManagerDTO">
         <id property="no" column="BOARD_NO"/>
         <result property="pageNo" column="SELL_PAGE_NO"/>
+        <result property="name" column="PRODUCT_NAME"/>
         <result property="title" column="BOARD_TITLE"/>
         <result property="content" column="BOARD_CONTENT"/>
         <result property="date" column="BOARD_DATE"/>
