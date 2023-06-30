@@ -47,13 +47,15 @@
 
                 <button id="toggleButton" class="toggle" onclick="location.href='/member/member-view?type=Y'">퇴사/계약만료만 조회</button>
 
-                <button class="button-square1">계정삭제</button>
+<!--                <button class="button-square1" onclick="location.href='/member/deleteMember?EmpNo=${empNo}'">계정삭제</button>-->
+<!--                <button class="button-square1 delete-member" th:onclick="|location.href='@{/member/deleteMember?EmpNo=}${member.empNo}'|">계정삭제2</button>-->
+                <button class="button-square1 delete-member" th:onclick="|javascript:deleteMember();|">계정삭제2</button>
             </div>
 
             <table>
                 <thead>
                 <tr>
-                    <th class="checkbox-cell"><input type="checkbox" id="select-all"></th>
+                    <th class="checkbox-cell"><input type="checkbox" id="select-all" onclick="allChecked()"></th>
                     <th>등록일</th>
                     <th>퇴사여부</th>
                     <th>아이디</th>
@@ -64,7 +66,7 @@
                 </thead>
                 <tbody> <!-- 10행. 페이징처리 필요-->
                 <tr th:each="member:${memberList}">
-                    <td class="checkbox-cell"><input type="checkbox"></td>
+                    <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${member.empNo}"></td>
                     <td th:text="${member.registDate}"></td>
                     <td th:text="${member.employee.isExpire}"></td>
                     <td th:text="${member.empNo}"></td>
@@ -125,25 +127,102 @@
 
 <script>
 
+    function allChecked(target) {
+        //전체 체크박스
+        const checkbox = document.getElementById('select-all');
+        //전체 체크박스 체크여부
+        const is_checked = checkbox.checked;
 
-    <!-- @전체선택 체크박스 -->
-    document.addEventListener('DOMContentLoaded', function () {
-        let selectAllCheckbox = document.getElementById('select-all');
-        let everyCheckbox = document.querySelectorAll('tbody td.checkbox-cell input[type="checkbox"]');
+        //전체 체크박스 체크여부 true면 일반 체크박스 전부 체크되게
+        if (is_checked) {
+            chkAllChecked()
+        } else {
+            //전체 해제되게
+            chkAllUnChecked()
+        }
+    }
 
-        selectAllCheckbox.addEventListener('click', function () {
-            var isChecked = selectAllCheckbox.checked;
-
-            everyCheckbox.forEach(function (checkbox) {
-                checkbox.checked = isChecked;
-            });
+    //전체 체크
+    function chkAllChecked() {
+        document.querySelectorAll(".chk").forEach(function(v,i){
+            v.checked = true;
         });
-    });
+    }
+
+    //전체 해제
+    function chkAllUnChecked() {
+        document.querySelectorAll(".chk").forEach(function (v,i) {
+            v.checked = false;
+        })
+    }
+
+    //개별 체크박스
+    function chkClicked() {
+        //체크박스 수
+        const allCount = document.querySelectorAll(".chk").length;
+        //체크된 체크박스의 수 구하기
+        const query = 'input[name="chk"]:checked'
+        const selectedElements = document.querySelectorAll(query);
+        const selectedElementsCnt = selectedElements.length;
+        console.log('체크된 체크박스의 수 : ' + selectedElementsCnt);
+        //두 수가 같으면 전체 체크박스 체크되게함
+        if(allCount == selectedElementsCnt) {
+            document.getElementById('select-all').checked = true;
+        }
+        //다르면 전체 체크박스 해제
+        else {
+            document.getElementById('select-all').checked = false;
+        }
+    }
+
+
+    //계정삭제
+    function deleteMember() {
+        //체크된항목
+        const query = 'input[name="chk"]:checked'
+        const selectedElements = document.querySelectorAll(query)
+        //체크된 항목 수
+        const selectedElementsCnt = selectedElements.length;
+        console.log('계정삭제를 위해 체크된 항목 수 확인 : ' + selectedElementsCnt)
+
+        if(selectedElementsCnt == 0) {
+            alert("삭제할 계정을 선택해주세요.")
+            return false;
+        }
+        else {
+            if(confirm("정말 삭제하시겠습니까?")) {
+                //배열 생성
+                const arr = new Array(selectedElementsCnt);
+
+                document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
+                                                                    //v:체크된 name=chk인 input태그, i:인덱스
+                    arr[i] = v.value; //input태그의 value = ${member.empNo}를 배열에 저장
+                });
+
+                const form = document.createElement('form'); //form요소를 만든다
+                form.setAttribute('method', 'post');
+                form.setAttribute('action', '/member/deleteMember');
+
+                let input1 = document.createElement('input');
+                input1.setAttribute("type", "hidden");
+                // input1.setAttribute("name", empNos);
+                input1.setAttribute("value", arr);
+                form.appendChild(input1); //form요소에 input자식요소(숨겨진)를 추가
+                console.log('----------form요소 생성되어 input요소가 하위에 추가됐는지 확인')
+                console.log(form);
+                document.body.appendChild(form); //form요소가 바디에 추가됨
+                form.submit(); //제출
+            }
+        }
+    }
+
+
+
+
 
     // @토글버튼 스크립트
     let tButton = document.getElementById('toggleButton');
     let isClicked = false;
-
 
     function toggleButton() {
         isClicked = !isClicked;
@@ -151,8 +230,27 @@
         //isClicked가 true면 clicked 클래스(CSS적용을 위한 클래스) 추가
         //isClicked가 false면 clicked 클래스 제거
         tButton.classList.toggle('clicked', isClicked);
-        }
     }
+
+
+    //계정 삭제
+    // function deleteMember() {
+    //     const empNo = [[ ${empNo} ]];
+    //
+    //     if (!confirm(empNo + '계정을 삭제하시겠습니까?')) {
+    //         return false;
+    //     }
+    //
+    //     const formHtml =
+    //         `<form id="deleteForm" action="/member-view" method="post">
+    //             <input type="hidden" id="empNo" name="empNo" value="${member.empNo}" />
+    //         </form>`;
+    //     const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+    //     const form = doc.body.firstChild;
+    //     document.body.append(form);
+    //     document.getElementById('deleteForm').submit();
+    // }
+
 </script>
 
 </body>

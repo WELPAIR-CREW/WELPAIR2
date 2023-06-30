@@ -2,17 +2,16 @@ package com.hielectro.welpair.member.controller;
 
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.service.MemberService;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/member")
@@ -100,6 +99,30 @@ public class MemberController {
 
         return model;
     }
+
+    //계정삭제
+//    @DeleteMapping("/deleteMember")
+//    public ResponseEntity<List<MemberDTO>> deleteMember(@RequestBody MemberDTO memberDTO) throws DeleteMemberException {
+//
+////        List<MemberDTO> memberList = memberService.deleteMember(memberDTO, SelectCriteria);
+////        return ResponseEntity.ok(memberList);
+//    }
+
+    @PostMapping("/deleteMember")
+    public String deleteMember(@ModelAttribute(value = "value") String arr) throws DeleteMemberException {
+                                    //폼으로 받을때는 @RequestParam 아님
+        System.out.println("확인 : " + arr);
+
+//        memberService.deleteMember(arr);
+
+        return "redirect:/member/member-view"; //삭제 후 회원조회 페이지로 리다이렉트
+    }
+
+
+
+
+
+
 
 
 

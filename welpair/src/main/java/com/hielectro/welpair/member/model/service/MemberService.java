@@ -1,8 +1,10 @@
 package com.hielectro.welpair.member.model.service;
 
+import com.hielectro.welpair.member.controller.DeleteMemberException;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 
+import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Map;
 
@@ -15,4 +17,10 @@ public interface MemberService {
     //1-2. 회원조회 - 전체, 퇴사 회원수
     int totalMemberCount(Map<String, String> searchMap);
     int expiredMemberCount(Map<String, String> searchMap);
+
+    //계정 삭제
+//    List<MemberDTO> deleteMember(MemberDTO memberDTO, SelectCriteria selectCriteria) throws DeleteMemberException;
+//    void deleteMember(MemberDTO memberDTO) throws DeleteMemberException;
+//    void deleteMember(MemberDTO memberDTO, List<String> empNos) throws DeleteMemberException;
+    void deleteMember(List<String> arr) throws DeleteMemberException;
 }

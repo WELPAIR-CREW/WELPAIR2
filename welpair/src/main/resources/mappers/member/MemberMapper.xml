@@ -73,7 +73,7 @@
     </select>
 
 
-<!-- 전체회원수 조회 -->
+<!-- 전체회원수, 퇴사회원수 조회 -->
     <select id="totalMemberCount" resultType="_int" parameterType="hashmap">
         SELECT
                 COUNT(*)
@@ -85,6 +85,12 @@
                  JOIN T_EMPLOYEE E on M.EMP_NO = E.EMP_NO
         WHERE E.IS_EXPIRE = 'Y'
     </select>
-
-
+    
+    
+<!-- 계정 삭제 -->
+    <delete id="deleteMember" parameterType="String">
+        DELETE
+        FROM TBL_MEMBER M
+        WHERE M.EMP_NO = #{empNo}
+    </delete>
 </mapper>
