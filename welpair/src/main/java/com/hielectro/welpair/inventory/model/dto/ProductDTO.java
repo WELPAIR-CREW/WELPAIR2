@@ -21,6 +21,7 @@ public class ProductDTO {
     private String categoryCode;
 
     private CategoryDTO category;
+
     private List<ProductDTO> productList;
     private List<StockDTO> StockList;
 

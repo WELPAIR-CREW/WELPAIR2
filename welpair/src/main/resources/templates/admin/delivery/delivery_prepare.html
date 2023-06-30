@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <title>상품준비중</title>
     <link rel="stylesheet" href="/common/css/footer.css">
-    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/member.css">
-    
-    <script src="../../src/static/include.js"></script>
+
+    <script src="../common/js/static/include.js"></script>
 </head>
 <body>
 
-    <div data-include-html="./header_admin.html" class="include"></div>
+    <div data-include-html="/admin/header_admin" class="include"></div>
 
     <div class="container">
         
     <div class="navs">
 
-        <div class="nav-menu">배송 전체 현황</a></div>
+        <div class="nav-menu"><a href="/delivery/delivery_main">배송 전체 현황</a></a></div>
         <div class="nav-menu"><b>상품준비중</b></div>
-        <div class="nav-menu">배송중</a></div>
-        <div class="nav-menu">배송완료</a></div>
+        <div class="nav-menu"><a href="/delivery/delivery_transit">배송중</a></a></div>
+        <div class="nav-menu"><a href="/delivery/delivery_complete">배송완료</a></a></div>
     </div>
 
     <section>
@@ -200,7 +200,6 @@
     </p>
     </div>
 
-    </section>
-    <div data-include-html="./footer.html" class="include"></div>
+    <div data-include-html="/admin/footer" class="include"></div>
 </body>
 </html>

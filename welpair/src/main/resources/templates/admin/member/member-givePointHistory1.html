@@ -1,29 +1,32 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>복지포인트지급이력</title>
-    <link rel="stylesheet" href="../../../static/common/css/header.css">
-    <link rel="stylesheet" href="../../../static/common/css/footer.css">
-    <link rel="stylesheet" href="../../../static/common/css/member.css">
-    <script src="../../src/static/include.js"></script>
+    <title>회원조회</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/main.css">
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/member.css">
+    <script src="/common/js/static/include.js"></script>
 </head>
 
 <body>
     <!-- header -->
-    <div data-include-html="./header_admin.html" class="include"></div>
+    <div data-include-html="/admin/header_admin" class="include"></div>
 
     <div class="container">
 
         <div class="navs">
 
-            <div class="nav-menu"><a href="./member-view.html">회원조회</a></div>
-            <div class="nav-menu"><a href="./member-regist1.html">회원등록</a></div>
-            <div class="nav-menu"><a href="./member-permission.html">가입승인</a></div>
-            <div class="nav-menu"><a href="./member-givePoint.html">복지포인트지급</a></div>
+            <div class="nav-menu"><a href="member-view">회원조회</a></div>
+            <div class="nav-menu"><a href="regist">회원등록</a></div>
+            <div class="nav-menu"><a href="permission">가입승인</a></div>
+            <div class="nav-menu"><a href="givePoint">복지포인트지급</a></div>
             <div class="nav-menu"><b>복지포인트지급이력</b></div>
         </div>
 
@@ -35,7 +38,7 @@
                 <div class="small-title">&#8251 요약조회</div>
 
                 <div class="over-table2">
-                    <button class="button-circle"">전체</button>
+                    <button class="button-circle">전체</button>
                     <button class=" button-circle">6개월</button>
 
                     <img id="calendar" src="../../img/calendar.png" alt="달력아이콘">
@@ -189,7 +192,7 @@
 
 
     <!-- footer -->
-    <div data-include-html="./footer.html" class="include"></div>
+    <div data-include-html="/admin/footer" class="include"></div>
 
 
 </body>

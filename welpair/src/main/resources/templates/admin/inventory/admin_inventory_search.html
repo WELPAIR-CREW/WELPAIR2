@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/inventory.css">
     <script src="/common/js/static/include.js"></script>
-
+    <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 </head>
 
@@ -52,7 +52,7 @@
                         </span>
                         <span class="section-historySearch-span">등록구분
                             <select id="stockType" class="section-historySearch-input option1">
-                                <option value="stockTypeDefalut" id="stockTypeDefalut">선택</option>
+                                <option id="stockTypeDefalut" value="">선택</option>
                                 <option name="invenIn" value="입고">입고</option>
                                 <option name="invenOut" value="출고">출고</option>
                             </select>
@@ -109,59 +109,81 @@
     <!-- footer -->
     <div data-include-html="/admin/footer" class="include"></div>
 
+    <!-- 스크립트 시작-->
     <script th:inline="javascript">
+
+        // 날짜 기본값 반영
+        let today = new Date();
+        let startDate = new Date();
+        startDate.setDate(today.getDate() - 7);
+
+        let startDateString = startDate.toISOString().split('T')[0];
+        let endDateString = today.toISOString().split('T')[0];
+
+
+        $("#startDate").val(startDateString);
+        $("#endDate").val(endDateString);
+
 
         // 검색 버튼
         $("#historySearch").click(function (){
 
-            let productCode = $("#productCode").val();
-            let productName = $("#productName").val();
-            let categoryCode = $("#categoryCode").val();
+            let productCode = $("#productCode").val().toUpperCase();
+            let productName = $("#productName").val().toUpperCase();
             let stockComment = $("#stockComment").val();
-            let stockType = $("#stockType").val();
+            let stockTypeDefalut = $("#stockType").val();
             let startDate = $("#startDate").val();
             let endDate = $("#endDate").val();
 
-            let data = {
-                productCode : productCode,
-                productName : productName,
-                categoryCode : categoryCode,
-                stockComment : stockComment,
-                stockType : stockType,
-                // startDate : startDate,
-                endDate : endDate
-            };
+                let data = {
+                    productCode: productCode,
+                    productName: productName,
+                    stockComment: stockComment,
+                    stockType: stockTypeDefalut,
+                    startDate: startDate,
+                    endDate: endDate
+                };
+            if (productCode != "" || productName != "" || stockComment != "" || stockTypeDefalut != "" || startDate != "" ||  endDate != "") {
 
-            $.ajax({
-                url: "/inventory/admin_inventory_search",
-                data : data,
-                type : 'post',
-                success: function (data){
+                console.log(data);
+                $.ajax({
 
-                    $("#searchResultTable tbody").empty();
+                    url: "/inventory/admin_inventory_search",
+                    data: data,
+                    type: 'post',
+                    success: function (data) {
+                        console.log(data);
 
-                    $.each(data, function (index, stock) {
-                        let row = $("<tr></tr>");
-                        row.append("<td>" + stock.stockNo + "</td>");
-                        row.append("<td>" + stock.productCode + "</td>");
-                        row.append("<td>" + stock.product.productName + "</td>");
-                        row.append("<td>" + stock.stockType + "</td>");
-                        row.append("<td>" + stock.stockDate + "</td>");
-                        row.append("<td>" + stock.stockAmount + "</td>");
-                        row.append("<td>" + stock.stockComment + "</td>");
-                        row.append("<td></td>");
+                        $("#searchResultTable tbody").empty();
 
-                        // row.append("<td>" + stock.product.productAmount+ "</td>");
-                        $("#searchResultTable tbody").append(row);
-                    });
-                },
-                error: function (error) {
-                    alert(error);
-                }
-            });
+                        $.each(data, function (index, stock) {
+                            console.log(data)
+                            let row = $("<tr></tr>");
+                            row.append("<td>" + stock.stockNo + "</td>");
+                            row.append("<td>" + stock.productCode + "</td>");
+                            row.append("<td>" + stock.product.productName + "</td>");
+                            row.append("<td>" + stock.stockType + "</td>");
+                            row.append("<td>" + stock.stockDate + "</td>");
+                            row.append("<td>" + stock.stockAmount + "</td>");
+                            row.append("<td>" + stock.product.productAmount + "</td>");
+                            row.append("<td>" + stock.stockComment + "</td>");
+
+                            $("#searchResultTable tbody").append(row);
+                        });
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                });
+            } else {
+                alert("최소 1개 이상의 옵션 입력해야 함")
+            }
         });
 
-
+        // 테이블 정렬
+        $(document).ready(function() {
+            $('#searchResultTable').DataTable();
+        });
     </script>
 </body>
 </html>

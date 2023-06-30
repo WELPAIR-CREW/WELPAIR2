@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hielectro.welpair.delivery.model.dao.deliveryDAO">
+
+
+    <!-- deliveryDTO -->
+    <resultMap id="deliveryDTO" type="com.hielectro.welpair.delivery.model.dto.DeliveryDTO">
+        <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="driverId" column="DRIVER_ID"/>
+        <result property="deliveryStatus" column="DELIVERY_STATUS"/>
+    </resultMap>
+
+    <!-- deliveryStockDTO -->
+    <resultMap id="deliveryStockDTO" type="com.hielectro.welpair.delivery.model.dto.DeliveryStockDTO">
+        <id property="stockNo" column="STOCK_NO"/>
+        <result property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+    </resultMap>
+
+    <!-- driverDTO -->
+    <resultMap id="driverDTO" type="com.hielectro.welpair.delivery.model.dto.DriverDTO">
+        <id property="driverId" column="DRIVER_ID"/>
+        <result property="driverName" column="DRIVER_NAME"/>
+        <result property="driverPhone" column="DRIVER_PHONE"/>
+
+        <!-- 2. DriverDTO에서 담지 못하는 정보에 대해 담을 수 있는 객체를 지정 -->
+        <!-- List 형식으로 받을 것이기 때문에 collection 이용
+             1대 1일 경우에는 association 이용
+        -->
+        <collection property="delivery" resultMap="deliveryDTO"/>
+    </resultMap>
+
+    <select id="deliveryDriver" resultMap="driverDTO">
+        SELECT
+               TR.DRIVER_ID
+             , TR.DRIVER_NAME
+             , TR.DRIVER_PHONE
+             , TE.PRODUCT_ORDER_NO
+             , TE.DRIVER_ID
+             , TE.DELIVERY_STATUS
+          FROM T_DRIVER TR
+          JOIN T_DELIVERY TE
+            ON TR .DRIVER_ID = TE.DRIVER_ID
+    </select>
+</mapper>

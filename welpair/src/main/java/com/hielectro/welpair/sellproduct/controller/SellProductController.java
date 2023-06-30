@@ -1,18 +1,25 @@
 package com.hielectro.welpair.sellproduct.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/sellproduct")
 public class SellProductController {
     private final SellProductServiceImpl productService;
+    private final int limit = 10;
 
     public SellProductController(SellProductServiceImpl productService) {
         this.productService = productService;
@@ -23,36 +30,58 @@ public class SellProductController {
         return "admin/sellproduct/" + url;
     }
 
-    @GetMapping(value = "list/{pageNo}", produces = "application/json;charset=utf-8")
+    @GetMapping("review")
+    public String reviewLocation(Model model) {
+        List<ReviewManagerDTO> list = productService.selectReviewList();
+        list.forEach(item -> {
+            if (item.getContent().length() > 20) {
+                String content = item.getContent();
+                String subContent = content.substring(0, 20);
+
+                item.setContent(subContent.concat("..."));
+            }
+        });
+        model.addAttribute("list", list);
+        return "admin/sellproduct/review";
+    }
+
+    @PostMapping(value = "sellProductListAPI", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public List<SellProductDTO> getProductList(@PathVariable int pageNo) {
-        List<SellProductDTO> sellProductList = productService.findSellProductByPageNo(pageNo);
+    public List<SellProductDetailDTO> sellProductList(@RequestBody Map<String, String> request) {
+        System.out.println("request : " + request);
+        List<SellProductDetailDTO> sellProductList = productService.selectProductList(request);
         System.out.println(sellProductList);
         return sellProductList;
     }
 
-    @PostMapping("totalCount")
+    @PostMapping(value = "sellProductCountAPI", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public int getSellProductCount() {
-        int result = productService.sellProductTotalCount();
-        System.out.println(result);
-        return result;
+    public Map<String, Integer> sellProductCount(@RequestBody(required = false) Map<String, String> request) {
+        int result = productService.sellProductSearchCount(request);
+        Map<String, Integer> response = pagination(result);
+
+        return response;
     }
 
-    @PostMapping("search")
+    @PostMapping("sellProductDeleteAPI")
     @ResponseBody
-    public List<SellProductDTO> findSellProductByCode(@RequestBody Map<String, String> request) {
-        return productService.findSellProductByCode(request);
-    }
-
-    @PostMapping("delete")
-    @ResponseBody
-    public int delete(@RequestBody List<String> request) {
+    public int sellProductDelete(@RequestBody List<String> request) {
         System.out.println(request);
         try {
-            return productService.delete(request);
+            return productService.sellProductDelete(request);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Map<String, Integer> pagination(int length) {
+        Map<String, Integer> response = new HashMap<>();
+        int maxPageNo = (int) Math.ceil((double) length / limit);
+
+        response.put("maxPageNo", maxPageNo);
+        response.put("startPageNo", 1);
+        response.put("endPageNo", 5);
+
+        return response;
     }
 }

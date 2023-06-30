@@ -26,4 +26,6 @@ public interface InventoryDAO {
 
     /* 3-1 */
     List<StockDTO> historySearch(StockDTO stock);
+
+    void stockRegistUpdate(String productCode, int stockAmount);
 }
