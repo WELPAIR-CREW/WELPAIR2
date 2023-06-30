@@ -76,8 +76,6 @@
             <version>1.16</version>
         </dependency>
 
-
-
         <!-- https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect -->
         <dependency>
             <groupId>nz.net.ultraq.thymeleaf</groupId>

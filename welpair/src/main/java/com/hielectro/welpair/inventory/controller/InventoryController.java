@@ -119,9 +119,10 @@ public class InventoryController {
      * 2-2. 입출고 등록
      */
     @PostMapping("stockRegist")
-    public ModelAndView stockRegist (ModelAndView mv, @RequestBody List<StockDTO> stockList
+    @ResponseBody
+    public Map<String, String> stockRegist (@RequestBody List<StockDTO> stockList
                                     , RedirectAttributes rttr, Locale locale){
-
+        Map<String, String> mv = new HashMap<>();
         System.out.println("-------------컨트롤러 2-2 in -------------");
         System.out.println("stockList = " + stockList);
         System.out.println("locale = " + locale);
@@ -139,39 +140,24 @@ public class InventoryController {
 
         System.out.println("result = " + result);
         if (result > 0) {
-            rttr.addFlashAttribute("resultMessage", "등록 성공" + result + "개 등록");
-            System.out.println("-------------컨트롤러 2-2 out -------------");
-            mv.addObject( "resultMessage","등록 성공" + result + "개 등록");
+            rttr.addFlashAttribute("resultMessage", "success");
+            mv.put( "resultMessage","success");
         } else if (result == -1) {
             rttr.addFlashAttribute("resultMessage", "출고 등록 실패-수량 부족");
-            mv.addObject("resultMessage", "fail");
+            mv.put("resultMessage", "fail");
 
         } else {
             rttr.addFlashAttribute("resultMessage", "등록 실패");
-            mv.addObject("resultMessage", "fail");
+            mv.put("resultMessage", "error");
         }
 
-        mv.setViewName("redirect:/inventory/admin_inventory_register");
+        System.out.println("Result message: " + mv.get("resultMessage"));
+
+            System.out.println("-------------컨트롤러 2-2 out -------------");
 
         return mv;
 
     }
-
-    @RequestMapping("admin_inventory_register")
-    public void registAlert(HttpServletRequest request) {
-
-        Map<String, ?> paramMap = RequestContextUtils.getInputFlashMap(request);
-        String message = null;
-
-        if (paramMap != null) {
-            message = (String) paramMap.get("resultMessage");
-        }
-    }
-
-
-
-
-
 
     @GetMapping("admin_inventory_search")
     public String StockhistorySearch() {

@@ -147,6 +147,18 @@
 --            AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
     </select>
 
+    <update id="cartAmountChange" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
+        UPDATE T_CART_SELL_PRODUCT
+           SET CART_AMOUNT = #{cartAmount}
+         WHERE CART_NO = (
+                            SELECT B.CART_NO
+                            FROM T_CART B
+                            WHERE B.EMP_NO = #{cart.empNo}
+                         )
+          AND SELL_PRODUCT_ID = #{sellProductId}
+    </update>
+
+
 
 
 </mapper>

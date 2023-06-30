@@ -2,17 +2,16 @@ package com.hielectro.welpair.member.controller;
 
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.service.MemberService;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/member")
@@ -100,6 +99,21 @@ public class MemberController {
 
         return model;
     }
+
+    @PostMapping("/deleteMember")
+    public String deleteMember(@RequestParam ArrayList<String> empNos) throws DeleteMemberException {
+
+        System.out.println("체크박스 체크된 사번의 배열이 잘 들어오는지 확인 : " + empNos);
+
+        memberService.deleteMember(empNos);
+
+        return "redirect:/member/member-view"; //삭제 후 회원조회 페이지로 리다이렉트
+    }
+
+
+
+
+
 
 
 

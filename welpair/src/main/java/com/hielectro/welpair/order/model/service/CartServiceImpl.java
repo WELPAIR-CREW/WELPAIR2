@@ -49,6 +49,7 @@ public class CartServiceImpl implements CartService {
         return cartMapper.isSellProductById(sellProductId);
     }
 
+
     @Override
     public int checkoutCartProductById(CartSellProductDTO cartSellProduct) {
         return cartMapper.checkoutCartProductById(cartSellProduct);
@@ -57,6 +58,13 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<CartGeneralDTO> cartAllInfoSelect(String empNo) {
         return cartMapper.cartAllInfoSelect(empNo);
+    }
+
+    @Transactional
+    @Override
+    public boolean cartAmountChange(CartSellProductDTO cartSellProduct) {
+        System.out.println("서비스 들어왓니????");
+        return cartMapper.cartAmountChange(cartSellProduct) > 0 ? true : false;
     }
 
 }

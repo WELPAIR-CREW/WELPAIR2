@@ -1,7 +1,6 @@
 package com.hielectro.welpair.order.controller;
 
 
-import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.ValueExp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +26,7 @@ public class CartController {
     private final CartService cartService;
 
 
-    private CartController( CartService cartService){
+    private CartController(CartService cartService) {
         this.cartService = cartService;
     }
 
@@ -39,15 +37,16 @@ public class CartController {
 //    }
 
     @GetMapping("/cart/add")
-    public String addCart(){return "/consumer/order/add";}
+    public String addCart() {
+        return "/consumer/order/add";
+    }
 
 
     // 카트 인서트용 메소드
     @ResponseBody
     @PostMapping(value = "/cart/add", produces = "application/json; charset=utf-8")
     public Map<String, String> addCart(@ModelAttribute CartSellProductDTO cartSellProduct,
-                                       @RequestParam("empNo") String empNo)
-    {
+                                       @RequestParam("empNo") String empNo) {
         // 카트별판매상품dto를 통해 매상품id와 수량 정보와, 회원정보ID가 넘어온다.
         System.out.println("선택상품 : " + cartSellProduct);
 
@@ -59,12 +58,12 @@ public class CartController {
                 cartService.isSellProductById(cartSellProduct.getSellProductId());
 
         // 1. 정상 수량인지 체크(프론트에서도 검증)
-        if(cartSellProduct.getCartAmount() < 1 ){
+        if (cartSellProduct.getCartAmount() < 1) {
             resultMap.put("message", "수량이 잘못되었습니다.");
             return resultMap;
         }
         // 2. 판매상품 ID를 통해 현재 판매중인 상품인지 조회
-        else if(sellProduct.getIsSell().equals('N')){
+        else if (sellProduct.getIsSell().equals('N')) {
             resultMap.put("message", "판매중인 상품이 아닙니다.");
             return resultMap;
         }
@@ -76,7 +75,7 @@ public class CartController {
             log.info("cart");
 
             // 장바구니 미생성 회원
-            if(cart == null) {
+            if (cart == null) {
                 // 장바구니 테이블을 생성한다.
                 cartService.makeCart(empNo);
                 // 다시 장바구니 정보 조회
@@ -90,7 +89,7 @@ public class CartController {
 
             // 장바구니에 같은 상품을 담은 경우
             int checkPrd = cartService.checkoutCartProductById(cartSellProduct);
-            if(checkPrd > 0 ){
+            if (checkPrd > 0) {
                 resultMap.put("message", "이미 장바구니에 존재하는 상품입니다.");
                 return resultMap;
             }
@@ -101,6 +100,7 @@ public class CartController {
                 //장바구니 담기 성공시
                 System.out.println("장바구니 담기 성공1111");
                 resultMap.put("message", "장바구니 담기에 성공하였습니다.");
+
                 return resultMap;
 
             } else {   // 실패
@@ -112,13 +112,12 @@ public class CartController {
         }
     }
 
-
     // 회원 장바구니 불러오기 메소드
     @GetMapping("cart")
     public String cartList(Model model
             , @AuthenticationPrincipal User user
             , @RequestParam(value = "empNo", required = false) String empNo
-    ){
+    ) {
 
         // 1. 회원 정보 받아서 해당 회원의 장바구니 조회
 //        System.out.println(user);
@@ -131,39 +130,58 @@ public class CartController {
         // 3. 장바구니 상품정보 모델에 담아 뷰로 전달
         model.addAttribute("cartList", cartList);
 
-//        for(CartGeneralDTO cart : cartList){
-////            cart.getSellPage().getTitle()
-////            exptPrice += cart.getTotalPrice();
-////            exptDeliveryPrice += cart.getCartSellProduct().getDeliveryPrice();
-//        }
+        for (CartGeneralDTO cart : cartList) {
 
-        return "consumer/order/cart.view";
+            priceMaker(cart);
 
-    }
-
-
-    // 수량변경시 가격변동 등 비동기처리 메소드
-    @PostMapping("cart/amount-change")
-    public String cartAmountChange(){
-
-
-//
-//        // 예상결제금액 : 단품별 합계 금액의 총 합계
-//        int exptPrice = 0;
-//        int exptDeliveryPrice = 0;
-//
-//        for(CartGeneralDTO cart : cartList){
-//            exptPrice += cart.getTotalPrice();
-//            exptDeliveryPrice += cart.getCartSellProduct().getDeliveryPrice();
-//        }
-//
-//        int exptTotalPrice = exptPrice + exptDeliveryPrice;
-//
+        }
 
         return "consumer/order/cart";
+
     }
 
+ //// json객체로 넘기겠다(포워드, 리다이렉트아님, 리로드안됨)
+    // 수량변경시 가격변동 등 비동기처리 메소드
+    @PostMapping("cart/amount-change")
+    @ResponseBody
+    public boolean cartAmountChange(@ModelAttribute CartSellProductDTO cartSellProduct, Model model
+            , @RequestParam(value = "empNo", required = false) String empNo) {
+
+        System.out.println(empNo);
+
+        cartSellProduct.setCart(new CartDTO());
+        cartSellProduct.getCart().setEmpNo(empNo);
+        System.out.println();
+        boolean result = cartService.cartAmountChange(cartSellProduct);
+        System.out.println(result);
 
 
 
+
+        return result;
+    }
+
+    // 단품 금액 생성 메소드
+    public void priceMaker(CartGeneralDTO cart) {
+
+        // 1품목 가격 (가격 * 수량)
+        cart.setPrice((int)(cart.getProduct().getProductPrice() * ((1.0 - cart.getSellProduct().getDiscount()))) * cart.getCartSellProduct().getCartAmount());
+        // 1품목 총합계 (1품목 가격 + 배송비)
+        cart.setTotalPrice(cart.getPrice() + cart.getCartSellProduct().getDeliveryPrice());
+
+    }
+
+    // 예상 결제금액 생성메소드(체크박스 선택시 바뀐다)
+    public void exptPriceMaker(CartGeneralDTO cart) {
+        // 선택 총 합계
+//        private int exptPrice;
+//        private int exptDeliveryPrice;
+//        private int exptTotalPrice;
+//        int exptPrice = cart.getTotalPrice();
+//        int exptDeliveryPrice = cart.getCartSellProduct().getDeliveryPrice();
+    }
 }
+
+
+
+
