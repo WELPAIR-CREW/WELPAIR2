@@ -34,13 +34,13 @@ public class SellProductServiceImpl implements SellProductService {
     }
 
     @Override
-    public int delete(List<String> request) throws Exception {
+    public int sellProductDelete(List<String> request) throws Exception {
         int size = request.size();
         int result = 0;
 
         System.out.println("service : " + request);
         for (int i = 0; i < size; i++) {
-            result += productMapper.delete(request.get(i));
+            result += productMapper.sellProductDelete(request.get(i));
         }
 
         if (result != size) {
