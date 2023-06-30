@@ -3,13 +3,26 @@
 
 <head>
     <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../../../static/common/css/cart.css">
+    <link rel="stylesheet" href="../../../static/common/css/header.css">
+    <link rel="stylesheet" href="../../../static/common/css/main.css">
+    <link rel="stylesheet" href="../../../static/common/css/footer.css">
+
+    <script src="../../../static/common/js/static/include.js"></script>
+    <script src="../../../static/common/js/src/cart.js"></script>
+
+
+
     <!-- css -->
-    <link rel="stylesheet" href="../common/css/cart.css">
+    <!-- <link rel="stylesheet" href="../common/css/cart.css">
     <link rel="stylesheet" href="../common/css/header.css">
     <link rel="stylesheet" href="../common/css/main.css">
     <link rel="stylesheet" href="../common/css/footer.css">
 
-    <script src="../common/js/static/include.js"></script>
+    <script src="../common/js/static/include.js"></script> -->
+    <!-- <script src="../common/js/src/cart.js"></script> -->
+    
     <title>cart</title>
 </head>
 
@@ -92,11 +105,11 @@
                                         <!-- 수량 입력 박스 -->
                                         <input type="number" class="item_count_box" min="1" max="100" title="상품수량" placeholder="1">
                                         <!-- 수량 플러스 버튼 -->
-                                        <button type="button" class="bnt_plus">
+                                        <button type="button" class="bnt_plus" onclick="bnt_plus()">
                                             <img src="../common/images/bnt_plus.png" alt="">
                                         </button>
                                         <!-- 수량 마이너스 버튼 -->
-                                        <button type="button" class="bnt_min">
+                                        <button type="button" class="bnt_min" onclick="bnt_minus()>
                                             <img src="../common/images/bnt_min.png" alt="">
                                         </button>
                                     </div>
@@ -114,7 +127,7 @@
                                 </div>
                                 <!-- 총금액 작성구역 -->
                                 <div class="cart_order_total_price">
-                                    <div class="totla_price_box" name="totalPrice" th:text="${totalPrice}">blank</div>
+                                    <div class="total_price_box" name="totalPrice" th:text="${totalPrice}">blank</div>
                                 </div>
                                 <!-- 상품금액 닫기 -->
                             </div>

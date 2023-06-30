@@ -22,4 +22,5 @@ public interface CartService {
 
     SellProductDTO isSellProductById(String sellProductId);
 
+    boolean cartAmountChange(CartSellProductDTO changeAmount);
 }
