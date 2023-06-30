@@ -12,9 +12,10 @@ public interface MemberMapper {
 
     List<MemberDTO> getExpiredMemberList();
 
+    int totalMemberCount(Map<String, String> searchMap); //셀렉트
 
-    int totalMemberCount(Map<String, String> searchMap);
+    int expiredMemberCount(Map<String, String> searchMap); //셀렉트
 
-    int expiredMemberCount(Map<String, String> searchMap);
+    int deleteMember(String empNo); //딜리트
 
 }
