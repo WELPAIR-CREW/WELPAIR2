@@ -158,7 +158,14 @@
           AND SELL_PRODUCT_ID = #{sellProductId}
     </update>
 
-
+    <delete id="deleteCartProduct">
+        delete
+        from T_CART_SELL_PRODUCT
+        where SELL_PRODUCT_ID = #{product}
+          AND CART_NO = ( SELECT CART_NO
+                          FROM T_CART A
+                          WHERE A.EMP_NO = #{empNo})
+    </delete>
 
 
 </mapper>

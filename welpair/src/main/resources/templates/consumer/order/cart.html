@@ -21,7 +21,7 @@
 
 <body>
 <!-- 헤더 -->
-<div data-include-html="/admin/header_admin" class="include"></div>
+<div data-include-html="/consumer/header_consumer" class="include"></div>
 <!-- 장바구니 시작 -->
 <form action="/payment/payment.do" method="post">
     <!-- 카트 컨테이너 시작 -->
@@ -45,7 +45,7 @@
                 </li>
                 <!-- 선택삭제 버튼 -->
                 <li>
-                    <button type="button" class="btn_del"><span>선택삭제</span></button>
+                    <button type="button" class="btn_del" id="btn_del"><span>선택삭제</span></button>
                 </li>
             </ul>
 
@@ -67,12 +67,12 @@
                     <!-- 상품 1개당 이벤트 발생시 생기는 리스트임 기본케이스 -->
                     <li th:each="cart, stat : ${cartList}" th:id="'cart_basic_list' + ${stat.count}">
                         <!-- 상품 info 박스 -->
-                        <div class="cart_info_box" th:id="'cart_basic_case' + ${stat.count}">
+                        <div class="cart_info_box" th:id="'cart_basic_case' + ${stat.count}" >
                             <!-- 상품 정보 구역(체크박스,썸네일,정보,수량) -->
                             <div class="cart_order_prd">
                                 <!-- 상품선택 체크박스 -->
                                 <label>
-                                    <input type="checkbox" th:class="'cart_select' + ${stat.count}">
+                                    <input type="checkbox" th:class="'cart_select' + ${stat.count}" th:name="${cart.sellProduct.id}">
                                 </label>
                                 <!-- 판매페이지 바로가기 링크 -->
                                 <a th:href="@{'/admin/sellproduct/' + ${cart.getSellPage().getNo()} + '.html'}">
@@ -111,15 +111,15 @@
                             <div class="price_area">
                                 <!-- 상품금액 -->
                                 <div class="cart_order_price">
-                                    <div class="price_box" name="price" th:text="${cart.price} + ' 원'">balnk</div>
+                                    <div class="price_box" name="price" th:text="${#numbers.formatDecimal(cart.price, 0, 'COMMA', 0, 'POINT')} + ' 원'">balnk</div>
                                 </div>
                                 <!-- 배송비 작성구역 -->
                                 <div class="cart_order_delivery">
-                                    <div class="delivery_box" name="deliveryPrice" th:text="${cart.cartSellProduct.deliveryPrice} + ' 원'">blank</div>
+                                    <div class="delivery_box" name="deliveryPrice" th:text="${#numbers.formatDecimal(cart.cartSellProduct.deliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
                                 </div>
                                 <!-- 총금액 작성구역 -->
                                 <div class="cart_order_total_price">
-                                    <div class="totla_price_box" name="totalPrice" th:text="${cart.totalPrice} + ' 원'">blank</div>
+                                    <div class="totla_price_box" name="totalPrice" th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
                                 </div>
                                 <!-- 상품금액 닫기 -->
                             </div>
@@ -150,9 +150,9 @@
                     <!-- 출력금액 -->
                     <div class="exptpay_price">
                         <!-- 선택 이벤트 발생-->
-                        <div class="exptpay_price1" name="exptPrice" th:text="${exptPrice} + ' 원'">blank</div>
-                        <div id="exptpay_del" name="exptDeliveryPrice" th:text="${exptDeliveryPrice} + ' 원'">blank</div>
-                        <div name="exptTotalPrice" class="exptpay_price3" th:text="${exptTotalPrice} + ' 원'">blank</div>
+                        <div class="exptpay_price1" name="exptPrice" th:text="${#numbers.formatDecimal(exptPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
+                        <div id="exptpay_del" name="exptDeliveryPrice" th:text="${#numbers.formatDecimal(exptDeliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
+                        <div name="exptTotalPrice" class="exptpay_price3" th:text="${#numbers.formatDecimal(exptTotalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
                     </div>
                 </div>
                 <!-- 버튼박스 -->

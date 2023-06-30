@@ -1,6 +1,7 @@
 package com.hielectro.welpair.order.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
@@ -13,9 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Slf4j
@@ -30,19 +29,13 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    // default 매핑 메소드
-//    @GetMapping({"{id}"})
-//    public String defaultLocation(@PathVariable("id") String url) {
-//        return "/consumer/order/" + url;
-//    }
-
     @GetMapping("/cart/add")
     public String addCart() {
         return "/consumer/order/add";
     }
 
 
-    // 카트 인서트용 메소드
+    // 장바구니 상품 인서트용
     @ResponseBody
     @PostMapping(value = "/cart/add", produces = "application/json; charset=utf-8")
     public Map<String, String> addCart(@ModelAttribute CartSellProductDTO cartSellProduct,
@@ -112,7 +105,7 @@ public class CartController {
         }
     }
 
-    // 회원 장바구니 불러오기 메소드
+    // 회원 장바구니 불러오기
     @GetMapping("cart")
     public String cartList(Model model
             , @AuthenticationPrincipal User user
@@ -140,26 +133,51 @@ public class CartController {
 
     }
 
- //// json객체로 넘기겠다(포워드, 리다이렉트아님, 리로드안됨)
-    // 수량변경시 가격변동 등 비동기처리 메소드
+    // 수량변경
     @PostMapping("cart/amount-change")
     @ResponseBody
     public boolean cartAmountChange(@ModelAttribute CartSellProductDTO cartSellProduct, Model model
             , @RequestParam(value = "empNo", required = false) String empNo) {
 
-        System.out.println(empNo);
 
         cartSellProduct.setCart(new CartDTO());
         cartSellProduct.getCart().setEmpNo(empNo);
-        System.out.println();
         boolean result = cartService.cartAmountChange(cartSellProduct);
+
+
         System.out.println(result);
-
-
-
 
         return result;
     }
+
+    // 선택상품 삭제
+    @ResponseBody
+    @PostMapping(value = "cart/delete")
+    public String deleteCart(Model model, @RequestBody ArrayList<String> productList
+                            , @RequestParam("empNo") String empNo){
+        System.out.println("컨트롤러 들어옴 cart/delete");
+        System.out.println(productList);
+
+
+        boolean result = cartService.deleteCartProduct(productList, empNo);
+
+
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        return "장바구니에서 삭제가 완료되었습니다.";
+    }
+
+
+    // 선택상품에 따른 예상결제 가격변동
+    @PostMapping("cart/select")
+    public void selectCart(Model model){
+
+
+
+
+    }
+
 
     // 단품 금액 생성 메소드
     public void priceMaker(CartGeneralDTO cart) {
