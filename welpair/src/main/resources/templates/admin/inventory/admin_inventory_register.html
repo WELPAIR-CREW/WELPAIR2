@@ -281,6 +281,8 @@
                     return;
                 }
 
+                // let resultMessage = Response.resultMaessage;
+
                 if (rowData.length > 0) {
                     $.ajax({
                         url: '/inventory/stockRegist',
@@ -288,16 +290,23 @@
                         data: JSON.stringify(rowData),
                         contentType: 'application/json',
 
+
                         success: function(response) {
-                            if (response === "success") {
-                                // alert("message");
+                            console.log('Response:', response);
+                            let resultMessage = response.resultMessage;
+                            console.log('resultMessage:', resultMessage);
+                            if (resultMessage === "success") {
+                                alert("등록 성공");
+                            } else if (resultMessage === "fail") {
+                                alert("출고 등록 실패-수량 부족");
                             } else {
-                                alert("resultMessage");
+                                alert("등록 실패");
                             }
                             location.reload();
                         },
                         error: function(error) {
-                            alert("resultMessage");
+                            console.log('Error:', error);
+                            alert("등록 실패");
                         }
                     });
                 }
