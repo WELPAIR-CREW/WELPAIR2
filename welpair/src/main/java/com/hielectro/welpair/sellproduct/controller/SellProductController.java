@@ -45,38 +45,43 @@ public class SellProductController {
         return "admin/sellproduct/review";
     }
 
-    @PostMapping(value = "list", produces = "application/json;charset=utf-8")
+    @PostMapping(value = "sellProductListAPI", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public List<SellProductDetailDTO> productList(@RequestBody Map<String, String> request) {
+    public List<SellProductDetailDTO> sellProductList(@RequestBody Map<String, String> request) {
         System.out.println("request : " + request);
         List<SellProductDetailDTO> sellProductList = productService.selectProductList(request);
         System.out.println(sellProductList);
         return sellProductList;
     }
 
-    @PostMapping(value = "count", produces = "application/json;charset=utf-8")
+    @PostMapping(value = "sellProductCountAPI", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Map<String, Integer> rowCount(@RequestBody(required = false) Map<String, String> request) {
-        Map<String, Integer> response = new HashMap<>();
+    public Map<String, Integer> sellProductCount(@RequestBody(required = false) Map<String, String> request) {
         int result = productService.sellProductSearchCount(request);
-        System.out.println("result : " + result);
-        int maxPageNo = (int) Math.ceil((double) result / 10);
+        Map<String, Integer> response = pagination(result);
+
+        return response;
+    }
+
+    @PostMapping("sellProductDeleteAPI")
+    @ResponseBody
+    public int sellProductDelete(@RequestBody List<String> request) {
+        System.out.println(request);
+        try {
+            return productService.sellProductDelete(request);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Map<String, Integer> pagination(int length) {
+        Map<String, Integer> response = new HashMap<>();
+        int maxPageNo = (int) Math.ceil((double) length / limit);
 
         response.put("maxPageNo", maxPageNo);
         response.put("startPageNo", 1);
         response.put("endPageNo", 5);
 
         return response;
-    }
-
-    @PostMapping("delete")
-    @ResponseBody
-    public int delete(@RequestBody List<String> request) {
-        System.out.println(request);
-        try {
-            return productService.delete(request);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

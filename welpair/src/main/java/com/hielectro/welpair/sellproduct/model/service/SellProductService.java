@@ -14,5 +14,5 @@ public interface SellProductService {
     List<ReviewManagerDTO> selectReviewList();
 
     @Transactional(rollbackFor = {Exception.class})
-    int delete(List<String> request) throws Exception;
+    int sellProductDelete(List<String> request) throws Exception;
 }

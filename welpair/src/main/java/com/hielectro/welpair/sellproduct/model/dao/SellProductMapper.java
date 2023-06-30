@@ -14,5 +14,5 @@ public interface SellProductMapper {
     int sellProductSearchCount(Map<String, String> search);
     List<SellProductDetailDTO> selectProductList(Map<String, String> sellProductCode);
     List<ReviewManagerDTO> selectReviewList();
-    int delete(String id);
+    int sellProductDelete(String id);
 }
