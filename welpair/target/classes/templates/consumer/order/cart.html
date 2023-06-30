@@ -81,8 +81,9 @@
                                     <div class="cart_thumb_box">
                                         <!-- 상품썸네일 이미지-->
                                         <span class="cart_thumb_img" name="sellThumbImage">
-<!--                                                <img th:src="@{'http://localhost:8888/product/product-detail/' + ${cart.sellImage.image} + '.html'}">-->
-                  </span>
+                                            <img th:if="${cart.sellImage.path != NullPointerException}" th:src="'..' + ${cart.sellImage.path}" class="thumbimg">
+                                            <img th:if="${cart.sellImage.path == NullPointerException}" src="../common/images/thumbnailbox.png" class="thumbimg">
+                                          </span>
                                     </div>
                                     <!-- 상품이름 작성구역  -->
                                     <div class="prd_name">

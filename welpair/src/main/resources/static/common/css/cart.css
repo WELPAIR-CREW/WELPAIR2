@@ -401,3 +401,13 @@ input[type='number']::-webkit-inner-spin-button {
 	border-radius: 6px;
 
 }
+
+
+.thumbimg {
+	background-repeat: no-repeat;
+	display: block;
+	max-width: 100%;
+	height: auto;
+	object-fit: cover;
+	margin: auto;
+}
