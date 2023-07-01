@@ -2,7 +2,7 @@ import { includeHTML } from './include.js'
 import {call, createPaging, createTable, pagination, setPagination} from './App.js'
 
 const searchBtn = document.querySelector(".first-button");
-searchBtn.addEventListener('click', fetchData);
+searchBtn.addEventListener('click', fetchSellProductListData);
 
 const deleteBtn = document.querySelectorAll(".first-button")[1];
 deleteBtn.addEventListener('click', deleteSellProduct);
@@ -16,7 +16,7 @@ headerCheckBox.addEventListener('click', function () {
 let code = null;
 let name = null;
 
-async function fetchData() {
+async function fetchSellProductListData() {
     code = document.querySelector(".product-code").value
     name = document.querySelector(".name").value
     const pageNo = 1;
@@ -51,12 +51,12 @@ async function deleteSellProduct() {
         .then(data => {
             if (data > 0) {
                 alert("삭제에 성공하였습니다.");
-                fetchData();
+                fetchSellProductListData();
             } else {
                 alert("삭제에 실패하였습니다.");
             }
         })
 }
 
-await fetchData();
+await fetchSellProductListData();
 includeHTML();

@@ -37,7 +37,8 @@ public class ProductServiceTests {
     @Test
     @DisplayName("리뷰 데이터를 불러오는지 여부 확인")
     public void test3() {
-        assertNotNull(productService.selectReviewList());
-        System.out.println(productService.selectReviewList());
+        Map<String, Object> searchMap = new HashMap<>();
+        assertNotNull(productService.selectReviewList(searchMap));
+        System.out.println(productService.selectReviewList(searchMap));
     }
 }

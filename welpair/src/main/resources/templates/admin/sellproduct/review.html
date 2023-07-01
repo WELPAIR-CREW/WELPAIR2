@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상품 관리</title>
-    <link rel="stylesheet" href="../common/css/header.css">
-    <link rel="stylesheet" href="../common/css/main.css">
-    <link rel="stylesheet" href="../common/css/footer.css">
-    <script th:src="@{../common/js/src/review.js}"></script>
+    <title>리뷰관리</title>
+    <link rel="stylesheet" th:href="@{../common/css/header.css}">
+    <link rel="stylesheet" th:href="@{../common/css/main.css}">
+    <link rel="stylesheet" th:href="@{../common/css/footer.css}">
+    <script th:src="@{../common/js/static/bundle.js}"></script>
     <script th:src="@{../common/js/static/include.js}"></script>
 </head>
 
@@ -23,49 +23,51 @@
         <div class="section-nav-category">판매상품등록</div>
         <div class="section-nav-category"><b>리뷰관리</b></div>
         <div class="section-nav-category">
-            <a href="/sellproduct/QnA">문의관리</a>
+            <a href="/sellproduct/QnA">상품문의관리</a>
         </div>
     </div>
     <div class="section-content">
         <div class="section-title">리뷰관리</div>
-        <div class="section-selectbox">
+        <form class="section-selectbox" action="/sellproduct/test">
             <div class="section-selectbox area1">
                 <span class="section-selectbox-span">판매상품ID
-                    <input type="text" class="section-selectbox-input product-code" placeholder="ID입력">
+                    <input type="text" name="id" class="section-selectbox-input product-code" placeholder="ID입력">
                 </span>
                 <span class="section-selectbox-span">상품명
-                    <input type="text" class="section-selectbox-input name" placeholder="상품명입력">
+                    <input type="text" name="name" class="section-selectbox-input name" placeholder="상품명입력">
                 </span>
-                <button class="button search">검색</button>
-                <button class="button second-button">비공개</button>
+                <button class="button search" type="submit">검색</button>
+                <button class="button second-button" type="button">비공개</button>
             </div>
             <div class="section-selectbox area2">
                     <span class="section-selectbox-span" style="margin-right: 10px;">기간
-                        <input type="date" class="section-selectbox-input dateIn">
+                        <input type="date" name="startDate" class="section-selectbox-input dateIn">
                         
                     </span>
                 <span>~</span>
                 <span class="section-selectbox-span" style="margin-left: 10px;">
-                        <input type="date" class="section-selectbox-input dateOut">
+                        <input type="date" name="endDate" class="section-selectbox-input dateOut">
                     </span>
             </div>
-        </div>
+        </form>
         <div class="table_container">
             <table class="section-product-table">
                 <colgroup>
-                    <col style="width: 50px;">
-                    <col style="width: 120px;">
-                    <col style="width: 160px;">
-                    <col style="width: 200px;">
-                    <col style="width: 300px;">
-                    <col style="width: 90px">
-                    <col style="width: 90px">
+                    <col style="min-width: 50px;">
+                    <col style="min-width: 120px;">
+                    <col style="min-width: 160px;">
+                    <col style="min-width: 160px;">
+                    <col style="min-width: 200px;">
+                    <col style="min-width: 300px;">
+                    <col style="min-width: 100px">
+                    <col style="min-width: 100px">
                 </colgroup>
                 <thead>
 
                 <tr>
                     <th><input type="checkbox"></th>
-                    <th>판매상품코드</th>
+                    <th>글번호</th>
+                    <th>판매페이지</th>
                     <th>상품명</th>
                     <th>제목</th>
                     <th>내용</th>
@@ -81,12 +83,15 @@
         </div>
     </div>
 </section>
-<div data-include-html="/admin/footer" class="include"></div>
 <script th:inline="javascript">
-
     let data = [[${list}]];
+    let paging = [[${paging}]];
     createTable(data);
+    setPagination(paging);
+    createPaging()
 </script>
+<div data-include-html="/admin/footer" class="include"></div>
+
 </body>
 
 </html>

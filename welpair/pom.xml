@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.5</version>
+            <version>2.10.1</version>
         </dependency>
 
         <dependency>
@@ -119,7 +119,7 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.4</version>
+            <version>1.5</version>
         </dependency>
         <!-- 썸네일 처리를 위한 라이브러리 -->
         <!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
