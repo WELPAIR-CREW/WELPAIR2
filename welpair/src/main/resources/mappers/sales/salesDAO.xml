@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hielectro.welpair.sales.model.dao.SalesDAO">
+
+    <resultMap id="salesResultMap" type="com.hielectro.welpair.sales.model.dto.SalesDTO">
+        <result property="month" column="MONTH" />
+        <result property="totalSales" column="SALES" />
+        <association property="payment" resultMap="getMonthSalesResultMap">
+        </association>
+    </resultMap>
+
+    <resultMap id="getMonthSalesResultMap" type="com.hielectro.welpair.payment.dto.PaymentDTO">
+        <id property="paymentNo" column="PAYMENT_NO"></id>
+        <result property="paymentDate" column="PAYMENT_DATE"></result>
+        <result property="paymentPrice" column="PAYMENT_PRICE"></result>
+        <result property="paymentType" column="PAYMENT_TYPE"></result>
+    </resultMap>
+
+    <select id="getMonthSales" resultMap="salesResultMap">
+        SELECT
+            TO_CHAR(TRUNC(PAYMENT_DATE, 'MONTH'), 'MM') AS MONTH,
+        SUM(PAYMENT_PRICE) AS SALES
+        FROM T_PAYMENT
+        WHERE TRUNC(PAYMENT_DATE, 'MONTH') >= TRUNC(SYSDATE) - INTERVAL '6' MONTH
+        GROUP BY TO_CHAR(TRUNC(PAYMENT_DATE, 'MONTH'), 'MM')
+        ORDER BY TO_CHAR(TRUNC(PAYMENT_DATE, 'MONTH'), 'MM')
+    </select>
+</mapper>

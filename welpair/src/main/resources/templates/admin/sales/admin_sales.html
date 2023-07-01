@@ -8,62 +8,71 @@
   <link rel="stylesheet" href="/common/css/main.css">
   <link rel="stylesheet" href="/common/css/header.css">
   <link rel="stylesheet" href="/common/css/footer.css">
-  <link rel="stylesheet" href="/common/css/inventory.css">
+  <link rel="stylesheet" href="/common/css/sales.css">
   <script src="/common/js/static/include.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
-<div data-include-html="/admin/header_admin" class="include"></div>
-<!-- 왼쪽 메뉴 베너 -->
-<section>
-  <div class="section-nav">
-    <div class="section-nav-category">
-      <a href="/sales/admin_sales">매출현황</a>
+  <div data-include-html="/admin/header_admin" class="include"></div>
+  <!-- 왼쪽 메뉴 베너 -->
+  <section>
+    <div class="section-nav">
+      <div class="section-nav-category">
+        <a href="/sales/admin_sales">매출현황</a>
+      </div>
     </div>
-  </div>
 
-  <!-- 컨텐츠 영역 시작 -->
-  <div class="section-content">
-    <div class="section-title">매출현황</div>
+    <!-- 컨텐츠 영역 시작 -->
+    <div class="section-content">
+      <div class="section-title">매출현황</div>
 
-    <form class="section-chart" action="" method="get">
-      <canvas id="salesChart">
-      </canvas>
-    </form>
-  </div>
-</section>
-<!-- footer -->
+      <div class="section-chart" method="get">
+        <canvas id="salesChart">
+        </canvas>
+      </div>
+    </div>
+  </section>
+  <!-- footer -->
 <div data-include-html="/admin/footer" class="include"></div>
 
 
 <!-- 스크립트 시작-->
-<script th:inline="javascript">
-  // Get the canvas element
-  var ctx = document.getElementById('salesChart').getContext('2d');
+  <script th:inline="javascript">
 
-  // Define the data for the chart
-  var data = {
-    labels: ['2월', '3월', '4월', '5월', '6월', '7월'],
-    datasets: [{
-      label: 'sales',
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: ['rgba(255, 206, 86, 0.2)'],
-      borderColor: ['rgba(255, 206, 86, 1)'],
-      borderWidth: 1
-    }]
-  };
+  let salesJson = /*[[${salesJson}]]*/ '';
 
-  // Create the chart
-  var myChart = new Chart(ctx, {
+
+  let monthlySales = JSON.parse(salesJson);
+  console.log(monthlySales)
+
+  let months = monthlySales.map(sales => sales.month);
+  let totalSales = monthlySales.map(sales => sales.totalSales);
+
+
+  let salesChart = document.getElementById('salesChart').getContext('2d');
+
+  new Chart(salesChart, {
     type: 'bar',
-    data: data,
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Monthly Sales',
+        data: totalSales,
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
     options: {
       responsive: true,
       scales: {
-        y: {beginAtZero: true}
+        y: {
+          beginAtZero: true
+        }
       }
     }
   });
