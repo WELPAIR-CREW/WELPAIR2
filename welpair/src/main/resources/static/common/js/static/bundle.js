@@ -32,7 +32,7 @@ function createTableCell(text) {
     return td;
 }
 
-function createPaging() {
+function createPaging(queryString = '') {
     const paging = document.querySelector('.paging');
     paging.innerHTML = '';
     const createLink = (text) => {
@@ -72,7 +72,11 @@ function createPaging() {
     const updatePage = async (pageNumber) => {
         if (pageNumber === pagination.currentPageNo) return;
         pagination.currentPageNo = pageNumber;
-        location.href = window.location.origin + window.location.pathname + "?currentPageNo=" + pageNumber;
+        location.href =
+            window.location.origin + window.location.pathname
+            + (queryString ? queryString.concat("&currentPageNo=")
+                           : "?currentPageNo=")
+            + pageNumber;
     };
 
     leftLink.addEventListener('click', async () => {
@@ -107,8 +111,8 @@ function search(e) {
     form.method = "get";
     form.action = "/sellproduct/test";
 
-    form.appendChild( document.querySelector("[name='id']"));
-    form.appendChild( document.querySelector("[name='name']"));
+    form.appendChild(document.querySelector("[name='id']").cloneNode());
+    form.appendChild(document.querySelector("[name='name']").cloneNode());
     document.body.append(form);
     form.submit();
 }

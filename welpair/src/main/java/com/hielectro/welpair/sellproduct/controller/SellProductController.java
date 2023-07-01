@@ -5,19 +5,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
-import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.hielectro.welpair.common.Pagination;
 import com.hielectro.welpair.common.Search;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/sellproduct")
@@ -34,87 +38,16 @@ public class SellProductController {
         return "admin/sellproduct/" + url;
     }
 
-    /*@GetMapping("review")
-    public String reviewLocation(HttpServletRequest request, Model model,
-                                 @ModelAttribute Search search,
-                                 @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
-        String url = String.valueOf(request.getRequestURL());
-        Map<String, Object> searchMap = new HashMap<>();
-        Map<String, Integer> paging = null;
-        searchMap.put("id", search.getId());
-        searchMap.put("name", search.getName());
-
-        if (!Pagination.getURL().equals(url)) {
-            Pagination.init(url);
-            int result = productService.reviewSearchCount(searchMap);
-            paging = Pagination.paging(result, currentPageNo);
-        } else {
-            paging = Pagination.getParameter(currentPageNo);
-        }
-
-        model.addAttribute("paging", paging);
-        searchMap.put("pageNo", currentPageNo);
-        List<ReviewManagerDTO> list = productService.selectReviewList(searchMap);
-
-        list.forEach(item -> {
-            if (item.getContent().length() > 20) {
-                String content = item.getContent();
-                String subContent = content.substring(0, 20);
-
-                item.setContent(subContent.concat("..."));
-            }
-        });
-
-
-        model.addAttribute("list", list);
-        return "admin/sellproduct/review";
-    }*/
-
-    /*@GetMapping("QnA")
-    public String qnaLocation(HttpServletRequest request, Model model,
-                              @ModelAttribute Search search,
-                              @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
-        String url = String.valueOf(request.getRequestURL());
-        Map<String, Object> searchMap = new HashMap<>();
-        Map<String, Integer> paging = null;
-        searchMap.put("id", search.getId());
-        searchMap.put("name", search.getName());
-
-        if (!Pagination.getURL().equals(url)) {
-            Pagination.init(url);
-            int result = productService.reviewSearchCount(searchMap);
-            paging = Pagination.paging(result, currentPageNo);
-        } else {
-            paging = Pagination.getParameter(currentPageNo);
-        }
-
-        model.addAttribute("paging", paging);
-        searchMap.put("pageNo", currentPageNo);
-        List<QnAManagerDTO> list = productService.selectQnAList(searchMap);
-
-        list.forEach(item -> {
-            if (item.getContent().length() > 20) {
-                String content = item.getContent();
-                String subContent = content.substring(0, 20);
-
-                item.setContent(subContent.concat("..."));
-            }
-        });
-
-
-        model.addAttribute("list", list);
-        return "admin/sellproduct/QnA";
-    }*/
-
     @GetMapping("review")
     public String reviewLocation(HttpServletRequest request, Model model,
                               @ModelAttribute Search search,
                               @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
         String url = String.valueOf(request.getRequestURL());
         Map<String, Object> searchMap = new HashMap<>();
+        System.out.println("==========================" + search);
         searchMap.put("search", search);
-        System.out.println("review test : " + search);
         searchMap.put("pageNo", currentPageNo);
+        model.addAttribute("queryString", search.toString());
 
         getPaging(model, currentPageNo, url, () -> productService.reviewSearchCount(searchMap));
         getSelectList(model, () -> productService.selectReviewList(searchMap));
@@ -127,8 +60,10 @@ public class SellProductController {
                               @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
         String url = String.valueOf(request.getRequestURL());
         Map<String, Object> searchMap = new HashMap<>();
+
         searchMap.put("search", search);
         searchMap.put("pageNo", currentPageNo);
+        model.addAttribute("queryString", search.toString());
 
         getPaging(model, currentPageNo, url, () -> productService.qnaSearchCount(searchMap));
         getSelectList(model, () -> productService.selectQnAList(searchMap));

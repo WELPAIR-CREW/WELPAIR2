@@ -87,11 +87,12 @@
 </section>
 <div data-include-html="/admin/footer" class="include"></div>
 <script th:inline="javascript">
-    let data = [[${list}]];
-    let paging = [[${paging}]];
+    const data = [[${list}]];
+    const paging = [[${paging}]];
+    const queryString = [[${queryString}]];
     createTable(data);
     setPagination(paging);
-    createPaging()
+    createPaging(queryString)
 </script>
 </body>
 

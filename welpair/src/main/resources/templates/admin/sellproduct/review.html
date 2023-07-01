@@ -86,9 +86,10 @@
 <script th:inline="javascript">
     let data = [[${list}]];
     let paging = [[${paging}]];
+    const queryString = [[${queryString}]];
     createTable(data);
     setPagination(paging);
-    createPaging()
+    createPaging(queryString)
 </script>
 <div data-include-html="/admin/footer" class="include"></div>
 
