@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
+import com.hielectro.welpair.common.Pagination;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,14 +27,33 @@ public class SellProductController {
         this.productService = productService;
     }
 
-    @GetMapping({"{id}"})
-    public String defaultLocation(@PathVariable("id") String url) {
+    @GetMapping("{url}")
+    public String defaultLocation(@PathVariable String url) {
         return "admin/sellproduct/" + url;
     }
 
     @GetMapping("review")
-    public String reviewLocation(Model model) {
-        List<ReviewManagerDTO> list = productService.selectReviewList();
+    public String reviewLocation(HttpServletRequest request, Model model,
+                                 @RequestParam(required = false) String id, @RequestParam(required = false) String name,
+                                 @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
+        String url = String.valueOf(request.getRequestURL());
+        Map<String, Object> searchMap = new HashMap<>();
+        Map<String, Integer> paging = null;
+        searchMap.put("id", id);
+        searchMap.put("name", name);
+
+        if (!Pagination.getURL().equals(url)) {
+            Pagination.init(url);
+            int result = productService.reviewSearchCount(searchMap);
+            paging = Pagination.paging(result, currentPageNo);
+        } else {
+            paging = Pagination.getParameter(currentPageNo);
+        }
+
+        model.addAttribute("paging", paging);
+        searchMap.put("pageNo", currentPageNo);
+        List<ReviewManagerDTO> list = productService.selectReviewList(searchMap);
+
         list.forEach(item -> {
             if (item.getContent().length() > 20) {
                 String content = item.getContent();
@@ -41,8 +62,46 @@ public class SellProductController {
                 item.setContent(subContent.concat("..."));
             }
         });
+
+
         model.addAttribute("list", list);
         return "admin/sellproduct/review";
+    }
+
+    @GetMapping("QnA")
+    public String qnaLocation(HttpServletRequest request, Model model,
+                              @RequestParam(required = false) String id, @RequestParam(required = false) String name,
+                              @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
+        String url = String.valueOf(request.getRequestURL());
+        Map<String, Object> searchMap = new HashMap<>();
+        Map<String, Integer> paging = null;
+        searchMap.put("id", id);
+        searchMap.put("name", name);
+
+        if (!Pagination.getURL().equals(url)) {
+            Pagination.init(url);
+            int result = productService.reviewSearchCount(searchMap);
+            paging = Pagination.paging(result, currentPageNo);
+        } else {
+            paging = Pagination.getParameter(currentPageNo);
+        }
+
+        model.addAttribute("paging", paging);
+        searchMap.put("pageNo", currentPageNo);
+        List<QnAManagerDTO> list = productService.selectQnAList(searchMap);
+
+        list.forEach(item -> {
+            if (item.getContent().length() > 20) {
+                String content = item.getContent();
+                String subContent = content.substring(0, 20);
+
+                item.setContent(subContent.concat("..."));
+            }
+        });
+
+
+        model.addAttribute("list", list);
+        return "admin/sellproduct/QnA";
     }
 
     @PostMapping(value = "sellProductListAPI", produces = "application/json;charset=utf-8")
@@ -70,7 +129,7 @@ public class SellProductController {
         try {
             return productService.sellProductDelete(request);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("error");
         }
     }
 

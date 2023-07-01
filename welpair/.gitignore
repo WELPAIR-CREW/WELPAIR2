@@ -16,6 +16,7 @@ local.properties
 .classpath
 .project
 .idea 
+.vscode
 
 # External tool builders
 .externalToolBuilders/

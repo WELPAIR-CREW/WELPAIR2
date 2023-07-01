@@ -10,10 +10,9 @@ import java.sql.Time;
 @Getter
 @Setter
 @ToString
-public class ReviewManagerDTO {
+public class QnAManagerDTO {
     private String no;
     private String pageNo;
-    private String name;
     private String title;
     private String content;
     private Date date;
