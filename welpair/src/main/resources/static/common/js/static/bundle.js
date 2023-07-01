@@ -101,3 +101,14 @@ function setPagination(data) {
     pagination.endPageNo = data.endPageNo;
     pagination.maxPageNo = data.maxPageNo;
 }
+
+function search(e) {
+    const form = document.createElement("form");
+    form.method = "get";
+    form.action = "/sellproduct/test";
+
+    form.appendChild( document.querySelector("[name='id']"));
+    form.appendChild( document.querySelector("[name='name']"));
+    document.body.append(form);
+    form.submit();
+}

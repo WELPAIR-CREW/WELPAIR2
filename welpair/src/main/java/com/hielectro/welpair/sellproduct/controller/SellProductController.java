@@ -7,6 +7,7 @@ import java.util.Map;
 import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
 import com.hielectro.welpair.common.Pagination;
+import com.hielectro.welpair.common.Search;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -133,6 +134,11 @@ public class SellProductController {
         }
     }
 
+    @GetMapping("test")
+    public String testMethod(@ModelAttribute Search search) {
+        System.out.println("test : " + search);
+        return "redirect:/sellproduct/review";
+    }
     public Map<String, Integer> pagination(int length) {
         Map<String, Integer> response = new HashMap<>();
         int maxPageNo = (int) Math.ceil((double) length / limit);

@@ -9,7 +9,7 @@
     <link rel="stylesheet" th:href="@{../common/css/header.css}">
     <link rel="stylesheet" th:href="@{../common/css/main.css}">
     <link rel="stylesheet" th:href="@{../common/css/footer.css}">
-    <script th:src="@{../common/js/static/create.js}"></script>
+    <script th:src="@{../common/js/static/bundle.js}"></script>
     <script th:src="@{../common/js/static/include.js}"></script>
 </head>
 
@@ -28,28 +28,28 @@
     </div>
     <div class="section-content">
         <div class="section-title">리뷰관리</div>
-        <div class="section-selectbox">
+        <form class="section-selectbox" action="/sellproduct/test">
             <div class="section-selectbox area1">
                 <span class="section-selectbox-span">판매상품ID
-                    <input type="text" name='id' class="section-selectbox-input product-code" placeholder="ID입력">
+                    <input type="text" name="id" class="section-selectbox-input product-code" placeholder="ID입력">
                 </span>
                 <span class="section-selectbox-span">상품명
-                    <input type="text" name='name' class="section-selectbox-input name" placeholder="상품명입력">
+                    <input type="text" name="name" class="section-selectbox-input name" placeholder="상품명입력">
                 </span>
-                <button class="button search">검색</button>
-                <button class="button second-button">비공개</button>
+                <button class="button search" type="submit">검색</button>
+                <button class="button second-button" type="button">비공개</button>
             </div>
             <div class="section-selectbox area2">
                     <span class="section-selectbox-span" style="margin-right: 10px;">기간
-                        <input type="date" class="section-selectbox-input dateIn">
+                        <input type="date" name="startDate" class="section-selectbox-input dateIn">
                         
                     </span>
                 <span>~</span>
                 <span class="section-selectbox-span" style="margin-left: 10px;">
-                        <input type="date" class="section-selectbox-input dateOut">
+                        <input type="date" name="endDate" class="section-selectbox-input dateOut">
                     </span>
             </div>
-        </div>
+        </form>
         <div class="table_container">
             <table class="section-product-table">
                 <colgroup>
