@@ -17,6 +17,16 @@ public class Search {
     private String name;
     private String title;
     private String content;
+    private int price;
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     private Date startDate;
     private Date endDate;
 
