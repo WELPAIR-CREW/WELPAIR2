@@ -3,6 +3,7 @@ package com.hielectro.welpair.sellproduct.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
@@ -33,15 +34,15 @@ public class SellProductController {
         return "admin/sellproduct/" + url;
     }
 
-    @GetMapping("review")
+    /*@GetMapping("review")
     public String reviewLocation(HttpServletRequest request, Model model,
-                                 @RequestParam(required = false) String id, @RequestParam(required = false) String name,
+                                 @ModelAttribute Search search,
                                  @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
         String url = String.valueOf(request.getRequestURL());
         Map<String, Object> searchMap = new HashMap<>();
         Map<String, Integer> paging = null;
-        searchMap.put("id", id);
-        searchMap.put("name", name);
+        searchMap.put("id", search.getId());
+        searchMap.put("name", search.getName());
 
         if (!Pagination.getURL().equals(url)) {
             Pagination.init(url);
@@ -67,17 +68,17 @@ public class SellProductController {
 
         model.addAttribute("list", list);
         return "admin/sellproduct/review";
-    }
+    }*/
 
-    @GetMapping("QnA")
+    /*@GetMapping("QnA")
     public String qnaLocation(HttpServletRequest request, Model model,
-                              @RequestParam(required = false) String id, @RequestParam(required = false) String name,
+                              @ModelAttribute Search search,
                               @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
         String url = String.valueOf(request.getRequestURL());
         Map<String, Object> searchMap = new HashMap<>();
         Map<String, Integer> paging = null;
-        searchMap.put("id", id);
-        searchMap.put("name", name);
+        searchMap.put("id", search.getId());
+        searchMap.put("name", search.getName());
 
         if (!Pagination.getURL().equals(url)) {
             Pagination.init(url);
@@ -103,7 +104,77 @@ public class SellProductController {
 
         model.addAttribute("list", list);
         return "admin/sellproduct/QnA";
+    }*/
+
+    @GetMapping("review")
+    public String reviewLocation(HttpServletRequest request, Model model,
+                              @ModelAttribute Search search,
+                              @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
+        String url = String.valueOf(request.getRequestURL());
+        Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("search", search);
+        System.out.println("review test : " + search);
+        searchMap.put("pageNo", currentPageNo);
+
+        getPaging(model, currentPageNo, url, () -> productService.reviewSearchCount(searchMap));
+        getSelectList(model, () -> productService.selectReviewList(searchMap));
+        return "admin/sellproduct/review";
     }
+
+    @GetMapping("QnA")
+    public String qnaLocation(HttpServletRequest request, Model model,
+                              @ModelAttribute Search search,
+                              @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
+        String url = String.valueOf(request.getRequestURL());
+        Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("search", search);
+        searchMap.put("pageNo", currentPageNo);
+
+        getPaging(model, currentPageNo, url, () -> productService.qnaSearchCount(searchMap));
+        getSelectList(model, () -> productService.selectQnAList(searchMap));
+        return "admin/sellproduct/QnA";
+    }
+
+    private void getPaging(Model model, int currentPageNo,
+                           String url, Supplier<Integer> searchCountSupplier) {
+        Map<String, Integer> paging = null;
+
+        if (!Pagination.getURL().equals(url)) {
+            Pagination.init(url);
+            int result = searchCountSupplier.get();
+            paging = Pagination.paging(result, currentPageNo);
+        } else {
+            paging = Pagination.getParameter(currentPageNo);
+        }
+
+        model.addAttribute("paging", paging);
+
+    }
+
+    private void getSelectList(Model model, Supplier<List<?>> selectListSupplier) {
+        List<?> list = selectListSupplier.get();
+
+        model.addAttribute("list", list);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @PostMapping(value = "sellProductListAPI", produces = "application/json;charset=utf-8")
     @ResponseBody

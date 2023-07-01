@@ -138,12 +138,24 @@
         JOIN T_SELL_PRODUCT TSP on TSP.SELL_PRODUCT_ID = TPO.SELL_PRODUCT_ID
         JOIN T_PRODUCT TP on TP.PRODUCT_CODE = TSP.PRODUCT_CODE
         WHERE 1=1
-        <if test="id != '' and id != null">
-            AND TSP.SELL_PRODUCT_ID = #{ id }
+        <if test="search.id != '' and search.id != null">
+            AND TSP.SELL_PRODUCT_ID = #{ search.id }
         </if>
-        <if test="name != '' and name != null">
-            AND TP.PRODUCT_NAME = #{ name }
+        <if test="search.name != '' and search.name != null">
+            AND TP.PRODUCT_NAME LIKE '%' || #{ search.name } || '%'
         </if>
+        <choose>
+            <when test="search.startDate != null and search.endDate != null">
+                AND BOARD_DATE >= #{ search.startDate }
+                AND BOARD_DATE &lt;= #{ search.endDate }
+            </when>
+            <when test="search.startDate != null">
+                AND BOARD_DATE >= #{ search.startDate }
+            </when>
+            <when test="search.endDate != null">
+                AND BOARD_DATE &lt;= #{ search.endDate }
+            </when>
+        </choose>
         )
         WHERE 1=1
     </select>
@@ -167,12 +179,24 @@
         JOIN T_SELL_PRODUCT TSP on TSP.SELL_PRODUCT_ID = TPO.SELL_PRODUCT_ID
         JOIN T_PRODUCT TP on TP.PRODUCT_CODE = TSP.PRODUCT_CODE
         WHERE 1=1
-        <if test="id != '' and id != null">
-            AND TSP.SELL_PRODUCT_ID = #{ id }
+        <if test="search.id != '' and search.id != null">
+            AND TSP.SELL_PRODUCT_ID = #{ search.id }
         </if>
-        <if test="name != '' and name != null">
-            AND TP.PRODUCT_NAME = #{ name }
+        <if test="search.name != '' and search.name != null">
+            AND TP.PRODUCT_NAME LIKE '%' || #{ search.name } || '%'
         </if>
+        <choose>
+            <when test="search.startDate != null and search.endDate != null">
+                AND BOARD_DATE >= #{ search.startDate }
+                AND BOARD_DATE &lt;= #{ search.endDate }
+            </when>
+            <when test="search.startDate != null">
+                AND BOARD_DATE >= #{ search.startDate }
+            </when>
+            <when test="search.endDate != null">
+                AND BOARD_DATE &lt;= #{ search.endDate }
+            </when>
+        </choose>
         )
         WHERE 1=1
         <if test="pageNo != '0' and pageNo != null">
@@ -196,12 +220,24 @@
         JOIN T_QNA USING (BOARD_NO)
         JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
         WHERE 1=1
-        <if test="id != '' and id != null">
-            AND SELL_PRODUCT_ID = #{ id }
+        <if test="search.id != '' and search.id != null">
+            AND SELL_PRODUCT_ID = #{ search.id }
         </if>
-        <if test="name != '' and name != null">
-            AND PRODUCT_NAME = #{ name }
+        <if test="search.name != '' and search.name != null">
+            AND PRODUCT_NAME = #{ search.name }
         </if>
+        <choose>
+            <when test="search.startDate != null and search.endDate != null">
+            AND BOARD_DATE >= #{ search.startDate }
+            AND BOARD_DATE &lt;= #{ search.endDate }
+            </when>
+            <when test="search.startDate != null">
+            AND BOARD_DATE >= #{ search.startDate }
+            </when>
+            <when test="search.endDate != null">
+            AND BOARD_DATE &lt;= #{ search.endDate }
+            </when>
+        </choose>
         )
         WHERE BOARD_DATE IS NOT NULL
     </select>
@@ -221,18 +257,33 @@
         JOIN T_QNA USING (BOARD_NO)
         JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
         WHERE 1=1
-        <if test="id != '' and id != null">
-            AND SELL_PRODUCT_ID = #{ id }
+        <if test="search.id != '' and search.id != null">
+            AND SELL_PRODUCT_ID = #{ search.id }
         </if>
-        <if test="name != '' and name != null">
-            AND PRODUCT_NAME = #{ name }
+        <if test="search.name != '' and search.name != null">
+            AND PRODUCT_NAME = #{ search.name }
         </if>
+        <choose>
+            <when test="search.startDate != null and search.endDate != null">
+                AND BOARD_DATE >= #{ search.startDate }
+                AND BOARD_DATE &lt;= #{ search.endDate }
+            </when>
+            <when test="search.startDate != null">
+                AND BOARD_DATE >= #{ search.startDate }
+            </when>
+            <when test="search.endDate != null">
+                AND BOARD_DATE &lt;= #{ search.endDate }
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
         )
         WHERE BOARD_DATE IS NOT NULL
         <if test="pageNo != '0' and pageNo != null">
             AND RN &gt; ( (TO_NUMBER(#{ pageNo }) - 1) * 10)
             AND RN &lt;= ( TO_NUMBER(#{ pageNo }) * 10)
         </if>
+
     </select>
 
     <delete id="sellProductDelete">

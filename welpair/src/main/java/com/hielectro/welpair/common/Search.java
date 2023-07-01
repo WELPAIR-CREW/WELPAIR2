@@ -19,10 +19,6 @@ public class Search {
     private String content;
     private int price;
 
-    public int getPrice() {
-        return price;
-    }
-
     public void setPrice(int price) {
         this.price = price;
     }
