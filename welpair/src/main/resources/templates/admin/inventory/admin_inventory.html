@@ -10,9 +10,10 @@
   <link rel="stylesheet" href="/common/css/header.css">
   <link rel="stylesheet" href="/common/css/footer.css">
   <link rel="stylesheet" href="/common/css/inventory.css">
-  <script src="/common/js/static/include.js"></script>
 
+  <script src="/common/js/static/include.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="/common/js/src/inventory.js"></script>
 </head>
 
 <body>
@@ -78,34 +79,5 @@
 <!-- footer -->
 <div data-include-html="/admin/footer" class="include"></div>
 
-<!-- 스크립트 시작-->
-<script>
-
-
-  // 1-1. 기본 정보 출력
-
-  $(document).ready(function() {
-    $.ajax({
-      url: "/inventory/getInventoryInfo",
-      dataType: "json",
-      method: "GET",
-      success: function(response) {
-
-        $("#totalInvenAmount").text(response.totalInvenAmount.toLocaleString());
-        $("#alertStock").text(response.alertStock.toLocaleString());
-
-        console.log(response);
-        console.log(response.totalInvenAmount);
-        console.log(response.alertStock);
-      },
-      error: function(xhr, status, error) {
-        console.log(xhr);
-        console.log(status);
-        console.log(error);
-      }
-    });
-  });
-
-</script>
 </body>
 </html>

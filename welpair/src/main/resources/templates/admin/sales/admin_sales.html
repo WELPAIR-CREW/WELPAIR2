@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,56 +9,100 @@
   <link rel="stylesheet" href="/common/css/header.css">
   <link rel="stylesheet" href="/common/css/footer.css">
   <link rel="stylesheet" href="/common/css/sales.css">
-  <script src="/common/js/static/include.js"></script>
 
+  <script src="/common/js/static/include.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
 <body>
-  <div data-include-html="/admin/header_admin" class="include"></div>
-  <!-- 왼쪽 메뉴 베너 -->
-  <section>
-    <div class="section-nav">
-      <div class="section-nav-category">
-        <a href="/sales/admin_sales">매출현황</a>
-      </div>
+<div data-include-html="/admin/header_admin" class="include"></div>
+<!-- 왼쪽 메뉴 베너 -->
+<section>
+  <div class="section-nav">
+    <div class="section-nav-category">
+      <a href="/sales/admin_sales">매출현황</a>
     </div>
+  </div>
 
-    <!-- 컨텐츠 영역 시작 -->
-    <div class="section-content">
-      <div class="section-title">매출현황</div>
+  <!-- 컨텐츠 영역 시작 -->
+  <div class="section-content">
+    <div class="section-title">매출현황</div>
 
-      <div class="section-chart" method="get">
-        <canvas id="salesChart">
-        </canvas>
-      </div>
+    <!-- 1-1. 매출현황 테이블 -->
+    <table class="salesTable">
+      <tbody>
+        <th></th>
+        <td th:each="sales : ${monthlySales}" th:text="${sales.totalSales}"></td>
+      </tbody>
+    </table>
+
+    <!-- 1-2. 매출현황 그래프 -->
+    <div class="section-chart" method="get">
+      <canvas id="salesChart" class="chart">
+      </canvas>
     </div>
-  </section>
-  <!-- footer -->
+  </div>
+</section>
+<!-- footer -->
 <div data-include-html="/admin/footer" class="include"></div>
 
 
 <!-- 스크립트 시작-->
-  <script th:inline="javascript">
+<script th:inline="javascript">
 
   let salesJson = /*[[${salesJson}]]*/ '';
 
-
   let monthlySales = JSON.parse(salesJson);
-  console.log(monthlySales)
+  console.log(monthlySales);
 
   let months = monthlySales.map(sales => sales.month);
   let totalSales = monthlySales.map(sales => sales.totalSales);
 
+  // 1-1. 매출 데이터 테이블
+
+  let salesTable = document.querySelector('.salesTable tbody')
+  salesTable.innerHTML = '';
+
+  // 1행 : 월
+  let row1 = document.createElement('tr');
+  let monthHeader = document.createElement('th');
+  monthHeader.textContent = '월';
+  row1.appendChild(monthHeader);
+
+  for (let i = 0; i < monthlySales.length; i++) {
+    let sales = monthlySales[i];
+    let monthCell = document.createElement('td');
+    monthCell.textContent = sales.month + '월';
+    row1.appendChild(monthCell);
+  }
+  salesTable.appendChild(row1);
+
+  // 2행 : 매출액
+  let row2 = document.createElement('tr');
+  let salesHeader = document.createElement('th');
+  salesHeader.textContent = '매출액';
+  row2.appendChild(salesHeader);
+
+  for (let i = 0; i < monthlySales.length; i++) {
+    let sales = monthlySales[i];
+    let totalSalesCell = document.createElement('td');
+    totalSalesCell.textContent = formatNumber(sales.totalSales);
+    row2.appendChild(totalSalesCell);
+  }
+
+  salesTable.appendChild(row2);
+
+
+  // 1-2. 매출 데이터 그래프
 
   let salesChart = document.getElementById('salesChart').getContext('2d');
 
   new Chart(salesChart, {
     type: 'bar',
     data: {
-      labels: months,
+      labels: months.map(month => month + '월'),
       datasets: [{
         label: 'Monthly Sales',
         data: totalSales,
@@ -70,12 +114,35 @@
     options: {
       responsive: true,
       scales: {
-        y: {
-          beginAtZero: true
+        x: {
+          display: true,
+        },
+          y: {
+            display: false
+          }
+        },
+      plugins: {
+        legend: {
+          display: false
         }
-      }
+      },
+      layout: {
+        padding: {
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 10
+        }
+      },
+      barPercentage: 0.6, // Adjust the width of the bars (0.1 to 1)
+      categoryPercentage: 0.8 // Adjust the space between bars (0.1 to 1)
     }
   });
+
+
+  function formatNumber(number) {
+    return number.toLocaleString() + '원';
+  }
 </script>
 </body>
 </html>

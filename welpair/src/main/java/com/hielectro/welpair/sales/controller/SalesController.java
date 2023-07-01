@@ -9,7 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -18,17 +22,10 @@ public class SalesController {
 
     private final SalesService salesService;
 
+
     public SalesController(SalesService salesService) {
         this.salesService = salesService;
     }
-
-//    @GetMapping("admin_sales")
-//    public String getSalesInfo(Model model){
-//        System.out.println("------------- 매출 컨트롤러 1-1-1 in -------------");
-//        System.out.println("------------- 매출 컨트롤러 1-1-1 out -------------");
-//
-//        return "admin/sales/admin_sales";
-//    }
 
     /**
      * 매출관리 (ng)
@@ -39,8 +36,23 @@ public class SalesController {
     public String getMonthSales(Model model){
         System.out.println("------------- 매출 컨트롤러 1-2-1 in -------------");
 
-//        List<SalesDTO> monthlySales = salesService.getMonthSales();
-//        model.addAttribute("monthlySales", monthlySales);
+//        List<SalesDTO> salesList = salesService.getMonthSales();
+//        Gson gson = new Gson();
+//        List<Map<String, Object>> monthlySales = new ArrayList<>();
+//
+//        for(SalesDTO sales : salesList){
+//            Map<String, Object> monthlySale = new HashMap<>();
+//            monthlySale.put("month", sales.getMonth() + "월");
+//            monthlySale.put("totalSales", String.format("%,d원", sales.getTotalSales()));
+//            monthlySales.add(monthlySale);
+//            System.out.println("monthlySales = " + monthlySales);
+//        }
+//
+//        String salesJson = gson.toJson(monthlySales);
+//
+//        model.addAttribute("salesJson", salesJson);
+//        System.out.println("monthlySales = " + monthlySales);
+//        System.out.println("salesJson = " + salesJson);
 
         List<SalesDTO> monthlySales = salesService.getMonthSales();
         Gson gson = new Gson();
@@ -49,6 +61,7 @@ public class SalesController {
         model.addAttribute("salesJson", salesJson);
         System.out.println("monthlySales = " + monthlySales);
         System.out.println("salesJson = " + salesJson);
+
         System.out.println("------------- 매출 컨트롤러 1-2-1 out -------------");
 
         return "admin/sales/admin_sales";

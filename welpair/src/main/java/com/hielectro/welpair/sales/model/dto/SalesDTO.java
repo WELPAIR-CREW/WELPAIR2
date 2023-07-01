@@ -3,6 +3,7 @@ package com.hielectro.welpair.sales.model.dto;
 import com.hielectro.welpair.payment.dto.PaymentDTO;
 import lombok.*;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @NoArgsConstructor
@@ -17,4 +18,6 @@ public class SalesDTO {
     private int month;
     private int totalSales;
 
+    public void setMonthFormatted(String s) {
+    }
 }
