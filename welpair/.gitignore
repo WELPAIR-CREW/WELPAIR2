@@ -99,4 +99,5 @@ replay_pid*
 
 target/
 application.yml
+settings.json
 # End of https://www.toptal.com/developers/gitignore/api/java,eclip
