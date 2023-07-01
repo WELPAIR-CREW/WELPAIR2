@@ -3,13 +3,12 @@ package com.hielectro.welpair.sellproduct.model.service;
 import java.util.List;
 import java.util.Map;
 
-import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
-import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import org.springframework.stereotype.Service;
 
+import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
+import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
 import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 
 @Service
 public class SellProductServiceImpl implements SellProductService {

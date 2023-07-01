@@ -3,11 +3,11 @@ package com.hielectro.welpair.sellproduct.model.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface SellProductService {
     public int sellProductSearchCount(Map<String, String> search);
