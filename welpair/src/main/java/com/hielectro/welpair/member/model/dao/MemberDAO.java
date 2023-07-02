@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MemberDAO {
 
-    MemberDTO findMemberById(String username);
+    MemberDTO findMemberById(String empNo);
 
-    // DB에 접근을 위한 객체
+
 }

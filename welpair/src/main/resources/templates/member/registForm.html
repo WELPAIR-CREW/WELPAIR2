@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>regist</title>
+    <link rel="stylesheet" type="text/css" href="/css/regist.css">
+    <link rel="stylesheet" type="text/css" href="/css">
+    <link rel="stylesheet" type="text/css" href="../consumer/header_consumer.html">
+
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+<body>
+<body>
+
+<form id="frm" action="/member/registForm" method="post">
+    <div class="article content_wrap">
+        <div class="title_regist"><h1>회원가입</h1></div>
+        <div class="form first_input int_name ">
+            <input class="input" type="text" placeholder="이름" id="memberName" name="empName">
+        </div>
+        <div class="form int_mamberNo">
+            <input class="input_name" type="text" placeholder="사원번호" id="memberNo" name="empNo">
+            <input class="check" value="사원번호"></input>
+        </div>
+        <div class="form int_password">
+            <input class="input pw" id="password1" type="password" placeholder="비밀번호" name="memPwd">
+        </div>
+        <div class="form int_passwordCheck">
+            <input class="input pw" id="password2" type="password" placeholder="비밀번호확인" name="pwd2">
+            <h4 class="pwd error" >비밀번호가 일치하지않습니다.</h4>
+            <h4 class="pwd ok" >비밀번호가 일치합니다.</h4>
+        </div>
+</form>
+<div class="terms terms_wrap">
+    <div class="title_term">
+        <input type="checkbox" id="term_ch">
+        <span class="titleTerm">웰페어 이용약관</span>
+    </div>
+    <div class="auth">
+        <p class="auth_inner">
+            네이버는 기본적으로 여러분 모두에게 동일한 내용의 서비스를 제공합니다.
+            다만, '청소년보호법' 등 관련 법령이나 기타 개별 서비스 제공에서의 특별한 필요에 의해서
+            연령 또는 일정한 등급을 기준으로 이용자를 구분하여 제공하는 서비스의 내용, 이용 시간,
+            이용 횟수 등을 다르게 하는 등 일부 이용을 제한하는 경우가 있습니다. 자세한 내용은 역시
+            각 서비스 상의 안내, 공지사항, 고객센터 도움말 등에서 확인하실 수 있습니다.
+            네이버는 기본적으로 여러분 모두에게 동일한 내용의 서비스를 제공합니다.
+            다만, '청소년보호법' 등 관련 법령이나 기타 개별 서비스 제공에서의 특별한 필요에 의해서
+            연령 또는 일정한 등급을 기준으로 이용자를 구분하여 제공하는 서비스의 내용, 이용 시간,
+            이용 횟수 등을 다르게 하는 등 일부 이용을 제한하는 경우가 있습니다. 자세한 내용은 역시
+            각 서비스 상의 안내, 공지사항, 고객센터 도움말 등에서 확인하실 수 있습니다.
+        </p>
+    </div>
+</div>
+<div class="bnt_regist_next">
+    <button class="bnt_next" type="submit">다음</button>
+</div>
+</div>
+<div class="footer1"></div>
+</body>
+
+
+<!-- <footer>
+    <div class="footer1"></div>
+</footer> -->
+<script>
+    $('.header1').load('../consumer/header_consumer.html');
+    $('.footer1').load('../HTML/consumer/footer.html');
+
+
+    $('.check').click(function(){
+        alert('사원번호인증확인, 사번있는지 확인 여부해아함');
+    });
+
+    // $('.bnt_next').click(function(){
+    //     alert('회원가입진행합니다.')
+    // });
+
+    // $(function(){
+    //     $('#password1').keyup(function(){
+    //         $('#')
+    //     })
+    // })
+
+    // 비밀번호 일치 확인 js.///////////////
+
+    $(function(){
+
+        $('.error').hide();
+        $('.ok').hide();
+
+        $('input').keyup(function(){
+
+            var pwd1 = $('#password1').val();
+            var pwd2 = $("#password2").val();
+
+            if(pwd1 != "" || pwd2 !=""){
+
+                if(pwd1 == pwd2){
+                    $('.error').hide();
+                    $('.ok').show();
+                    $(".bnt_next").removeAttr("disabled");
+                    $("#password1").css({'border' : '2px solid #3e4feb'});
+                    $("#password2").css({'border' : '2px solid #3e4feb'});
+                    $(".ok").css({"color" : "#3e4feb"});
+
+                    return true
+                } else{
+                    $('.error').show();
+                    $('.ok').hide();
+                    $('.bnt_next').attr('disabled', 'disabled');
+                    $("#password1").css({'border' : '2px solid red'});
+                    $("#password2").css({'border' : '2px solid red'});
+                    $(".error").css({"color" : "red"});
+                    return false
+                }
+
+            }
+
+        });
+
+    });
+
+
+    $(function(){
+        $("#frm").submit(function(){
+            if($("#memberName").val().trim() == ""){
+                alert("이름을 입력하세요.");
+                $("#memberName").focus();
+                return false;
+            }
+            if($("#memberNo").val().trim() == ""){
+                alert("사원번호을 입력하세요.");
+                $("#memberNo").focus();
+                return false;
+            }
+            if($("#password1").val().trim() == ""){
+                alert("비밀번호를 입력하세요.");
+                $("#password1").focus();
+                return false;
+            }
+            if($('#term_ch')[0].checked === false){
+                alert("이용약관에 동의해주세요");
+                $("#term_ch").focus();
+                return false;
+            } else{
+                alert('회원가입이 완료되었습니다.');
+                return true;
+            }
+
+        });
+    });
+
+    // 양식 입력 요청 코드 ///////////////////
+    // $(function(){
+    //     $("#frm").submit(function(){
+    //         if($("#memberName").val().trim() == ""){
+    //             alert("이름을 입력하세요.");
+    //             $("#memberName").focus();
+    //             return false;
+    //         }
+    //         if($("#memberNo").val().trim() == ""){
+    //             alert("사원번호을 입력하세요.");
+    //             $("#memberNo").focus();
+    //             return false;
+    //         }
+    //         if($("#password1").val().trim() == ""){
+    //             alert("비밀번호를 입력하세요.");
+    //             $("#password1").focus();
+    //             return false;
+    //         }
+    //         if($('#term_ch')[0].checked === false){
+    //             alert("이용약관에 동의해주세요");
+    //             $("#term_ch").focus();
+    //             return false;
+    //         } else{
+    //             alert('회원가입이 완료되었습니다.');
+    //             return true;
+    //         }
+
+    //     });
+    // });
+
+    // 마우스 효과
+
+    // if($("#password1").val().trim() == ""){
+    // alert("비밀번호를 입력하세요.");
+    // $("#password1").focus();
+    // return false;
+    // }
+    // if($("#password1").val() != $("#password2").val()){
+    //     alert("비밀번호가 일치하지 않습니다.");
+    //     $("#password2").focus();
+    //     return false;
+    // }
+
+</script>
+
+
+</html>
