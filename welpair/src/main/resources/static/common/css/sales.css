@@ -34,6 +34,32 @@
 
 /* contents */
 
+.section-salesSearch {
+    margin: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: right;
+}
+
+.section-salesSearch-option {
+    width: 150px;
+    height: 33px;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.btn_basic {
+    width: 80px;
+    height: 33px;
+    border-radius: 6px;
+    margin-left: 10px;
+    background-color: #333333;
+    color: white;
+}
+
+
+
 .salesTable {
     margin: 30px;
     position:relative;

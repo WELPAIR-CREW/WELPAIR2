@@ -13,7 +13,7 @@
 
   <script src="/common/js/static/include.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-  <script src="/common/js/src/inventory.js"></script>
+<!--  <script src="/common/js/src/inventory.js"></script>-->
 </head>
 
 <body>
@@ -78,6 +78,32 @@
 
 <!-- footer -->
 <div data-include-html="/admin/footer" class="include"></div>
+<script th:inline="javascript">
 
+  /* admin_inventory */
+  // 1-1. 기본 정보 출력
+
+  $(document).ready(function() {
+    $.ajax({
+      url: "/inventory/getInventoryInfo",
+      dataType: "json",
+      method: "GET",
+      success: function(response) {
+
+        $("#totalInvenAmount").text(response.totalInvenAmount.toLocaleString());
+        $("#alertStock").text(response.alertStock.toLocaleString());
+
+        console.log(response);
+        console.log(response.totalInvenAmount);
+        console.log(response.alertStock);
+      },
+      error: function(xhr, status, error) {
+        console.log(xhr);
+        console.log(status);
+        console.log(error);
+      }
+    });
+  });
+</script>
 </body>
 </html>

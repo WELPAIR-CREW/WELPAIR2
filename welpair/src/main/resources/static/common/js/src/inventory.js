@@ -204,9 +204,9 @@ $(document).ready(function() {
 
 
 // 날짜 기본값 반영
-let today = new Date();
-let stockDateString = today.toISOString().split('T')[0];
-$("#stockDate").val(stockDateString);
+// let today = new Date();
+// let stockDateString = today.toISOString().split('T')[0];
+// $("#stockDate").val(stockDateString);
 
 // 입고 일자 오늘로
 $(document).ready(function() {
