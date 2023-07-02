@@ -45,7 +45,8 @@
     </resultMap>
 
     <resultMap id="ReviewManagerDTO" type="com.hielectro.welpair.board.model.dto.ReviewManagerDTO">
-        <id property="id" column="SELL_PRODUCT_ID"/>
+        <id property="no" column="BOARD_NO"/>
+        <result property="pageNo" column="SELL_PAGE_NO"/>
         <result property="name" column="PRODUCT_NAME"/>
         <result property="title" column="BOARD_TITLE"/>
         <result property="content" column="BOARD_CONTENT"/>
@@ -53,6 +54,14 @@
         <result property="time" column="BOARD_TIME"/>
     </resultMap>
 
+    <resultMap id="QnAManagerDTO" type="com.hielectro.welpair.board.model.dto.QnAManagerDTO">
+        <id property="no" column="BOARD_NO"/>
+        <result property="pageNo" column="SELL_PAGE_NO"/>
+        <result property="title" column="BOARD_TITLE"/>
+        <result property="content" column="BOARD_CONTENT"/>
+        <result property="date" column="BOARD_DATE"/>
+        <result property="time" column="BOARD_TIME"/>
+    </resultMap>
     <select id="sellProductSearchCount" resultType="_int">
         SELECT
         COUNT(*)
@@ -110,25 +119,120 @@
         </if>
     </select>
 
+    <select id="reviewSearchCount" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM (
+        SELECT ROWNUM AS RN
+        , TB.BOARD_NO
+        , TR.SELL_PAGE_NO
+        , TP.PRODUCT_NAME
+        , TB.BOARD_TITLE
+        , TB.BOARD_CONTENT
+        , TO_DATE(TB.BOARD_DATE, 'RRRR-MM-DD') as BOARD_DATE
+        , TO_CHAR(TB.BOARD_DATE, 'HH24:MI:ss') as BOARD_TIME
+        FROM T_BOARD TB
+        JOIN T_REVIEW TR on TB.BOARD_NO = TR.BOARD_NO
+        JOIN T_ORDER T on (TR.ORDER_NO = T.ORDER_NO AND TB.EMP_NO = T.EMP_NO)
+        JOIN T_PRODUCT_ORDER TPO on T.ORDER_NO = TPO.ORDER_NO
+        JOIN T_SELL_PRODUCT TSP on TSP.SELL_PRODUCT_ID = TPO.SELL_PRODUCT_ID
+        JOIN T_PRODUCT TP on TP.PRODUCT_CODE = TSP.PRODUCT_CODE
+        WHERE 1=1
+        <if test="id != '' and id != null">
+            AND TSP.SELL_PRODUCT_ID = #{ id }
+        </if>
+        <if test="name != '' and name != null">
+            AND TP.PRODUCT_NAME = #{ name }
+        </if>
+        )
+        WHERE 1=1
+    </select>
+
     <select id="selectReviewList" resultMap="ReviewManagerDTO">
         SELECT
-            *
+                *
         FROM (
-                 SELECT ROWNUM AS RN
-                      , SELL_PRODUCT_ID
-                      , PRODUCT_NAME
-                      , BOARD_TITLE
-                      , BOARD_CONTENT
-                      , TO_DATE(BOARD_DATE, 'RRRR-MM-DD') as BOARD_DATE
-                      , TO_CHAR(BOARD_DATE, 'HH24:MI:ss') as BOARD_TIME
-                 FROM T_SELL_PRODUCT
-                  LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
-                  LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
-                  LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
-                  LEFT JOIN T_REVIEW USING (SELL_PAGE_NO)
-                  LEFT JOIN T_BOARD USING (BOARD_NO)
-             )
+        SELECT ROWNUM AS RN
+        , TB.BOARD_NO
+        , TR.SELL_PAGE_NO
+        , TP.PRODUCT_NAME
+        , TB.BOARD_TITLE
+        , TB.BOARD_CONTENT
+        , TO_DATE(TB.BOARD_DATE, 'RRRR-MM-DD') as BOARD_DATE
+        , TO_CHAR(TB.BOARD_DATE, 'HH24:MI:ss') as BOARD_TIME
+        FROM T_BOARD TB
+        JOIN T_REVIEW TR on TB.BOARD_NO = TR.BOARD_NO
+        JOIN T_ORDER T on (TR.ORDER_NO = T.ORDER_NO AND TB.EMP_NO = T.EMP_NO)
+        JOIN T_PRODUCT_ORDER TPO on T.ORDER_NO = TPO.ORDER_NO
+        JOIN T_SELL_PRODUCT TSP on TSP.SELL_PRODUCT_ID = TPO.SELL_PRODUCT_ID
+        JOIN T_PRODUCT TP on TP.PRODUCT_CODE = TSP.PRODUCT_CODE
+        WHERE 1=1
+        <if test="id != '' and id != null">
+            AND TSP.SELL_PRODUCT_ID = #{ id }
+        </if>
+        <if test="name != '' and name != null">
+            AND TP.PRODUCT_NAME = #{ name }
+        </if>
+        )
+        WHERE 1=1
+        <if test="pageNo != '0' and pageNo != null">
+            AND RN &gt; ( (TO_NUMBER(#{ pageNo }) - 1) * 10)
+            AND RN &lt;= ( TO_NUMBER(#{ pageNo }) * 10)
+        </if>
+    </select>
+
+    <select id="qnaSearchCount" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM (
+        SELECT ROWNUM AS RN
+        , BOARD_NO
+        , SELL_PAGE_NO
+        , BOARD_TITLE
+        , BOARD_CONTENT
+        , TO_DATE(BOARD_DATE, 'RRRR-MM-DD') as BOARD_DATE
+        , TO_CHAR(BOARD_DATE, 'HH24:MI:ss') as BOARD_TIME
+        FROM T_BOARD
+        JOIN T_QNA USING (BOARD_NO)
+        JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
+        WHERE 1=1
+        <if test="id != '' and id != null">
+            AND SELL_PRODUCT_ID = #{ id }
+        </if>
+        <if test="name != '' and name != null">
+            AND PRODUCT_NAME = #{ name }
+        </if>
+        )
         WHERE BOARD_DATE IS NOT NULL
+    </select>
+
+    <select id="selectQnAList" resultMap="QnAManagerDTO">
+        SELECT
+                *
+        FROM (
+        SELECT ROWNUM AS RN
+        , BOARD_NO
+        , SELL_PAGE_NO
+        , BOARD_TITLE
+        , BOARD_CONTENT
+        , TO_DATE(BOARD_DATE, 'RRRR-MM-DD') as BOARD_DATE
+        , TO_CHAR(BOARD_DATE, 'HH24:MI:ss') as BOARD_TIME
+        FROM T_BOARD
+        JOIN T_QNA USING (BOARD_NO)
+        JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
+        WHERE 1=1
+        <if test="id != '' and id != null">
+            AND SELL_PRODUCT_ID = #{ id }
+        </if>
+        <if test="name != '' and name != null">
+            AND PRODUCT_NAME = #{ name }
+        </if>
+        )
+        WHERE BOARD_DATE IS NOT NULL
+        <if test="pageNo != '0' and pageNo != null">
+            AND RN &gt; ( (TO_NUMBER(#{ pageNo }) - 1) * 10)
+            AND RN &lt;= ( TO_NUMBER(#{ pageNo }) * 10)
+        </if>
     </select>
 
     <delete id="sellProductDelete">

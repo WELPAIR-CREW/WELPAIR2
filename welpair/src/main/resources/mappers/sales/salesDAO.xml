@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hielectro.welpair.sales.model.dao.SalesDAO">
+
+    <resultMap id="salesResultMap" type="com.hielectro.welpair.sales.model.dto.SalesDTO">
+        <result property="month" column="MONTH"/>
+        <result property="totalSales" column="SALES"/>
+        <association property="payment" resultMap="getPaymentResultMap"></association>
+<!--        <association property="orderPayment" resultMap="getOrderPaymentResultMap"></association>-->
+<!--        <association property="productOrder" resultMap="getProductOrderResultMap"></association>-->
+<!--        <association property="sellProduct" resultMap="getSellProductResultMap"></association>-->
+<!--        <association property="product" resultMap="getProductResultMap"></association>-->
+<!--        <association property="category" resultMap="getCategoryResultMap"></association>-->
+    </resultMap>
+
+    <resultMap id="getPaymentResultMap" type="com.hielectro.welpair.payment.dto.PaymentDTO">
+        <result property="paymentNo" column="PAYMENT_NO"></result>
+        <result property="paymentDate" column="PAYMENT_DATE"></result>
+        <result property="paymentPrice" column="PAYMENT_PRICE"></result>
+        <result property="paymentType" column="PAYMENT_TYPE"></result>
+    </resultMap>
+<!--    <resultMap id="getOrderPaymentResultMap" type="com.hielectro.welpair.payment.dto.OrderPaymentDTO">-->
+<!--        <result property="paymentNo" column="PAYMENT_NO"></result>-->
+<!--        <result property="orderNo" column="ORDER_NO"></result>-->
+<!--    </resultMap>-->
+<!--    <resultMap id="getProductOrderResultMap" type="com.hielectro.welpair.order.model.dto.ProductOrderDTO">-->
+<!--        <result property="orderNo" column="ORDER_NO"></result>-->
+<!--        <result property="sellProductId" column="SELL_PRODUCT_ID"></result>-->
+<!--    </resultMap>-->
+<!--    <resultMap id="getSellProductResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">-->
+<!--        <result property="sellProductId" column="SELL_PRODUCT_ID"></result>-->
+<!--        <result property="productCode" column="PRODUCT_CODE"></result>-->
+<!--    </resultMap>-->
+<!--    <resultMap id="getProductResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">-->
+<!--        <result property="productCode" column="PRODUCT_CODE"></result>-->
+<!--        <result property="categoryCode" column="CATEGORY_CODE"></result>-->
+<!--    </resultMap>-->
+<!--    <resultMap id="getCategoryResultMap" type="com.hielectro.welpair.inventory.model.dto.CategoryDTO">-->
+<!--        <result property="categoryCode" column="CATEGORY_CODE"></result>-->
+<!--        <result property="categoryName" column="CATEGORY_NAME"></result>-->
+<!--    </resultMap>-->
+
+    <select id="getMonthSales" resultMap="salesResultMap">
+        SELECT
+        TO_CHAR(TRUNC(A.PAYMENT_DATE, 'MONTH'), 'MM') AS MONTH
+        , SUM(A.PAYMENT_PRICE) AS SALES
+        FROM T_PAYMENT A
+        WHERE TRUNC(PAYMENT_DATE, 'MONTH') >= TRUNC(SYSDATE) - INTERVAL '6' MONTH
+        GROUP BY TO_CHAR(TRUNC(PAYMENT_DATE, 'MONTH'), 'MM')
+        ORDER BY TO_CHAR(TRUNC(PAYMENT_DATE, 'MONTH'), 'MM')
+    </select>
+
+
+
+
+<!--    검색 조건 추가  -->
+<!--    <select id="getMonthSales" resultMap="salesResultMap">-->
+<!--        SELECT-->
+<!--               TO_CHAR(TRUNC(A.PAYMENT_DATE, 'MONTH'), 'MM') AS MONTH-->
+<!--             , SUM(A.PAYMENT_PRICE) AS SALES-->
+<!--          FROM T_PAYMENT A-->
+<!--          JOIN T_ORDER_PAYMENT B ON B.PAYMENT_NO = A.PAYMENT_NO-->
+<!--          JOIN T_PRODUCT_ORDER C ON C.ORDER_NO = B.ORDER_NO-->
+<!--          JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID-->
+<!--          JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE-->
+<!--          JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE-->
+<!--         WHERE TRUNC(PAYMENT_DATE, 'MONTH') >= TRUNC(SYSDATE) - INTERVAL '6' MONTH-->
+<!--        <if test="payment != null and payment.paymentType != null and payment.paymentType != ''">-->
+<!--            AND A.PAYMENT_TYPE = #{payment.paymentType}-->
+<!--        </if>-->
+<!--        <if test="category != null and category.categoryCode != null and category.categoryCode != ''">-->
+<!--            AND E.CATEGORY_CODE = #{category.categoryCode}-->
+<!--        </if>-->
+<!--        GROUP BY TO_CHAR(TRUNC(PAYMENT_DATE, 'MONTH'), 'MM')-->
+<!--        ORDER BY TO_CHAR(TRUNC(PAYMENT_DATE, 'MONTH'), 'MM')-->
+<!--    </select>-->
+</mapper>

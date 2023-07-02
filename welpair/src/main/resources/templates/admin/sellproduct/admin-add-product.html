@@ -6,16 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상품 등록</title>
-    <link rel="stylesheet" href="../../CSS/header.css">
-    <link rel="stylesheet" href="../../CSS/main.css">
-    <link rel="stylesheet" href="../../CSS/product-detail.css">
-    <link rel="stylesheet" href="../../CSS/footer.css">
-    <script src="../../src/static/include.js"></script>
+    <link rel="stylesheet" href="../common/css/header.css">
+    <link rel="stylesheet" href="../common/css/main.css">
+    <link rel="stylesheet" href="../common/css/product-detail.css">
+    <link rel="stylesheet" href="../common/css/footer.css">
+    <script th:src="@{../common/js/static/bundle.js}"></script>
+    <script th:src="@{../common/js/static/include.js}"></script>
 </head>
 
 <body>
     <form>
-        <div data-include-html="./header_admin.html" class="include"></div>
+        <div data-include-html="/admin/header_admin" class="include"></div>
         <div class="product-add-header">
             <span class="product-add-title">상품등록</span>
             <button>
@@ -28,14 +29,17 @@
         </div>
         <section class="product-detail">
             <article class="product-detail-area1">
-                <img src="#">
-                <div class="thumbnail-img">
+                <div class="imagebox">
                     <img src="#">
-                    <img src="#">
-                    <img src="#">
-                    <img src="#">
-                    <img src="#">
-                    <img src="#">
+
+                    <div class="thumbnail-img">
+                        <img src="#">
+                        <img src="#">
+                        <img src="#">
+                        <img src="#">
+                        <img src="#">
+                        <img src="#">
+                    </div>
                 </div>
                 <label for="upload" class="upload">
                     &gt; 이미지 업로드 &lt;
@@ -49,11 +53,11 @@
                 <div class="product-add-info">
                     상품명 : <input type="text" name="name" class="product-sale-name" placeholder="판매상품명 입력"><br>
                     상품가격 : <input type="text" name="price" class="product-sale-price" placeholder="판매가격 입력"><br>
-                    상위 카테고리 : 
+                    상위 카테고리 :
                     <select name="parentCategory" id="refCategoryCode">
 
                     </select><br>
-                    하위 카테고리 : 
+                    하위 카테고리 :
                     <select name="subCategory" id="categoryCode">
 
                     </select>
@@ -67,7 +71,13 @@
                 <div class="product-no">상품번호</div>
                 <div class="product-no-text"><input type="text" placeholder="상품번호 입력" name="productNo"></div>
                 <div class="product-status">상품상태</div>
-                <div class="product-status-text"><input type="text" placeholder="상품상태 입력" name="productStatus"></div>
+                <div class="product-status-text">
+                    <select placeholder="상품상태 선택" name="productStatus">
+                        <option value="1">신상</option>
+                        <option value="2">리퍼</option>
+                        <option value="3">전시</option>
+                    </select>
+                </div>
             </article>
             <article class="product-as-cert">
                 <div class="product-as">A/S 안내</div>
@@ -92,8 +102,23 @@
             </div>
             <img src="#" alt="" srcset="">
         </section>
-        <div data-include-html="./footer.html" class="include"></div>
+        <div data-include-html="/admin/footer" class="include"></div>
     </form>
+    <script>
+        const upload = document.querySelector('#upload')
+        const thumbnail = document.querySelector(".thumbnail-img");
+
+        upload.addEventListener('change', function () {
+            [...thumbnail.children].forEach((item, index) => {
+                if (this.files[index]) {
+                    item.src = URL.createObjectURL(this.files[index])
+                    item.style = "display: block"
+                } else {
+                    item.style = "display: none"
+                }
+            })
+        })
+    </script>
 </body>
 
 </html>

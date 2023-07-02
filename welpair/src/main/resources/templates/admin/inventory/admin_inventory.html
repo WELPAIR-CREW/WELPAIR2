@@ -10,9 +10,10 @@
   <link rel="stylesheet" href="/common/css/header.css">
   <link rel="stylesheet" href="/common/css/footer.css">
   <link rel="stylesheet" href="/common/css/inventory.css">
-  <script src="/common/js/static/include.js"></script>
 
+  <script src="/common/js/static/include.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<!--  <script src="/common/js/src/inventory.js"></script>-->
 </head>
 
 <body>
@@ -77,11 +78,9 @@
 
 <!-- footer -->
 <div data-include-html="/admin/footer" class="include"></div>
+<script th:inline="javascript">
 
-<!-- 스크립트 시작-->
-<script>
-
-
+  /* admin_inventory */
   // 1-1. 기본 정보 출력
 
   $(document).ready(function() {
@@ -105,7 +104,6 @@
       }
     });
   });
-
 </script>
 </body>
 </html>

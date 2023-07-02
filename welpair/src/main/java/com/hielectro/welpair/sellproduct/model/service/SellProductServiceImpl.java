@@ -3,6 +3,7 @@ package com.hielectro.welpair.sellproduct.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import org.springframework.stereotype.Service;
@@ -24,17 +25,32 @@ public class SellProductServiceImpl implements SellProductService {
     }
 
     @Override
+    public int reviewSearchCount(Map<String, Object> searchMap) {
+        return productMapper.reviewSearchCount(searchMap);
+    }
+
+    @Override
+    public int qnaSearchCount(Map<String, Object> searchMap) {
+        return productMapper.qnaSearchCount(searchMap);
+    }
+
+
+    @Override
     public List<SellProductDetailDTO> selectProductList(Map<String, String> productId) {
         return productMapper.selectProductList(productId);
     }
 
     @Override
-    public List<ReviewManagerDTO> selectReviewList() {
-        return productMapper.selectReviewList();
+    public List<ReviewManagerDTO> selectReviewList(Map<String, Object> searchMap) {
+        return productMapper.selectReviewList(searchMap);
     }
 
     @Override
-    public int sellProductDelete(List<String> request) throws Exception {
+    public List<QnAManagerDTO> selectQnAList(Map<String, Object> searchMap) {
+        return productMapper.selectQnAList(searchMap);
+    }
+    @Override
+    public int sellProductDelete(List<String> request) throws IllegalStateException {
         int size = request.size();
         int result = 0;
 
@@ -49,4 +65,6 @@ public class SellProductServiceImpl implements SellProductService {
 
         return result;
     }
+
+
 }
