@@ -19,8 +19,8 @@
 <body>
 <div data-include-html="/admin/header_admin" class="include"></div>
 
-<!-- 왼쪽 메뉴 베너 -->
 <section>
+<!-- 왼쪽 메뉴 베너 -->
   <div class="section-nav">
     <div class="section-nav-category">
       <a href="/inventory/admin_inventory"><b>재고관리</b></a>
@@ -78,32 +78,6 @@
 
 <!-- footer -->
 <div data-include-html="/admin/footer" class="include"></div>
-<script th:inline="javascript">
-
-  /* admin_inventory */
-  // 1-1. 기본 정보 출력
-
-  $(document).ready(function() {
-    $.ajax({
-      url: "/inventory/getInventoryInfo",
-      dataType: "json",
-      method: "GET",
-      success: function(response) {
-
-        $("#totalInvenAmount").text(response.totalInvenAmount.toLocaleString());
-        $("#alertStock").text(response.alertStock.toLocaleString());
-
-        console.log(response);
-        console.log(response.totalInvenAmount);
-        console.log(response.alertStock);
-      },
-      error: function(xhr, status, error) {
-        console.log(xhr);
-        console.log(status);
-        console.log(error);
-      }
-    });
-  });
-</script>
+<script src="/common/js/src/inventory.js"></script>
 </body>
 </html>
