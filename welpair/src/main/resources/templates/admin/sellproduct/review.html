@@ -84,8 +84,8 @@
     </div>
 </section>
 <script th:inline="javascript">
-    let data = [[${list}]];
-    let paging = [[${paging}]];
+    let data = /*[[${list}]]*/'list'
+    let paging = /*[[${paging}]]*/'paging'
     createTable(data);
     setPagination(paging);
     createPaging()
