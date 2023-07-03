@@ -13,7 +13,11 @@ import java.util.Date;
 public class SelectCriteria {
 
     private int currentPage; //현재페이지번호
-    private int totalMemberCount; //총 항목의 수
+
+//    private int listlength;
+  private int totalMemberCount; //총 항목의 수
+//  private int totalEmployeeCount;
+
     private int itemsPerPage; //한 페이지에 보여줄 항목의 수
     private int displayPageCount; //한번에 표시할 페이지번호의 수
     private int totalPages; //총 페이지 수
@@ -24,15 +28,7 @@ public class SelectCriteria {
     private String searchCondition; //검색 조건
     private String searchValue; //검색어
 
-    private String isExpired;
-
-
-//    private int totalEmployeeCount;
-//    private Date hireDate;
-
-    private int listlength;
-
-
-
+  private String isExpired;
+//  private Date hireDate;
 
 }
