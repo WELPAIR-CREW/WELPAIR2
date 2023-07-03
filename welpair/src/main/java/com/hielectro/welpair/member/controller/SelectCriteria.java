@@ -3,6 +3,8 @@ package com.hielectro.welpair.member.controller;
 
 import lombok.*;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @ToString
@@ -23,4 +25,8 @@ public class SelectCriteria {
     private String searchValue; //검색어
 
     private String isExpired;
+
+
+//    private int totalEmployeeCount;
+//    private Date hireDate;
 }

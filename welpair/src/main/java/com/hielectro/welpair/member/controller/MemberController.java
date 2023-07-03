@@ -1,5 +1,6 @@
 package com.hielectro.welpair.member.controller;
 
+import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.service.MemberService;
 import org.apache.ibatis.annotations.Select;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
-@RequestMapping("/member")
+@RequestMapping("/member/*")
 public class MemberController {
 
     private final MemberService memberService;
@@ -48,32 +49,13 @@ public class MemberController {
 
         SelectCriteria selectCriteria = null;
 
-// 원래코드
-//        if(searchCondition != null && !"".equals(searchCondition)) {
-//            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, searchCondition, searchValue, isExpired);
-//        } else {
-//            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, isExpired);
-//        }
-
-        if(isExpired != null) {
-
-            if(searchCondition != null && !"".equals(searchCondition)) {
-                selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, searchCondition, searchValue, isExpired);
-            } else {
-                selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, isExpired);
-            }
-
-        } else {
-
-            if(searchCondition != null && !"".equals(searchCondition)) {
-                selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, searchCondition, searchValue);
-            } else {
-                selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount);
-            }
-
+        if(searchCondition != null && !"".equals(searchCondition)) { //검색어 있을때
+            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, searchCondition, searchValue, isExpired);
+        } else { //검색어 없을때
+            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, isExpired);
         }
-        System.out.println(selectCriteria.getIsExpired());
 
+        System.out.println(selectCriteria.getIsExpired());
 
         List<MemberDTO> memberList = memberService.getMemberList(selectCriteria);
 
@@ -88,7 +70,7 @@ public class MemberController {
         //퇴사한 회원만 가져오는지 확인
         System.out.println(memberList);
 
-        //페이지묶음 - 지금은 전체 페이지를 다 가져오도록하는 코드임
+        //@페이지묶음 - 지금은 전체 페이지를 다 가져오도록하는 코드임
         List<Integer> pageNumList = new ArrayList<>();
         for (int i=1; i<=totalPages; i++) {
             pageNumList.add(i);
@@ -111,22 +93,50 @@ public class MemberController {
     }
 
 
+    //2. 회원등록 - 직원목록
+    @GetMapping("/regist")
+    public ModelAndView getEmployeeList(HttpServletRequest request, @RequestParam(required = false) String searchCondition, @RequestParam(required = false) String searchValue
+            , @RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView model
+            , @RequestParam(value="type", required = false) Date hireDate) {
+
+
+        Map<String, String> searchMap = new HashMap<>();
+        searchMap.put("searchCondition", searchCondition);
+        searchMap.put("searchValue", searchValue);
+        System.out.println("입사일 : " + hireDate);
+        int totalEmployeeCount = memberService.totalEmployeeCount(searchMap); //총 항목 수(검색 조건 적용)
+        int itemsPerPage = 10; //페이지당 항목 수
+        int displayPageCount = 5; //표시할 페이지 번호 수
+
+        int totalPages = 0;
+        totalPages = (int) Math.ceil((double) totalEmployeeCount / itemsPerPage);
+
+        SelectCriteria selectCriteria = null;
+
+
+        //...필터, 검색 관련 내용 넣기...
+
+//        if(searchCondition != null && !"".equals(searchCondition)) { //검색어 있을때
+//            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalEmployeeCount, itemsPerPage, displayPageCount, searchCondition, searchValue, isExpired);
+//        } else { //검색어 없을때
+//            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalEmployeeCount, itemsPerPage, displayPageCount, hireDate);
+//        }
+
+
+        List<EmployeeDTO> employeeList = memberService.getEmployeeList(selectCriteria);
 
 
 
-
-
-
-
-
-
-
-
-    @GetMapping("regist")
-    public String getEmpListForRegist() {
-        return "admin/member/member-regist1";
-
+        model.addObject("employeeList", employeeList);
+        model.addObject("selectCriteria", selectCriteria);
+        model.setViewName("admin/member/member-regist1");
+        return model;
     }
+
+
+
+
+
 
     @GetMapping("permission")
     public String getReqList() {

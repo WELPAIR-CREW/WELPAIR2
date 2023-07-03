@@ -3,6 +3,7 @@ import com.hielectro.welpair.member.controller.DeleteMemberException;
 import com.hielectro.welpair.member.controller.Pagenation;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dao.MemberMapper;
+import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class MemberServiceImpl implements MemberService {
         List<MemberDTO> memberList = memberMapper.getMemberList(selectCriteria);
         return memberList;
     }
+
+
     //전체,퇴사회원수 조회
     @Override
     public int totalMemberCount(Map<String, String> searchMap) {
@@ -41,23 +44,9 @@ public class MemberServiceImpl implements MemberService {
 
         return memberMapper.expiredMemberCount(searchMap);
     }
-    //계정 삭제
-//    @Override
-//    @Transactional
-//    public List<MemberDTO> deleteMember(MemberDTO memberDTO, SelectCriteria selectCriteria) throws DeleteMemberException {
-//        List<MemberDTO> memberList = null;
-//
-//        int result = memberMapper.deleteMember(memberDTO.getEmpNo());
-//
-//        if(result > 0) {
-//            memberList = memberMapper.getMemberList(selectCriteria);
-//        } else {
-//            throw new DeleteMemberException("계정삭제 실패");
-//        }
-//
-//        return memberList;
-//    }
 
+
+    //계정 삭제
     @Override
     @Transactional(rollbackFor = Exception.class) //어떤 예외가 발생하더라도 롤백하게함
     public void deleteMember(List<String> empNos) throws DeleteMemberException {
@@ -75,4 +64,19 @@ public class MemberServiceImpl implements MemberService {
             }
         }
     }
+
+
+    //회원등록-직원목록 조회
+    @Override
+    public List<EmployeeDTO> getEmployeeList(SelectCriteria selectCriteria) {
+        List<EmployeeDTO> employeeList = memberMapper.getEmployeeList(selectCriteria);
+        return employeeList;
+    }
+
+
+    @Override
+    public int totalEmployeeCount(Map<String, String> searchMap) {
+        return memberMapper.totalEmployeeCount(searchMap);
+    }
+
 }
