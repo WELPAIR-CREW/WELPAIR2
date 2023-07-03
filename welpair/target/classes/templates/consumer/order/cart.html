@@ -77,14 +77,14 @@
                                 </label>
                                 <!-- 판매페이지 바로가기 링크 -->
 <!--                                    <a th:if="${cart.getSellPage().getNo() == Exception}" th th:href="@{'/admin/sellproduct'}">-->
-<!--                                    <a th:if="${cart.getSellPage().getNo() != Exception}" th:href="@{'/admin/sellproduct?' + ${cart.getSellPage().getNo()} + '.html'}">-->
+<!--                                    <a th:unless="${cart.getSellPage().getNo() == Exception}" th:href="@{'/admin/sellproduct?' + ${cart.getSellPage().getNo()} + '.html'}">-->
 
                                     <!-- 상품썸네일 구역 -->
                                     <div class="cart_thumb_box">
                                         <!-- 상품썸네일 이미지-->
                                         <span class="cart_thumb_img" name="sellThumbImage">
                                             <img th:if="${cart.sellImage.path != NullPointerException}" th:src="'../..' + ${cart.sellImage.path}" class="thumbimg">
-                                            <img th:if="${cart.sellImage.path == NullPointerException}" src="/common/images/thumbnailbox.png" class="thumbimg">
+                                            <img th:unless="${cart.sellImage.path != NullPointerException}" src="/common/images/thumbnailbox.png" class="thumbimg">
                                           </span>
                                     </div>
                                     <!-- 상품이름 작성구역  -->
