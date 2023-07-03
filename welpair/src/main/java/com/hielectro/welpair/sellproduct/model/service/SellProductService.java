@@ -3,6 +3,7 @@ package com.hielectro.welpair.sellproduct.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
@@ -22,4 +23,5 @@ public interface SellProductService {
     List<QnAManagerDTO> selectQnAList(Map<String, Object> searchMap);
 
     int qnaSearchCount(Map<String, Object> searchMap);
+    List<ProductDTO> selectOptionList(ProductDTO product);
 }

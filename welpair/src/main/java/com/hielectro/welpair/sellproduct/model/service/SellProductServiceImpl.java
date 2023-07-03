@@ -3,6 +3,7 @@ package com.hielectro.welpair.sellproduct.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import org.springframework.stereotype.Service;
 
 import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
@@ -31,6 +32,11 @@ public class SellProductServiceImpl implements SellProductService {
     @Override
     public int qnaSearchCount(Map<String, Object> searchMap) {
         return productMapper.qnaSearchCount(searchMap);
+    }
+
+    @Override
+    public List<ProductDTO> selectOptionList(ProductDTO product) {
+        return productMapper.selectOptionList(product);
     }
 
 

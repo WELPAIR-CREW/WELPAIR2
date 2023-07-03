@@ -1,5 +1,6 @@
 package com.hielectro.welpair.sellproduct.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,30 @@ public class SellProductController {
     @GetMapping("{url}")
     public String defaultLocation(@PathVariable String url) {
         return "admin/sellproduct/" + url;
+    }
+
+    @GetMapping("add")
+    public String addSellProduct() {
+        return "admin/sellproduct/admin-add-product";
+    }
+
+    @PostMapping("add")
+    public String redirectSellPage() {
+
+        return "";
+//        return "redirect:consumer/sellproduct/product-detail";
+    }
+
+    @PostMapping("optionList")
+    @ResponseBody
+    public List<ProductDTO> selectOptionList(@RequestBody ProductDTO product) {
+        return productService.selectOptionList(product);
+    }
+
+    @PostMapping("productNameList")
+    @ResponseBody
+    public List<ProductDTO> selectProductName(@RequestBody ProductDTO product) {
+        return new ArrayList<>();
     }
 
     @GetMapping("review")

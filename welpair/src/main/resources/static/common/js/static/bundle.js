@@ -106,13 +106,28 @@ function setPagination(data) {
     pagination.maxPageNo = data.maxPageNo;
 }
 
-function search(e) {
-    const form = document.createElement("form");
-    form.method = "get";
-    form.action = "/sellproduct/test";
+const call = async (url, method, request) => {
+    let options = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: method
+    };
 
-    form.appendChild(document.querySelector("[name='id']").cloneNode());
-    form.appendChild(document.querySelector("[name='name']").cloneNode());
-    document.body.append(form);
-    form.submit();
+    if (request) {
+        options.body = JSON.stringify(request);
+    }
+
+    console.log(options.body);
+    return fetch(url, options)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            return Promise.reject(response);
+        })
+        .catch(error => {
+            console.log(error);
+            return Promise.reject(error);
+        })
 }

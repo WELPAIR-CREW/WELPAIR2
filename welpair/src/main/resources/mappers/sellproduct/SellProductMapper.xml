@@ -19,6 +19,7 @@
         <result property="productStatus" column="PRODUCT_STATUS"/>
         <result property="productPrice" column="PRODUCT_PRICE"/>
         <result property="productOption" column="PRODUCT_OPTION"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
     </resultMap>
 
     <resultMap id="SellItemPageDTO" type="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
@@ -284,6 +285,14 @@
             AND RN &lt;= ( TO_NUMBER(#{ pageNo }) * 10)
         </if>
 
+    </select>
+
+    <select id="selectOptionList" resultMap="ProductDTO">
+        SELECT
+               DISTINCT PRODUCT_OPTION
+          FROM T_PRODUCT
+         WHERE CATEGORY_CODE = #{ categoryCode }
+         ORDER BY PRODUCT_OPTION
     </select>
 
     <delete id="sellProductDelete">

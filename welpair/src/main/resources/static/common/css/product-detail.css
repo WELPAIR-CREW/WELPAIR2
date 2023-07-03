@@ -298,3 +298,7 @@ label[for='upload'] {
 .product-detail-area1 img {
     display: none;
 }
+
+.product-detail-area1 .selectImg {
+    border: 2px solid #333333;
+}
