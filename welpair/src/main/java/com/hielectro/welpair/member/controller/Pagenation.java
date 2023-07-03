@@ -6,11 +6,45 @@ import java.util.Map;
 
 public class Pagenation {
 
-    //검색어 없는 경우의 페이징 처리
-    public static SelectCriteria getSelectCriteria(int currentPage, int totalMemberCount, int itemsPerPage, int displayPageCount, String isExpired) {
 
-        return getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, null, null, isExpired);
+    private static int currentPage;
+    private static int startPage = 1;
+    private static int endPage = 5;
+    private static int totalPages; //총 페이지 수 (마지막 페이지 번호)
+    private static int listLength; //총 항목 수 totalMemberCount, totalEmployeeCount 등
+    private static int itemsPerPage = 10; //페이지당 항목 수
+    private static String url = "";
+
+
+
+    //항목이 하나도 없을 경우
+    public static void init(String requestURL) {
+        currentPage = 1;
+        startPage = 1;
+        endPage = 5;
+        totalPages = 1; //항목이 0개이면 총 페이지수가 1페이지가 될것
+        listLength = 0; //항목이 0개
+        url = requestURL; //String.valueOf(request.getRequestURL())
     }
+
+
+    public static Map<String, Integer> paging(int listLength, int currentPage) {
+        if(listLength == 0) { //항목이 0개이면.........???
+            listLength++;
+        }
+        listLength = listLength; //필드에 인자로 들어온 값(컨트롤러가 DB에서 받은 총항목수)을 대입
+        currentPage = currentPage;
+        totalPages = (int) Math.ceil((double)listLength/itemsPerPage); //총 페이지수 계산
+
+        Map<String, Integer> response = new HashMap<>(); //???
+
+        return getResultMap(response); //???
+    }
+
+
+
+
+
 
     //검색어가 있는 경우 페이징 처리
     public static SelectCriteria getSelectCriteria(int currentPage, int totalMemberCount, int itemsPerPage, int displayPageCount

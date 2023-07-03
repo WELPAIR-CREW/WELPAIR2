@@ -1,5 +1,6 @@
 package com.hielectro.welpair.member.controller;
 
+import com.hielectro.welpair.common.Pagination;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.service.MemberService;
@@ -28,17 +29,22 @@ public class MemberController {
 
     //1. 회원조회 - 회원목록
     @GetMapping("/member-view")
-    public ModelAndView getMemberList(HttpServletRequest request, @RequestParam(required = false) String searchCondition, @RequestParam(required = false) String searchValue
-            , @RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView model
+    public ModelAndView getMemberList(HttpServletRequest request, @RequestParam(required = false) String searchValue
+            , @RequestParam(value="currentPage", defaultValue="1", required=false) int currentPage, ModelAndView model
             , @RequestParam(value="type", required = false) String isExpired) {
                                 //int currentPage: URL로 전달되는 현재 페이지 번호로 URL에 제공되지 않으면 1로 설정됨)
                                 //String isExpired: URL로 전달되는 값...버튼을 눌렀을때 추가됨되도록 타임리프의 속성으로 추가돼있음
 
+        String url = String.valueOf(request.getRequestURL());
         Map<String, String> searchMap = new HashMap<>();
-        searchMap.put("searchCondition", searchCondition);
-        searchMap.put("searchValue", searchValue);
+        Map<String, Integer> paging = null;
+        searchMap.put("searchValue", searchValue); //검색어
+
+        Pagination.init(url);
+        int result = memberService.totalMemberCount(searchMap);
+
         System.out.println(isExpired);
-        int totalMemberCount = memberService.totalMemberCount(searchMap); //총 항목 수(검색 조건 적용)
+
         int expiredMemberCount = memberService.expiredMemberCount(searchMap); //퇴사한 직원 수
         int itemsPerPage = 10; //페이지당 항목 수
         int displayPageCount = 5; //표시할 페이지 번호 수
@@ -95,7 +101,7 @@ public class MemberController {
 
     //2. 회원등록 - 직원목록
     @GetMapping("/regist")
-    public ModelAndView getEmployeeList(HttpServletRequest request, @RequestParam(required = false) String searchCondition, @RequestParam(required = false) String searchValue
+    public ModelAndView getEmployeeList(@RequestParam(required = false) String searchCondition, @RequestParam(required = false) String searchValue
             , @RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView model
             , @RequestParam(value="type", required = false) Date hireDate) {
 

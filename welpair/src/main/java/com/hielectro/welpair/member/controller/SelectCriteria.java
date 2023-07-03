@@ -29,4 +29,10 @@ public class SelectCriteria {
 
 //    private int totalEmployeeCount;
 //    private Date hireDate;
+
+    private int listlength;
+
+
+
+
 }
