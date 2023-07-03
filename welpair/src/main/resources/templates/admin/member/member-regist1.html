@@ -46,7 +46,7 @@
                 
                 <table>
                     <thead>
-                        <tr>
+                        <tr th:each="member:${memberList}">
                             <th>입사일</th>
                             <th>사번</th>
                             <th>이름</th>
@@ -60,82 +60,12 @@
                     <tbody>
                         <tr th:each="employee:${employeeList}">
                             <td th:text="${employee.hireDate}"></td>
-                            <td>P231010</td>
-                            <td>홍길동</td>
-                            <td>hong123@hielectronics.com</td>
-                            <td>010-1234-5678</td>
-                            <td>영업</td>
-                            <td>사원</td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-regist2.html">등록</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-regist2.html">등록</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-regist2.html">등록</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-regist2.html">등록</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-regist2.html">등록</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td th:text="${employee.empNo}"></td>
+                            <td th:text="${employee.empName}"></td>
+                            <td th:text="${employee.empEmail}"></td>
+                            <td th:text="${employee.empPhone}"></td>
+                            <td th:text="${employee.empDept}"></td>
+                            <td th:text="${employee.jobCode}"></td>
                             <td>
                                 <button class="button-square2">
                                     <a href="../../HTML/admin/member-regist2.html">등록</a>

@@ -93,4 +93,23 @@
         FROM T_MEMBER M
         WHERE M.EMP_NO = #{empNo}
     </delete>
+
+    <select id="getMemberList" resultMap="memberListResultMap">
+    select
+    E.EMP_NO
+    ,E.EMP_NAME
+    ,E.EMP_EMAIL
+    ,E.EMP_PHONE
+    ,E.EMP_DEPT
+    ,E.JOB_CODE
+    ,E.HIRE_DATE
+    ,M.REGIST_DATE
+    from T_EMPLOYEE E
+    join T_MEMBER M ON (E.EMP_NO = M.EMP_NO)
+    where E.IS_EXPIRE = 'N' and E.EMP_NO like 'E%'
+    order by E.HIRE_DATE desc;
+    </select>
+
+
+
 </mapper>
