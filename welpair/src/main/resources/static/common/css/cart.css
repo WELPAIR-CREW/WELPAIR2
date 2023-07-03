@@ -46,6 +46,7 @@ li[id*=cart_basic] {
 input[type=checkbox] {
 	width: 23px;
 	height: 23px;
+	margin-right: 20px;
 }
 
 /* 장바구니 상품부분 박스 */

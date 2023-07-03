@@ -28,10 +28,9 @@ public class CartGeneralDTO {
 
     private int price;
     private int totalPrice;
+
     private int exptPrice;
     private int exptDeliveryPrice;
     private int exptTotalPrice;
-
-
 }
 
