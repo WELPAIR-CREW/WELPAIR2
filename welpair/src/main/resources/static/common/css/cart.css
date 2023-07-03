@@ -46,6 +46,7 @@ li[id*=cart_basic] {
 input[type=checkbox] {
 	width: 23px;
 	height: 23px;
+	margin-right: 20px;
 }
 
 /* 장바구니 상품부분 박스 */
@@ -400,4 +401,14 @@ input[type='number']::-webkit-inner-spin-button {
 	color: white;
 	border-radius: 6px;
 
+}
+
+
+.thumbimg {
+	background-repeat: no-repeat;
+	display: block;
+	max-width: 100%;
+	height: auto;
+	object-fit: cover;
+	margin: auto;
 }

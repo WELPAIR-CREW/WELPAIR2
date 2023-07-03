@@ -84,6 +84,8 @@
             <version>1.16</version>
         </dependency>
 
+
+
         <!-- https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect -->
         <dependency>
             <groupId>nz.net.ultraq.thymeleaf</groupId>
@@ -136,7 +138,6 @@
             <artifactId>spring-boot-starter-validation</artifactId>
             <version>3.1.0</version>
         </dependency>
-
     </dependencies>
 
     <build>

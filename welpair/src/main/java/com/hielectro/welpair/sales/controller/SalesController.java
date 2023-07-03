@@ -35,18 +35,95 @@ public class SalesController {
      * 월별 총매출액 정보 전달
      * 막대그래프로 단순 표현 예정
      */
-    @GetMapping("admin_sales")
-    public String getMonthSales(Model model, @ModelAttribute SalesDTO sales) {
-        System.out.println("------------- 매출 컨트롤러 1-1-1 in -------------");
+//    @GetMapping("admin_sales")
+//    public String getMonthSales(Model model, @ModelAttribute SalesDTO sales) {
+//        System.out.println("------------- 매출 컨트롤러 1-1 in -------------");
+//
+//        sales.setPayment(new PaymentDTO());
+//        sales.setCategory(new CategoryDTO());
+//
+//        PaymentDTO payment = sales.getPayment();
+//        CategoryDTO category = sales.getCategory();
+//
+//        String paymentType = (payment.getPaymentType() != null) ? payment.getPaymentType() : null;
+//        String categoryCode = (category.getCategoryCode() != null) ? category.getCategoryCode() : null;
+//
+//        System.out.println("categoryCode = " + categoryCode);
+//        System.out.println("paymentType = " + paymentType);
+//
+//        List<SalesDTO> monthlyList = salesService.getMonthSales(sales);
+//        model.addAttribute("monthlyList", monthlyList);
+//        System.out.println("monthlyList = " + monthlyList);
+//        System.out.println("------------- 매출 컨트롤러 1-1 out -------------");
+//
+//        return "admin/sales/admin_sales";
+//
+//    }
+//
+//    @GetMapping("/salesSearch")
+//    @ResponseBody
+//    public List<SalesDTO> salesSearch(/*@ModelAttribute SalesDTO sales,*/ @RequestParam(value = "paymentType", required = false) String paymentType,
+//                                      @RequestParam(value = "categoryCode", required = false) String categoryCode) {
+//
+//        System.out.println("------------- 매출 컨트롤러 1-2 in -------------");
+//
+//        SalesDTO sales = new SalesDTO();
+//        PaymentDTO payment = new PaymentDTO();
+//        CategoryDTO category = new CategoryDTO();
+//
+//        payment.setPaymentType(paymentType);
+//        category.setCategoryCode(categoryCode);
+//        System.out.println("paymentType = " + paymentType);
+//        System.out.println("categoryCode = " + categoryCode);
+//
+//        sales.setPayment(payment);
+//        sales.setCategory(category);
+//
+//        System.out.println("payment = " + payment);
+//        System.out.println("category = " + category);
+//
+//
+//        System.out.println("------------- 매출 컨트롤러 1-2 -------------");
+//        paymentType = (sales.getPayment().getPaymentType() != null) ? sales.getPayment().getPaymentType() : null;
+//        categoryCode = (category.getCategoryCode() != null) ? category.getCategoryCode() : null;
+//
+//        System.out.println("paymentType = " + paymentType);
+//        System.out.println("categoryCode = " + categoryCode);
+//        System.out.println("payment = " + payment);
+//        System.out.println("category = " + category);
+//
+//        System.out.println("------------- 매출 컨트롤러 1-2 -------------");
+//        List<SalesDTO> monthlyList = salesService.getMonthSales(sales);
+//        System.out.println("monthlyList = " + monthlyList);
+//
+//        System.out.println("------------- 매출 컨트롤러 1-2 out -------------");
+//        return monthlyList;
+//
+//    }
 
-        sales.setPayment(new PaymentDTO());
-        sales.setCategory(new CategoryDTO());
 
-        PaymentDTO payment = sales.getPayment();
-        CategoryDTO category = sales.getCategory();
 
-        String paymentType = (payment != null && payment.getPaymentType() != null) ? payment.getPaymentType() : null;
-        String categoryCode = (category != null && category.getCategoryCode() != null) ? category.getCategoryCode() : null;
+    @GetMapping("/admin_sales")
+    public String getMonthSales(/*@ModelAttribute SalesDTO sales, */Model model, @RequestParam(value = "paymentType", required = false) String paymentType,
+                                      @RequestParam(value = "categoryCode", required = false) String categoryCode){
+        System.out.println("------------- 매출 컨트롤러 1-1 in -------------");
+
+        SalesDTO sales = new SalesDTO();
+        PaymentDTO payment = new PaymentDTO();
+        CategoryDTO category = new CategoryDTO();
+
+        payment.setPaymentType(paymentType);
+        category.setCategoryCode(categoryCode);
+        System.out.println("paymentType = " + paymentType);
+        System.out.println("categoryCode = " + categoryCode);
+
+        sales.setPayment(payment);
+        sales.setCategory(category);
+
+        System.out.println("payment = " + payment);
+        System.out.println("category = " + category);
+        paymentType = (payment.getPaymentType() != null) ? payment.getPaymentType() : null;
+        categoryCode = (category.getCategoryCode() != null) ? category.getCategoryCode() : null;
 
         System.out.println("categoryCode = " + categoryCode);
         System.out.println("paymentType = " + paymentType);
@@ -54,8 +131,7 @@ public class SalesController {
         List<SalesDTO> monthlyList = salesService.getMonthSales(sales);
         model.addAttribute("monthlyList", monthlyList);
         System.out.println("monthlyList = " + monthlyList);
-        System.out.println("------------- 매출 컨트롤러 1-1-2 out -------------");
-
+        System.out.println("------------- 매출 컨트롤러 1-1 out -------------");
 
         return "admin/sales/admin_sales";
 
@@ -63,4 +139,38 @@ public class SalesController {
 
 
 
+    @PostMapping("/admin_sales")
+    @ResponseBody
+    public List<SalesDTO> getMonthSales1(/*@ModelAttribute SalesDTO sales, */Model model, @RequestParam(value = "paymentType", required = false) String paymentType,
+                                                                            @RequestParam(value = "categoryCode", required = false) String categoryCode){
+        System.out.println("------------- 매출 컨트롤러 1-1 in -------------");
+
+        SalesDTO sales = new SalesDTO();
+        PaymentDTO payment = new PaymentDTO();
+        CategoryDTO category = new CategoryDTO();
+
+        payment.setPaymentType(paymentType);
+        category.setCategoryCode(categoryCode);
+        System.out.println("paymentType = " + paymentType);
+        System.out.println("categoryCode = " + categoryCode);
+
+        sales.setPayment(payment);
+        sales.setCategory(category);
+
+        System.out.println("payment = " + payment);
+        System.out.println("category = " + category);
+        paymentType = (payment.getPaymentType() != null) ? payment.getPaymentType() : null;
+        categoryCode = (category.getCategoryCode() != null) ? category.getCategoryCode() : null;
+
+        System.out.println("categoryCode = " + categoryCode);
+        System.out.println("paymentType = " + paymentType);
+
+        List<SalesDTO> monthlyList = salesService.getMonthSales(sales);
+        model.addAttribute("monthlyList", monthlyList);
+        System.out.println("monthlyList = " + monthlyList);
+        System.out.println("------------- 매출 컨트롤러 1-1 out -------------");
+
+        return monthlyList;
+
+    }
 }
