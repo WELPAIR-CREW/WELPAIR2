@@ -24,6 +24,7 @@ import com.hielectro.welpair.common.Pagination;
 import com.hielectro.welpair.common.Search;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/sellproduct")
@@ -46,7 +47,14 @@ public class SellProductController {
     }
 
     @PostMapping("add")
-    public String redirectSellPage() {
+    public String redirectSellPage(@ModelAttribute List<MultipartFile> uploadFiles,
+                                   @ModelAttribute MultipartFile uploadDetailFile,
+                                   @ModelAttribute ProductDTO product,
+                                   @RequestParam String title,
+                                   @RequestParam double discount) {
+        if (uploadFiles.size() > 6) {
+            throw new IllegalStateException("상품 이미지는 최대 6개까지만 등록 가능합니다.");
+        }
 
         return "";
 //        return "redirect:consumer/sellproduct/product-detail";
@@ -68,12 +76,13 @@ public class SellProductController {
     public String reviewLocation(HttpServletRequest request, Model model,
                               @ModelAttribute Search search,
                               @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
-        String url = String.valueOf(request.getRequestURL());
+        String queryString = search.toString();
+        String url = String.valueOf(request.getRequestURL()) + queryString;
         Map<String, Object> searchMap = new HashMap<>();
         System.out.println("==========================" + search);
         searchMap.put("search", search);
         searchMap.put("pageNo", currentPageNo);
-        model.addAttribute("queryString", search.toString());
+        model.addAttribute("queryString", queryString);
 
         getPaging(model, currentPageNo, url, () -> productService.reviewSearchCount(searchMap));
         getSelectList(model, () -> productService.selectReviewList(searchMap));
@@ -84,12 +93,12 @@ public class SellProductController {
     public String qnaLocation(HttpServletRequest request, Model model,
                               @ModelAttribute Search search,
                               @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
-        String url = String.valueOf(request.getRequestURL());
+        String queryString = search.toString();
+        String url = String.valueOf(request.getRequestURL()) + queryString;
         Map<String, Object> searchMap = new HashMap<>();
-
         searchMap.put("search", search);
         searchMap.put("pageNo", currentPageNo);
-        model.addAttribute("queryString", search.toString());
+        model.addAttribute("queryString", queryString);
 
         getPaging(model, currentPageNo, url, () -> productService.qnaSearchCount(searchMap));
         getSelectList(model, () -> productService.selectQnAList(searchMap));

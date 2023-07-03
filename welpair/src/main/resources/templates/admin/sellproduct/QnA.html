@@ -91,6 +91,7 @@
 <script th:inline="javascript">
     let data = /*[[${list}]]*/'list'
     let paging = /*[[${paging}]]*/'paging'
+    let queryString = /*[[${queryString}]]*/'queryString'
     createTable(data);
     setPagination(paging);
     createPaging(queryString)
