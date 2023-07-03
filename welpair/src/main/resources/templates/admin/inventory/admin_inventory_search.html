@@ -10,9 +10,11 @@
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/inventory.css">
+
     <script src="/common/js/static/include.js"></script>
     <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<!--    <script th:inline="javascript" th:src="@{/common/js/src/inventory-search.js}"></script>-->
 </head>
 
 <body>
@@ -109,8 +111,9 @@
     <!-- footer -->
     <div data-include-html="/admin/footer" class="include"></div>
 
-    <!-- 스크립트 시작-->
+
     <script th:inline="javascript">
+        /* admin_inventory_search */
 
         // 날짜 기본값 반영
         let today = new Date();
@@ -135,14 +138,14 @@
             let startDate = $("#startDate").val();
             let endDate = $("#endDate").val();
 
-                let data = {
-                    productCode: productCode,
-                    productName: productName,
-                    stockComment: stockComment,
-                    stockType: stockTypeDefalut,
-                    startDate: startDate,
-                    endDate: endDate
-                };
+            let data = {
+                productCode: productCode,
+                productName: productName,
+                stockComment: stockComment,
+                stockType: stockTypeDefalut,
+                startDate: startDate,
+                endDate: endDate
+            };
             if (productCode != "" || productName != "" || stockComment != "" || stockTypeDefalut != "" || startDate != "" ||  endDate != "") {
 
                 console.log(data);
@@ -184,6 +187,7 @@
         $(document).ready(function() {
             $('#searchResultTable').DataTable();
         });
+
     </script>
 </body>
 </html>
