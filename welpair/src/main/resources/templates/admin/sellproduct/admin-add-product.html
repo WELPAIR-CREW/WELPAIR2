@@ -61,7 +61,7 @@
                         <option value="8">에어프라이</option>
                         <option value="9">인덕션</option>
                     </select><br>
-                    상태 : <select name="productStatus">
+                    상태 : <select name="productStatus" id="productStatus">
                         <option value="신상">신상</option>
                         <option value="리퍼">리퍼</option>
                         <option value="전시">전시</option>
@@ -87,7 +87,7 @@
                 <div class="product-no-text"></div>
                 <div class="product-status">상품상태</div>
                 <div class="product-status-text">
-                    
+
                 </div>
             </article>
             <article class="product-as-cert">
@@ -161,6 +161,10 @@
             call('/sellproduct/optionList', 'post', { categoryCode: categoryCode.value })
                 .then(list => {
                     productOption.innerHTML = '';
+                    const option = document.createElement("option");
+                    option.value = '';
+                    option.textContent = '선택';
+                    productOption.append(option);
 
                     for (obj of list) {
                         const option = document.createElement("option");
@@ -171,21 +175,48 @@
                 })
         })
 
-        productOption.addEventListener('change', function() {
+        productStatus.addEventListener('change', function () {
             options = {
-                categoryCode : categoryCode.value,
-                productOption : productOption.value,
-                productStatus : productStatus.value
+                categoryCode: categoryCode.value,
+                productOption: productOption.value,
+                productStatus: productStatus.value
             }
             call('/sellproduct/productNameList', 'post', options)
                 .then(list => {
                     productName.innerHTML = '';
+                    const option = document.createElement("option");
+                    option.value = '';
+                    option.textContent = '선택';
+                    productName.append(option);
 
                     for (obj of list) {
                         const option = document.createElement("option");
                         option.value = obj.productCode;
                         option.textContent = obj.productName;
-                        productOption.append(option);
+                        productName.append(option);
+                    }
+                })
+        })
+
+        productOption.addEventListener('change', function () {
+            options = {
+                categoryCode: categoryCode.value,
+                productOption: productOption.value,
+                productStatus: productStatus.value
+            }
+            call('/sellproduct/productNameList', 'post', options)
+                .then(list => {
+                    productName.innerHTML = '';
+                    const option = document.createElement("option");
+                    option.value = '';
+                    option.textContent = '선택';
+                    productName.append(option);
+
+                    for (obj of list) {
+                        const option = document.createElement("option");
+                        option.value = obj.productCode;
+                        option.textContent = obj.productName;
+                        productName.append(option);
                     }
                 })
         })

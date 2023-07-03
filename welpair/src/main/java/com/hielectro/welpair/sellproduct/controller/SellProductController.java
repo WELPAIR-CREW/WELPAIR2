@@ -61,7 +61,7 @@ public class SellProductController {
     @PostMapping("productNameList")
     @ResponseBody
     public List<ProductDTO> selectProductName(@RequestBody ProductDTO product) {
-        return new ArrayList<>();
+        return productService.selectProductNameList(product);
     }
 
     @GetMapping("review")

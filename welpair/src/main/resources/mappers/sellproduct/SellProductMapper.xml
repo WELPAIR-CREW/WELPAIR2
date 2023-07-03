@@ -294,6 +294,23 @@
          WHERE CATEGORY_CODE = #{ categoryCode }
          ORDER BY PRODUCT_OPTION
     </select>
+    
+    <select id="selectProductNameList" resultMap="ProductDTO">
+        SELECT
+               PRODUCT_CODE
+             , PRODUCT_NAME
+          FROM T_PRODUCT
+         WHERE 1=1
+        <if test="productStatus != null and productStatus != ''">
+           AND PRODUCT_STATUS = #{ productStatus }
+        </if>
+        <if test="productOption != null and productOption != ''">
+            AND PRODUCT_OPTION = #{ productOption }
+        </if>
+        <if test="categoryCode != null and categoryCode != ''">
+            AND CATEGORY_CODE = #{ categoryCode }
+        </if>
+    </select>
 
     <delete id="sellProductDelete">
         DELETE

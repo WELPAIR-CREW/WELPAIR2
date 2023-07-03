@@ -20,4 +20,5 @@ public interface SellProductMapper {
     int qnaSearchCount(Map<String, Object> searchMap);
     List<QnAManagerDTO> selectQnAList(Map<String, Object> searchMap);
     List<ProductDTO> selectOptionList(ProductDTO product);
+    List<ProductDTO> selectProductNameList(ProductDTO product);
 }

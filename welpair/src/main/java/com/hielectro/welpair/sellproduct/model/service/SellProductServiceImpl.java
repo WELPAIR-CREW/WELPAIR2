@@ -39,6 +39,11 @@ public class SellProductServiceImpl implements SellProductService {
         return productMapper.selectOptionList(product);
     }
 
+    @Override
+    public List<ProductDTO> selectProductNameList(ProductDTO product) {
+        return productMapper.selectProductNameList(product);
+    }
+
 
     @Override
     public List<SellProductDetailDTO> selectProductList(Map<String, String> productId) {

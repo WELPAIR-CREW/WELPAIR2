@@ -24,4 +24,5 @@ public interface SellProductService {
 
     int qnaSearchCount(Map<String, Object> searchMap);
     List<ProductDTO> selectOptionList(ProductDTO product);
+    List<ProductDTO> selectProductNameList(ProductDTO product);
 }
