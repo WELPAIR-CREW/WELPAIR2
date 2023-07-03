@@ -8,7 +8,15 @@
 <!--    <link rel="stylesheet" href="../../static/css/login.css">-->
     <link rel="stylesheet" href="/css/login.css">
     <link rel="stylesheet" href="/css/fontstyle.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+    <link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+
+
 </head>
 <body>
 <!-- <div class="header1"></div> -->
@@ -17,16 +25,17 @@
     <div>
         <div class="login-title">로그인</div>
         <form action="/member/login" method="post" id="loginForm">
-            <div class="input-id" name="">
+            <div class="input-id" >
                 <input type="text" placeholder="사번을 입력하세요" name="empNo">
             </div>
             <div class="input-pwd">
                 <input type="password" placeholder="패스워드를 입력하세요" name="memPwd">
             </div>
+            <div class="btn-go">
+                <input class="btn-login" type="submit"></input>
+            </div>
         </form>
-        <div class="btn-go">
-            <button class="btn-login">로그인</button>
-        </div>
+
         <div class="btn-regist">
             <span class="regist-btn"><a href="../HTML/regist.html">회원가입</a></span>
             <span class="find-info"><a href="../HTML/Findid.html">아이디찾기</a></span>
@@ -41,10 +50,14 @@
 <script>
     $('.header1').load('../HTML/consumer/header.html');
     $('.footer1').load('../HTML/consumer/footer.html');
+    $(function(){
 
-    $('.btn-login').click(function(){
-        alert('로그인합니다.');
-    });
+        $("input[type=submit]").click(function(){
+            $("#loginForm").submit();
+        });
+    })
+
+
 </script>
 
 </html>

@@ -2,14 +2,20 @@ package com.hielectro.welpair.member.model.service;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dao.MemberDAO;
 import com.hielectro.welpair.member.model.dao.MemberMapper;
+import com.hielectro.welpair.member.model.dto.AuthorityDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
+import com.hielectro.welpair.member.model.dto.MemberRoleDTO;
+import com.hielectro.welpair.member.model.dto.UserImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,13 +62,28 @@ public class MemberServiceImpl implements MemberService {
 
         /* 조회했을 때 값이 없을 경우 npe발생하는 것을 방지 빈객체에 넣어둡시다. */
         if(member == null){
-            throw new UsernameNotFoundException("회원이 존재하지 않습니다. 다시 확인해주세요.");
+            member = new MemberDTO();
+        }
+
+        //권한 리스트 뽑아오기
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        if(member.getMemberList() != null){
+            List<MemberRoleDTO> roleList = member.getMemberList();
+
+            for(int i = 0; i < roleList.size(); i++){
+
+                AuthorityDTO authority = roleList.get(i).getAuthority();
+                authorities.add(new SimpleGrantedAuthority(authority.getAuthName()));
+            }
         }
 
 
+        UserImpl user = new UserImpl(member.getEmpNo(), member.getMemPwd(), authorities);
+        user.setDetails(member);
 
 
 
-        return (UserDetails) member;
+        return user;
     }
 }

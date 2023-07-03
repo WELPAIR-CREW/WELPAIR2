@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>testmain</title>
+</head>
+<body>
+<div align="right">
+
+
+    <th:block sec:authorize="isAuthenticated()"> <!-- 인즌된 경우(로그인 후) -->
+        <h3><span sec:authentication="principal.name"></span> 님 환영합니다. </h3>
+        <button onclick="location.href='/member/logout'">로그아웃</button>
+    </th:block>
+</div>
+
+
+</body>
+</html>

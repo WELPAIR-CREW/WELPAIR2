@@ -2,6 +2,7 @@ package com.hielectro.welpair.member.model.service;
 
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;

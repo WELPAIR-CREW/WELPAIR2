@@ -1,6 +1,7 @@
 package com.hielectro.welpair.member.model.dto;
 import lombok.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,5 +20,7 @@ public class EmployeeDTO {
     private Date hireDate;
     private Date expireDate;
     private String isExpire; //데이터타입 CHAR = 'N'
+
+
 
 }

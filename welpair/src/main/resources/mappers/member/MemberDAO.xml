@@ -17,6 +17,57 @@
     </select>
 
 
+    <resultMap id="loginMemberResultMap" type="com.hielectro.welpair.member.model.dto.MemberDTO">
+        <id property="empNo" column="EMP_NO"/>
+        <result property="memPwd" column="MEM_PWD"/>
+        <result property="registDate" column="REGIST_DATE"/>
+        <result property="pointBalance" column="POINT_BALACE"/>
+        <result property="memAuth" column="AUTH_AUTH"/>
+        
+        <collection property="memberList" resultMap="memberRoleResultMap"/>
+        
+    </resultMap>
+    
+    <resultMap id="memberRoleResultMap" type="com.hielectro.welpair.member.model.dto.MemberRoleDTO">
+        <id property="memberNo" column="MEM_NO"/>
+        <id property="authCode" column="AUTH_CODE"/>
+        
+        <association property="authority" resultMap="authoritResultMap"/>
+    </resultMap>
+
+
+    <resultMap id="authorityResultMap" type="com.hielectro.welpair.member.model.dto.AuthorityDTO">
+        <id property="authCode" column="AUTH_CODE"/>
+        <result property="authName" column="AUTH_NAME"/>
+
+        <collection property="authenticationMenuDTO" resultMap="authenticatedMenuResultMap"/>
+    </resultMap>
+    
+<!--  메뉴 관련 추후 추가해야함  -->
+
+
+    <select id="findMemberById" resultMap="loginMemberResultMap">
+        SELECT
+            A.EMP_NO
+            ,A.MEM_PWD
+            ,A.REGIST_DATE
+            ,A.POINT_BALANCE
+            ,A.MEM_AUTH
+            ,B.MEM_NO REF_MEMBER_NO
+            ,B.AUTH_CODE REF_AUTH_CODE
+            ,D.AUTH_CODE REF_AUTH_CODE2
+            ,D.AUTH_NAME
+      FROM  T_MEMBER A
+            LEFT JOIN T_MEMBER_ROLE B ON(A.EMP_NO = B.MEM_NO)
+            LEFT JOIN T_AUTHORITY D ON(B.AUTH_CODE = D.AUTH_CODE)
+      WHERE  A.EMP_NO = #{ empNo }
+    </select>
+
+
+
+
+
+
 
 
 
