@@ -22,11 +22,11 @@
 
         <div class="navs">
 
-            <div class="nav-menu"><a href="./member-view.html">회원조회</a></div>
-            <div class="nav-menu"><a href="./member-regist1.html">회원등록</a></div>
+            <div class="nav-menu"><a href="member-view">회원조회</a></div>
+            <div class="nav-menu"><a href="regist">회원등록</a></div>
             <div class="nav-menu"><b>가입승인</b></div>
-            <div class="nav-menu"><a href="./member-givePoint.html">복지포인트지급</a></div>
-            <div class="nav-menu"><a href="./member-givePointHistory1.html">복지포인트지급이력</a></div>
+            <div class="nav-menu"><a href="givePoint">복지포인트지급</a></div>
+            <div class="nav-menu"><a href="givePointHistory">복지포인트지급이력</a></div>
         </div>
 
         <div class="box">
@@ -34,17 +34,22 @@
 
             <div class="contents">
                 <div class="over-table">
-                    <label class="count-row">신규 요청 : <span id="member-value">nn</span>건</label>
+                    <label class="count-row">신규 요청 : <span th:text="${reqJoinCount}" class="member-value">nn</span>건</label>
                     <span class="buttons">
-                        <button class="button-square3">승인</button>
+                        <button class="button-square3" th:onclick="|javascript:insertMember();|">승인</button>
                         <button class="button-square3 second">거절</button>
+
+<!--                    <button class="button-square1 delete-member" th:onclick="|javascript:deleteMember();|">계정삭제</button>-->
+<!--                    <button class="button-square3 second" th:onclick="|javascript:함수명();|">거절</button>-->
                     </span>
                 </div>
+
+
 
                 <table>
                     <thead>
                         <tr>
-                            <th class="checkbox-cell"><input type="checkbox" id="select-all"></th>
+                            <th class="checkbox-cell"><input type="checkbox" id="select-all" onclick="allChecked()"></th>
                             <th>요청일</th>
                             <th>아이디</th>
                             <th>이름</th>
@@ -52,84 +57,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.07.01</td>
-                            <td>T232010</td>
-                            <td>홍길동</td>
-                            <td>hong123@hielectronics.com</td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.06.01</td>
-                            <td>T232011</td>
-                            <td>유관순</td>
-                            <td>yu123@hielectronics.com</td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.05.01</td>
-                            <td>T232012</td>
-                            <td>김선달</td>
-                            <td>kim123@hielectronics.com</td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>2023.06.06</td>
-                            <td>T232000</td>
-                            <td>아무개</td>
-                            <td>mugae@hielectronics.com</td>
+                        <tr th:each="req:${reqList}">
+                            <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" onclick="chkClicked()"
+                            th:value="${req.empNo}"></td>
+                            <td th:text="${#dates.format(req.reqDate, 'yyyy.MM.dd')}"></td>
+                            <td th:text="${req.empNo}"></td>
+                            <td th:text="${req.employee.empName}"></td>
+                            <td th:text="${req.employee.empEmail}"></td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div class="under-table">
-                    <div class="search-list top">
-                        <input type="text" class="search-input">
-                        <button class="button-circle">검색</button>
-                    </div>
+<!--                    <div class="search-list top">-->
+<!--                        <input type="text" class="search-input">-->
+<!--                        <button class="button-circle">검색</button>-->
+<!--                    </div>-->
 
                     <div class="paging">
                         <span>&lt;</span>
@@ -168,6 +111,50 @@
                 });
             });
         });
+
+
+
+        //가입승인
+
+        // //계정삭제 버튼 - 참고용
+        // function deleteMember() {
+        //     //체크된항목
+        //     const query = 'input[name="chk"]:checked'
+        //     const selectedElements = document.querySelectorAll(query)
+        //     //체크된 항목 수
+        //     const selectedElementsCnt = selectedElements.length;
+        //     console.log('계정삭제를 위해 체크된 항목 수 확인 : ' + selectedElementsCnt)
+        //
+        //     if(selectedElementsCnt == 0) {
+        //         alert("삭제할 계정을 선택해주세요.")
+        //         return false;
+        //     }
+        //     else {
+        //         if(confirm("정말 삭제하시겠습니까?")) {
+        //             //체크된 회원의 사번들을 담을 배열 생성
+        //             const empNo = new Array(selectedElementsCnt);
+        //
+        //             document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
+        //                 //v:체크된 name=chk인 input태그, i:인덱스
+        //                 empNo[i] = v.value; //input태그의 value = ${member.empNo}를 배열에 저장
+        //             });
+        //
+        //             const form = document.createElement('form'); //form요소를 만든다
+        //             form.setAttribute('method', 'post');
+        //             form.setAttribute('action', '/member/deleteMember');
+        //
+        //             let input1 = document.createElement('input');
+        //             input1.setAttribute("type", "hidden");
+        //             input1.setAttribute("name", "empNos"); //name에 변수명
+        //             input1.setAttribute("value", empNo); //value에 값
+        //             form.appendChild(input1); //form요소에 input자식요소(숨겨진)를 추가
+        //             document.body.appendChild(form); //form요소가 바디에 추가됨
+        //             form.submit(); //제출
+        //
+        //             alert("계정을 삭제하셨습니다.")
+        //         }
+        //     }
+        // }
     
     </script>
 </body>

@@ -5,6 +5,7 @@ import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dao.MemberMapper;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
+import com.hielectro.welpair.member.model.dto.ReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,10 +74,20 @@ public class MemberServiceImpl implements MemberService {
         return employeeList;
     }
 
-
     @Override
     public int totalEmployeeCount(Map<String, String> searchMap) {
         return memberMapper.totalEmployeeCount(searchMap);
     }
+
+
+
+    //가입승인 - 가입요청 목록
+    @Override
+    public List<ReqDTO> reqList() {
+        List<ReqDTO> reqList = memberMapper.reqList();
+        return reqList;
+    }
+    @Override
+    public int reqJoinCount() { return memberMapper.reqJoinCount(); }
 
 }

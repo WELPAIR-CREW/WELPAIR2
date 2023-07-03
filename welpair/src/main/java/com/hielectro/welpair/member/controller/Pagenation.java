@@ -7,13 +7,16 @@ import java.util.Map;
 public class Pagenation {
 
     //검색어 없는 경우의 페이징 처리
-    public static SelectCriteria getSelectCriteria(int currentPage, int totalMemberCount, int itemsPerPage, int displayPageCount, String isExpired) {
+//    public static SelectCriteria getSelectCriteria(int currentPage, int totalMemberCount, int itemsPerPage, int displayPageCount, String isExpired) {
+    public static SelectCriteria getSelectCriteria(int currentPage, int listlength, int itemsPerPage, int displayPageCount, String isExpired) {
 
-        return getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, null, null, isExpired);
+//        return getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, null, null, isExpired);
+        return getSelectCriteria(currentPage, listlength, itemsPerPage, displayPageCount, null, null, isExpired);
     }
 
     //검색어가 있는 경우 페이징 처리
-    public static SelectCriteria getSelectCriteria(int currentPage, int totalMemberCount, int itemsPerPage, int displayPageCount
+//    public static SelectCriteria getSelectCriteria(int currentPage, int totalMemberCount, int itemsPerPage, int displayPageCount
+    public static SelectCriteria getSelectCriteria(int currentPage, int listlength, int itemsPerPage, int displayPageCount
             , String searchCondition, String searchValue, String isExpired) {
 
         int totalPages;	//총 페이지 수이자 마지막 페이지 번호에 해당
@@ -23,7 +26,8 @@ public class Pagenation {
         int endRow;
 
         //총 페이지수 계산
-        totalPages = (int) Math.ceil((double) totalMemberCount / itemsPerPage);
+//        totalPages = (int) Math.ceil((double) totalMemberCount / itemsPerPage);
+        totalPages = (int) Math.ceil((double) listlength / itemsPerPage);
         System.out.println("총 항목 수를 토대로 계산된 총 페이지 수 : " + totalPages);
 
         //페이지번호 세트에서 시작페이지번호, 끝페이지번호
@@ -51,7 +55,8 @@ public class Pagenation {
         System.out.println("끝 항목의 인덱스 : " + endRow);
 
 
-        SelectCriteria selectCriteria = new SelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount ,totalPages, startPage, endPage, startRow, endRow
+//        SelectCriteria selectCriteria = new SelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount ,totalPages, startPage, endPage, startRow, endRow
+        SelectCriteria selectCriteria = new SelectCriteria(currentPage, listlength, itemsPerPage, displayPageCount ,totalPages, startPage, endPage, startRow, endRow
                 , searchCondition, searchValue, isExpired);
 
         return selectCriteria;

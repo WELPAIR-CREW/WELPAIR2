@@ -58,6 +58,18 @@
         <result property="empDept" column="EMP_DEPT"/>
         <result property="jobCode" column="JOB_CODE"/>
         <result property="isExpire" column="IS_EXPIRE"/>
+        <association property="memberDTO" javaType="com.hielectro.welpair.member.model.dto.MemberDTO">
+            <result property="registDate" column="REGIST_DATE"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="reqListResultMap" type="com.hielectro.welpair.member.model.dto.ReqDTO">
+        <result property="empNo" column="EMP_NO"/>
+        <result property="reqDate" column="REQ_DATE"/>
+        <association property="employee" javaType="com.hielectro.welpair.member.model.dto.EmployeeDTO">
+            <result property="empName" column="EMP_NAME"/>
+            <result property="empEmail" column="EMP_EMAIL"/>
+        </association>
     </resultMap>
 
 
@@ -110,20 +122,21 @@
 <!--  2. 회원등록  -->
     <select id="getEmployeeList" resultMap="employeeListResultMap">
         select * from
-            (select
-                 rownum AS rnum
-                  ,E.EMP_NO
-                  ,E.EMP_NAME
-                  ,E.EMP_EMAIL
-                  ,E.EMP_PHONE
-                  ,E.EMP_DEPT
-                  ,E.JOB_CODE
-                  ,E.HIRE_DATE
-                  ,M.REGIST_DATE
-             from T_EMPLOYEE E
-                      join T_MEMBER M ON (E.EMP_NO = M.EMP_NO)
-             where E.IS_EXPIRE = 'N' and E.EMP_NO like 'E%'
-             order by E.HIRE_DATE desc)
+            (SELECT
+                 row_number() OVER (ORDER BY E.EMP_NO) AS rnum
+--                  버튼 확인을 위해 일부러 정렬 순서를 바꾼것. 원래 입사일 내림차순이 맞음
+--                  row_number() OVER (ORDER BY E.HIRE_DATE DESC) AS rnum
+                 ,E.EMP_NO
+                 ,E.EMP_NAME
+                 ,E.EMP_EMAIL
+                 ,E.EMP_PHONE
+                 ,E.EMP_DEPT
+                 ,E.JOB_CODE
+                 ,E.HIRE_DATE
+                 ,M.REGIST_DATE
+             FROM T_EMPLOYEE E
+             LEFT JOIN T_MEMBER M ON (E.EMP_NO = M.EMP_NO)
+             WHERE E.IS_EXPIRE = 'N' AND E.EMP_NO LIKE 'E%')
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
     </select>
 
@@ -134,5 +147,21 @@
     </select>
 
 
+<!-- 3. 가입승인 - 신규가입요청 목록 -->
+    <select id="reqList" resultMap="reqListResultMap">
+        SELECT R.REQ_DATE, R.EMP_NO, E.EMP_NAME, E.EMP_EMAIL
+        FROM T_REQ_JOIN R
+        JOIN T_EMPLOYEE E ON (R.EMP_NO = E.EMP_NO)
+        WHERE R.IS_REGIST = 'N'
+        ORDER BY R.REQ_DATE DESC
+    </select>
+
+<!--  신규가입요청 수  -->
+    <select id="reqJoinCount" resultType="_int" parameterType="hashmap">
+        SELECT
+            COUNT(*)
+          FROM T_REQ_JOIN
+         WHERE IS_REGIST = 'N'
+    </select>
 
 </mapper>

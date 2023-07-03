@@ -14,8 +14,8 @@ public class SelectCriteria {
 
     private int currentPage; //현재페이지번호
 
-//    private int listlength;
-  private int totalMemberCount; //총 항목의 수
+    private int listlength; //총 항목의 수
+//  private int totalMemberCount;
 //  private int totalEmployeeCount;
 
     private int itemsPerPage; //한 페이지에 보여줄 항목의 수

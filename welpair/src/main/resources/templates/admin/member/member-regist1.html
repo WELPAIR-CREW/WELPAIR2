@@ -24,7 +24,7 @@
 
             <div class="nav-menu"><a href="member-view">회원조회</a></div>
             <div class="nav-menu"><b>회원등록</b></div>
-            <div class="nav-menu"><a href="permission">가입승인</a></div>
+            <div class="nav-menu"><a href="reqList">가입승인</a></div>
             <div class="nav-menu"><a href="givePoint">복지포인트지급</a></div>
             <div class="nav-menu"><a href="givePointHistory">복지포인트지급이력</a></div>
         </div>
@@ -46,7 +46,7 @@
                 
                 <table>
                     <thead>
-                        <tr th:each="member:${memberList}">
+                        <tr>
                             <th>입사일</th>
                             <th>사번</th>
                             <th>이름</th>
@@ -59,58 +59,26 @@
                     </thead>
                     <tbody>
                         <tr th:each="employee:${employeeList}">
-                            <td th:text="${employee.hireDate}"></td>
+                            <td th:text="${#dates.format(employee.hireDate, 'yyyy.MM.dd')}"></td>
                             <td th:text="${employee.empNo}"></td>
                             <td th:text="${employee.empName}"></td>
                             <td th:text="${employee.empEmail}"></td>
                             <td th:text="${employee.empPhone}"></td>
                             <td th:text="${employee.empDept}"></td>
                             <td th:text="${employee.jobCode}"></td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="member/member-regist2">등록</a>
-                                </button>
+<!--                         (회원등록여부판별) 등록일이 null이면 등록버튼 추가, null이 아니면 텍스트'완료'추가 -->
+<!--                         null이 발생할 수 있는 프로퍼티에는 ?를 써준다-->
+                            <td th:if="${#strings.isEmpty(employee.memberDTO?.registDate)}">
+<!--                               등록 버튼 눌렀을때 이동하는 회원등록페이지 1)Get방식요청 -->
+<!--                               URL : /registPage?empNo=E00001 -->
+<!--                                <button class="button-square2">-->
+<!--                                    <a th:href="@{/registPage(empNo=${employee.empNo})}">등록</a>-->
+<!--                                </button>-->
+
+<!--                               등록 버튼 눌렀을때 이동하는 회원등록페이지 2)POST방식 요청-->
+                                <button class="button-square2" onclick="registEmp('${employee.empNo}')">등록</button>
                             </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>완료</td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>완료</td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>완료</td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>완료</td>
+                            <td th:if="${not #strings.isEmpty(employee.memberDTO?.registDate)}" th:text="완료"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -144,6 +112,29 @@
     <!-- footer -->
     <div data-include-html="/admin/footer" class="include"></div>
 
+    <script>
+<!-- 회원 등록 버튼 클릭시 실행 -->
+        function registEmp(empNo) {
+            confirm("회원으로 등록하시겠습니까?");
+            let form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/member/registPage';
+            // form.setAttribute('method', 'post');
+            // form.setAttribute('action', '/member/registPage');
+
+            let empNoInput = document.createElement('input');
+            empNoInput.type = 'hidden';
+            empNoInput.name = 'empNo';
+            empNoInput.value = empNo;
+
+            console.log('스크립트에서 empNo값 확인 : ' + empNo);
+
+            form.appendChild(empNoInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
 
 </body>
 
