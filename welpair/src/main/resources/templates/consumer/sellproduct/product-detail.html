@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{ title }"></title>
+    <link rel="stylesheet" href="../common/css/header.css">
+    <link rel="stylesheet" href="../common/css/main.css">
+    <link rel="stylesheet" href="../common/css/product-detail.css">
+    <link rel="stylesheet" href="../common/css/footer.css">
+    <script th:src="@{../common/js/static/bundle.js}"></script>
+    <script th:src="@{../common/js/static/include.js}"></script>
+</head>
+
+<body>
+    <div data-include-html="/consumer/header_consumer" class="include"></div>
+    <div class="category-list">
+        <span class="large-category">카테고리</span> &gt;
+        <span class="medium-category">하위 카테고리</span>
+    </div>
+    <section class="product-detail">
+        <article class="product-detail-area1">
+            <div class="imagebox">
+                <img src="#">
+
+                <div class="thumbnail-img">
+                    <img src="#">
+                    <img src="#">
+                    <img src="#">
+                    <img src="#">
+                    <img src="#">
+                    <img src="#">
+                </div>
+            </div>
+        </article>
+        <article class="product-detail-area2">
+            <div class="product-detail-info">
+                <div class="product-name">상품명</div>
+                <div class="product-price">
+                    <span>??%</span>
+                    <div class="product-detail-price">
+                        <del class="origin-price">20,000원</del>
+                        <div class="sale-price">15,000원</div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-options">
+                <h2>옵션선택</h2>
+                <div class="product-options-type">
+                    <select name="option" id="option">
+                        <option value="">Size</option>
+                        <option>옵션</option>
+                        <option>옵션</option>
+                    </select>
+                </div>
+            </div>
+            <div class="product-detail-pay">
+                <div class="product-count">
+                    <input type="text" class="" value="1">
+                    <!-- 수량 플러스 버튼 -->
+                    <button type="button" class="bnt_plus">
+                        <img src="../common/images/bnt_plus.png" alt="">
+                    </button>
+                    <!-- 수량 마이너스 버튼 -->
+                    <button type="button" class="bnt_min">
+                        <img src="../common/images/bnt_min.png" alt="">
+                    </button>
+                </div>
+                <div class="total-payment">
+                    <span>총 상품 금액</span>
+                    <span class="sale-price">15,000원</span>
+                </div>
+                <div class="payment">
+                    <button class="payment btn">
+                        결제하기
+                    </button>
+                </div>
+                <div class="favorite-cart">
+
+                    <div class="favorite">
+                        <button class="favorite btn">
+                            찜하기
+                        </button>
+                    </div>
+                    <div class="product-cart">
+                        <button class="product-cart btn">
+                            장바구니
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+    <section class="product-random-review">
+        <div class="random-review-list container">
+            <div class="random-review-1 item">
+                별 0~5<br>
+                사원번호? 23.05.10   상품명<br>
+                블라 블ㄹ라 어쩌구 저쩌구
+            </div>
+            <div class="random-review-2 item">
+                별 0~5<br>
+                사원번호? 23.05.10   상품명<br>
+                블라 블ㄹ라 어쩌구 저쩌구
+            </div>
+            <div class="random-review-3 item">
+                별 0~5<br>
+                사원번호? 23.05.10   상품명<br>
+                블라 블ㄹ라 어쩌구 저쩌구
+            </div>
+            <div class="random-review-4 item">
+                별 0~5<br>
+                사원번호? 23.05.10   상품명<br>
+                블라 블ㄹ라 어쩌구 저쩌구
+            </div>
+        </div>
+    </section>
+
+    <section class="product-various-menu">
+        <div class="product-detail-info">상세 정보</div>
+        <div class="product-review">리뷰</div>
+        <div class="product-qna">문의</div>
+        <div class="product-return-exchange-info">반품/교환 정보</div>
+    </section>
+
+    <section class="product-info">
+        <span>상품 정보</span>
+        <article class="product-info-list">
+            <div class="product-no">상품번호</div>
+            <div class="product-no-text">123456789</div>
+            <div class="product-status">상품상태</div>
+            <div class="product-status-text">신상품</div>
+        </article>
+        <article class="product-as-cert">
+            <div class="product-as">A/S 안내</div>
+            <div class="product-as-text">
+                02-9999-9999 <br>
+                [소비자고객센터] 10:00 ~ 17:30 <br>
+                [점심시간] 09:00 ~ 18:00
+            </div>
+            <div class="product-cert">인증정보</div>
+            <div class="product-cert-text">
+                국가인증 뭐뭐뭐 <br>
+                인증번호 뭐뭐뭐
+            </div>
+        </article>
+    </section>
+    <section class="product-detail-image">
+        <img src="#" alt="" srcset="">
+    </section>
+    <div data-include-html="/consumer/footer" class="include"></div>
+</body>
+
+</html>
