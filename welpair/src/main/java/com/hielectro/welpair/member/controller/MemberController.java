@@ -1,6 +1,7 @@
 package com.hielectro.welpair.member.controller;
 
 import com.hielectro.welpair.common.Pagination;
+import com.hielectro.welpair.member.model.dto.DeptDTO;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.dto.ReqDTO;
@@ -154,45 +155,31 @@ public class MemberController {
     }
 
 
-    //등록 버튼 눌렀을때 이동하는 회원등록페이지 1)Get방식요청
-//    @GetMapping("/registPage")
-//    public ModelAndView registPage(@RequestParam String empNo, ModelAndView model) {
-//        model.addObject("empNo", empNo);
-//        model.setViewName("admin/member/member-regist2");
-//        return model;
-//    }
-    //등록 버튼 눌렀을때 이동하는 회원등록페이지 2)Post방식요청
-//    @PostMapping("/registPage")
-//    public ModelAndView registPage(@RequestParam String empNo, ModelAndView model) {
-//
-//        System.out.println("form태그를 통해 empNo이 들어왔는지 확인 : " + empNo);
-//        model.addObject("empNo", empNo);
-//        model.setViewName("admin/member/member-regist2");
-//        return model;
-//    }
+    @PostMapping("/registPage") //@ResponseBody를 붙이는건 ajax일때만 해당
+    public ModelAndView registPage(@ModelAttribute EmployeeDTO employee) {
+                                    //form.submit()해서 보내면 @ModelAttribute이고 body에 담아서 보내면 @RequestBody임
 
-    //empNo만 받아오는 경우는 완성됨
-//    @PostMapping("/registPage")
-//    public ModelAndView registPage(@RequestParam String empNo) {
-//        ModelAndView model = new ModelAndView("admin/member/member-regist2");
-//        System.out.println("form태그를 통해 empNo이 들어왔는지 확인 : " + empNo);
-//        model.addObject("empNo", empNo);
-//        return model;
-//    }
-
-    //employeeList를 받아오게끔 작성
-    @PostMapping("/registPage")
-    @ResponseBody
-    public ModelAndView registPage(@RequestBody Object employeeList) {
         ModelAndView model = new ModelAndView("admin/member/member-regist2");
+        System.out.println("employeeDTO로 들어왔는지 확인 : " + employee);
+        model.addObject("employee", employee);
 
-        model.addObject("employeeList", employeeList);
+        //매개변수(@RequestParam String empNo, ... 등)으로 받았을때
+//        model.addObject("empNo", empNo);
+//        model.addObject("empName", empName);
+//        model.addObject("empEmail", empEmail);
+//        model.addObject("empPhone", empPhone);
+//        model.addObject("deptName", deptName);
+//        model.addObject("jobName", jobName);
         return model;
     }
 
+    @PostMapping("/registSubmit")
+    public String registMember(@ModelAttribute EmployeeDTO employee) throws RegistMemberException {
 
-//@RequestParam ArrayList<String> empNos)
-
+        System.out.println("회원등록 submit 후 들어오는지 확인---------------------");
+        memberService.registMember(employee);
+        return "redirect:/member/regist"; //등록 후 회원등록(목록) 페이지로 리다이렉트
+    }
 
 
     @GetMapping("givePoint")

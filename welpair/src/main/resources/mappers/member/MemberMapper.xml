@@ -170,4 +170,9 @@
          WHERE IS_REGIST = 'N'
     </select>
 
+<!--  회원등록 -->
+    <insert id="registMember" parameterType="">
+        INSERT INTO
+    </insert>
+
 </mapper>

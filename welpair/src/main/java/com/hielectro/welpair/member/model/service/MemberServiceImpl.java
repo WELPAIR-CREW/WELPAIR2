@@ -1,6 +1,7 @@
 package com.hielectro.welpair.member.model.service;
 import com.hielectro.welpair.member.controller.DeleteMemberException;
 import com.hielectro.welpair.member.controller.Pagenation;
+import com.hielectro.welpair.member.controller.RegistMemberException;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dao.MemberMapper;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
@@ -79,6 +80,18 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.totalEmployeeCount(searchMap);
     }
 
+    //회원등록-등록페이지에서 전송버튼 눌렀을때
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void registMember(EmployeeDTO employee) throws RegistMemberException {
+        int result = memberMapper.registMember(employee);
+        if(result > 0) {
+            System.out.println("회원등록 성공");
+        } else {
+            System.out.println("회원등록 실패");
+            throw new RegistMemberException("계정삭제 실패"); //@Transactional에 의해 예외발생시 롤백
+        }
+    }
 
 
     //가입승인 - 가입요청 목록

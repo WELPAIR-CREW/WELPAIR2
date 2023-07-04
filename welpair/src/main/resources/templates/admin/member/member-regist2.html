@@ -34,50 +34,50 @@
 
             <div class="contents">
 
-                <form action="" method="post">
+                <form action="" method="POST" onsubmit="return validation()">
 
                     <div class="form-group">
                         <label for="memId">아이디</label>
-<!--                    <input id="memId" type="text" th:name="empNo" th:value="${ empNo }" required readonly/>-->
-                        <input id="memId" type="text" th:name="employeeList" th:value="${ employeeList.empNo }" required readonly/>
+                        <input id="memId" type="text" th:name="empNo" th:value="${ employee.empNo }" required readonly/>
                     </div>
                     <div class="form-group">
                         <label for="password1">비밀번호 설정</label>
-                        <input id="password1" type="text"/>
+                        <input id="password1" type="text" th:value="${ employee.empPhone.substring(employee.empPhone.length - 4) }" required/>
                     </div>
                     <div class="form-group">
                         <label for="password2">비밀번호 확인</label>
-                        <input id="password2" type="text"/>
+                        <input id="password2" type="text" placeholder="비밀번호를 확인해주세요" required/>
                     </div>
                     <div class="form-group">
                         <label for="memName">이름</label>
-                        <input id="memName" type="text"/>
+                        <input id="memName" type="text" th:name="empName" th:value="${ employee.empName }" required readonly/>
                     </div>
                     <div class="form-group">
                         <label for="memEmail">이메일</label>
-                        <input id="memEmail" type="text"/>
+                        <input id="memEmail" type="text" th:name="empEmail" th:value="${ employee.empEmail }" required/>
                     </div>
                     <div class="form-group">
                         <label for="memPhone">연락처</label>
-                        <input id="memPhone" type="text"/>
+                        <input id="memPhone" type="text" th:name="empPhone" th:value="${ employee.empPhone }" required/>
                     </div>
                     <div class="form-group">
                         <label for="memDept">부서</label>
-                        <input id="memDept" type="text"/>
+                        <input id="memDept" type="text" th:name="deptName" th:value="${ employee.deptDTO.deptName }" readonly/>
                     </div>
                     <div class="form-group">
                         <label for="memJob">직급</label>
-                        <input id="memJob" type="text"/>
+                        <input id="memJob" type="text" th:name="deptName" th:value="${ employee.jobDTO.jobName }" readonly/>
                     </div>
+
                     <!-- 자동입력된다면 input:text, 직접선택시 select>option태그 -->
 
                     <span>
                         <button class="wide-button">
-                            <a href="/member/member-regist1">입력취소</a>
+                            <a href="regist">입력취소</a>
                         </button>
                     </span>
                     <span>
-                        <button class="wide-button dark" type="submit">회원등록</button>
+                        <button id="regist-submit" class="wide-button dark" type="submit">회원등록</button>
                     </span>
                 </form>
 
@@ -91,6 +91,29 @@
 
     <!-- footer -->
     <div data-include-html="/admin/footer" class="include"></div>
+
+    <script>
+        function validation() {
+            let password1 = document.getElementById('password1').value;
+            let password2 = document.getElementById('password2').value;
+
+            //비밀번호가 비어있다면
+            if(password1 == "" || password2 == "") {
+                alert('비밀번호를 입력해야 등록이 가능합니다.');
+                return false //false를 반환하게 되면 (submit버튼 클릭시 발생하는)onsubmit이벤트가 중단되며 폼이 서버로 전송되지 않는다
+            }
+
+            //비밀번호 확인
+            if(password1 !== password2) {
+                alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
+                return false;
+            }
+
+            //통과시 제출
+            alert("회원 등록 완료!");
+            return true;
+        }
+    </script>
 
 
 </body>
