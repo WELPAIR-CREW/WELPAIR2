@@ -26,8 +26,8 @@ public class UserImpl extends User{
 
     private EmployeeDTO employee;
 
-    public UserImpl(String empNo, String password, Collection<? extends GrantedAuthority> authorities) {
-        super(empNo, password, authorities);
+    public UserImpl(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
     }
 
 

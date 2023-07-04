@@ -151,9 +151,20 @@ public class MemberController {
     public String loginForm(@RequestParam("empNo") String empNo,
                             @RequestParam("memPwd") String memPwd){
 
-        System.out.println("empNo = " + empNo + ", memPwd = " + memPwd);
+//        System.out.println("empNo = " + empNo + ", memPwd = " + memPwd);
         return null;
 
+    }
+    @PostMapping("test")
+    public String testForm(Model model){
+
+        return "member/test";
+    }
+
+    @GetMapping("error")
+    public String error(Model model){
+
+        return "member/error";
     }
 
 
@@ -169,13 +180,12 @@ public class MemberController {
     }
 
     @PostMapping("registForm")
-    public String registSave(@RequestParam("empName") String empName,
-                            @RequestParam("empNo") String empNo,
+    public String registSave(@RequestParam("empNo") String empNo,
                             @RequestParam("memPwd") String memPwd){
-
-        System.out.println("memName = " + empName + ", empNo = " + empNo + ", memPwd = " + memPwd);
+        System.out.println("empNo = " + empNo + ", memPwd = " + memPwd);
 
         return null;
+
     }
 
 

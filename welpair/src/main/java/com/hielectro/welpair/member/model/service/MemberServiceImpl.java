@@ -2,10 +2,7 @@ package com.hielectro.welpair.member.model.service;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dao.MemberDAO;
 import com.hielectro.welpair.member.model.dao.MemberMapper;
-import com.hielectro.welpair.member.model.dto.AuthorityDTO;
-import com.hielectro.welpair.member.model.dto.MemberDTO;
-import com.hielectro.welpair.member.model.dto.MemberRoleDTO;
-import com.hielectro.welpair.member.model.dto.UserImpl;
+import com.hielectro.welpair.member.model.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +54,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public UserDetails loadUserByUsername(String empNo) throws UsernameNotFoundException {
 
-
+        System.out.println("empNo = " + empNo);   // 잘들어옴
         MemberDTO member = memberDAO.findMemberById(empNo);
-
+        System.out.println("member ====================== " + member);
         /* 조회했을 때 값이 없을 경우 npe발생하는 것을 방지 빈객체에 넣어둡시다. */
         if(member == null){
             member = new MemberDTO();
@@ -69,6 +66,7 @@ public class MemberServiceImpl implements MemberService {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         if(member.getMemberList() != null){
+
             List<MemberRoleDTO> roleList = member.getMemberList();
 
             for(int i = 0; i < roleList.size(); i++){
@@ -83,7 +81,26 @@ public class MemberServiceImpl implements MemberService {
         user.setDetails(member);
 
 
-
         return user;
     }
+
+
+
+
+
+
+// 회원가입
+
+    // 사번조회조회
+    public EmployeeDTO selectMemberByUserId(String empNo){
+
+        return memberDAO.selectMemberByUserId(empNo);
+    }
+
+
+
+
+
+
+
 }

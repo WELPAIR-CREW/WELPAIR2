@@ -32,7 +32,7 @@
         <id property="memberNo" column="MEM_NO"/>
         <id property="authCode" column="AUTH_CODE"/>
         
-        <association property="authority" resultMap="authoritResultMap"/>
+        <association property="authority" resultMap="authorityResultMap"/>
     </resultMap>
 
 
@@ -40,9 +40,23 @@
         <id property="authCode" column="AUTH_CODE"/>
         <result property="authName" column="AUTH_NAME"/>
 
-        <collection property="authenticationMenuDTO" resultMap="authenticatedMenuResultMap"/>
+        <!--        <collection property="authenticationMenuDTO" resultMap="authenticatedMenuResultMap"/>-->
     </resultMap>
-    
+
+    <resultMap id="employeeResultMap" type="com.hielectro.welpair.member.model.dto.EmployeeDTO">
+        <id property="empNo" column="EMP_NO"/>
+        <result property="empName" column="EMP_NAME"/>
+        <result property="hireType" column="HIRE_TYPE"/>
+        <result property="empEmail" column="EMP_EMAIL"/>
+        <result property="empPhone" column="EMP_PHONE"/>
+        <result property="empDept" column="EMP_DEPT"/>
+        <result property="jobCode" column="JOB_CODE"/>
+        <result property="hireDate" column="HIRE_DATE"/>
+        <result property="expireDate" column="EXPIRE_DATE"/>
+        <result property="isExpire" column="IS_EXPIRE"/>
+
+    </resultMap>
+
 <!--  메뉴 관련 추후 추가해야함  -->
 
 
@@ -62,6 +76,20 @@
             LEFT JOIN T_AUTHORITY D ON(B.AUTH_CODE = D.AUTH_CODE)
       WHERE  A.EMP_NO = #{ empNo }
     </select>
+
+
+<!--    <select id="selectMemberByUserId" resultType="employeeResultMap">-->
+<!--        SELECT-->
+<!--            A.EMP_NO-->
+<!--       FROM T_EMPLOYEE A-->
+<!--      WHERE A.EMP_NO = #{ empNo }-->
+<!--    </select>-->
+
+<!--    <insert id="insertMember" parameterType="employeeResultMap">-->
+<!--        INSERT -->
+<!--            INTO-->
+<!--    </insert>-->
+
 
 
 

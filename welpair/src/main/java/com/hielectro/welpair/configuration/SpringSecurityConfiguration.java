@@ -45,19 +45,22 @@ public class SpringSecurityConfiguration {
 
         return http.csrf().disable()
                 .authorizeRequests()  // 요청에 대한 권한 체크를 어떻게 할것인지 지정
-                .anyRequest().permitAll()     // 등록되지 않은 경로는 누구나 접근 가능  // 나중에 경로 접근권한 추가해야함./////////////
+                .anyRequest().permitAll()     // 등록되지 않은 경로는 누구나 접근 가능  // 나중에 경로 접근권한 추가해야함.///////////////////
                 .and()
                 .formLogin()        // 로그인 form을 따로 이용해 로그인 처리할 것이다.
                 .loginPage("/member/login")  // login Page로 로그인페이지에서 submit요청하는 경로로 지정하겠다.
+                .usernameParameter("empNo")
+                .passwordParameter("memPwd")
                 .successForwardUrl("/member/test")      // 성공 시 페이지 설정
                .and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/"))  // 로그아웃 시 요청 경로
+                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))  // 로그아웃 시 요청 경로
+                .logoutSuccessUrl("/")
                 .deleteCookies("JSESSIONID")  // 쿠키 제거
                 .invalidateHttpSession(true)                    // session 정보 무효화
                .and()
                 .exceptionHandling()                     // 인가/인증 exception 핸들링 설정
-                .accessDeniedPage("/")     // 인가 되지 않았을 때 - 권한이 없는 기능을 요청했을 떄 랜더랑 할 페이지
+                .accessDeniedPage("/member/error")     // 인가 되지 않았을 때 - 권한이 없는 기능을 요청했을 떄 랜더랑 할 페이지
                 .and().build();
 
     }
