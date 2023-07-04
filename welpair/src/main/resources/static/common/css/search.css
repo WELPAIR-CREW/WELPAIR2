@@ -10,12 +10,19 @@ li {
 } */
 
 .section-content {
-    position: relative;
+    position: absolute;
     width: 1196px;
     height: auto;
-    margin: auto;
+    margin: 20px;
     box-sizing: border-box;
     padding-bottom: 10px;
+}
+
+.section-title{
+    height: 54px;
+    font-size: 26px;
+    font-weight: bold;
+    border-bottom: 4px solid black;
 }
 
 
@@ -155,13 +162,19 @@ li {
 .paging {
     display: flex;
     position: relative;
-    bottom: 30px;
-    width: 100%;
-    margin-top: 50px;
-    margin-bottom: 30px;
+    align-items: center;
+    bottom: 0px;
+    width: 250px;
+    left: 380px;
+    height: 33px;
     justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 10px;
     font-size: 16px;
     color: #A9A9A9;
+}
+.paging span:not(:first-child) {
+    margin-left: 20px;
 }
 
 #footerwrap {

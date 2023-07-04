@@ -6,25 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원등록</title>
-    <link rel="stylesheet" href="../../../static/common/css/header.css">
-    <link rel="stylesheet" href="../../../static/common/css/footer.css">
-    <link rel="stylesheet" href="../../../static/common/css/member.css">
-    <script src="../../src/static/include.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/main.css">
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/member.css">
+    <script src="/common/js/static/include.js"></script>
 </head>
 
 <body>
     <!-- header -->
-    <div data-include-html="./header_admin.html" class="include"></div>
+    <div data-include-html="/admin/header_admin" class="include"></div>
 
     <div class="container">
 
         <div class="navs">
 
-            <div class="nav-menu"><a href="./member-view.html">회원조회</a></div>
+            <div class="nav-menu"><a href="member-view">회원조회</a></div>
             <div class="nav-menu"><b>회원등록</b></div>
-            <div class="nav-menu"><a href="./member-permission.html">가입승인</a></div>
-            <div class="nav-menu"><a href="./member-givePoint.html">복지포인트지급</a></div>
-            <div class="nav-menu"><a href="./member-givePointHistory1.html">복지포인트지급이력</a></div>
+            <div class="nav-menu"><a href="reqList">가입승인</a></div>
+            <div class="nav-menu"><a href="givePoint">복지포인트지급</a></div>
+            <div class="nav-menu"><a href="givePointHistory">복지포인트지급이력</a></div>
         </div>
 
         <div class="box">
@@ -36,8 +38,7 @@
                 <div class="over-table2">
                     <button class="button-circle">전체</button>
                     <button class=" button-circle">최근한달</button>
-
-                    <img id="calendar" src="../../img/calendar.png" alt="달력아이콘">
+                    <img id="calendar" src="/common/images/calendar.png" alt="달력아이콘">
                     <input type="date" class="select-date" name="date">
                     <label>~</label>
                     <input type="date" class="select-date" name="date">
@@ -58,128 +59,26 @@
                     </thead>
                     <tbody>
                         <tr th:each="employee:${employeeList}">
-                            <td th:text="${employee.hireDate}"></td>
-                            <td>P231010</td>
-                            <td>홍길동</td>
-                            <td>hong123@hielectronics.com</td>
-                            <td>010-1234-5678</td>
-                            <td>영업</td>
-                            <td>사원</td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-regist2.html">등록</a>
-                                </button>
+                            <td th:text="${#dates.format(employee.hireDate, 'yyyy.MM.dd')}"></td>
+                            <td th:text="${employee.empNo}"></td>
+                            <td th:text="${employee.empName}"></td>
+                            <td th:text="${employee.empEmail}"></td>
+                            <td th:text="${employee.empPhone}"></td>
+                            <td th:text="${employee.deptDTO.deptName}"></td>
+                            <td th:text="${employee.jobDTO.jobName}"></td>
+<!--                         (회원등록여부판별) 등록일이 null이면 등록버튼 추가, null이 아니면 텍스트'완료'추가 -->
+<!--                         null이 발생할 수 있는 프로퍼티에는 ?를 써준다-->
+                            <td th:if="${#strings.isEmpty(employee.memberDTO?.registDate)}">
+
+<!--                        등록 버튼 눌렀을때 이동하는 회원등록페이지 (POST방식 요청)-->
+                            <button class="button-square2 regist" >등록</button>
+<!--                        <button class="button-square2 test" th:data-employee="${employee}">등록</button>-->
+<!--                        <button class="button-square2" th:onclick="'registEmp(\'' + ${employee.empNo} + '\')'">등록</button>-->
+<!--                        <button class="button-square2" th:onclick="|javascript:registEmp('${employee.empNo}')|">등록</button>-->
+<!--                        <button class="button-square2" data-emp-no="${employee.empNo}" onclick="registEmp(this.getAttribute('data-emp-no'))">등록</button>-->
+
                             </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-regist2.html">등록</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-regist2.html">등록</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-regist2.html">등록</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-regist2.html">등록</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-regist2.html">등록</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>완료</td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>완료</td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>완료</td>
-                        </tr>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>완료</td>
+                            <td th:if="${not #strings.isEmpty(employee.memberDTO?.registDate)}" th:text="완료"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -211,8 +110,70 @@
 
 
     <!-- footer -->
-    <div data-include-html="./footer.html" class="include"></div>
+    <div data-include-html="/admin/footer" class="include"></div>
 
+
+    <script>
+        $('.regist').click(function(){
+
+            let empNo = $(this).parent().siblings()[1].innerText; //this는 클릭한 버튼을 의미하고 변수에는 ${employee.empNo}에 해당하는값이 담김
+            let empName = $(this).parent().siblings()[2].innerText;
+            let empEmail = $(this).parent().siblings()[3].innerText;
+            let empPhone = $(this).parent().siblings()[4].innerText;
+            let deptName = $(this).parent().siblings()[5].innerText;
+            let jobName = $(this).parent().siblings()[6].innerText;
+
+            let check =  confirm("회원으로 등록하시겠습니까?");
+
+            if(check){ //확인을 눌러서 true일때만 작동
+                let form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/member/registPage';
+
+                let empNoInput = document.createElement('input');
+                empNoInput.type = 'hidden';
+                empNoInput.name = 'empNo';
+                empNoInput.value = empNo;
+
+                let empNameInput = document.createElement('input');
+                empNameInput.type = 'hidden';
+                empNameInput.name = 'empName';
+                empNameInput.value = empName;
+
+                let empEmailInput = document.createElement('input');
+                empEmailInput.type = 'hidden';
+                empEmailInput.name = 'empEmail';
+                empEmailInput.value = empEmail;
+
+                let empPhoneInput = document.createElement('input');
+                empPhoneInput.type = 'hidden';
+                empPhoneInput.name = 'empPhone';
+                empPhoneInput.value = empPhone;
+
+                let deptNameInput = document.createElement('input');
+                deptNameInput.type = 'hidden';
+                deptNameInput.name = 'deptDTO.deptName'; //regist2페이지에서 사용될때 th:value="${ employee.deptDTO.deptName }"
+                deptNameInput.value = deptName;
+
+                let jobNameInput = document.createElement('input');
+                jobNameInput.type = 'hidden';
+                jobNameInput.name = 'jobDTO.jobName';
+                jobNameInput.value = jobName;
+
+                console.log('스크립트에서 empNo값 확인 : ' + empNo);
+
+                form.appendChild(empNoInput);
+                form.appendChild(empNameInput);
+                form.appendChild(empEmailInput);
+                form.appendChild(empPhoneInput);
+                form.appendChild(deptNameInput);
+                form.appendChild(jobNameInput);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        })
+    </script>
 
 </body>
 

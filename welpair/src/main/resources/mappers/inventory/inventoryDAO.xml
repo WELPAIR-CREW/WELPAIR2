@@ -48,43 +48,43 @@
     <!-- 1-1 -->
     <select id="getTotalInventoryAmount" resultType="_int">
         SELECT
-               SUM(PRODUCT_AMOUNT) AS 총재고수량
-          FROM T_PRODUCT
+            SUM(PRODUCT_AMOUNT) AS 총재고수량
+        FROM T_PRODUCT
     </select>
 
     <select id="getNumberOfAlertStock" resultType="_int">
         SELECT
-               COUNT(*) AS 위험재고수량
-          FROM T_PRODUCT
-         WHERE PRODUCT_AMOUNT &lt; 10
+            COUNT(*) AS 위험재고수량
+        FROM T_PRODUCT
+        WHERE PRODUCT_AMOUNT &lt; 10
 
     </select>
 
     <!-- 1-2 -->
     <select id="searchProductByCode" resultMap="searchInvenResultMap">
         SELECT
-               A.PRODUCT_CODE
-             , A.PRODUCT_NAME
-             , B.CATEGORY_NAME
-             , A.PRODUCT_AMOUNT
-         FROM T_PRODUCT A
-         JOIN T_CATEGORY B ON B.CATEGORY_CODE = A.CATEGORY_CODE
-         <if test=" searchCode != null">
-        WHERE A.PRODUCT_CODE = #{ searchCode }
-         </if>
+        A.PRODUCT_CODE
+        , A.PRODUCT_NAME
+        , B.CATEGORY_NAME
+        , A.PRODUCT_AMOUNT
+        FROM T_PRODUCT A
+        JOIN T_CATEGORY B ON B.CATEGORY_CODE = A.CATEGORY_CODE
+        <if test=" searchCode != null">
+            WHERE A.PRODUCT_CODE = #{ searchCode }
+        </if>
     </select>
 
 
     <!-- 2-1. -->
     <select id="stockRegistSerch" resultMap="stockRegistSerchResultMap">
         SELECT
-               A.PRODUCT_CODE
-             , A.PRODUCT_NAME
-             , A.PRODUCT_AMOUNT
-             , B.CATEGORY_NAME
-          FROM T_PRODUCT A
-          JOIN T_CATEGORY B ON B.CATEGORY_CODE = A.CATEGORY_CODE
-         WHERE 1=1
+        A.PRODUCT_CODE
+        , A.PRODUCT_NAME
+        , A.PRODUCT_AMOUNT
+        , B.CATEGORY_NAME
+        FROM T_PRODUCT A
+        JOIN T_CATEGORY B ON B.CATEGORY_CODE = A.CATEGORY_CODE
+        WHERE 1=1
         <if test="productCode != null and productCode != ''">
             AND A.PRODUCT_CODE = #{productCode}
         </if>
@@ -98,7 +98,7 @@
 
     <!-- 2-2. -->
     <insert id="stockRegist" parameterType="com.hielectro.welpair.inventory.model.dto.StockDTO">
-    INSERT INTO T_STOCK A (
+        INSERT INTO T_STOCK A (
         A.STOCK_NO
       , A.STOCK_TYPE
       , A.PRODUCT_CODE
@@ -106,38 +106,38 @@
       , A.STOCK_AMOUNT
       , A.STOCK_COMMENT
     )
-    VALUES
-    (
-        'S' || EXTRACT(YEAR FROM CURRENT_DATE) || LPAD(EXTRACT(MONTH FROM CURRENT_DATE), 2, '0') || LPAD(SEQ_STOCK_NO.NEXTVAL, 4, '0')
-      , #{ stockType }
-      , #{ productCode }
-      , #{ stockDate }
-      , #{ stockAmount }
-      , #{ stockComment }
-    )
+        VALUES
+            (
+            'S' || EXTRACT(YEAR FROM CURRENT_DATE) || LPAD(EXTRACT(MONTH FROM CURRENT_DATE), 2, '0') || LPAD(SEQ_STOCK_NO.NEXTVAL, 4, '0')
+                , #{ stockType }
+                , #{ productCode }
+                , #{ stockDate }
+                , #{ stockAmount }
+                , #{ stockComment }
+            )
     </insert>
 
     <update id="stockRegistUpdate" parameterType="java.util.Map">
         UPDATE T_PRODUCT
-           SET PRODUCT_AMOUNT = PRODUCT_AMOUNT + #{stockAmount}
-         WHERE PRODUCT_CODE = #{ productCode }
+        SET PRODUCT_AMOUNT = PRODUCT_AMOUNT + #{stockAmount}
+        WHERE PRODUCT_CODE = #{ productCode }
     </update>
 
     <!-- 3-1. -->
     <select id="historySearch" resultMap="searchHistoryResultMap">
         SELECT
-               A.STOCK_NO
-             , A.PRODUCT_CODE
-             , A.STOCK_TYPE
-             , A.STOCK_DATE
-             , A.STOCK_AMOUNT
-             , A.STOCK_COMMENT
-             , B.PRODUCT_NAME
-             , B.CATEGORY_CODE
-             , B.PRODUCT_AMOUNT
-          FROM T_STOCK A
-          JOIN T_PRODUCT B ON B.PRODUCT_CODE = A.PRODUCT_CODE
-         WHERE A.STOCK_DATE BETWEEN #{startDate} AND (#{endDate} + 1)
+        A.STOCK_NO
+        , A.PRODUCT_CODE
+        , A.STOCK_TYPE
+        , A.STOCK_DATE
+        , A.STOCK_AMOUNT
+        , A.STOCK_COMMENT
+        , B.PRODUCT_NAME
+        , B.CATEGORY_CODE
+        , B.PRODUCT_AMOUNT
+        FROM T_STOCK A
+        JOIN T_PRODUCT B ON B.PRODUCT_CODE = A.PRODUCT_CODE
+        WHERE A.STOCK_DATE BETWEEN #{startDate} AND (#{endDate} + 1)
         <if test="productCode != null and productCode != ''">
             AND A.PRODUCT_CODE = #{productCode}
         </if>

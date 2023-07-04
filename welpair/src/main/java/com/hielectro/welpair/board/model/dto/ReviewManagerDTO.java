@@ -11,7 +11,8 @@ import java.sql.Time;
 @Setter
 @ToString
 public class ReviewManagerDTO {
-    private String id;
+    private String no;
+    private String pageNo;
     private String name;
     private String title;
     private String content;

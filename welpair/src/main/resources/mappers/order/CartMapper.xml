@@ -55,13 +55,23 @@
             <result property="categoryCode" column="CATEGORY_CODE"/>
         </resultMap>
 
+<!--    <resultMap id="SellImageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellImageDTO">-->
+<!--        <id property="no" column="SELL_PAGE_NO"/>-->
+<!--        <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>-->
+<!--        <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>-->
+<!--        <result property="detailImageFileName" column="SELL_DETAIL_IMAGE_FILE_NAME"/>-->
+<!--        <result property="detailImageOriginFileName" column="SELL_DETAIL_IMAGE_ORGIN_FILE_NAME"/>-->
+<!--        <result property="path" column="FILE_PATH"/>-->
+<!--        <result property="createDate" column="CREATE_DATE"/>-->
+<!--    </resultMap>-->
+
     <resultMap id="cartGeneralResultMap" type="com.hielectro.welpair.order.model.dto.CartGeneralDTO">
         <association property="cart" resultMap="cartResultMap"/>
         <association property="cartSellProduct" resultMap="cartSellProductResultMap"/>
         <association property="sellProduct" resultMap="SellProductResultMap"/>
         <association property="sellItemPage" resultMap="SellItemPageResultMap"/>
         <association property="sellPage" resultMap="SellPageResultMap"/>
-        <!--        <association property="sellImage" resultMap="SellImageResultMap"/>-->
+<!--        <association property="sellImage" resultMap="SellImageResultMap"/>-->
         <association property="product" resultMap="ProductResultMap"/>
     </resultMap>
 
@@ -136,8 +146,8 @@
                , T_SELL_PRODUCT C
                , T_SELL_ITEM_PAGE D
                , T_SELL_PAGE E
-               , T_PRODUCT G
---                T_SELL_IMAGE F,
+               , T_PRODUCT G,
+--                T_SELL_IMAGE F
          WHERE A.EMP_NO = #{empNo}
            AND A.CART_NO = B.CART_NO(+)
            AND B.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID(+)
@@ -158,7 +168,14 @@
           AND SELL_PRODUCT_ID = #{sellProductId}
     </update>
 
-
+    <delete id="deleteCartProduct">
+        delete
+        from T_CART_SELL_PRODUCT
+        where SELL_PRODUCT_ID = #{product}
+          AND CART_NO = ( SELECT CART_NO
+                          FROM T_CART A
+                          WHERE A.EMP_NO = #{empNo})
+    </delete>
 
 
 </mapper>

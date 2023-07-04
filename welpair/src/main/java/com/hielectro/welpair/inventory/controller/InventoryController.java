@@ -67,7 +67,7 @@ public class InventoryController {
         if(searchCode != null){
             List<ProductDTO> productList = inventoryService.searchProductByCode(searchCode);
             model.addAttribute("productList", productList);
-        System.out.println("-------------컨트롤러 1-2 out -------------");
+            System.out.println("-------------컨트롤러 1-2 out -------------");
         } else {
             model.addAttribute("productList", Collections.emptyList());
         }
@@ -78,10 +78,10 @@ public class InventoryController {
 
     @GetMapping("admin_inventory_register")
     public String stockRegistSerch() {
-            System.out.println("-------------컨트롤러 2-1-1 in -------------");
-            System.out.println("-------------컨트롤러 2-1-1 out-------------");
-    return "admin/inventory/admin_inventory_register";
-}
+        System.out.println("-------------컨트롤러 2-1-1 in -------------");
+        System.out.println("-------------컨트롤러 2-1-1 out-------------");
+        return "admin/inventory/admin_inventory_register";
+    }
 
     /**
      * 재고관리 메뉴 (ng) 2. 입출고등록 페이지
@@ -104,7 +104,7 @@ public class InventoryController {
 
             if (productCode != null || productName != null || categoryCode != null) {
                 stockList = inventoryService.stockRegistSerch(product);
-            System.out.println("-------------컨트롤러 2-1-2 out -------------");
+                System.out.println("-------------컨트롤러 2-1-2 out -------------");
             } else {
             }
         } catch(TemplateInputException e){
@@ -119,9 +119,10 @@ public class InventoryController {
      * 2-2. 입출고 등록
      */
     @PostMapping("stockRegist")
-    public ModelAndView stockRegist (ModelAndView mv, @RequestBody List<StockDTO> stockList
-                                    , RedirectAttributes rttr, Locale locale){
-
+    @ResponseBody
+    public Map<String, String> stockRegist (@RequestBody List<StockDTO> stockList
+            , RedirectAttributes rttr, Locale locale){
+        Map<String, String> mv = new HashMap<>();
         System.out.println("-------------컨트롤러 2-2 in -------------");
         System.out.println("stockList = " + stockList);
         System.out.println("locale = " + locale);
@@ -139,45 +140,30 @@ public class InventoryController {
 
         System.out.println("result = " + result);
         if (result > 0) {
-            rttr.addFlashAttribute("resultMessage", "등록 성공" + result + "개 등록");
-            System.out.println("-------------컨트롤러 2-2 out -------------");
-            mv.addObject( "resultMessage","등록 성공" + result + "개 등록");
+            rttr.addFlashAttribute("resultMessage", "success");
+            mv.put( "resultMessage","success");
         } else if (result == -1) {
             rttr.addFlashAttribute("resultMessage", "출고 등록 실패-수량 부족");
-            mv.addObject("resultMessage", "fail");
+            mv.put("resultMessage", "fail");
 
         } else {
             rttr.addFlashAttribute("resultMessage", "등록 실패");
-            mv.addObject("resultMessage", "fail");
+            mv.put("resultMessage", "error");
         }
 
-        mv.setViewName("redirect:/inventory/admin_inventory_register");
+        System.out.println("Result message: " + mv.get("resultMessage"));
+
+        System.out.println("-------------컨트롤러 2-2 out -------------");
 
         return mv;
 
     }
 
-    @RequestMapping("admin_inventory_register")
-    public void registAlert(HttpServletRequest request) {
-
-        Map<String, ?> paramMap = RequestContextUtils.getInputFlashMap(request);
-        String message = null;
-
-        if (paramMap != null) {
-            message = (String) paramMap.get("resultMessage");
-        }
-    }
-
-
-
-
-
-
     @GetMapping("admin_inventory_search")
     public String StockhistorySearch() {
 
-            System.out.println("-------------컨트롤러 3-1-1 in -------------");
-            System.out.println("-------------컨트롤러 3-1-1 out -------------");
+        System.out.println("-------------컨트롤러 3-1-1 in -------------");
+        System.out.println("-------------컨트롤러 3-1-1 out -------------");
 
         return "admin/inventory/admin_inventory_search";
     }
@@ -214,4 +200,3 @@ public class InventoryController {
 
 
 }
-

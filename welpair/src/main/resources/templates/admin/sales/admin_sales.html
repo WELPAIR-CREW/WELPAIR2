@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,10 +8,12 @@
   <link rel="stylesheet" href="/common/css/main.css">
   <link rel="stylesheet" href="/common/css/header.css">
   <link rel="stylesheet" href="/common/css/footer.css">
-  <link rel="stylesheet" href="/common/css/inventory.css">
-  <script src="/common/js/static/include.js"></script>
+  <link rel="stylesheet" href="/common/css/sales.css">
 
+  <script src="/common/js/static/include.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
@@ -28,10 +30,44 @@
   <div class="section-content">
     <div class="section-title">매출현황</div>
 
-    <form class="section-chart" action="" method="get">
-      <canvas id="salesChart">
+    <!-- 1-1. 매출현황 조건 검색 -->
+    <div class="section-salesSearch">
+      <form action="/sales/admin_sales" method="post">
+        <label for="paymentType">결제 유형:</label>
+        <select id="paymentType" name="paymentType" class="section-salesSearch-option">
+          <option value="">전체</option>
+          <option value="카드">카드</option>
+          <option value="포인트">포인트</option>
+        </select>
+        <label for="categoryCode">상품 카테고리:</label>
+        <select id="categoryCode" name="categoryCode" class="section-salesSearch-option">
+          <option value="">전체</option>
+          <option value="3">TV</option>
+          <option value="4">에어컨</option>
+          <option value="5">냉장고</option>
+          <option value="6">전자레인지</option>
+          <option value="7">커피포트</option>
+          <option value="8">에어프라이</option>
+          <option value="9">인덕션</option>
+        </select>
+        <button type="submit" class="btn_basic">검색</button>
+      </form>
+    </div>
+
+    <!-- 1-2. 매출현황 테이블 -->
+    <table class="salesTable">
+<!--      <d th:text="${sales.payment.paymentType}"></d>-->
+      <tbody>
+        <th></th>
+        <td th:each="sales : ${monthlySales}" th:text="${sales.totalSales}"></td>
+      </tbody>
+    </table>
+
+    <!-- 1-3. 매출현황 그래프 -->
+    <div class="section-chart" method="get">
+      <canvas id="salesChart" class="chart">
       </canvas>
-    </form>
+    </div>
   </div>
 </section>
 <!-- footer -->
@@ -39,33 +75,6 @@
 
 
 <!-- 스크립트 시작-->
-<script th:inline="javascript">
-  // Get the canvas element
-  var ctx = document.getElementById('salesChart').getContext('2d');
-
-  // Define the data for the chart
-  var data = {
-    labels: ['2월', '3월', '4월', '5월', '6월', '7월'],
-    datasets: [{
-      label: 'sales',
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: ['rgba(255, 206, 86, 0.2)'],
-      borderColor: ['rgba(255, 206, 86, 1)'],
-      borderWidth: 1
-    }]
-  };
-
-  // Create the chart
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: data,
-    options: {
-      responsive: true,
-      scales: {
-        y: {beginAtZero: true}
-      }
-    }
-  });
-</script>
+<script src="/common/js/src/sales.js"></script>
 </body>
 </html>

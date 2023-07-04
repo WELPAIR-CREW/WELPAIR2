@@ -1,35 +1,39 @@
 <header>
-    <img src="../common/images/title.png" class="title">
+    <img src="/common/images/title.png" class="title">
     <div class="icons">
 
-        <a href="admin/index">ADMIN</a>
+        <a href="/admin/index">ADMIN</a>
 
         <div class="search-bar">
-            <input type="text" class="search-box" placeholder="검색어">
-            <a href="/consumer/search/search">
-                <img src="../common/images/search-icon.png" alt="search">
-            </a>
+<!--            <form id="search-form" action="/search/search" method="post">-->
+                <input type="text" class="search-box" name="title" placeholder="검색어 입력">
+                <a href="#" id="search-button">
+                    <img src="/common/images/search-icon.png" alt="search">
+                </a>
+<!--            </form>-->
         </div>
         <div class="my-info">
             <a href="#">MY</a>
         </div>
 
         <div class="cart">
-            <img src="../common/images/cart.png" alt="cart">
+            <a href="/order/cart">
+                <img src="/common/images/cart.png" alt="cart">
+            </a>
         </div>
     </div>
 </header>
 <nav>
     <div class="header-category">
         <div>
-            <span>주문 관리</span>
-            <span>TOP</span>
-            <span>DRESS</span>
-            <span>BOTTOM</span>
-            <span>SHOES</span>
-            <span>BAG</span>
-            <span>CAT</span>
-            <span>CATE</span>
+            <span>MAIN</span>
+            <span>대형가전</span>
+            <span>소형가전</span>
+            <span>TV</span>
+            <span>에어컨</span>
+            <span>냉장고</span>
+            <span>기타</span>
+            <span>기타기타</span>
         </div>
     </div>
 </nav>
