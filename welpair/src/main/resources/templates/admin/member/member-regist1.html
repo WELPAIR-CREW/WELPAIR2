@@ -120,7 +120,9 @@
     <script>
         $('.test').click(function(){
 
-            let empNo = $(this).parent().siblings()[1].innerText; //this는 클릭한 버튼을 의미하고 변수에는 ${employee.empNo}에 해당하는값이 담김
+            // let empNo = $(this).parent().siblings()[1].innerText; //this는 클릭한 버튼을 의미하고 변수에는 ${employee.empNo}에 해당하는값이 담김
+            // let employeeList1 = $(this).parent().parent().data('employeeList');
+            const employeeList = '[[$employeeList]]'
             let check =  confirm("회원으로 등록하시겠습니까?");
 
             if(check){ //확인을 눌러서 true일때만 작동

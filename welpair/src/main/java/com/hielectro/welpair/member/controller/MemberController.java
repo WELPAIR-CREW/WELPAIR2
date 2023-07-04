@@ -170,16 +170,28 @@ public class MemberController {
 //        model.setViewName("admin/member/member-regist2");
 //        return model;
 //    }
+
+    //empNo만 받아오는 경우는 완성됨
+//    @PostMapping("/registPage")
+//    public ModelAndView registPage(@RequestParam String empNo) {
+//        ModelAndView model = new ModelAndView("admin/member/member-regist2");
+//        System.out.println("form태그를 통해 empNo이 들어왔는지 확인 : " + empNo);
+//        model.addObject("empNo", empNo);
+//        return model;
+//    }
+
+    //employeeList를 받아오게끔 작성
     @PostMapping("/registPage")
-    public ModelAndView registPage(@RequestParam String empNo) {
+    @ResponseBody
+    public ModelAndView registPage(@RequestBody Object employeeList) {
         ModelAndView model = new ModelAndView("admin/member/member-regist2");
-        System.out.println("form태그를 통해 empNo이 들어왔는지 확인 : " + empNo);
-        model.addObject("empNo", empNo);
+
+        model.addObject("employeeList", employeeList);
         return model;
     }
 
 
-
+//@RequestParam ArrayList<String> empNos)
 
 
 
