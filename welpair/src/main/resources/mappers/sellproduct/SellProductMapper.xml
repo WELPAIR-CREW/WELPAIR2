@@ -10,7 +10,7 @@
         <result property="isSell" column="IS_SELL"/>
 
         <association property="product" resultMap="ProductDTO"/>
-        <collection property="sellItemPageList" resultMap="SellItemPageDTO"/>
+        <association property="sellItemPage" resultMap="SellItemPageDTO"/>
     </resultMap>
 
     <resultMap id="ProductDTO" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
@@ -311,6 +311,57 @@
             AND CATEGORY_CODE = #{ categoryCode }
         </if>
     </select>
+
+    <insert id="insertSellProduct">
+        INSERT INTO T_SELL_PRODUCT
+        VALUES
+        (
+          'SP' || LPAD(SEQ_SELL_PRODUCT_ID.nextval, 6, '0')
+        , #{ code }
+        , #{ discount }
+        , DEFAULT
+        )
+        <selectKey keyProperty="id" resultType="string" order="AFTER">
+            SELECT 'SP' || LPAD(SEQ_SELL_PRODUCT_ID.currval, 6, '0')
+              FROM DUAL
+        </selectKey>
+    </insert>
+
+    <insert id="insertSellPage">
+        INSERT INTO T_SELL_PAGE
+        VALUES
+        (
+            'SN' || LPAD(SEQ_SELL_PAGE_NO.nextval, 10, '0')
+        ,   #{ title }
+        ,   #{ detailImageFileName }
+        ,   #{ detailImageOriginFileName }
+        ,   #{ path }
+        ,   SYSDATE
+        )
+        <selectKey keyColumn="SELL_PAGE_NO" keyProperty="no" resultType="string" order="AFTER">
+            SELECT 'SN' || LPAD(SEQ_SELL_PAGE_NO.currval, 10, '0')
+              FROM DUAL
+        </selectKey>
+    </insert>
+
+    <insert id="insertSellItemPage">
+        INSERT INTO T_SELL_ITEM_PAGE
+        VALUES
+        (
+            #{ no }
+        ,   #{ id }
+        )
+    </insert>
+
+    <insert id="insertThumbnail">
+        INSERT INTO T_THUMB_IMAGE
+        VALUES
+        (
+            #{ no }
+        ,   #{ thumbnailImageFileName }
+        ,   #{ thumbnailImageOriginFileName }
+        )
+    </insert>
 
     <delete id="sellProductDelete">
         DELETE

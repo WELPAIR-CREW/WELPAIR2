@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <form>
+    <form method="post" action="/sellproduct/add" enctype="multipart/form-data">
         <div data-include-html="/admin/header_admin" class="include"></div>
         <div class="product-add-header">
             <span class="product-add-title">상품등록</span>
@@ -71,7 +71,7 @@
 
                     </select><br>
                     상품 :
-                    <select name="productName" id="productName">
+                    <select name="code" id="productName">
 
                     </select><br>
                     제목 : <input type="text" name="title" class="page-title" placeholder="판매상품명 입력"><br>
@@ -136,6 +136,11 @@
         })
 
         upload.addEventListener('change', function () {
+            if (this.files.length > 6) {
+                alert('상품 이미지는 최대 6개까지 가능합니다.');
+                return;
+            }
+
             [...thumbnail.children].forEach((item, index) => {
                 if (this.files[index]) {
                     if (index == 0) {
