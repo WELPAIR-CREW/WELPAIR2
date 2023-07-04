@@ -1,28 +1,41 @@
 package com.hielectro.welpair.sellproduct.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
-import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
-import com.hielectro.welpair.common.Pagination;
-import com.hielectro.welpair.common.Search;
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
-import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.*;
+import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.hielectro.welpair.common.Pagination;
+import com.hielectro.welpair.common.Search;
+import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
+import org.springframework.web.multipart.MultipartFile;
+
 @Controller
 @RequestMapping("/sellproduct")
+@Slf4j
 public class SellProductController {
     private final SellProductServiceImpl productService;
     private final int limit = 10;
+    @Value("${image.image-dir}")
+    private String IMAGE_DIR;
 
     public SellProductController(SellProductServiceImpl productService) {
         this.productService = productService;
@@ -33,77 +46,166 @@ public class SellProductController {
         return "admin/sellproduct/" + url;
     }
 
-    @GetMapping("review")
-    public String reviewLocation(HttpServletRequest request, Model model,
-                                 @RequestParam(required = false) String id, @RequestParam(required = false) String name,
-                                 @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
-        String url = String.valueOf(request.getRequestURL());
-        Map<String, Object> searchMap = new HashMap<>();
-        Map<String, Integer> paging = null;
-        searchMap.put("id", id);
-        searchMap.put("name", name);
+    @GetMapping("add")
+    public String addSellProduct() {
+        return "admin/sellproduct/admin-add-product";
+    }
 
-        if (!Pagination.getURL().equals(url)) {
-            Pagination.init(url);
-            int result = productService.reviewSearchCount(searchMap);
-            paging = Pagination.paging(result, currentPageNo);
-        } else {
-            paging = Pagination.getParameter(currentPageNo);
+    @PostMapping("add")
+    public String registSellProduct(@ModelAttribute SellProductDTO sellProduct,
+                                    @RequestParam String title,
+                                    @ModelAttribute List<MultipartFile> uploadFiles,
+                                    @ModelAttribute MultipartFile uploadDetailFile
+                                    ) {
+        if (uploadFiles.size() > 6) {
+            throw new IllegalStateException("상품 이미지는 최대 6개까지 등록 가능합니다.");
+        }
+        String baseDir = IMAGE_DIR;
+        String uploadDir = baseDir + "/original";
+        String thumbnail = baseDir + "/thumbnail";
+        File dir = new File(uploadDir);
+        File dir2 = new File(thumbnail);
+
+        if (!dir.exists() || !dir2.exists()) {
+            dir.mkdirs();
+            dir2.mkdirs();
         }
 
-        model.addAttribute("paging", paging);
-        searchMap.put("pageNo", currentPageNo);
-        List<ReviewManagerDTO> list = productService.selectReviewList(searchMap);
+        List<ThumbnailImageDTO> thumbnailImageList = new ArrayList<>();
+        SellPageDTO sellPage = new SellPageDTO();
+        sellPage.setTitle(title);
+        sellPage.setThumbnailImageList(thumbnailImageList);
+        sellPage.setPath(baseDir);
+        sellProduct.setSellItemPage(new SellItemPageDTO());
+        sellProduct.getSellItemPage().setSellPage(sellPage);
 
-        list.forEach(item -> {
-            if (item.getContent().length() > 20) {
-                String content = item.getContent();
-                String subContent = content.substring(0, 20);
+        try {
+            for (MultipartFile file : uploadFiles) {
+                String originFileName = file.getOriginalFilename();
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String savedFileName = UUID.randomUUID().toString().replace("_", "");
 
-                item.setContent(subContent.concat("..."));
+                file.transferTo(new File(uploadDir + "/" + savedFileName + ext));
+                Thumbnails.of(uploadDir + "/" + savedFileName + ext).size(360, 360)
+                        .toFile(thumbnail + "/" + savedFileName + "_360x" + ext);
+                Thumbnails.of(uploadDir + "/" + savedFileName  + ext).size(60, 60)
+                        .toFile(thumbnail + "/" + savedFileName + "_60x" + ext);
+
+                ThumbnailImageDTO thumbnailImage = new ThumbnailImageDTO();
+                thumbnailImage.setThumbnailImageOriginFileName(originFileName);
+                thumbnailImage.setThumbnailImageFileName(savedFileName + ext);
+
+                thumbnailImageList.add(thumbnailImage);
             }
-        });
 
+            String originFileName = uploadDetailFile.getOriginalFilename();
+            String ext = originFileName.substring(originFileName.lastIndexOf("."));
+            String savedFileName = UUID.randomUUID().toString().replace("-", "");
 
-        model.addAttribute("list", list);
+            uploadDetailFile.transferTo(new File(uploadDir + "/" + savedFileName + ext));
+            sellPage.setPath(IMAGE_DIR);
+            sellPage.setDetailImageOriginFileName(originFileName);
+            sellPage.setDetailImageFileName(savedFileName + ext);
+
+            productService.insertSellProduct(sellProduct);
+        } catch (IllegalStateException | IOException e) {
+            e.printStackTrace();
+
+            int cnt = 0;
+            for (int i = 0; i < thumbnailImageList.size(); i++) {
+                ThumbnailImageDTO file = thumbnailImageList.get(i);
+
+                File deleteFile = new File(uploadDir + "/" + file.getThumbnailImageFileName());
+                String ext = deleteFile.getName().substring(deleteFile.getName().lastIndexOf("."));
+                boolean isDeleted1 = deleteFile.delete();
+
+                File deleteThumbnail = new File(thumbnail + "/"
+                        + file.getThumbnailImageFileName().substring(0, file.getThumbnailImageFileName().lastIndexOf(".")) + "_60x" + ext);
+                File deleteThumbnail2 = new File(thumbnail + "/"
+                        + file.getThumbnailImageFileName().substring(0, file.getThumbnailImageFileName().lastIndexOf(".")) + "_360x" + ext);
+                boolean isDeleted2 = deleteThumbnail.delete();
+                boolean isDeleted3 = deleteThumbnail2.delete();
+
+                if ((isDeleted1 && isDeleted2) && isDeleted3) {
+                    cnt++;
+                }
+            }
+
+            if (cnt * 2 == thumbnailImageList.size()) {
+                log.info("[ThumbnailController] 업로드에 실패한 모든 사진 삭제 완료!");
+            }
+        }
+        return "redirect:/products/" + sellPage.getNo();
+//        return "redirect:consumer/sellproduct/product-detail";
+    }
+
+    @PostMapping("optionList")
+    @ResponseBody
+    public List<ProductDTO> selectOptionList(@RequestBody ProductDTO product) {
+        return productService.selectOptionList(product);
+    }
+
+    @PostMapping("productNameList")
+    @ResponseBody
+    public List<ProductDTO> selectProductName(@RequestBody ProductDTO product) {
+        return productService.selectProductNameList(product);
+    }
+
+    @GetMapping("review")
+    public String reviewLocation(HttpServletRequest request, Model model,
+                                 @ModelAttribute Search search,
+                                 @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
+        String queryString = search.toString();
+        String url = String.valueOf(request.getRequestURL()) + queryString;
+        Map<String, Object> searchMap = new HashMap<>();
+        System.out.println("==========================" + search);
+        searchMap.put("search", search);
+        searchMap.put("pageNo", currentPageNo);
+        model.addAttribute("queryString", queryString);
+
+        getPaging(model, currentPageNo, url, () -> productService.reviewSearchCount(searchMap));
+        getSelectList(model, () -> productService.selectReviewList(searchMap));
         return "admin/sellproduct/review";
     }
 
     @GetMapping("QnA")
     public String qnaLocation(HttpServletRequest request, Model model,
-                              @RequestParam(required = false) String id, @RequestParam(required = false) String name,
+                              @ModelAttribute Search search,
                               @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
-        String url = String.valueOf(request.getRequestURL());
+        String queryString = search.toString();
+        String url = String.valueOf(request.getRequestURL()) + queryString;
         Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("search", search);
+        searchMap.put("pageNo", currentPageNo);
+        model.addAttribute("queryString", queryString);
+
+        getPaging(model, currentPageNo, url, () -> productService.qnaSearchCount(searchMap));
+        getSelectList(model, () -> productService.selectQnAList(searchMap));
+        return "admin/sellproduct/QnA";
+    }
+
+    private void getPaging(Model model, int currentPageNo,
+                           String url, Supplier<Integer> searchCountSupplier) {
         Map<String, Integer> paging = null;
-        searchMap.put("id", id);
-        searchMap.put("name", name);
 
         if (!Pagination.getURL().equals(url)) {
             Pagination.init(url);
-            int result = productService.reviewSearchCount(searchMap);
+            int result = searchCountSupplier.get();
             paging = Pagination.paging(result, currentPageNo);
         } else {
             paging = Pagination.getParameter(currentPageNo);
         }
 
         model.addAttribute("paging", paging);
-        searchMap.put("pageNo", currentPageNo);
-        List<QnAManagerDTO> list = productService.selectQnAList(searchMap);
 
-        list.forEach(item -> {
-            if (item.getContent().length() > 20) {
-                String content = item.getContent();
-                String subContent = content.substring(0, 20);
+    }
 
-                item.setContent(subContent.concat("..."));
-            }
-        });
-
+    private void getSelectList(Model model, Supplier<List<?>> selectListSupplier) {
+        List<?> list = selectListSupplier.get();
 
         model.addAttribute("list", list);
-        return "admin/sellproduct/QnA";
     }
+
 
     @PostMapping(value = "sellProductListAPI", produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -139,6 +241,7 @@ public class SellProductController {
         System.out.println("test : " + search);
         return "redirect:/sellproduct/review";
     }
+
     public Map<String, Integer> pagination(int length) {
         Map<String, Integer> response = new HashMap<>();
         int maxPageNo = (int) Math.ceil((double) length / limit);

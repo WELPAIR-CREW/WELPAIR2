@@ -2,10 +2,13 @@ package com.hielectro.welpair.product;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
+import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.parameters.P;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.hielectro.welpair.configuration.MybatisConfiguration;
@@ -20,6 +23,9 @@ import java.util.Map;
 public class ProductServiceTests {
     @Autowired
     SellProductServiceImpl productService;
+
+    @Autowired
+    SellProductMapper productMapper;
 
     @Test
     @DisplayName("Service 의존성 주입 확인")
@@ -40,5 +46,14 @@ public class ProductServiceTests {
         Map<String, Object> searchMap = new HashMap<>();
         assertNotNull(productService.selectReviewList(searchMap));
         System.out.println(productService.selectReviewList(searchMap));
+    }
+
+    @Test
+    @DisplayName("옵션리스트 출력 확인")
+    public void selectOptionList() {
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setCategoryCode("3");
+        assertNotNull(productMapper.selectOptionList(productDTO));
+        System.out.println(productMapper.selectOptionList(productDTO));
     }
 }

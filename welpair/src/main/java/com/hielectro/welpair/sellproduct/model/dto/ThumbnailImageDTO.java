@@ -2,19 +2,13 @@ package com.hielectro.welpair.sellproduct.model.dto;
 
 import lombok.*;
 
-import java.sql.Date;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SellImageDTO {
-    private String no;
+public class ThumbnailImageDTO {
+    private String no;   // SellPage no
     private String thumbnailImageFileName;
     private String thumbnailImageOriginFileName;
-    private String detailImageFileName;
-    private String detailImageOriginFileName;
-    private String path;
-    private Date createDate;
 }
