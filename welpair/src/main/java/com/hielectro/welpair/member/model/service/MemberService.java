@@ -1,6 +1,7 @@
 package com.hielectro.welpair.member.model.service;
 
 import com.hielectro.welpair.member.controller.DeleteMemberException;
+import com.hielectro.welpair.member.controller.RegistMemberException;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
@@ -25,8 +26,15 @@ public interface MemberService {
     //2-1. 회원등록 - 직원목록
     List<EmployeeDTO> getEmployeeList(SelectCriteria selectCriteria);
     int totalEmployeeCount(Map<String, String> searchMap);
+    //2-2. 회원등록 - 등록페이지에서 전송버튼 눌렀을때
+    void registMember(EmployeeDTO employee) throws RegistMemberException;
+
+
 
     //3-1. 가입승인 - 가입요청 목록
     List<ReqDTO> reqList();
     int reqJoinCount();
+
+
+
 }
