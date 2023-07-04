@@ -1,5 +1,6 @@
 package com.hielectro.welpair.search.model.dto;
 
+<<<<<<< HEAD
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
@@ -25,5 +26,4 @@ public class SearchDTO {
     private SellItemPageDTO sellItemPage;
     private SellProductDTO sellProduct;
     private ProductDTO product;
-
 }
