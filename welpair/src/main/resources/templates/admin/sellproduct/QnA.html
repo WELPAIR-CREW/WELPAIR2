@@ -21,7 +21,9 @@
             <div class="section-nav-category">
                 <a href="/sellproduct/product">판매상품관리</a>
             </div>
-            <div class="section-nav-category">판매상품등록</div>
+            <div class="section-nav-category">
+                <a href="/sellproduct/add">판매상품등록</a>
+            </div>
             <div class="section-nav-category">
                 <a href="/sellproduct/review">리뷰관리</a>
             </div>
@@ -57,13 +59,13 @@
         <div class="table_container">
             <table class="section-product-table">
                 <colgroup>
-                    <col style="min-width: 50px;">
-                    <col style="min-width: 120px;">
-                    <col style="min-width: 160px;">
-                    <col style="min-width: 200px;">
-                    <col style="min-width: 300px;">
-                    <col style="min-width: 100px">
-                    <col style="min-width: 100px">
+                    <col style="width: 50px;">
+                    <col style="width: 120px;">
+                    <col style="width: 160px;">
+                    <col style="width: 200px;">
+                    <col style="width: 300px;">
+                    <col style="width: 100px">
+                    <col style="width: 100px">
                 </colgroup>
                 <thead>
                 <tr>
@@ -89,9 +91,10 @@
 <script th:inline="javascript">
     let data = /*[[${list}]]*/'list'
     let paging = /*[[${paging}]]*/'paging'
+    let queryString = /*[[${queryString}]]*/'queryString'
     createTable(data);
     setPagination(paging);
-    createPaging()
+    createPaging(queryString)
 </script>
 </body>
 
