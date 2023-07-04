@@ -76,7 +76,11 @@
 <!--                                </button>-->
 
 <!--                               등록 버튼 눌렀을때 이동하는 회원등록페이지 2)POST방식 요청-->
-                                <button class="button-square2" onclick="registEmp('${employee.empNo}')">등록</button>
+                            <button class="button-square2 test" >등록</button>
+<!--                            <button class="button-square2" th:onclick="'registEmp(\'' + ${employee.empNo} + '\')'">등록</button>-->
+<!--                            <button class="button-square2" th:onclick="|javascript:registEmp('${employee.empNo}')|">등록</button>-->
+<!--                                <button class="button-square2" data-emp-no="${employee.empNo}" onclick="registEmp(this.getAttribute('data-emp-no'))">등록</button>-->
+
                             </td>
                             <td th:if="${not #strings.isEmpty(employee.memberDTO?.registDate)}" th:text="완료"></td>
                         </tr>
@@ -112,28 +116,31 @@
     <!-- footer -->
     <div data-include-html="/admin/footer" class="include"></div>
 
+
     <script>
-<!-- 회원 등록 버튼 클릭시 실행 -->
-        function registEmp(empNo) {
-            confirm("회원으로 등록하시겠습니까?");
-            let form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/member/registPage';
-            // form.setAttribute('method', 'post');
-            // form.setAttribute('action', '/member/registPage');
+        $('.test').click(function(){
 
-            let empNoInput = document.createElement('input');
-            empNoInput.type = 'hidden';
-            empNoInput.name = 'empNo';
-            empNoInput.value = empNo;
+            let empNo = $(this).parent().siblings()[1].innerText; //this는 클릭한 버튼을 의미하고 변수에는 ${employee.empNo}에 해당하는값이 담김
+            let check =  confirm("회원으로 등록하시겠습니까?");
 
-            console.log('스크립트에서 empNo값 확인 : ' + empNo);
+            if(check){ //확인을 눌러서 true일때만 작동
+                let form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/member/registPage';
 
-            form.appendChild(empNoInput);
+                let empNoInput = document.createElement('input');
+                empNoInput.type = 'hidden';
+                empNoInput.name = 'empNo';
+                empNoInput.value = empNo;
 
-            document.body.appendChild(form);
-            form.submit();
-        }
+                console.log('스크립트에서 empNo값 확인 : ' + empNo);
+
+                form.appendChild(empNoInput);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        })
     </script>
 
 </body>
