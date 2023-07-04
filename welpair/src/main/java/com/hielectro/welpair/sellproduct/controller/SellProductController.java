@@ -34,8 +34,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class SellProductController {
     private final SellProductServiceImpl productService;
     private final int limit = 10;
-    @Value("${image.image-dir}")
-    private String IMAGE_DIR;
+//    @Value("${image.image-dir}")
+    private final String IMAGE_DIR = "c:/upload";
 
     public SellProductController(SellProductServiceImpl productService) {
         this.productService = productService;
