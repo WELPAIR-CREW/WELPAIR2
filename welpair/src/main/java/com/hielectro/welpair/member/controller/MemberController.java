@@ -163,21 +163,15 @@ public class MemberController {
         System.out.println("employeeDTO로 들어왔는지 확인 : " + employee);
         model.addObject("employee", employee);
 
-        //매개변수(@RequestParam String empNo, ... 등)으로 받았을때
-//        model.addObject("empNo", empNo);
-//        model.addObject("empName", empName);
-//        model.addObject("empEmail", empEmail);
-//        model.addObject("empPhone", empPhone);
-//        model.addObject("deptName", deptName);
-//        model.addObject("jobName", jobName);
         return model;
     }
 
-    @PostMapping("/registSubmit")
-    public String registMember(@ModelAttribute EmployeeDTO employee) throws RegistMemberException {
+    @PostMapping("/registMember")
+    public String registMember(@ModelAttribute MemberDTO member) throws RegistMemberException {
 
         System.out.println("회원등록 submit 후 들어오는지 확인---------------------");
-        memberService.registMember(employee);
+        System.out.println("회원등록 member = " + member); //여기서 memPwd=null로 들어오는것이 문제
+        memberService.registMember(member);
         return "redirect:/member/regist"; //등록 후 회원등록(목록) 페이지로 리다이렉트
     }
 

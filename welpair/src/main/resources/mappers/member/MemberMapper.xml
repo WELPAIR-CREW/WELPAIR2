@@ -152,6 +152,19 @@
         FROM T_EMPLOYEE E
     </select>
 
+    <insert id="registMember" parameterType="com.hielectro.welpair.member.model.dto.MemberDTO">
+        INSERT INTO T_MEMBER
+        VALUES
+        (
+          #{ empNo }
+        , #{ memPwd }
+        , sysdate
+        , default
+        , default
+        )
+    </insert>
+
+
 
 <!-- 3. 가입승인 - 신규가입요청 목록 -->
     <select id="reqList" resultMap="reqListResultMap">
@@ -170,9 +183,6 @@
          WHERE IS_REGIST = 'N'
     </select>
 
-<!--  회원등록 -->
-    <insert id="registMember" parameterType="">
-        INSERT INTO
-    </insert>
+
 
 </mapper>
