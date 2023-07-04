@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
 
 <head>
     <meta charset="UTF-8">
     <!-- css -->
-    <link rel="stylesheet" href="../../CSS/payment.css">
-    <link rel="stylesheet" href="../../CSS/header.css">
-    <link rel="stylesheet" href="../../CSS/footer.css">
+    <link rel="stylesheet" href="/common/css/payment.css">
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
 
     <!-- script -->
-    <script src="../../src/static/include.js"></script>
+    <script src="/common/js/static/include.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 
 
     <title>welpair</title>
 </head>
 <!-- 헤더 -->
-<div data-include-html="../consumer/header.html" class="include"></div>
+<div data-include-html="/consumer/header_consumer" class="include"></div>
 
 <body>
     <!-- 결제페이지 컨테이너 -->
@@ -30,7 +32,7 @@
                 <ul class="order_prd_ul">
                     <li class="prd_list_head">
                         <!-- thymeleaf... 셀렉아이템 갯수 변수사용  -->
-                        <div th:text="total: ${variable}" class="list_head_1"></div>
+                        <div text="" class="list_head_1"></div>
                         <div class="list_head_2">상품정보</div>
                         <div class="list_head_3">수량(변경)</div>
                         <div class="list_head_4">금액</div>
@@ -132,7 +134,7 @@
                             <td>
                                 <div class="labelbox">휴대폰번호</div>
                             </td>
-                            <td><input type="text" class="inputbox_phone" name="ordererPhone"
+                            <td><input type="number" class="inputbox_phone" name="ordererPhone"
                                     placeholder=" 휴대폰 번호를 입력하세요.(숫자만 입력)" required></td>
                         </tr>
                     </table>
@@ -145,7 +147,7 @@
                 <div class="title_recipient">수령자&nbsp;정보</div>
                 <table class="info_table">
                     <tr>
-                        <td><input type="checkbox"><label class="labelbox"> 주문인과&nbsp;동일</label>
+                        <td><input type="checkbox" id="sameorderer"><label class="labelbox" for="sameorderer">&nbsp;주문인과&nbsp;동일</label>
                         </td>
                     </tr>
                     <tr>
@@ -159,7 +161,7 @@
                         <td>
                             <div class="labelbox">휴대폰&nbsp;번호</div>
                         </td>
-                        <td><input type="text" class="inputbox_phone" name="recipientPhone"
+                        <td><input type="number" class="inputbox_phone" name="recipientPhone"
                                 placeholder=" 휴대폰 번호를 입력하세요.(숫자만 입력)" required></td>
                     </tr>
                     <tr>
@@ -168,7 +170,7 @@
                         </td>
                         <td>
                             <select name="recipientAddress" id="recipientAddress" required>
-                                <option placeholder="" selected disabled hidden>배송지를&nbsp;선택해주세요.</option>
+                                <option placeholder="" selected disabled hidden>배송지&nbsp;선택</option>
                                 <!-- ajax로 조회해서 추가될 부분  -->
                                 <!-- option value="기본배송지 1~3"></option> 정적코드 추가-->
                             </select>
@@ -311,7 +313,10 @@
 
 
     <!-- footer -->
-    <div data-include-html="../consumer/footer.html" class="include"></div>
+    <div data-include-html="/../admin/footer" class="include"></div>
+
+    <script src="/common/js/src/payment.js"></script>
+
 </body>
 
 </html>

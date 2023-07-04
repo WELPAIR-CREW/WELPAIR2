@@ -23,7 +23,7 @@
 <!-- 헤더 -->
 <div data-include-html="/consumer/header_consumer" class="include"></div>
 <!-- 장바구니 시작 -->
-<form action="/payment/payment.do" method="post">
+<form action="/payment/pay" method="post" id="cartPayForm">
     <!-- 카트 컨테이너 시작 -->
     <div id="cart_container">
         <!-- 상품 컨테이너 시작 -->
@@ -73,7 +73,8 @@
                             <div class="cart_order_prd">
                                 <!-- 상품선택 체크박스 -->
                                 <label>
-                                    <input type="checkbox" th:class="'cart_select' + ${stat.count}" th:name="${cart.sellProduct.id}" onchange="checkboxTrueList()" data-th-value="${cart.price} + '/' +${cart.cartSellProduct.deliveryPrice} + '/' + ${cart.totalPrice}">
+                                    <input type="checkbox" th:class="'cart_select' + ${stat.count}" name="sellProductId"
+                                           th:id="${cart.sellProduct.id}" onchange="checkboxTrueList()" data-th-value="${cart.price} + '/' +${cart.cartSellProduct.deliveryPrice} + '/' + ${cart.totalPrice}">
                                 </label>
                                 <!-- 판매페이지 바로가기 링크 -->
 <!--                                    <a th:if="${cart.getSellPage().getNo() == Exception}" th th:href="@{'/admin/sellproduct'}">-->
@@ -84,7 +85,7 @@
                                         <!-- 상품썸네일 이미지-->
                                         <span class="cart_thumb_img" name="sellThumbImage">
                                             <img th:if="${cart.sellImage.path != NullPointerException}" th:src="'../..' + ${cart.sellImage.path}" class="thumbimg">
-                                            <img th:unless="${cart.sellImage.path != NullPointerException}" src="/common/images/thumbnailbox.png" class="thumbimg">
+                                            <img th:if="${cart.sellImage.path == NullPointerException}" src="/common/images/thumbnailbox.png" class="thumbimg">
                                           </span>
                                     </div>
                                     <!-- 상품이름 작성구역  -->
@@ -98,7 +99,7 @@
                                 <div class="prd_util">
                                     <div class="prd_util_wrap">
                                         <!-- 수량 입력 박스 -->
-                                        <input type="number" th:id="'item_count_box' + ${stat.count}" th:name="'item_count_box' + ${stat.count}" class="item_count_box" min="1" max="100" title="상품수량" placeholder="1" disabled th:value="${cart.cartSellProduct.cartAmount}">
+                                        <input type="number" th:id="'item_count_box' + ${stat.count}" name="cartAmount" class="item_count_box" min="1" max="100" title="상품수량" placeholder="1" disabled th:value="${cart.cartSellProduct.cartAmount}">
                                         <!-- 수량 플러스 버튼 -->
                                         <button type="button" class="bnt_plus" th:name="'btn_plus'+ ${stat.count}" th:count="${stat.count}" th:onclick="|btn_plus(${stat.count})|">
                                             <img src="/common/images/bnt_plus.png" alt="" />
@@ -114,17 +115,17 @@
                             <div class="price_area">
                                 <!-- 상품금액 -->
                                 <div class="cart_order_price">
-                                    <div class="price_box" th:id="'price_' + ${stat.count}" th:text="${#numbers.formatDecimal(cart.price, 0, 'COMMA', 0, 'POINT')} + ' 원'">balnk</div>
+                                    <div class="price_box" th:id="'price_' + ${stat.count}" name="exptPrice" th:text="${#numbers.formatDecimal(cart.price, 0, 'COMMA', 0, 'POINT')} + ' 원'">balnk</div>
 <!--                                    <div class="price_box" id="price" >balnk</div>-->
                                 </div>
                                 <!-- 배송비 작성구역 -->
                                 <div class="cart_order_delivery">
-                                    <div class="delivery_box" th:id="'deliveryPrice_' + ${stat.count}" th:text="${#numbers.formatDecimal(cart.cartSellProduct.deliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
+                                    <div class="delivery_box" th:id="'deliveryPrice_' + ${stat.count}" name="exptDeliveryPrice" th:text="${#numbers.formatDecimal(cart.cartSellProduct.deliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
 <!--                                    <div class="delivery_box" id="'deliveryPrice">blank</div>-->
                                 </div>
                                 <!-- 총금액 작성구역 -->
                                 <div class="cart_order_total_price">
-                                    <div class="totla_price_box" th:id="'totalPrice_' + ${stat.count}" th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
+                                    <div class="totla_price_box" th:id="'totalPrice_' + ${stat.count}" name="exptTotalPrice" th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
 <!--                                    <div class="totla_price_box" id="totalPrice">blank</div>-->
                                 </div>
                                 <!-- 상품금액 닫기 -->
@@ -168,7 +169,7 @@
                 </div>
                 <!-- 버튼박스 -->
                 <div class="bnt_order">
-                    <button type="submit" class="goto_payment"><span>선택상품<br>주문하기</span></button>
+                    <button type="submit" class="go_pay" th:onclick="gotopay"><span>선택상품<br>주문하기</span></button>
                 </div>
             </div>
             <!-- 예상결제정보 컨테이너 닫기 -->
