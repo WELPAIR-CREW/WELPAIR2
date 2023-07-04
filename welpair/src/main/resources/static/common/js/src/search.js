@@ -1,32 +1,4 @@
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("옴??")
-    var searchButton = document.getElementById('search-button');
-    if (searchButton) {
-        searchButton.addEventListener('click', submitSearchForm);
-    }
-});
-
-function submitSearchForm(event) {
-    console.log("옴옴옴??")
-    event.preventDefault(); // Prevent the default form submission
-
-    var searchTerm = document.getElementsByName("prodSearchInput")[0].value;
-    var searchURL = "/consumer/search/search?term=" + encodeURIComponent(searchTerm);
-
-    // Set the search URL as the form action
-    document.getElementById("search-form").action = searchURL;
-
-    // Submit the form synchronously
-    document.getElementById("search-form").submit();
-
-    // Navigate to the desired page after querying
-    window.location.href = "/consumer/search/search";
-}
-
-
-
-
 
 
 let currentPage = 1;

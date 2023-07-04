@@ -193,4 +193,75 @@ public class MemberController {
         return "admin/member/member-givePointHistory1";
     }
 
+
+
+
+
+
+
+//    로그인 창
+
+    /* 로그인창을 띄웁시다. */
+    @GetMapping("login")
+    public String login(Model model){
+
+        return "member/login";
+
+    }
+
+    @PostMapping("login")
+    public String loginForm(@RequestParam("empNo") String empNo,
+                            @RequestParam("memPwd") String memPwd){
+
+//        System.out.println("empNo = " + empNo + ", memPwd = " + memPwd);
+        return null;
+
+    }
+    @PostMapping("test")
+    public String testForm(Model model){
+
+        return "member/test";
+    }
+
+    @GetMapping("error")
+    public String error(Model model){
+
+        return "member/error";
+    }
+
+
+
+
+
+// 회원가입 창
+
+    /* 회원가입창을 띄웁시다. */
+    @GetMapping("registForm")
+    public String registForm(Model model){
+        return "member/registForm";
+    }
+
+    @PostMapping("registForm")
+    public String registSave(@RequestParam("empNo") String empNo,
+                            @RequestParam("memPwd") String memPwd){
+        System.out.println("empNo = " + empNo + ", memPwd = " + memPwd);
+
+        return null;
+
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

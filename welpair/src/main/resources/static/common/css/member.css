@@ -17,7 +17,7 @@ a:hover {
 /* 체크박스 체크시 색상 */
 input[type=checkbox] {
     accent-color: lavender;
-    
+
 }
 
 
@@ -355,7 +355,7 @@ td {
 /* member-givePoint */
 
 .container.long {
-    /* height: 656px; 
+    /* height: 656px;
     +244만큼 페이지 길이 추가 */
     height: 900px;
 }
@@ -365,7 +365,7 @@ td {
     height: 832px;
 }
 
-.section-title.long { 
+.section-title.long {
     /* 타이틀과 컨텐츠 간격 조정*/
     margin-bottom: 50px;
 }
@@ -480,4 +480,4 @@ td {
 
     margin-top: -100px;
     margin-bottom: auto;
-} 
+}

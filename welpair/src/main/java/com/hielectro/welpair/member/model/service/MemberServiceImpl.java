@@ -3,25 +3,36 @@ import com.hielectro.welpair.member.controller.DeleteMemberException;
 import com.hielectro.welpair.member.controller.Pagenation;
 import com.hielectro.welpair.member.controller.RegistMemberException;
 import com.hielectro.welpair.member.controller.SelectCriteria;
+import com.hielectro.welpair.member.model.dao.MemberDAO;
 import com.hielectro.welpair.member.model.dao.MemberMapper;
+import com.hielectro.welpair.member.model.dto.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.dto.ReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class MemberServiceImpl implements MemberService {
 
+    private final MemberDAO memberDAO;
     private final MemberMapper memberMapper;
 
+
     @Autowired
-    public MemberServiceImpl(MemberMapper memberMapper) {
+    public MemberServiceImpl(MemberDAO memberDAO, MemberMapper memberMapper) {
+        this.memberDAO = memberDAO;
         this.memberMapper = memberMapper;
     }
 
@@ -46,6 +57,62 @@ public class MemberServiceImpl implements MemberService {
 
         return memberMapper.expiredMemberCount(searchMap);
     }
+
+
+
+
+    /* 사용자가 입력한 값을 조회한 후 userdetails 타입의 user객체를 만들어서 반환 */
+    @Override
+    public UserDetails loadUserByUsername(String empNo) throws UsernameNotFoundException {
+
+        System.out.println("empNo = " + empNo);   // 잘들어옴
+        MemberDTO member = memberDAO.findMemberById(empNo);
+        System.out.println("member ====================== " + member);
+        /* 조회했을 때 값이 없을 경우 npe발생하는 것을 방지 빈객체에 넣어둡시다. */
+        if(member == null){
+            member = new MemberDTO();
+        }
+
+        //권한 리스트 뽑아오기
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        if(member.getMemberList() != null){
+
+            List<MemberRoleDTO> roleList = member.getMemberList();
+
+            for(int i = 0; i < roleList.size(); i++){
+
+                AuthorityDTO authority = roleList.get(i).getAuthority();
+                authorities.add(new SimpleGrantedAuthority(authority.getAuthName()));
+            }
+        }
+
+
+        UserImpl user = new UserImpl(member.getEmpNo(), member.getMemPwd(), authorities);
+        user.setDetails(member);
+
+
+        return user;
+    }
+
+
+
+
+
+
+// 회원가입
+
+    // 사번조회조회
+    public EmployeeDTO selectMemberByUserId(String empNo){
+
+        return memberDAO.selectMemberByUserId(empNo);
+    }
+
+
+
+
+
+
 
 
     //계정 삭제

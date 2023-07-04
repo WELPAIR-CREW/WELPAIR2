@@ -5,6 +5,8 @@ import com.hielectro.welpair.member.controller.RegistMemberException;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import com.hielectro.welpair.member.model.dto.ReqDTO;
 
 import java.lang.reflect.Member;
@@ -12,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public interface MemberService {
+public interface MemberService extends UserDetailsService {
 
     //1-1. 회원조회 - 회원목록
     List<MemberDTO> getMemberList(SelectCriteria selectCriteria);
@@ -20,6 +22,14 @@ public interface MemberService {
     //1-2. 회원조회 - 전체, 퇴사 회원수
     int totalMemberCount(Map<String, String> searchMap);
     int expiredMemberCount(Map<String, String> searchMap);
+
+
+
+
+
+
+
+
 
     void deleteMember(List<String> empNos) throws DeleteMemberException;
 
