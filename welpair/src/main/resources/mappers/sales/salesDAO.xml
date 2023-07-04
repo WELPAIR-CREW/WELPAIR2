@@ -45,19 +45,6 @@
         <result property="categoryCode" column="CATEGORY_CODE"></result>
         <result property="categoryName" column="CATEGORY_NAME"></result>
     </resultMap>
-    <!---->
-<!--    <select id="getMonthSales" resultMap="salesResultMap">-->
-<!--        SELECT-->
-<!--        TO_CHAR(TRUNC(A.PAYMENT_DATE, 'MONTH'), 'MM') AS MONTH-->
-<!--        , SUM(A.PAYMENT_PRICE) AS SALES-->
-<!--        FROM T_PAYMENT A-->
-<!--        WHERE TRUNC(PAYMENT_DATE, 'MONTH') >= TRUNC(SYSDATE) - INTERVAL '6' MONTH-->
-<!--        GROUP BY TO_CHAR(TRUNC(PAYMENT_DATE, 'MONTH'), 'MM')-->
-<!--        ORDER BY TO_CHAR(TRUNC(PAYMENT_DATE, 'MONTH'), 'MM')-->
-<!--    </select>-->
-
-
-
 
     <!--검색 조건 추가  -->
     <select id="getMonthSales" resultMap="salesResultMap">
