@@ -1,6 +1,7 @@
 package com.hielectro.welpair.order.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
@@ -13,9 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Slf4j
@@ -25,28 +24,26 @@ public class CartController {
 
     private final CartService cartService;
 
+    private final String empNo = "E00033";
 
     private CartController(CartService cartService) {
         this.cartService = cartService;
     }
 
-    // default 매핑 메소드
-//    @GetMapping({"{id}"})
-//    public String defaultLocation(@PathVariable("id") String url) {
-//        return "/consumer/order/" + url;
-//    }
-
+    // 카트에 상품담기(임시)
     @GetMapping("/cart/add")
     public String addCart() {
-        return "/consumer/order/add";
+        return "consumer/order/add";
     }
 
 
-    // 카트 인서트용 메소드
+    // 장바구니 상품 담기 인서트용
     @ResponseBody
     @PostMapping(value = "/cart/add", produces = "application/json; charset=utf-8")
-    public Map<String, String> addCart(@ModelAttribute CartSellProductDTO cartSellProduct,
-                                       @RequestParam("empNo") String empNo) {
+    public Map<String, String> addCart(@ModelAttribute CartSellProductDTO cartSellProduct
+            , @RequestParam("empNo") String empNo
+    ) {
+
         // 카트별판매상품dto를 통해 매상품id와 수량 정보와, 회원정보ID가 넘어온다.
         System.out.println("선택상품 : " + cartSellProduct);
 
@@ -112,11 +109,11 @@ public class CartController {
         }
     }
 
-    // 회원 장바구니 불러오기 메소드
+    // 회원 장바구니 불러오기
     @GetMapping("cart")
     public String cartList(Model model
             , @AuthenticationPrincipal User user
-            , @RequestParam(value = "empNo", required = false) String empNo
+//            , @RequestParam(value = "empNo", required = false) String empNo
     ) {
 
         // 1. 회원 정보 받아서 해당 회원의 장바구니 조회
@@ -127,39 +124,84 @@ public class CartController {
         // 2. 장바구니 관련 테이블 리스트로 받아옴
         List<CartGeneralDTO> cartList = cartService.cartAllInfoSelect(empNo);
 
-        // 3. 장바구니 상품정보 모델에 담아 뷰로 전달
-        model.addAttribute("cartList", cartList);
 
         for (CartGeneralDTO cart : cartList) {
-
             priceMaker(cart);
+            model.addAttribute("expt", cartList.get(cartList.size()-1));
+
+
 
         }
+
+        // 3. 장바구니 상품정보 모델에 담아 뷰로 전달
+        model.addAttribute("cartList", cartList);
 
         return "consumer/order/cart";
 
     }
 
- //// json객체로 넘기겠다(포워드, 리다이렉트아님, 리로드안됨)
-    // 수량변경시 가격변동 등 비동기처리 메소드
-    @PostMapping("cart/amount-change")
+    // 수량변경
     @ResponseBody
-    public boolean cartAmountChange(@ModelAttribute CartSellProductDTO cartSellProduct, Model model
-            , @RequestParam(value = "empNo", required = false) String empNo) {
+    @PostMapping("/cart/amount-change")
+    public String cartAmountChange(@ModelAttribute CartSellProductDTO cartSellProduct, Model model
+    ) {
 
-        System.out.println(empNo);
+        System.out.println("수량변경 컨트롤러");
+        System.out.println(cartSellProduct);
 
         cartSellProduct.setCart(new CartDTO());
         cartSellProduct.getCart().setEmpNo(empNo);
-        System.out.println();
         boolean result = cartService.cartAmountChange(cartSellProduct);
+        String response = "";
+
         System.out.println(result);
+        if(result){
+            response = "수량변경 성공";
+        }
+        else {
+            response = "수량변경 실패";
+        }
 
-
-
-
-        return result;
+        return response;
     }
+
+    // 선택상품 삭제
+    @ResponseBody
+    @PostMapping(value = "cart/delete")
+    public String deleteCart(Model model, @RequestBody ArrayList<String> productList
+//                            , @RequestParam("empNo") String empNo
+    ){
+        System.out.println("컨트롤러 들어옴 cart/delete");
+        System.out.println(productList);
+
+        boolean result = cartService.deleteCartProduct(productList, empNo);
+        String response = "";
+
+        if(result){
+            response = "선택상품 삭제 성공";
+        }
+        else {
+            response = "선택상품 삭제 실패";
+        }
+        return response;
+    }
+
+
+    // 선택상품에 따른 예상결제 가격변동
+    @ResponseBody
+    @PostMapping("cart/exptprice")
+    public Model selectCart(Model model, @RequestBody ArrayList<ArrayList<String>> exptPriceList){
+
+        System.out.println("cart/exptPrice 컨트롤러");
+        System.out.println(exptPriceList);
+
+        System.out.println(exptPriceList);
+
+        model.addAttribute("expt", exptPriceMaker(exptPriceList));
+
+        return model;
+    }
+
 
     // 단품 금액 생성 메소드
     public void priceMaker(CartGeneralDTO cart) {
@@ -171,15 +213,34 @@ public class CartController {
 
     }
 
-    // 예상 결제금액 생성메소드(체크박스 선택시 바뀐다)
-    public void exptPriceMaker(CartGeneralDTO cart) {
+    // 예상 총 결제금액 생성메소드(체크박스 선택시 바뀐다)
+    public CartGeneralDTO exptPriceMaker(ArrayList<ArrayList<String>> exptPriceList) {
         // 선택 총 합계
-//        private int exptPrice;
-//        private int exptDeliveryPrice;
-//        private int exptTotalPrice;
-//        int exptPrice = cart.getTotalPrice();
-//        int exptDeliveryPrice = cart.getCartSellProduct().getDeliveryPrice();
+
+        int exptPrice = 0;
+        int exptDeliveryPrice = 0;
+        int exptTotalPrice = 0;
+
+        for(ArrayList<String> expt : exptPriceList){
+
+            exptPrice += Integer.parseInt(expt.get(0));
+            exptDeliveryPrice += Integer.parseInt(expt.get(1));
+            exptTotalPrice += Integer.parseInt(expt.get(2));
+
+        }
+
+        CartGeneralDTO expt = new CartGeneralDTO();
+        expt.setExptPrice(exptPrice);
+        expt.setExptDeliveryPrice(exptDeliveryPrice);
+        expt.setExptTotalPrice(exptTotalPrice);
+
+        return expt;
+
+
+
     }
+
+
 }
 
 

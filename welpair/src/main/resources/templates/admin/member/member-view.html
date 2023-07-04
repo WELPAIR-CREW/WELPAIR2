@@ -29,7 +29,7 @@
     <div class="navs">
         <div class="nav-menu"><b>회원조회</b></div>
         <div class="nav-menu"><a href="regist">회원등록</a></div> <!-- 이렇게 URL매핑된 컨트롤러 메서드 실행됨 -->
-        <div class="nav-menu"><a href="permission">가입승인</a></div>
+        <div class="nav-menu"><a href="reqList">가입승인</a></div>
         <div class="nav-menu"><a href="givePoint">복지포인트지급</a></div>
         <div class="nav-menu"><a href="givePointHistory">복지포인트지급이력</a></div>
     </div>
@@ -65,7 +65,7 @@
                 <tbody> <!-- 10행. 페이징처리 필요-->
                 <tr th:each="member:${memberList}">
                     <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${member.empNo}"></td>
-                    <td th:text="${member.registDate}"></td>
+                    <td th:text="${#dates.format(member.registDate, 'yyyy.MM.dd')}"></td>
                     <td th:text="${member.employee.isExpire}"></td>
                     <td th:text="${member.empNo}"></td>
                     <td th:text="${member.employee.empName}"></td>

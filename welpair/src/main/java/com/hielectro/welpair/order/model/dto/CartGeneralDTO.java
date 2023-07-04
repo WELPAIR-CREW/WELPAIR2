@@ -22,15 +22,14 @@ public class CartGeneralDTO {
     private SellPageDTO sellPage;
 
 
-//    private SellImageDTO sellImage = new SellImageDTO();
+//    private  thumbImage;
     private ProductDTO product;
 
     private int price;
     private int totalPrice;
+
     private int exptPrice;
     private int exptDeliveryPrice;
     private int exptTotalPrice;
-
-
 }
 
