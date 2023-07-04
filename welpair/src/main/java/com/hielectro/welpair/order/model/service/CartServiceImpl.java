@@ -8,6 +8,7 @@ import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -63,8 +64,19 @@ public class CartServiceImpl implements CartService {
     @Transactional
     @Override
     public boolean cartAmountChange(CartSellProductDTO cartSellProduct) {
-        System.out.println("서비스 들어왓니????");
         return cartMapper.cartAmountChange(cartSellProduct) > 0 ? true : false;
+    }
+
+    @Transactional
+    @Override
+    public boolean deleteCartProduct(ArrayList<String> productList, String empNo) {
+
+        int result = 0;
+
+        for(String product : productList){
+            result += cartMapper.deleteCartProduct(product, empNo);
+        }
+        return result < productList.size() ? true : false;
     }
 
 }

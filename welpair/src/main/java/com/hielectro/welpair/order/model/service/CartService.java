@@ -5,6 +5,7 @@ import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface CartService {
@@ -23,4 +24,6 @@ public interface CartService {
     SellProductDTO isSellProductById(String sellProductId);
 
     boolean cartAmountChange(CartSellProductDTO changeAmount);
+
+    boolean deleteCartProduct(ArrayList<String> productList, String empNo);
 }
