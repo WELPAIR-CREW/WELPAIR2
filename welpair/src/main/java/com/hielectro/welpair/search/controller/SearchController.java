@@ -20,8 +20,10 @@ public class SearchController {
 
     @GetMapping("search/search")
     public String searchResult(){
-        System.out.println("-------------컨트롤러 1-1-1 in -------------");
-        System.out.println("-------------컨트롤러 1-1-1 out -------------");
+        System.out.println("------------- 상품검색 컨트롤러 1-1-1 in -------------");
+
+
+        System.out.println("------------- 상품검색 컨트롤러 1-1-1 out -------------");
         return "consumer/search/search";
     }
 }
