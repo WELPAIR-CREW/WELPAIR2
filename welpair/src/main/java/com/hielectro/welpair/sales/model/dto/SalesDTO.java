@@ -18,28 +18,13 @@ import java.util.List;
 @ToString
 public class SalesDTO {
 
+    private int month;
+    private int totalSales;
+
     private PaymentDTO payment; // 주문번호
     private OrderPaymentDTO orderPayment; // 주문번호 + 판매상품ID
     private ProductOrderDTO productOrder; // 판매상품ID + 상품코드
     private SellProductDTO sellProduct; // 판매상품ID + 상품코드
     private ProductDTO product; // 상품코드 + 카테고리코드
     private CategoryDTO category; // 카테고리코드 + 카테고리명
-
-    private int month;
-    private int totalSales;
-
-
-//    public String getPaymentType() {
-//        if (payment != null && payment.getPaymentType() != null) {
-//            return payment.getPaymentType();
-//        }
-//        return null;
-//    }
-//
-//    public String getCategoryCode() {
-//        if (category != null && category.getCategoryCode() != null) {
-//            return category.getCategoryCode();
-//        }
-//        return null;
-//    }
 }

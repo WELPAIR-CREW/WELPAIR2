@@ -1,5 +1,4 @@
-
-
+/* admin_inventory_search */
 
 let currentPage = 1;
 const rowsPerPage = 10;
@@ -12,6 +11,18 @@ function showPage(page) {
     $("#searchResultTable tbody tr").slice(startIndex, endIndex).show();
 }
 
+
+// 날짜 기본값 반영
+let today = new Date();
+let startDate = new Date();
+startDate.setDate(today.getDate() - 7);
+
+let startDateString = startDate.toISOString().split('T')[0];
+let endDateString = today.toISOString().split('T')[0];
+
+
+$("#startDate").val(startDateString);
+$("#endDate").val(endDateString);
 
 
 // 검색 버튼
@@ -74,7 +85,10 @@ $("#historySearch").click(function (){
     }
 });
 
-
+// 테이블 정렬
+$(document).ready(function() {
+    $('#searchResultTable').DataTable();
+});
 
 // 페이징
 

@@ -67,49 +67,13 @@
             <div class="section-searchResult">
                 <div>
                     <ul>
-                        <li class="section-searchResult-product">
+                        <li class="section-searchResult-product" th:each="searchDTO : ${prodSearchList}">
                             <a href="#">
                                 <img src="#" alt="">
                             </a>
                             <div class="product-info">
-                                <div class="searchProdTitle"><span>상품명</span></div>
-                                <div class="searchProdPrice"><span>10,000원</span></div>
-                            </div>
-                        </li>
-                        <li class="section-searchResult-product">
-                            <a href="#">
-                                <img src="#" alt="">
-                            </a>
-                            <div class="product-info">
-                                <div class="searchProdTitle"><span>상품명</span></div>
-                                <div class="searchProdPrice"><span>10,000원</span></div>
-                            </div>
-                        </li>
-                        <li class="section-searchResult-product">
-                            <a href="#">
-                                <img src="#" alt="">
-                            </a>
-                            <div class="product-info">
-                                <div class="searchProdTitle"><span>상품명</span></div>
-                                <div class="searchProdPrice"><span>10,000원</span></div>
-                            </div>
-                        </li>
-                        <li class="section-searchResult-product">
-                            <a href="#">
-                                <img src="#" alt="">
-                            </a>
-                            <div class="product-info">
-                                <div class="searchProdTitle"><span>상품명</span></div>
-                                <div class="searchProdPrice"><span>10,000원</span></div>
-                            </div>
-                        </li>
-                        <li class="section-searchResult-product">
-                            <a href="#">
-                                <img src="#" alt="">
-                            </a>
-                            <div class="product-info">
-                                <div class="searchProdTitle"><span>상품명</span></div>
-                                <div class="searchProdPrice"><span>10,000원</span></div>
+                                <div class="searchProdTitle" name="name"><span th:text="${searchDTO.sellPage.title}"></span></div>
+                                <div class="searchProdPrice" name="sellPrice"><span th:text="${searchDTO.sellprice}"></span></div>
                             </div>
                         </li>
                     </ul>
