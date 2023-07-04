@@ -32,6 +32,18 @@
     <resultMap id="SellPageDTO" type="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
         <id property="no" column="SELL_PAGE_NO"/>
         <result property="title" column="SELL_PAGE_TITLE"/>
+        <result property="detailImageFileName" column="SELL_DETAIL_IMAGE_FILE_NAME"/>
+        <result property="detailImageOriginFileName" column="SELL_DETAIL_IMAGE_ORGIN_FILE_NAME"/>
+        <result property="path" column="FILE_PATH"/>
+        <result property="createDate" column="CREATE_DATE"/>
+
+        <collection property="thumbnailImageList" resultMap="ThumbnailImageDTO"/>
+    </resultMap>
+
+    <resultMap id="ThumbnailImageDTO" type="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
+        <id property="no" column="SELL_PAGE_NO"/>
+        <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>
+        <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>
     </resultMap>
 
     <resultMap id="SellProductDetailDTO" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO">
@@ -294,7 +306,20 @@
          WHERE CATEGORY_CODE = #{ categoryCode }
          ORDER BY PRODUCT_OPTION
     </select>
-    
+
+    <select id="selectOneSellProduct" resultMap="SellProductResultMap">
+        SELECT
+               *
+          FROM T_SELL_PRODUCT
+          JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
+          JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
+          JOIN T_THUMB_IMAGE USING (SELL_PAGE_NO)
+         WHERE 1=1
+        <if test="pageNo != null and pageNo != ''">
+          AND SELL_PRODUCT_ID = #{ pageNo }
+        </if>
+    </select>
+
     <select id="selectProductNameList" resultMap="ProductDTO">
         SELECT
                PRODUCT_CODE

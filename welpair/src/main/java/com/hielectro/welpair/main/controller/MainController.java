@@ -1,5 +1,7 @@
 package com.hielectro.welpair.main.controller;
 
+import com.hielectro.welpair.main.model.service.MainService;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/")
 public class MainController {
+    private final MainService mainService;
+
+    public MainController(MainService mainService) {
+        this.mainService = mainService;
+    }
 
     @RequestMapping({"consumer/header_consumer", "admin/header_admin", "admin/index", "index"})
     public void header() {}
@@ -18,8 +25,8 @@ public class MainController {
 
     @GetMapping("products/{pageNo}")
     public String productPage(@PathVariable String pageNo, Model model) {
-
-        model.addAttribute("sellProductPageNo", pageNo);
+        SellProductDTO sellProduct = mainService.selectOneSellProduct(pageNo);
+        model.addAttribute("sellProduct", sellProduct);
         return "consumer/sellproduct/product-detail";
     }
 }
