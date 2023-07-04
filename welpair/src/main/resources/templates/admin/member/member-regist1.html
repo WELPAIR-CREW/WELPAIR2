@@ -64,8 +64,8 @@
                             <td th:text="${employee.empName}"></td>
                             <td th:text="${employee.empEmail}"></td>
                             <td th:text="${employee.empPhone}"></td>
-                            <td th:text="${employee.empDept}"></td>
-                            <td th:text="${employee.jobCode}"></td>
+                            <td th:text="${employee.deptDTO.deptName}"></td>
+                            <td th:text="${employee.jobDTO.jobName}"></td>
 <!--                         (회원등록여부판별) 등록일이 null이면 등록버튼 추가, null이 아니면 텍스트'완료'추가 -->
 <!--                         null이 발생할 수 있는 프로퍼티에는 ?를 써준다-->
                             <td th:if="${#strings.isEmpty(employee.memberDTO?.registDate)}">

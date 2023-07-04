@@ -24,5 +24,7 @@ public class EmployeeDTO {
     private String isExpire; //데이터타입 CHAR = 'N'
 
     private MemberDTO memberDTO;
+    private DeptDTO deptDTO;
+    private JobDTO jobDTO;
 
 }
