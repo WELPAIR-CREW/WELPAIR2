@@ -4,8 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>고객별 주문내역</title>
-    <br>
-    <br>
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/member.css">
@@ -15,14 +13,14 @@
 
 <body>
 
-    <div data-include-html="./header_admin.html" class="include"></div>
-
+<div data-include-html="/admin/header_admin" class="include"></div>
     <div class="container">
+
         <!---->
         <div class="navs">
 
             <div class="nav-menu"><b>고객별 주문내역</b></div>
-            <div class="nav-menu">주문관리</div>
+            <div class="nav-menu"><a href="/order/order_manage">주문관리</a></div>
         </div>
         <!---->
 
@@ -52,128 +50,31 @@
 
                 <table border="1px">
                     <br>
+                    <thead>
                     <tr>
-                        <th>
-                            &ensp;주문일자&ensp;
-                            &emsp;주문번호&emsp;
-                            &emsp;&emsp;&emsp;상품명&emsp;&emsp;&emsp;
-                            &ensp;수량&ensp;
-                            &emsp;주문자&emsp;
-                            &ensp;결제방법&ensp;
-                            &emsp;결제금액&ensp;
-                        </th>
-                    </tr>
-                    <tr>
-                        <td>
-                            &ensp;주문일자&ensp;
-                            &emsp;주문번호&emsp;
-                            &emsp;&emsp;&emsp;상품명&emsp;&emsp;&emsp;
-                            &ensp;수량&ensp;
-                            &emsp;주문자&emsp;
-                            &ensp;결제방법&ensp;
-                            &emsp;결제금액&ensp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &ensp;주문일자&ensp;
-                            &emsp;주문번호&emsp;
-                            &emsp;&emsp;&emsp;상품명&emsp;&emsp;&emsp;
-                            &ensp;수량&ensp;
-                            &emsp;주문자&emsp;
-                            &ensp;결제방법&ensp;
-                            &emsp;결제금액&ensp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &ensp;주문일자&ensp;
-                            &emsp;주문번호&emsp;
-                            &emsp;&emsp;&emsp;상품명&emsp;&emsp;&emsp;
-                            &ensp;수량&ensp;
-                            &emsp;주문자&emsp;
-                            &ensp;결제방법&ensp;
-                            &emsp;결제금액&ensp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &ensp;주문일자&ensp;
-                            &emsp;주문번호&emsp;
-                            &emsp;&emsp;&emsp;상품명&emsp;&emsp;&emsp;
-                            &ensp;수량&ensp;
-                            &emsp;주문자&emsp;
-                            &ensp;결제방법&ensp;
-                            &emsp;결제금액&ensp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &ensp;주문일자&ensp;
-                            &emsp;주문번호&emsp;
-                            &emsp;&emsp;&emsp;상품명&emsp;&emsp;&emsp;
-                            &ensp;수량&ensp;
-                            &emsp;주문자&emsp;
-                            &ensp;결제방법&ensp;
-                            &emsp;결제금액&ensp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &ensp;주문일자&ensp;
-                            &emsp;주문번호&emsp;
-                            &emsp;&emsp;&emsp;상품명&emsp;&emsp;&emsp;
-                            &ensp;수량&ensp;
-                            &emsp;주문자&emsp;
-                            &ensp;결제방법&ensp;
-                            &emsp;결제금액&ensp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &ensp;주문일자&ensp;
-                            &emsp;주문번호&emsp;
-                            &emsp;&emsp;&emsp;상품명&emsp;&emsp;&emsp;
-                            &ensp;수량&ensp;
-                            &emsp;주문자&emsp;
-                            &ensp;결제방법&ensp;
-                            &emsp;결제금액&ensp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &ensp;주문일자&ensp;
-                            &emsp;주문번호&emsp;
-                            &emsp;&emsp;&emsp;상품명&emsp;&emsp;&emsp;
-                            &ensp;수량&ensp;
-                            &emsp;주문자&emsp;
-                            &ensp;결제방법&ensp;
-                            &emsp;결제금액&ensp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &ensp;주문일자&ensp;
-                            &emsp;주문번호&emsp;
-                            &emsp;&emsp;&emsp;상품명&emsp;&emsp;&emsp;
-                            &ensp;수량&ensp;
-                            &emsp;주문자&emsp;
-                            &ensp;결제방법&ensp;
-                            &emsp;결제금액&ensp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &ensp;주문일자&ensp;
-                            &emsp;주문번호&emsp;
-                            &emsp;&emsp;&emsp;상품명&emsp;&emsp;&emsp;
-                            &ensp;수량&ensp;
-                            &emsp;주문자&emsp;
-                            &ensp;결제방법&ensp;
-                            &emsp;결제금액&ensp;
-                        </td>
+
+                        <th><input type="checkbox" name="" id="checkAll" /></th>
+                        <th>주문일자</th>
+                        <th>주문번호</th>
+                        <th>상품명</th>
+                        <th>수량</th>
+                        <th>수취인</th>
+                        <th>배송지정일</th>
+                        <th>배송인</th>
                     </tr>
 
+                    <tr>
+                        <td><input type="checkbox" name="chk_box" class="checkSelect"/></td>
+                        <th>주문일자</th>
+                        <th>주문번호</th>
+                        <th>상품명</th>
+                        <th>수량</th>
+                        <th>수취인</th>
+                        <th>배송지정일</th>
+                        <th>배송인</th>
+                    </tr>
+
+                    </thead>
 
 
                 </table>
@@ -194,8 +95,8 @@
             </form>
         </section>
     </div>
-    
-    <div data-include-html="./footer.html" class="include"></div>
-</body>
 
+
+<div data-include-html="/admin/footer" class="include"></div>
+</body>
 </html>

@@ -55,7 +55,7 @@
             <result property="categoryCode" column="CATEGORY_CODE"/>
         </resultMap>
 
-    <resultMap id="SellImageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellImageDTO">
+    <!--<resultMap id="SellImageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellImageDTO">
         <id property="no" column="SELL_PAGE_NO"/>
         <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>
         <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>
@@ -63,7 +63,7 @@
         <result property="detailImageOriginFileName" column="SELL_DETAIL_IMAGE_ORGIN_FILE_NAME"/>
         <result property="path" column="FILE_PATH"/>
         <result property="createDate" column="CREATE_DATE"/>
-    </resultMap>
+    </resultMap>-->
 
     <resultMap id="cartGeneralResultMap" type="com.hielectro.welpair.order.model.dto.CartGeneralDTO">
         <association property="cart" resultMap="cartResultMap"/>

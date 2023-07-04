@@ -1,6 +1,6 @@
 package com.hielectro.welpair.delivery.model.service;
 
-import com.hielectro.welpair.delivery.model.dao.deliveryDAO;
+import com.hielectro.welpair.delivery.model.dao.deliveryMapper;
 import com.hielectro.welpair.delivery.model.dto.DriverDTO;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +9,9 @@ import java.util.List;
 @Service
 public class deliveryService {
 
-    private final deliveryDAO delivery;
+    private final deliveryMapper delivery;
 
-    public deliveryService(deliveryDAO delivery) {
+    public deliveryService(deliveryMapper delivery) {
         this.delivery = delivery;
     }
 

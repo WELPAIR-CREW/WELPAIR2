@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hielectro.welpair.delivery.model.dao.deliveryDAO">
+<mapper namespace="com.hielectro.welpair.delivery.model.dao.deliveryMapper">
 
 
     <!-- deliveryDTO -->
@@ -12,11 +12,12 @@
         <result property="deliveryStatus" column="DELIVERY_STATUS"/>
     </resultMap>
 
-    <!-- deliveryStockDTO -->
-    <resultMap id="deliveryStockDTO" type="com.hielectro.welpair.delivery.model.dto.DeliveryStockDTO">
-        <id property="stockNo" column="STOCK_NO"/>
-        <result property="productOrderNo" column="PRODUCT_ORDER_NO"/>
-    </resultMap>
+
+    <!--    deliveryStockDTO -->
+    <!--    <resultMap id="deliveryStockDTO" type="com.hielectro.welpair.delivery.model.dto.DeliveryStockDTO">-->
+    <!--        <id property="stockNo" column="STOCK_NO"/>-->
+    <!--        <result property="productOrderNo" column="PRODUCT_ORDER_NO"/>-->
+    <!--    </resultMap>-->
 
     <!-- driverDTO -->
     <resultMap id="driverDTO" type="com.hielectro.welpair.delivery.model.dto.DriverDTO">
@@ -31,16 +32,41 @@
         <collection property="delivery" resultMap="deliveryDTO"/>
     </resultMap>
 
+
+
+
+
+
+
+
+    <!-- 배송조회에서 주문번호로조회 할 수 있게 DELIVERY + PRODUCT_ORDER JOIN -->
+    <select id="deliveryDeliver" resultMap="deliveryDTO">
+        SELECT TE.PRODUCT_ORDER_NO
+             , TE.DRIVER_ID
+             , TE.DELIVERY_STATUS
+             , PO.PRODUCT_ORDER_NO
+             , PO.ORDER_NO
+             , PO.SELL_PRODUCT_ID
+             , PO.PRODUCT_ORDER_AMOUNT
+             , PO.PRODUCT_ORDER_PRICE
+             , PO.DELIVERY_DATE
+        FROM T_DELIVERY TE
+                 JOIN T_PRODUCT_ORDER PO
+                      ON TE.PRODUCT_ORDER_NO = PO.PRODUCT_ORDER_NO
+    </select>
+
+    <!-- 쌍방조회용 DRIVER + DELIVERY JOIN -->
     <select id="deliveryDriver" resultMap="driverDTO">
-        SELECT
-               TR.DRIVER_ID
+        SELECT TR.DRIVER_ID
              , TR.DRIVER_NAME
              , TR.DRIVER_PHONE
              , TE.PRODUCT_ORDER_NO
              , TE.DRIVER_ID
              , TE.DELIVERY_STATUS
-          FROM T_DRIVER TR
-          JOIN T_DELIVERY TE
-            ON TR .DRIVER_ID = TE.DRIVER_ID
+        FROM T_DRIVER TR
+                 JOIN T_DELIVERY TE
+                      ON TR.DRIVER_ID = TE.DRIVER_ID
     </select>
+
+
 </mapper>
