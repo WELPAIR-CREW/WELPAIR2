@@ -20,6 +20,8 @@
         <result property="productPrice" column="PRODUCT_PRICE"/>
         <result property="productOption" column="PRODUCT_OPTION"/>
         <result property="categoryCode" column="CATEGORY_CODE"/>
+
+        <association property="category" resultMap="CategoryDTO"/>
     </resultMap>
 
     <resultMap id="SellItemPageDTO" type="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
@@ -44,21 +46,45 @@
         <id property="categoryCode" column="CATEGORY_CODE"/>
         <result property="categoryName" column="CATEGORY_NAME"/>
         <result property="refCategoryCode" column="REF_CATEGORY_CODE"/>
-        <association property="refCategory" resultMap="CategoryDTO"/>
+        <association property="refCategory" javaType="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
+            <id property="categoryCode" column="REF_CATEGORY_CODE"/>
+            <result property="categoryName" column="REF_CATEGORY_NAME"/>
+        </association>
     </resultMap>
 
     <resultMap id="ThumbnailImageDTO" type="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
-        <id property="no" column="SELL_PAGE_NO"/>
+        <result property="no" column="SELL_PAGE_NO"/>
         <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>
         <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>
     </resultMap>
 
     <select id="selectOneSellProduct" resultMap="SellProductResultMap">
         SELECT
-        *
+                SELL_PRODUCT_ID
+              , PRODUCT_CODE
+              , DISCOUNT
+              , IS_SELL
+              , PRODUCT_CODE
+              , PRODUCT_NAME
+              , PRODUCT_STATUS
+              , PRODUCT_AMOUNT
+              , PRODUCT_PRICE
+              , PRODUCT_OPTION
+              , PRODUCT_NATION
+              , A.*
+              , B.CATEGORY_CODE AS REF_CATEGORY_CODE
+              , B.CATEGORY_NAME AS REF_CATEGORY_NAME
+              , SELL_PAGE_NO
+              , SELL_PAGE_TITLE
+              , SELL_DETAIL_IMAGE_FILE_NAME
+              , SELL_DETAIL_IMAGE_ORGIN_FILE_NAME
+              , FILE_PATH
+              , CREATE_DATE
+              , SELL_THUMB_IMAGE_FILE_NAME
+              , SELL_THUMB_IMAGE_ORGIN_FILE_NAME
         FROM T_SELL_PRODUCT
         JOIN T_PRODUCT USING (PRODUCT_CODE)
-        JOIN T_CATEGORY A USING (CATEGORY_CODE)
+        JOIN T_CATEGORY A ON (T_PRODUCT.CATEGORY_CODE = A.CATEGORY_CODE)
         JOIN T_CATEGORY B ON (B.CATEGORY_CODE = A.REF_CATEGORY_CODE)
         JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
         JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
