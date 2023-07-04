@@ -35,7 +35,7 @@ public class SellProductController {
     private final SellProductServiceImpl productService;
     private final int limit = 10;
 //    @Value("${image.image-dir}")
-    private final String IMAGE_DIR = "c:/upload";
+    private final String IMAGE_DIR = "/src/main/resources/static";
 
     public SellProductController(SellProductServiceImpl productService) {
         this.productService = productService;
@@ -60,11 +60,14 @@ public class SellProductController {
         if (uploadFiles.size() > 6) {
             throw new IllegalStateException("상품 이미지는 최대 6개까지 등록 가능합니다.");
         }
+        String rootPath = System.getProperty("user.dir");
         String baseDir = IMAGE_DIR;
-        String uploadDir = baseDir + "/original";
-        String thumbnail = baseDir + "/thumbnail";
-        File dir = new File(uploadDir);
-        File dir2 = new File(thumbnail);
+        String originalImageDir = "/common/images/original";
+        String thumbnailImageDir = "/common/images/thumbnail";
+        String absoluteOriginalImageDir = rootPath + baseDir + originalImageDir;
+        String absoluteThumbnailImageDir = rootPath + baseDir + thumbnailImageDir;
+        File dir = new File(absoluteOriginalImageDir);
+        File dir2 = new File(absoluteThumbnailImageDir);
 
         if (!dir.exists() || !dir2.exists()) {
             dir.mkdirs();
@@ -83,17 +86,18 @@ public class SellProductController {
             for (MultipartFile file : uploadFiles) {
                 String originFileName = file.getOriginalFilename();
                 String ext = originFileName.substring(originFileName.lastIndexOf("."));
-                String savedFileName = UUID.randomUUID().toString().replace("_", "");
+                String savedFileName = UUID.randomUUID().toString().replace("-", "");
+                String thumbnailSize360x = savedFileName + "_360x";
 
-                file.transferTo(new File(uploadDir + "/" + savedFileName + ext));
-                Thumbnails.of(uploadDir + "/" + savedFileName + ext).size(360, 360)
-                        .toFile(thumbnail + "/" + savedFileName + "_360x" + ext);
-                Thumbnails.of(uploadDir + "/" + savedFileName  + ext).size(60, 60)
-                        .toFile(thumbnail + "/" + savedFileName + "_60x" + ext);
+                file.transferTo(new File(absoluteOriginalImageDir + "/" + savedFileName + ext));
+                Thumbnails.of(absoluteOriginalImageDir + "/" + savedFileName + ext).size(360, 360)
+                        .toFile(absoluteThumbnailImageDir + "/" + thumbnailSize360x + ext);
+                Thumbnails.of(absoluteOriginalImageDir + "/" + savedFileName  + ext).size(60, 60)
+                        .toFile(absoluteThumbnailImageDir + "/" + savedFileName + "_60x" + ext);
 
                 ThumbnailImageDTO thumbnailImage = new ThumbnailImageDTO();
                 thumbnailImage.setThumbnailImageOriginFileName(originFileName);
-                thumbnailImage.setThumbnailImageFileName(savedFileName + ext);
+                thumbnailImage.setThumbnailImageFileName(thumbnailSize360x + ext);
 
                 thumbnailImageList.add(thumbnailImage);
             }
@@ -102,8 +106,8 @@ public class SellProductController {
             String ext = originFileName.substring(originFileName.lastIndexOf("."));
             String savedFileName = UUID.randomUUID().toString().replace("-", "");
 
-            uploadDetailFile.transferTo(new File(uploadDir + "/" + savedFileName + ext));
-            sellPage.setPath(IMAGE_DIR);
+            uploadDetailFile.transferTo(new File(absoluteOriginalImageDir + "/" + savedFileName + ext));
+            sellPage.setPath("/common/images/");
             sellPage.setDetailImageOriginFileName(originFileName);
             sellPage.setDetailImageFileName(savedFileName + ext);
 
@@ -115,13 +119,13 @@ public class SellProductController {
             for (int i = 0; i < thumbnailImageList.size(); i++) {
                 ThumbnailImageDTO file = thumbnailImageList.get(i);
 
-                File deleteFile = new File(uploadDir + "/" + file.getThumbnailImageFileName());
+                File deleteFile = new File(absoluteOriginalImageDir + "/" + file.getThumbnailImageFileName());
                 String ext = deleteFile.getName().substring(deleteFile.getName().lastIndexOf("."));
                 boolean isDeleted1 = deleteFile.delete();
 
-                File deleteThumbnail = new File(thumbnail + "/"
+                File deleteThumbnail = new File(absoluteOriginalImageDir + "/"
                         + file.getThumbnailImageFileName().substring(0, file.getThumbnailImageFileName().lastIndexOf(".")) + "_60x" + ext);
-                File deleteThumbnail2 = new File(thumbnail + "/"
+                File deleteThumbnail2 = new File(absoluteOriginalImageDir + "/"
                         + file.getThumbnailImageFileName().substring(0, file.getThumbnailImageFileName().lastIndexOf(".")) + "_360x" + ext);
                 boolean isDeleted2 = deleteThumbnail.delete();
                 boolean isDeleted3 = deleteThumbnail2.delete();
