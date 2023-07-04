@@ -128,38 +128,6 @@ public class MemberController {
 
         List<EmployeeDTO> employeeList = memberService.getEmployeeList(selectCriteria);
 
-
-//        //부서코드에 부서이름 매핑하기-----------------------(부서 테이블 만드는 방법 대신 사용)
-//        Map<String, String> deptMap = new HashMap<>();
-//        deptMap.put("D1", "영업");
-//        deptMap.put("D2", "구매");
-//        deptMap.put("D3", "인사");
-//        deptMap.put("D4", "재무");
-//        deptMap.put("D5", "품질");
-//        deptMap.put("D6", "생산");
-//        deptMap.put("D7", "고객");
-//        deptMap.put("D8", "개발");
-//        deptMap.put("D9", "법무");
-//
-//        for(EmployeeDTO emp : employeeList) {
-//            String deptCode = emp.getEmpDept();
-//            String deptName = deptMap.get(deptCode);
-//            emp.setEmpDept(deptName);
-//        }
-//        //---------------------------------------------D1~D9 / J1~J6
-//        Map<String, String> jobMap = new HashMap<>();
-//        jobMap.put("J1", "사원");
-//        jobMap.put("J2", "대리");
-//        jobMap.put("J3", "과장");
-//        jobMap.put("J4", "차장");
-//        jobMap.put("J5", "부장");
-//        jobMap.put("J6", "이사");
-//        for(EmployeeDTO emp : employeeList) {
-//            String jobCode = emp.getJobCode();
-//            String jobName = jobMap.get(jobCode);
-//            emp.setJobCode(jobName);
-//        }
-
         model.addObject("employeeList", employeeList);
         model.addObject("selectCriteria", selectCriteria);
         model.setViewName("admin/member/member-regist1");
