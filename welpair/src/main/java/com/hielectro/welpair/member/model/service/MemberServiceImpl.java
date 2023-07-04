@@ -150,8 +150,8 @@ public class MemberServiceImpl implements MemberService {
     //회원등록-등록페이지에서 전송버튼 눌렀을때
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void registMember(EmployeeDTO employee) throws RegistMemberException {
-        int result = memberMapper.registMember(employee);
+    public void registMember(MemberDTO member) throws RegistMemberException {
+        int result = memberMapper.registMember(member);
         if(result > 0) {
             System.out.println("회원등록 성공");
         } else {

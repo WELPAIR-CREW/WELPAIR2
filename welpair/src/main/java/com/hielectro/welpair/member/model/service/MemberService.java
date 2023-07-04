@@ -37,7 +37,7 @@ public interface MemberService extends UserDetailsService {
     List<EmployeeDTO> getEmployeeList(SelectCriteria selectCriteria);
     int totalEmployeeCount(Map<String, String> searchMap);
     //2-2. 회원등록 - 등록페이지에서 전송버튼 눌렀을때
-    void registMember(EmployeeDTO employee) throws RegistMemberException;
+    void registMember(MemberDTO member) throws RegistMemberException;
 
 
 

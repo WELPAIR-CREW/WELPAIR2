@@ -27,5 +27,5 @@ public interface MemberMapper {
     //가입승인-가입요청 목록
     List<ReqDTO> reqList();
     int reqJoinCount();
-    int registMember(EmployeeDTO employee); //인서트
+    int registMember(MemberDTO member); //인서트
 }
