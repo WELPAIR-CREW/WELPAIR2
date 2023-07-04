@@ -255,4 +255,3 @@ $(".paging1").on("click", "#nextPage", function() {
         updatePaginationButtons();
     }
 });
-

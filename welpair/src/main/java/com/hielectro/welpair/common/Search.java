@@ -19,8 +19,11 @@ public class Search {
     private String title;
     private String content;
     private int price;
+
     private Date startDate;
     private Date endDate;
+
+
 
     public void setPrice(int price) {
         this.price = price;

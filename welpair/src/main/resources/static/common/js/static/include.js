@@ -17,6 +17,12 @@ function includeHTML() {
                     frag.appendChild(range.extractContents());
                     el.replaceWith(frag);
 
+                    if (target.includes("header")) {
+                        var searchButton = document.getElementById('search-button');
+                        if (searchButton) {
+                            searchButton.addEventListener('click', submitSearchForm);
+                        }
+                    }
                 } else if (this.status === 404) {
 
                     console.log('Page not found');
@@ -29,6 +35,16 @@ function includeHTML() {
             return;
         }
     });
+}
+
+function submitSearchForm(event) {
+    event.preventDefault();
+    console.log("옴옴옴??")
+
+    var searchTerm = document.getElementsByName("title")[0].value;
+    var searchURL = "/consumer/search/search?title=" + searchTerm;
+
+    window.location.href = searchURL;
 }
 
 window.onload = includeHTML;
