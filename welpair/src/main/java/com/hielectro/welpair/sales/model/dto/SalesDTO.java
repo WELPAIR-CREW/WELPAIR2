@@ -3,8 +3,8 @@ package com.hielectro.welpair.sales.model.dto;
 import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
-import com.hielectro.welpair.payment.dto.OrderPaymentDTO;
-import com.hielectro.welpair.payment.dto.PaymentDTO;
+import com.hielectro.welpair.payment.model.dto.OrderPaymentDTO;
+import com.hielectro.welpair.payment.model.dto.PaymentDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import lombok.*;
 

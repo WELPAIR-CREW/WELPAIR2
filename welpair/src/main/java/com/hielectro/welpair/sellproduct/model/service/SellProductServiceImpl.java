@@ -3,13 +3,15 @@ package com.hielectro.welpair.sellproduct.model.service;
 import java.util.List;
 import java.util.Map;
 
-import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
-import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.*;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Service;
 
+import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
+import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
 import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SellProductServiceImpl implements SellProductService {
@@ -34,6 +36,64 @@ public class SellProductServiceImpl implements SellProductService {
         return productMapper.qnaSearchCount(searchMap);
     }
 
+    @Override
+    public List<ProductDTO> selectOptionList(ProductDTO product) {
+        return productMapper.selectOptionList(product);
+    }
+
+    @Override
+    public List<ProductDTO> selectProductNameList(ProductDTO product) {
+        return productMapper.selectProductNameList(product);
+    }
+
+    @Override
+    @Transactional
+    public void insertSellProduct(SellProductDTO sellProduct) throws IllegalStateException{
+        SellItemPageDTO sellItemPage = sellProduct.getSellItemPage();
+        SellPageDTO sellPage = sellItemPage.getSellPage();
+        List<ThumbnailImageDTO> thumbnailImageList = sellPage.getThumbnailImageList();
+
+        // 1. 판매상품 추가
+        {
+            int result = productMapper.insertSellProduct(sellProduct);
+            System.out.println(result);
+            if (!(result > 0)) {
+                throw new IllegalStateException("SellProduct insert Failed");
+            }
+        }
+        // 2. 판매상품 페이지 추가
+        {
+            int result = productMapper.insertSellPage(sellPage);
+
+            if (!(result > 0)) {
+                throw new IllegalStateException("SellPage insert Failed");
+            }
+        }
+        // 3. 판매상품별페이지 추가
+        {
+            sellItemPage.setId(sellProduct.getId());
+            sellItemPage.setNo(sellPage.getNo());
+            int result = productMapper.insertSellItemPage(sellItemPage);
+
+            if (!(result > 0)) {
+                throw new IllegalStateException("SellItemPage insert Failed");
+            }
+        }
+        // 4. 페이지의 썸네일 추가
+        {
+            int result = 0;
+
+            for(ThumbnailImageDTO thumbnail : thumbnailImageList) {
+                thumbnail.setNo(sellPage.getNo());
+                result += productMapper.insertThumbnail(thumbnail);
+            }
+
+            if (result != thumbnailImageList.size()) {
+                throw new IllegalStateException("thumbnail insert Failed");
+            }
+        }
+    }
+
 
     @Override
     public List<SellProductDetailDTO> selectProductList(Map<String, String> productId) {
@@ -50,6 +110,7 @@ public class SellProductServiceImpl implements SellProductService {
         return productMapper.selectQnAList(searchMap);
     }
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public int sellProductDelete(List<String> request) throws IllegalStateException {
         int size = request.size();
         int result = 0;

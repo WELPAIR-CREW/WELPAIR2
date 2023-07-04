@@ -116,7 +116,7 @@ $btn_del.addEventListener("click", (e => {
 // 삭제할 아이템 담기
     let $deleteItem = Array.from(prdCheckbox)
         .filter(item => item.checked)
-        .map(item => item.getAttribute('name'));
+        .map(item => item.getAttribute('id'));
 
 
     console.log($deleteItem);
@@ -159,23 +159,25 @@ $btn_del.addEventListener("click", (e => {
 }));
 
 
+// 선택상품 주문하기 post 요청,
+function gotopay(){
 
+    const from = document.getElementById("cartPayForm");
 
+    let checkboxes = form.elements["sellProductId"];
+    let selectedProducts = [];
 
+    for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            selectedProducts.push(checkboxes[i].value);
+        }
+    }
+    let json = JSON.stringify(selectedProducts);
+    let hiddenInput = document.createElement("input");
+    hiddenInput.setAttribute("type", "hidden");
+    hiddenInput.setAttribute("name", "selectedProducts");
+    hiddenInput.setAttribute("value", json);
+    form.appendChild(hiddenInput);
+    form.submit();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

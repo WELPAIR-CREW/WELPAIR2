@@ -1,4 +1,4 @@
-package com.hielectro.welpair.payment.dto;
+package com.hielectro.welpair.payment.model.dto;
 
 import lombok.*;
 

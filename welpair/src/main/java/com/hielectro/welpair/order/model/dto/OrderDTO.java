@@ -2,7 +2,7 @@ package com.hielectro.welpair.order.model.dto;
 
 
 import com.hielectro.welpair.member.model.dto.MemberDTO;
-import com.hielectro.welpair.payment.dto.OrderPaymentDTO;
+import com.hielectro.welpair.payment.model.dto.OrderPaymentDTO;
 import lombok.*;
 
 import java.sql.Timestamp;

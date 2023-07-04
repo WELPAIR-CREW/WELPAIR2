@@ -17,7 +17,7 @@
         <!---->
     </resultMap>
 
-    <resultMap id="getPaymentResultMap" type="com.hielectro.welpair.payment.dto.PaymentDTO">
+    <resultMap id="getPaymentResultMap" type="com.hielectro.welpair.payment.model.dto.PaymentDTO">
         <result property="paymentNo" column="PAYMENT_NO"></result>
         <result property="paymentDate" column="PAYMENT_DATE"></result>
         <result property="paymentPrice" column="PAYMENT_PRICE"></result>
@@ -25,7 +25,7 @@
     </resultMap>
 
     <!---->
-    <resultMap id="getOrderPaymentResultMap" type="com.hielectro.welpair.payment.dto.OrderPaymentDTO">
+    <resultMap id="getOrderPaymentResultMap" type="com.hielectro.welpair.payment.model.dto.OrderPaymentDTO">
         <result property="paymentNo" column="PAYMENT_NO"></result>
         <result property="orderNo" column="ORDER_NO"></result>
     </resultMap>

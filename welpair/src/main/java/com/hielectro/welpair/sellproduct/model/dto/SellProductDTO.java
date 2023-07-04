@@ -6,16 +6,25 @@ import lombok.*;
 import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class SellProductDTO {
+    @Setter
     private String id;
+    @Setter
     private String code;
-    private float discount;
+    private double discount;
+    @Setter
     private String isSell;
 
+    @Setter
     private ProductDTO product;
-    private List<SellItemPageDTO> sellItemPageList;
+    @Setter
+    private SellItemPageDTO sellItemPage;
+
+    public void setDiscount(Double discount) {
+        if (discount != null)
+            this.discount = discount;
+    }
 }
