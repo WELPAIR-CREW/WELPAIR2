@@ -26,6 +26,7 @@ public class MainController {
     @GetMapping("products/{pageNo}")
     public String productPage(@PathVariable String pageNo, Model model) {
         SellProductDTO sellProduct = mainService.selectOneSellProduct(pageNo);
+        System.out.println(sellProduct);
         model.addAttribute("sellProduct", sellProduct);
         return "consumer/sellproduct/product-detail";
     }

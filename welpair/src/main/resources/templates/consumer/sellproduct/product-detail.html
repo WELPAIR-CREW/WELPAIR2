@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="#{ title }"></title>
+    <title th:text="${ sellProduct.sellItemPage.sellPage.title }">title</title>
     <link rel="stylesheet" href="../common/css/header.css">
     <link rel="stylesheet" href="../common/css/main.css">
     <link rel="stylesheet" href="../common/css/product-detail.css">
@@ -17,7 +17,7 @@
 <body>
     <div data-include-html="/consumer/header_consumer" class="include"></div>
     <div class="category-list">
-        <span class="large-category">카테고리</span> &gt;
+        <span class="large-category" th:text="${}">카테고리</span> &gt;
         <span class="medium-category">하위 카테고리</span>
     </div>
     <section class="product-detail">
@@ -37,7 +37,7 @@
         </article>
         <article class="product-detail-area2">
             <div class="product-detail-info">
-                <div class="product-name">상품명</div>
+                <div th:text="${ sellProduct.sellItemPage.sellPage.title }" class="product-name">상품명</div>
                 <div class="product-price">
                     <span>??%</span>
                     <div class="product-detail-price">
