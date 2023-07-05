@@ -124,15 +124,18 @@ public class CartController {
         List<CartGeneralDTO> cartList = cartService.cartAllInfoSelect(empNo);
 
 
+        System.out.println(cartList.size());
         for (CartGeneralDTO cart : cartList) {
-            priceMaker(cart);
-            System.out.println(cart.getSellPage());
-            model.addAttribute("expt", cartList.get(cartList.size()-1));
+            try {
+                priceMaker(cart);
+                System.out.println(cart.getSellPage());
+                model.addAttribute("expt", cartList.get(cartList.size()-1));
 
+            } catch (NullPointerException e) {
 
-
+                return "consumer/order/cart-blank";
+            }
         }
-
         // 3. 장바구니 상품정보 모델에 담아 뷰로 전달
         model.addAttribute("cartList", cartList);
 

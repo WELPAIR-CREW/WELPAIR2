@@ -151,7 +151,7 @@
            AND C.SELL_PRODUCT_ID = D.SELL_PRODUCT_ID(+)
            AND D.SELL_PAGE_NO = E.SELL_PAGE_NO(+)
            AND C.PRODUCT_CODE = G.PRODUCT_CODE(+)
---            AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
+           AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
     </select>
 
     <update id="cartAmountChange" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
