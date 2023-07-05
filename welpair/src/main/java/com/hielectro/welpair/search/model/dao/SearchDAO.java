@@ -13,4 +13,5 @@ public interface SearchDAO {
 //    List<SearchDTO> searchResultByTitle(String title);
     List<SearchDTO> searchResultByTitle(String title);
 
+    List<SearchDTO> searchDetailResult(SearchDTO search);
 }

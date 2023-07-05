@@ -16,7 +16,7 @@ $("#detailSearch").click(function (){
 
     console.log("검색 들어옴 ")
 
-    let title = $("#title").val();
+    let title = $("#title").val().toUpperCase();
     let categoryCode = $("#categoryCode").val();
     let minPrice = $("#minPrice").val();
     let maxPrice = $("#maxPrice").val();
@@ -30,11 +30,15 @@ $("#detailSearch").click(function (){
     if (title != "" || categoryCode != "" || minPrice != "" ||  maxPrice != "") {
 
         console.log(data);
+        const json = JSON.stringify(data)
+        console.log(json);
+
         $.ajax({
 
-            url: "/search/search",
-            data: data,
-            type: 'get',
+            url: "/search/detail",
+            data: json,
+            contentType: 'application/json',
+            type: 'post',
             success: function (data) {
                 console.log(data);
 

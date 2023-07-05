@@ -23,13 +23,22 @@ public class SearchServiceImpl implements SearchService {
 
         System.out.println("============ 상품검색 서비스 1-1-1 in ============");
 
-        SellPageDTO sellPage = new SellPageDTO();
         String title = search.getSellPage().getTitle();
         System.out.println("title = " + title);
 
         List<SearchDTO> result = searchDAO.searchResultByTitle(title);
 
         System.out.println("============ 상품검색 서비스 1-1-1 out ============");
+        return result;
+    }
+
+    @Override
+    public List<SearchDTO> searchDetailResult(SearchDTO search) {
+        System.out.println("============ 상품 상세 검색 서비스 1-1-2 in ============");
+
+
+        List<SearchDTO> result = searchDAO.searchDetailResult(search);
+        System.out.println("============ 상품 상세 검색 서비스 1-1-2 out ============");
         return result;
     }
 }

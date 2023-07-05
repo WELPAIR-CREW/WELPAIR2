@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,7 +25,7 @@
             <div class="section-title">상세검색</div>
 
             <div class="section-detailSearch">
-                <form action="/search/search">
+                <form action="/search/detail">
                     <!-- 상세 검색 옵션 -->
                     <div class="section-detailSearch-line1">
                         <div>
@@ -67,15 +67,15 @@
             <div class="section-searchResult">
                 <div>
                     <ul>
-                        <li class="section-searchResult-product" th:each="searchDTO : ${prodSearchList}">
+                        <li class="section-searchResult-product" th:each="search : ${prodSearchList}">
                             <a href="#">
-                                <div name="thumbnailImage"><span th:text="${searchDTO.getThumbnailImage().thumbnailImageFileName}"></span></div>
+                                <div name="thumbnailImage"><span th:text="${search.getThumbnailImage().thumbnailImageFileName}"></span></div>
                                 <img src="#" alt="">
                             </a>
                             <div class="product-info">
-                                <div class="searchProdTitle" name="title"><span th:text="${searchDTO.sellPage.title}"></span></div>
-                                <div class="searchProdPrice" name="sellPrice"><span th:text="${searchDTO.sellprice}"></span></div>
-                                <div name="sellPageNo"><span th:text="${searchDTO.getSellItemPage().no}"></span></div>
+                                <div class="searchProdTitle" name="title"><span th:text="${search.sellPage.title}"></span></div>
+                                <div class="searchProdPrice" name="sellPrice"><span th:text="${search.sellprice}"></span></div>
+                                <div name="sellPageNo"><span th:text="${search.getSellItemPage().no}"></span></div>
                             </div>
                         </li>
                     </ul>
