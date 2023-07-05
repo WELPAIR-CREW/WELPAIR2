@@ -5,6 +5,7 @@ import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.*;
 
 
@@ -22,7 +23,7 @@ public class CartGeneralDTO {
     private SellPageDTO sellPage;
 
 
-//    private  thumbImage;
+    private ThumbnailImageDTO thumbImage;
     private ProductDTO product;
 
     private int price;

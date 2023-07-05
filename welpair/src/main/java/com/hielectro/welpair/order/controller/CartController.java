@@ -1,7 +1,5 @@
 package com.hielectro.welpair.order.controller;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
@@ -127,6 +125,7 @@ public class CartController {
 
         for (CartGeneralDTO cart : cartList) {
             priceMaker(cart);
+            System.out.println(cart.getSellPage());
             model.addAttribute("expt", cartList.get(cartList.size()-1));
 
 
