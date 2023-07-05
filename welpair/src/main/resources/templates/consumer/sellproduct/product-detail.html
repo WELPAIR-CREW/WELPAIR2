@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="#{ title }"></title>
+    <title th:text="${ sellProduct.sellItemPage.sellPage.title }">title</title>
     <link rel="stylesheet" href="../common/css/header.css">
     <link rel="stylesheet" href="../common/css/main.css">
     <link rel="stylesheet" href="../common/css/product-detail.css">
@@ -17,60 +17,44 @@
 <body>
     <div data-include-html="/consumer/header_consumer" class="include"></div>
     <div class="category-list">
-        <span class="large-category">카테고리</span> &gt;
-        <span class="medium-category">하위 카테고리</span>
+        <span class="large-category" th:text="${sellProduct.product.category.refCategory.categoryName}">카테고리</span>
+        <span class="medium-category" th:text="${sellProduct.product.category.categoryName}">하위 카테고리</span>
     </div>
     <section class="product-detail">
         <article class="product-detail-area1">
             <div class="imagebox">
-                <img src="#">
+                <img th:src="|${sellProduct.sellItemPage.sellPage.path}thumbnail/${sellProduct.sellItemPage.sellPage.thumbnailImageList.get(0).thumbnailImageFileName}|" style="display: block;">
 
                 <div class="thumbnail-img">
-                    <img src="#">
-                    <img src="#">
-                    <img src="#">
-                    <img src="#">
-                    <img src="#">
-                    <img src="#">
+                    <img th:each="thumb : ${sellProduct.sellItemPage.sellPage.thumbnailImageList}" th:src="|${sellProduct.sellItemPage.sellPage.path}thumbnail/${thumb.thumbnailImageFileName}|" style="display: block">
                 </div>
             </div>
         </article>
         <article class="product-detail-area2">
             <div class="product-detail-info">
-                <div class="product-name">상품명</div>
+                <div th:text="${ sellProduct.sellItemPage.sellPage.title }" class="product-name">판매상품</div>
                 <div class="product-price">
-                    <span>??%</span>
+                    <span th:text="|${ sellProduct.discount * 100}%|">??%</span>
                     <div class="product-detail-price">
-                        <del class="origin-price">20,000원</del>
-                        <div class="sale-price">15,000원</div>
+                        <del class="origin-price" th:text="|${#numbers.formatInteger(sellProduct.product.productPrice, 3, 'COMMA')}원|">20,000원</del>
+                        <div class="sale-price" th:text="|${#numbers.formatInteger(sellProduct.product.productPrice * (1 - sellProduct.discount), 3, 'COMMA')}원|">15,000원</div>
                     </div>
                 </div>
             </div>
             <div class="product-options">
-                <h2>옵션선택</h2>
-                <div class="product-options-type">
-                    <select name="option" id="option">
-                        <option value="">Size</option>
-                        <option>옵션</option>
-                        <option>옵션</option>
-                    </select>
-                </div>
+                <h2 th:text="|옵션 : ${sellProduct.product.productOption}|">옵션</h2>
             </div>
             <div class="product-detail-pay">
                 <div class="product-count">
-                    <input type="text" class="" value="1">
+                    <input type="text" class="count" value="1">
                     <!-- 수량 플러스 버튼 -->
-                    <button type="button" class="bnt_plus">
-                        <img src="../common/images/bnt_plus.png" alt="">
-                    </button>
+                    <button type="button" class="btn_plus"></button>
                     <!-- 수량 마이너스 버튼 -->
-                    <button type="button" class="bnt_min">
-                        <img src="../common/images/bnt_min.png" alt="">
-                    </button>
+                    <button type="button" class="btn_min"></button>
                 </div>
                 <div class="total-payment">
-                    <span>총 상품 금액</span>
-                    <span class="sale-price">15,000원</span>
+                    <span>총 금액</span>
+                    <span class="total-price" th:text="|${#numbers.formatInteger(sellProduct.product.productPrice * (1 - sellProduct.discount), 3, 'COMMA')}원|">15,000원</span>
                 </div>
                 <div class="payment">
                     <button class="payment btn">
@@ -129,9 +113,9 @@
         <span>상품 정보</span>
         <article class="product-info-list">
             <div class="product-no">상품번호</div>
-            <div class="product-no-text" th:text="#{ pageNo }"></div>
+            <div class="product-no-text" th:text="${ sellProduct.sellItemPage.no }"></div>
             <div class="product-status">상품상태</div>
-            <div class="product-status-text" th:text="#{ productStatus }"></div>
+            <div class="product-status-text" th:text="${ sellProduct.product.productStatus }"></div>
         </article>
         <article class="product-as-cert">
             <div class="product-as">A/S 안내</div>
@@ -148,9 +132,44 @@
         </article>
     </section>
     <section class="product-detail-image">
-        <img src="#" alt="" srcset="">
+        <img th:src="|${sellProduct.sellItemPage.sellPage.path}original/${sellProduct.sellItemPage.sellPage.detailImageFileName}|">
     </section>
     <div data-include-html="/consumer/footer" class="include"></div>
 </body>
+<script th:inline="javascript">
+    const minus_btn = document.querySelector(".btn_min");
+    const plus_btn = document.querySelector(".btn_plus");
+    const count = document.querySelector(".count");
+    const total_price = document.querySelector(".total-price");
+    const sale_price = /*[[${(sellProduct.product.productPrice * (1 - sellProduct.discount))}]]*/'';
+    const thumbnail = document.querySelector(".thumbnail-img");
 
+    [...thumbnail.children].forEach(item => {
+        item.addEventListener("mouseover", function () {
+            [...thumbnail.children].forEach(item => {
+                item.classList.remove("selectImg")
+            })
+            this.classList.add("selectImg")
+            document.querySelector(".imagebox > img").src = this.src
+        })
+    })
+
+    count.addEventListener("input", function() {
+        total_price.textContent = (sale_price * this.value).toLocaleString() + "원";
+    })
+
+    minus_btn.addEventListener("click", function() {
+        if (Number(count.value) > 1) {
+            count.value = Number(count.value) - 1;
+            count.dispatchEvent(new Event('input'));
+        }
+    })
+
+    plus_btn.addEventListener("click", function() {
+        count.value = Number(count.value) + 1;
+        count.dispatchEvent(new Event('input'));
+    })
+
+
+</script>
 </html>
