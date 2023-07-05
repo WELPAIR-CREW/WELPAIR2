@@ -23,7 +23,8 @@
 <!-- 헤더 -->
 <div data-include-html="/consumer/header_consumer" class="include"></div>
 <!-- 장바구니 시작 -->
-<form action="/payment/pay" method="post" id="cartPayForm">
+
+
     <!-- 카트 컨테이너 시작 -->
     <div id="cart_container">
         <!-- 상품 컨테이너 시작 -->
@@ -68,31 +69,36 @@
                     <!-- 상품 1개당 이벤트 발생시 생기는 리스트임 기본케이스 -->
                     <li th:each="cart, stat : ${cartList}" th:id="'cart_basic_list' + ${stat.count}">
                         <!-- 상품 info 박스 -->
-                        <div class="cart_info_box" th:id="'cart_basic_case' + ${stat.count}" >
-                            <!-- 상품 정보 구역(체크박스,썸네일,정보,수량) -->
+                        <div class="cart_info_box" th:id="'cart_basic_case' + ${stat.count}" name="sellProductId" th:value="${cart.cartSellProduct.sellProductId}">
+<!--                            <input type="checkbox" name="sellProductId" th:value="${cart.cartSellProduct.sellProductId}" hidden="" readonly>-->
+                                <!-- 상품 정보 구역(체크박스,썸네일,정보,수량) -->
                             <div class="cart_order_prd">
                                 <!-- 상품선택 체크박스 -->
                                 <label>
-                                    <input type="checkbox" th:class="'cart_select' + ${stat.count}" name="sellProductId"
+                                    <input type="checkbox" th:class="'cart_select' + ${stat.count}"
                                            th:id="${cart.sellProduct.id}" onchange="checkboxTrueList()" data-th-value="${cart.price} + '/' +${cart.cartSellProduct.deliveryPrice} + '/' + ${cart.totalPrice}">
                                 </label>
                                 <!-- 판매페이지 바로가기 링크 -->
-<!--                                    <a th:if="${cart.getSellPage().getNo() == Exception}" th th:href="@{'/admin/sellproduct'}">-->
-<!--                                    <a th:unless="${cart.getSellPage().getNo() == Exception}" th:href="@{'/admin/sellproduct?' + ${cart.getSellPage().getNo()} + '.html'}">-->
+<!--                                    <a th:if="${cart.sellPage.no != null}" th:href="'/consumer/sellproduct/product-detail?' + ${cart.sellPage.no}">-->
+<!--                                <a th:href="'/products/'+ ${cart.sellPage.no}">-->
+                                <a href="/index">
 
                                     <!-- 상품썸네일 구역 -->
                                     <div class="cart_thumb_box">
                                         <!-- 상품썸네일 이미지-->
-                                        <span class="cart_thumb_img" name="sellThumbImage">
-                                            <img th:if="${cart.sellImage.path != NullPointerException}" th:src="'../..' + ${cart.sellImage.path}" class="thumbimg">
-                                            <img th:if="${cart.sellImage.path == NullPointerException}" src="/common/images/thumbnailbox.png" class="thumbimg">
+                                        <span class="cart_thumb_img" name="thumbImage">
+                                            <img th:if="${cart?.sellPage?.path != null}" th:src="'../..' + ${cart.sellPage.path}" class="thumbimg">
+                                            <img th:unless="${cart?.sellPage?.path != null }" src="/common/images/thumbnailbox.png" class="thumbimg" alt="thumbnail">
                                           </span>
                                     </div>
                                     <!-- 상품이름 작성구역  -->
                                     <div class="prd_name">
-<!--                                        <div class="prd_pageTitle" name="sellPageTitle" th:text="${cart.sellPage.title}">blank</div>-->
-                                        <div class="prd_productName "th:id="'productName' + ${stat.count}" th:name="'productName' + ${stat.count}" th:text="${cart.product.productName}" th:value="${cart.sellProduct.id}">balnk</div>
+                                        <div class="prd_pageTitle" name="sellPageTitle" th:if="${cart.sellPage?.title != null}" th:text="${cart.sellPage.title}"></div>
+                                        <div class="prd_pageTitle" name="sellPageTitle" th:unless="${cart.sellPage?.title != null}">상품 판매페이지를 찾을 수 없습니다.</div>
+                                        <div class="prd_pageTitle" name="no-sellPageTitle" th:if="${cart.sellProduct.isSell == 'N'}">판매중인 상품이 아닙니다.</div>
+                                        <div class="prd_productName "th:id="'productName' + ${stat.count}" th:name="productName" th:text="${cart.product.productName}" th:value="${cart.sellProduct.id}">balnk</div>
                                     </div>
+<!--                                </a>-->
                                 </a>
                                 <!-- click이벤트 js 작성  -->
                                 <!-- 상품 수량변경 옵션구역 -->
@@ -115,17 +121,17 @@
                             <div class="price_area">
                                 <!-- 상품금액 -->
                                 <div class="cart_order_price">
-                                    <div class="price_box" th:id="'price_' + ${stat.count}" name="exptPrice" th:text="${#numbers.formatDecimal(cart.price, 0, 'COMMA', 0, 'POINT')} + ' 원'">balnk</div>
+                                    <div class="price_box" th:id="'price_' + ${stat.count}" name="" th:text="${#numbers.formatDecimal(cart.price, 0, 'COMMA', 0, 'POINT')} + ' 원'">balnk</div>
 <!--                                    <div class="price_box" id="price" >balnk</div>-->
                                 </div>
                                 <!-- 배송비 작성구역 -->
                                 <div class="cart_order_delivery">
-                                    <div class="delivery_box" th:id="'deliveryPrice_' + ${stat.count}" name="exptDeliveryPrice" th:text="${#numbers.formatDecimal(cart.cartSellProduct.deliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
+                                    <div class="delivery_box" th:id="'deliveryPrice_' + ${stat.count}" name="" th:text="${#numbers.formatDecimal(cart.cartSellProduct.deliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
 <!--                                    <div class="delivery_box" id="'deliveryPrice">blank</div>-->
                                 </div>
                                 <!-- 총금액 작성구역 -->
                                 <div class="cart_order_total_price">
-                                    <div class="totla_price_box" th:id="'totalPrice_' + ${stat.count}" name="exptTotalPrice" th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
+                                    <div class="totla_price_box" th:id="'totalPrice_' + ${stat.count}" name="" th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
 <!--                                    <div class="totla_price_box" id="totalPrice">blank</div>-->
                                 </div>
                                 <!-- 상품금액 닫기 -->
@@ -157,9 +163,9 @@
                     <!-- 출력금액 -->
                     <div class="exptpay_price">
                         <!-- 선택 이벤트 발생-->
-                        <div class="exptpay_price1" id="exptPrice" name="exptPrice">0 원</div>
-                        <div id="exptpay_del"  name="exptDeliveryPrice">0 원</div>
-                        <div class="exptpay_price3" id="exptTotalPrice" name="exptTotalPrice">0 원</div>
+                        <input class="exptpay_price1" id="exptPrice" name="exptPrice" readonly ></input>
+                        <input class="exptpay_price2" id="exptpay_del" name="exptDeliveryPrice" readonly ></input>
+                        <input class="exptpay_price3" id="exptTotalPrice" name="exptTotalPrice" readonly ></input>
 
 <!--                        <div class="exptpay_price1" name="exptPrice" th:text="${#numbers.formatDecimal(exptPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">0원</div>-->
 <!--                        <div id="exptpay_del" name="exptDeliveryPrice" th:text="${#numbers.formatDecimal(exptDeliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">0원</div>-->
@@ -169,14 +175,14 @@
                 </div>
                 <!-- 버튼박스 -->
                 <div class="bnt_order">
-                    <button type="submit" class="go_pay" th:onclick="gotopay"><span>선택상품<br>주문하기</span></button>
+                    <button type="button" id="btn_gopay" class="go_pay"><span>선택상품<br>주문하기</span></button>
                 </div>
             </div>
             <!-- 예상결제정보 컨테이너 닫기 -->
         </div>
         <!-- 카트 컨테이너 닫기 -->
     </div>
-</form>
+
 <!-- footer -->
 <div data-include-html="/../admin/footer" class="include"></div>
 <script src="/common/js/src/cart.js"></script>
