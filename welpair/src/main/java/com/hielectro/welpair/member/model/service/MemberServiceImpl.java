@@ -100,13 +100,7 @@ public class MemberServiceImpl implements MemberService {
 
 
 
-// 회원가입
 
-    // 사번조회조회
-    public EmployeeDTO selectMemberByUserId(String empNo){
-
-        return memberDAO.selectMemberByUserId(empNo);
-    }
 
 
 
