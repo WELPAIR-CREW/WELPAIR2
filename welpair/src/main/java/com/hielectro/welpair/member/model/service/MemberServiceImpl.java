@@ -1,16 +1,12 @@
 package com.hielectro.welpair.member.model.service;
 import com.hielectro.welpair.member.controller.DeleteMemberException;
-import com.hielectro.welpair.member.controller.Pagenation;
 import com.hielectro.welpair.member.controller.RegistMemberException;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dao.MemberDAO;
 import com.hielectro.welpair.member.model.dao.MemberMapper;
 import com.hielectro.welpair.member.model.dto.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
-import com.hielectro.welpair.member.model.dto.ReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -154,20 +150,50 @@ public class MemberServiceImpl implements MemberService {
         int result = memberMapper.registMember(member);
         if(result > 0) {
             System.out.println("회원등록 성공");
+
+            //회원별권한도 인서트
+            String empNo = member.getEmpNo();
+            int result2 = memberMapper.regisMemberRole(empNo);
+            if(result2>0) {
+                System.out.println("회원권한등록 성공");
+            } else {
+                System.out.println("회원권한등록 실패");
+                throw new RegistMemberException("회원권한등록 실패");
+            }
+
         } else {
             System.out.println("회원등록 실패");
-            throw new RegistMemberException("계정삭제 실패"); //@Transactional에 의해 예외발생시 롤백
+            throw new RegistMemberException("회원등록 실패"); //@Transactional에 의해 예외발생시 롤백
         }
     }
 
 
     //가입승인 - 가입요청 목록
     @Override
-    public List<ReqDTO> reqList() {
-        List<ReqDTO> reqList = memberMapper.reqList();
+    public List<MemberDTO> reqList() {
+        List<MemberDTO> reqList = memberMapper.reqList();
         return reqList;
     }
     @Override
     public int reqJoinCount() { return memberMapper.reqJoinCount(); }
+
+
+    //승인버튼
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateForPermission(List<String> empNos) throws RegistMemberException {
+        //아이디 목록을 가지고 반복문을 통해 업데이트해야한다
+        for(int i=0; i<empNos.size(); i++) {
+            String empNo = String.valueOf(empNos.get(i));
+            int result = memberMapper.updateForPermission(empNo);
+
+            if(result > 0) {
+                System.out.println("가입승인 성공");
+            } else {
+                System.out.println("가입승인 실패");
+                throw new RegistMemberException("가입승인 실패"); //@Transactional에 의해 예외발생시 롤백
+            }
+        }
+    }
 
 }

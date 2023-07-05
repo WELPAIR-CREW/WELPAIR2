@@ -36,20 +36,15 @@
                 <div class="over-table">
                     <label class="count-row">신규 요청 : <span th:text="${reqJoinCount}" class="member-value">nn</span>건</label>
                     <span class="buttons">
-                        <button class="button-square3" th:onclick="|javascript:insertMember();|">승인</button>
-                        <button class="button-square3 second">거절</button>
-
-<!--                    <button class="button-square1 delete-member" th:onclick="|javascript:deleteMember();|">계정삭제</button>-->
-<!--                    <button class="button-square3 second" th:onclick="|javascript:함수명();|">거절</button>-->
+                        <button class="button-square3" th:onclick="|javascript:permissionMember();|">승인</button>
+                        <button class="button-square3 second" th:onclick="|javascript:rejectMember();|">거절</button>
                     </span>
                 </div>
-
-
 
                 <table>
                     <thead>
                         <tr>
-                            <th class="checkbox-cell"><input type="checkbox" id="select-all" onclick="allChecked()"></th>
+                            <th class="checkbox-cell"><input type="checkbox" id="select-all2" onclick="allChecked()"></th>
                             <th>요청일</th>
                             <th>아이디</th>
                             <th>이름</th>
@@ -60,7 +55,7 @@
                         <tr th:each="req:${reqList}">
                             <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" onclick="chkClicked()"
                             th:value="${req.empNo}"></td>
-                            <td th:text="${#dates.format(req.reqDate, 'yyyy.MM.dd')}"></td>
+                            <td th:text="${#dates.format(req.registDate, 'yyyy.MM.dd')}"></td>
                             <td th:text="${req.empNo}"></td>
                             <td th:text="${req.employee.empName}"></td>
                             <td th:text="${req.employee.empEmail}"></td>
@@ -99,62 +94,145 @@
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let selectAllCheckbox = document.getElementById('select-all');
-            let everyCheckbox = document.querySelectorAll('tbody td.checkbox-cell input[type="checkbox"]');
-    
-            selectAllCheckbox.addEventListener('click', function () {
-                let isChecked = selectAllCheckbox.checked;
-    
-                everyCheckbox.forEach(function (checkbox) {
-                    checkbox.checked = isChecked;
-                });
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     let selectAllCheckbox = document.getElementById('select-all');
+        //     let everyCheckbox = document.querySelectorAll('tbody td.checkbox-cell input[type="checkbox"]');
+        //
+        //     selectAllCheckbox.addEventListener('click', function () {
+        //         let isChecked = selectAllCheckbox.checked;
+        //
+        //         everyCheckbox.forEach(function (checkbox) {
+        //             checkbox.checked = isChecked;
+        //         });
+        //     });
+        // });
+
+        function allChecked(target) {
+            //전체 체크박스
+            const checkbox = document.getElementById('select-all2');
+            //전체 체크박스 체크여부
+            const is_checked = checkbox.checked;
+            //전체 체크박스 체크여부가 true이면 일반 체크박스가 전부 체크되게
+            if (is_checked) {
+                chkAllChecked();
+            } else {
+                //전체 해제되게
+                chkAllUnChecked();
+            }
+        }
+
+        function chkAllChecked() {
+            document.querySelectorAll(".chk").forEach(function(v,i){
+                v.checked = true;
             });
-        });
+        }
+
+        function chkAllUnChecked() {
+            document.querySelectorAll(".chk").forEach(function (v,i) {
+                v.checked = false;
+            });
+        }
+
+        //개별 체크박스 체크
+        function chkClicked() {
+            //체크박스 수
+            const allCount = document.querySelectorAll(".chk").length;
+            //체크된 체크박스의 수
+            const query = 'input[name="chk"]:checked';
+            const selectedElements = document.querySelectorAll(query);
+            const selectedElementsCnt = selectedElements.length;
+            console.log('체크된 체크박스 수 : ' + selectedElementsCnt);
+
+            //체크박스 수와 체크된 체크박스 수가 같다면 전체 체크박스가 체크되게 함
+            if(allCount == selectedElementsCnt) {
+                document.getElementById('select-all2').checked = true;
+            } else {
+                document.getElementById('select-all2').checked = false;
+            }
+
+        }
+
+        //가입승인 버튼
+        function permissionMember() {
+            //체크된 항목
+            const query = 'input[name="chk"]:checked';
+            const selectedElements = document.querySelectorAll(query);
+            //체크된 항목 수
+            const selectedElementsCnt = selectedElements.length;
+            console.log('가입승인을 위해 체크된 항목 수 확인 : ' + selectedElementsCnt);
+
+            if(selectedElementsCnt == 0) {
+                alert("선택된 항목이 없습니다.");
+                return false;
+            } else {
+                if(confirm("승인하시겠습니까?")) {
+                    //체크된 항목의 사번들을 담을 배열 생성
+                    const empNo = new Array(selectedElementsCnt);
+
+                    document.querySelectorAll('input[name="chk"]:checked').forEach(function(v,i) {
+                        empNo[i] = v.value; //input태그의 value = ${req.empNo}를 배열에 저장
+                    });
+
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/member/permission'; //컨트롤러의 URI매핑
+
+                    let inputEmpNo = document.createElement('input');
+                    inputEmpNo.setAttribute("type", "hidden");
+                    inputEmpNo.setAttribute("name", "empNos");
+                    inputEmpNo.setAttribute("value", empNo);
+                    form.appendChild(inputEmpNo);
+                    document.body.appendChild(form);
+                    form.submit();
+
+                    alert("선택한 요청을 승인하셨습니다.")
+                }
+            }
+        }
+
+        //승인 거절 버튼 - 거절시 회원 테이블에서 삭제(회원조회 페이지의 계정삭제버튼과 같은 기능)
+        function rejectMember() {
+            //체크된항목
+            const query = 'input[name="chk"]:checked'
+            const selectedElements = document.querySelectorAll(query)
+            //체크된 항목 수
+            const selectedElementsCnt = selectedElements.length;
+            console.log('승인 거절을 위해 체크된 항목 수 확인 : ' + selectedElementsCnt)
+
+            if(selectedElementsCnt == 0) {
+                alert("선택된 항목이 없습니다.");
+                return false;
+            }
+            else {
+                if(confirm("거절하시겠습니까?")) {
+                    //체크된 회원의 사번들을 담을 배열 생성
+                    const empNo = new Array(selectedElementsCnt);
+
+                    document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
+                        empNo[i] = v.value; //input태그의 value = ${req.empNo}를 배열에 저장
+                    });
+
+                    const form = document.createElement('form');
+                    form.setAttribute('method', 'post');
+                    form.setAttribute('action', '/member/deleteMember'); //계정삭제하는 핸들러메소드로 보낸다
+
+                    let input1 = document.createElement('input');
+                    input1.setAttribute("type", "hidden");
+                    input1.setAttribute("name", "empNos");
+                    input1.setAttribute("value", empNo);
+                    form.appendChild(input1);
+                    document.body.appendChild(form);
+                    form.submit();
+
+                    alert("선택한 요청을 거절하셨습니다.")
+                }
+            }
+        }
 
 
 
-        //가입승인
 
-        // //계정삭제 버튼 - 참고용
-        // function deleteMember() {
-        //     //체크된항목
-        //     const query = 'input[name="chk"]:checked'
-        //     const selectedElements = document.querySelectorAll(query)
-        //     //체크된 항목 수
-        //     const selectedElementsCnt = selectedElements.length;
-        //     console.log('계정삭제를 위해 체크된 항목 수 확인 : ' + selectedElementsCnt)
-        //
-        //     if(selectedElementsCnt == 0) {
-        //         alert("삭제할 계정을 선택해주세요.")
-        //         return false;
-        //     }
-        //     else {
-        //         if(confirm("정말 삭제하시겠습니까?")) {
-        //             //체크된 회원의 사번들을 담을 배열 생성
-        //             const empNo = new Array(selectedElementsCnt);
-        //
-        //             document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
-        //                 //v:체크된 name=chk인 input태그, i:인덱스
-        //                 empNo[i] = v.value; //input태그의 value = ${member.empNo}를 배열에 저장
-        //             });
-        //
-        //             const form = document.createElement('form'); //form요소를 만든다
-        //             form.setAttribute('method', 'post');
-        //             form.setAttribute('action', '/member/deleteMember');
-        //
-        //             let input1 = document.createElement('input');
-        //             input1.setAttribute("type", "hidden");
-        //             input1.setAttribute("name", "empNos"); //name에 변수명
-        //             input1.setAttribute("value", empNo); //value에 값
-        //             form.appendChild(input1); //form요소에 input자식요소(숨겨진)를 추가
-        //             document.body.appendChild(form); //form요소가 바디에 추가됨
-        //             form.submit(); //제출
-        //
-        //             alert("계정을 삭제하셨습니다.")
-        //         }
-        //     }
-        // }
+
     
     </script>
 </body>
