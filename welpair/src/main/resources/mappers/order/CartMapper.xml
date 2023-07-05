@@ -55,23 +55,12 @@
             <result property="categoryCode" column="CATEGORY_CODE"/>
         </resultMap>
 
-<<<<<<< HEAD
     <resultMap id="ThumbnailImageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
         <id property="no" column="SELL_PAGE_NO"/>
         <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>
         <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>
     </resultMap>
-=======
-<!--    <resultMap id="SellImageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellImageDTO">-->
-<!--        <id property="no" column="SELL_PAGE_NO"/>-->
-<!--        <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>-->
-<!--        <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>-->
-<!--        <result property="detailImageFileName" column="SELL_DETAIL_IMAGE_FILE_NAME"/>-->
-<!--        <result property="detailImageOriginFileName" column="SELL_DETAIL_IMAGE_ORGIN_FILE_NAME"/>-->
-<!--        <result property="path" column="FILE_PATH"/>-->
-<!--        <result property="createDate" column="CREATE_DATE"/>-->
-<!--    </resultMap>-->
->>>>>>> 780a3114d6242ac3edd2f36c6e18d0b46b1cea2d
+
 
     <resultMap id="cartGeneralResultMap" type="com.hielectro.welpair.order.model.dto.CartGeneralDTO">
         <association property="cart" resultMap="cartResultMap"/>
@@ -79,11 +68,7 @@
         <association property="sellProduct" resultMap="SellProductResultMap"/>
         <association property="sellItemPage" resultMap="SellItemPageResultMap"/>
         <association property="sellPage" resultMap="SellPageResultMap"/>
-<<<<<<< HEAD
         <association property="thumbImage" resultMap="ThumbnailImageResultMap"/>
-=======
-<!--        <association property="sellImage" resultMap="SellImageResultMap"/>-->
->>>>>>> 780a3114d6242ac3edd2f36c6e18d0b46b1cea2d
         <association property="product" resultMap="ProductResultMap"/>
     </resultMap>
 
@@ -159,11 +144,7 @@
                , T_SELL_ITEM_PAGE D
                , T_SELL_PAGE E
                , T_PRODUCT G,
-<<<<<<< HEAD
                  T_THUMB_IMAGE F
-=======
---                T_SELL_IMAGE F
->>>>>>> 780a3114d6242ac3edd2f36c6e18d0b46b1cea2d
          WHERE A.EMP_NO = #{empNo}
            AND A.CART_NO = B.CART_NO(+)
            AND B.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID(+)
