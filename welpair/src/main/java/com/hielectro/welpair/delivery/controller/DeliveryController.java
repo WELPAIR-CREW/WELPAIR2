@@ -33,6 +33,8 @@ public class DeliveryController {
     /* 상품준비중 */
     @GetMapping("delivery_prepare")
     public String deliveryprepare() {
+        List<DriverDTO> list = service.deliveryDriver();
+
 
         return "admin/delivery/delivery_prepare";
 

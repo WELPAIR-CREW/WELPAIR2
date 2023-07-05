@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hielectro.welpair.delivery.model.dao.adminOrderMapper">
+
+    <!-- adminOrderDTO -->
+    <resultMap id="adminOrderDTO" type="com.hielectro.welpair.delivery.model.dto.adminOrderDTO">
+        <id property="orderNo" column="ORDER_NO"/>
+        <result property="orderDate" column="ORDER_DATE"/>
+        <result property="totalPrice" column="TOTAL_PRICE"/>
+        <result property="deliveryType" column="DELIVERY_TYPE"/>
+        <result property="empNo" column="EMP_NO"/>
+    </resultMap>
+
+</mapper>
