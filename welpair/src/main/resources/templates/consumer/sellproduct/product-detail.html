@@ -186,7 +186,7 @@
         const formData = new URLSearchParams();
         formData.append('sellProductId', sellProductId);
         formData.append('cartAmount', count.value);
-        formData.append('empNo', 'E00043');
+        formData.append('empNo', 'E00017');
 
         const url = '/order/cart/add';
         const options = {
@@ -206,7 +206,7 @@
             })
             .then(data => {
                 console.log(data);
-                alert(data);
+                alert(data.message);
             })
             .catch(error => {
                 console.log(error);
