@@ -61,7 +61,14 @@ li {
     font-size: 16px;
     padding: 0px 16px;
 }
-
+.section-detailSearch-input option1{
+    box-sizing: border-box;
+    width: 180px;
+    height: 33px;
+    border-radius: 6px;
+    font-size: 16px;
+    padding: 0px 16px;
+}
 .section-searchResult {
     /* width: 100%; */
     /* display: flex; */

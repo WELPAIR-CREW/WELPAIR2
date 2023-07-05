@@ -57,11 +57,10 @@ public class SearchController {
 
     @PostMapping("detail")
     @ResponseBody
-//    public List<SearchDTO> searchDetailResult(Model model, @RequestParam(required = false) String title,
     public String searchDetailResult(Model model, @RequestParam(required = false) String title,
                                               @RequestParam(required = false) String categoryCode,
-                                              @RequestParam(required = false) int minPrice,
-                                              @RequestParam(required = false) int maxPrice) {
+                                              @RequestParam(required = false) Integer minPrice,
+                                              @RequestParam(required = false) Integer maxPrice) {
         System.out.println("------------- 상품 상세 검색 컨트롤러 1-1-2 in -------------");
 
         SearchDTO search = new SearchDTO();
@@ -79,16 +78,20 @@ public class SearchController {
         List<SearchDTO> prodSearchList = null;
         if(search != null){
             prodSearchList = searchService.searchDetailResult(search);
+
             System.out.println("prodSearchList = " + prodSearchList);
 
             model.addAttribute("prodSearchList", prodSearchList);
 
-            System.out.println("------------- 상품 상세 검색 컨트롤러 1-1-2 out -------------");
         } else{
             model.addAttribute("prodSearchList", Collections.emptyList());
         }
 
+        if(prodSearchList.isEmpty()){
+            model.addAttribute("noResultMessage", "검색한 결과가 없습니다.");
+        }
 
+        System.out.println("------------- 상품 상세 검색 컨트롤러 1-1-2 out -------------");
         return "search/search";
 //        return prodSearchList;
     }

@@ -86,22 +86,23 @@ img[alt="cart"] {
     transform: translateX(-50%);
 }
 
-.header-category>div {
+.header-category ul {
     display: flex;
     width: 1280px;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    font-size: 18px;
     margin: 0 auto;
+    padding: 0;
+    list-style-type: none;
 }
 
-.header-category>div>span {
+.header-category ul li {
     margin: 0 30px;
 }
 
-.header-category a {
+.header-category ul li a {
     text-decoration: none;
     color: black;
     cursor: pointer;
+    font-size: 18px;
 }

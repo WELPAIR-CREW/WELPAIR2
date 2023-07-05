@@ -65,7 +65,7 @@
 
             <!-- 검색 결과 리스트 -->
             <div class="section-searchResult">
-                <div>
+                <div th:if="${not #strings.isEmpty(prodSearchList)}">
                     <ul>
                         <li class="section-searchResult-product" th:each="search : ${prodSearchList}">
                             <a href="#">
@@ -80,6 +80,10 @@
                         </li>
                     </ul>
                 </div>
+                <div th:unless="${not #strings.isEmpty(prodSearchList)}">
+                    <p th:text="${noResultMessage}"></p>
+                </div>
+
             </div>
 
 
