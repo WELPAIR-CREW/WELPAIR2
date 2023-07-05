@@ -18,5 +18,5 @@ public class CartSellProductDTO {
     private CartDTO cart; // 카트
 
 
-//    private SellProductDTO sellProduct; // 판매상품 dto
+    private SellProductDTO sellProduct; // 판매상품 dto
 }

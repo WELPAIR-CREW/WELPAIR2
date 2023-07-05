@@ -24,13 +24,13 @@
         <div class="section-content">
             <div class="section-title">상세검색</div>
 
-            <form action="/search/search">
-                <div class="section-detailSearch">
+            <div class="section-detailSearch">
+                <form action="/search/search">
                     <!-- 상세 검색 옵션 -->
                     <div class="section-detailSearch-line1">
                         <div>
                             <span class="section-detailSearch-span">상품명
-                                <input type="text" name="productName" class="section-detailSearch-input" placeholder="상품명입력">
+                                <input type="text" name="title" id="title" class="section-detailSearch-input" placeholder="상품명입력" value="">
                             </span>
                             <span class="section-detailSearch-span">카테고리
                                 <select id="categoryCode" class="section-detailSearch-input option1">
@@ -45,21 +45,21 @@
                                 </select>
                             </span>
                             <span class="section-detailSearch-input">가격
-                                <input type="number" name="minPrice" class="section-detailSearch-input price" placeholder="최소 금액">
+                                <input type="number" name="minPrice" id="minPrice" class="section-detailSearch-input price" placeholder="최소 금액" value="">
                                 <span>~</span>
-                                <input type="number" name="maxPrice" class="section-detailSearch-input price" placeholder="최대 금액">
+                                <input type="number" name="maxPrice" id="maxPrice" class="section-detailSearch-input price" placeholder="최대 금액" value="">
                             </span>
                             <span>
                                 <input clas="searchCheck" type="checkbox"> 결과 내 검색
                             </span>
                             <span>
                                 <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
-                                <input id="sendProductSearch" class="btn_basic" type="button" value="검색">
+                                <input id="detailSearch" class="btn_basic" type="button" value="검색">
                             </span>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
 
             <!-- 검색 수량, 정렬 기준 -->
 
@@ -69,11 +69,13 @@
                     <ul>
                         <li class="section-searchResult-product" th:each="searchDTO : ${prodSearchList}">
                             <a href="#">
+                                <div name="thumbnailImage"><span th:text="${searchDTO.getThumbnailImage().thumbnailImageFileName}"></span></div>
                                 <img src="#" alt="">
                             </a>
                             <div class="product-info">
-                                <div class="searchProdTitle" name="name"><span th:text="${searchDTO.sellPage.title}"></span></div>
+                                <div class="searchProdTitle" name="title"><span th:text="${searchDTO.sellPage.title}"></span></div>
                                 <div class="searchProdPrice" name="sellPrice"><span th:text="${searchDTO.sellprice}"></span></div>
+                                <div name="sellPageNo"><span th:text="${searchDTO.getSellItemPage().no}"></span></div>
                             </div>
                         </li>
                     </ul>
@@ -82,7 +84,7 @@
 
 
             <!-- 페이징 -->
-            <div class="paging1">
+            <div class="paging">
                 <span id="prevPage">&lt;</span>
                 <span class="currentPage">1</span>
                 <span class="pageNum">2</span>
@@ -96,7 +98,7 @@
 
 
     <!-- footer -->
-    <div data-include-html="/admin/footer" class="include"></div>
+    <div data-include-html="/consumer/footer" class="include"></div>
     <script src="/common/js/src/search.js"></script>
 </body>
 </html>

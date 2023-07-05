@@ -11,7 +11,7 @@
     <resultMap id="prodSearchResultMap" type="com.hielectro.welpair.search.model.dto.SearchDTO">
         <result property="sellprice" column="SELLPRICE"></result>
         <association property="sellPage" resultMap="getSellPageResultMap"></association>
-        <association property="thumbnailImageList" resultMap="getThumbnailImageResultMap"></association>
+        <association property="thumbnailImage" resultMap="getThumbnailImageResultMap"></association>
         <association property="sellItemPage" resultMap="getSellItemPageResultMap"></association>
         <association property="sellProduct" resultMap="getSellProductResultMap"></association>
         <association property="product" resultMap="getProductResultMap"></association>
@@ -36,7 +36,9 @@
     </resultMap>
     <resultMap id="getProductResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
         <result property="productCode" column="PRODUCT_CODE"></result>
-        <result property="productName" column="PRODUCT_NAME"></result>
+        <result property="productPrice" column="PRODUCT_PRICE"></result>
+        <result property="categoryCode" column="CATEGORY_CODE"></result>
+
     </resultMap>
 
     <select id="searchResultByTitle" resultMap="prodSearchResultMap">
@@ -51,6 +53,18 @@
           JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID
           JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
          WHERE D.IS_SELL = 'Y'
+            <if test="title != null and title != ''">
+                AND A.SELL_PAGE_TITLE LIKE '%' || #{title} || '%'
+            </if>
+            <if test="title != null and title != ''">
+                AND A.SELL_PAGE_TITLE LIKE '%' || #{title} || '%'
+            </if>
+            <if test="title != null and title != ''">
+                AND A.SELL_PAGE_TITLE LIKE '%' || #{title} || '%'
+            </if>
+            <if test="title != null and title != ''">
+                AND A.SELL_PAGE_TITLE LIKE '%' || #{title} || '%'
+            </if>
     </select>
 
 
