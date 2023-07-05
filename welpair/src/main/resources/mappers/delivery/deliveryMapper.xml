@@ -5,7 +5,7 @@
 <mapper namespace="com.hielectro.welpair.delivery.model.dao.deliveryMapper">
 
 
-    <!-- deliveryDTO -->
+    <!-- 배송관련 deliveryDTO -->
     <resultMap id="deliveryDTO" type="com.hielectro.welpair.delivery.model.dto.DeliveryDTO">
         <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
         <result property="driverId" column="DRIVER_ID"/>
@@ -13,13 +13,13 @@
     </resultMap>
 
 
-    <!--    deliveryStockDTO -->
+    <!-- deliveryStockDTO -->
     <!--    <resultMap id="deliveryStockDTO" type="com.hielectro.welpair.delivery.model.dto.DeliveryStockDTO">-->
     <!--        <id property="stockNo" column="STOCK_NO"/>-->
     <!--        <result property="productOrderNo" column="PRODUCT_ORDER_NO"/>-->
     <!--    </resultMap>-->
 
-    <!-- driverDTO -->
+    <!-- 배송기사 driverDTO -->
     <resultMap id="driverDTO" type="com.hielectro.welpair.delivery.model.dto.DriverDTO">
         <id property="driverId" column="DRIVER_ID"/>
         <result property="driverName" column="DRIVER_NAME"/>
