@@ -32,20 +32,25 @@ public class SearchController {
      * 1-1. 상품명 검색 시, 검색한 단어가 포함된 상품 리스트 출력
      */
     @GetMapping("search")
-    public String searchResult(Model model, @RequestParam(value = "title", required = false) String title){
+    public String searchResultMain(Model model, @RequestParam(value = "title", required = false) String title
+                                            ,@RequestParam(value = "categoryCode", required = false) String categoryCode){
         System.out.println("------------- 상품검색 컨트롤러 1-1-1 in -------------");
 
         SearchDTO search = new SearchDTO();
         SellPageDTO sellPage = new SellPageDTO();
+        ProductDTO product = new ProductDTO();
 
-        System.out.println("search.getSellPage() = " + search.getSellPage());
         sellPage.setTitle(title);
+        product.setCategoryCode(categoryCode);
         System.out.println("title = " + title);
+        System.out.println("categoryCode = " + categoryCode);
+
 
         search.setSellPage(sellPage);
+        search.setProduct(product);
         System.out.println("search = " + search);
 
-        List<SearchDTO> prodSearchList = searchService.searchResultByTitle(search);
+        List<SearchDTO> prodSearchList = searchService.searchResultMain(search);
         System.out.println("prodSearchList = " + prodSearchList);
 
         model.addAttribute("prodSearchList", prodSearchList);
@@ -93,7 +98,6 @@ public class SearchController {
 
         System.out.println("------------- 상품 상세 검색 컨트롤러 1-1-2 out -------------");
         return "search/search";
-//        return prodSearchList;
     }
 
 }

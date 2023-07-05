@@ -41,7 +41,7 @@
 
     </resultMap>
 
-    <select id="searchResultByTitle" resultMap="prodSearchResultMap">
+    <select id="searchResultMain" resultMap="prodSearchResultMap">
         SELECT
                A.SELL_PAGE_TITLE /* AS 판매상품명*/
              , E.PRODUCT_PRICE * (1 - D.DISCOUNT) AS SELLPRICE /*AS 판매가격*/
@@ -55,6 +55,9 @@
          WHERE D.IS_SELL = 'Y'
             <if test="title != null and title != ''">
                 AND A.SELL_PAGE_TITLE LIKE '%' || #{title} || '%'
+            </if>
+            <if test="categoryCode != null and categoryCode != ''">
+                AND E.CATEGORY_CODE = #{categoryCode}
             </if>
     </select>
     <select id="searchDetailResult" resultMap="prodSearchResultMap">

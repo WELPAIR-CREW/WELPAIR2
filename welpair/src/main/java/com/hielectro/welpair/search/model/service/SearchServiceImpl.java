@@ -19,14 +19,16 @@ public class SearchServiceImpl implements SearchService {
 
     /* 1-1 */
     @Override
-    public List<SearchDTO> searchResultByTitle(SearchDTO search) {
+    public List<SearchDTO> searchResultMain(SearchDTO search) {
 
         System.out.println("============ 상품검색 서비스 1-1-1 in ============");
 
         String title = search.getSellPage().getTitle();
+        String categoryCode = search.getProduct().getCategoryCode();
         System.out.println("title = " + title);
+        System.out.println("categoryCode = " + categoryCode);
 
-        List<SearchDTO> result = searchDAO.searchResultByTitle(title);
+        List<SearchDTO> result = searchDAO.searchResultMain(title, categoryCode);
 
         System.out.println("============ 상품검색 서비스 1-1-1 out ============");
         return result;
