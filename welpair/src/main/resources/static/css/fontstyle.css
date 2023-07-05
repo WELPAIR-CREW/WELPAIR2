@@ -1,0 +1,111 @@
+.text_login{
+    font-family: '맑은고딕';
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.bntlogin{
+    font-family: '맑은고딕';
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.content > h1 {
+    font-family: '맑은고딕';
+    font-size: 24px;
+    color: #333;
+}
+
+/* 컨텐츠 영역  */
+
+.content{
+    font-family: '맑은고딕';
+    font-size: 24px;
+}
+
+.form > h1{
+    font-family: '맑은고딕';
+    font-size: 24px;
+}
+
+.form > input {
+    margin-top: 10px;
+    border: 1px solid #d9d9d9;
+}
+
+.form > ::placeholder {
+    padding-left: 10px;
+    color: #d9d9d9;
+}
+
+
+/* 이용약관 */
+
+span{
+    font-family: '맑은고딕';
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+
+/* 공지사항 */
+.notice_text{
+    font-family: '맑은고딕';
+    font-size: 22px;
+    font-weight: 500;
+    border-bottom: 2px solid #333 ;
+    padding: 8px;
+}
+
+
+
+.view_title{
+    font-family: '맑은고딕';
+    font-size: 22px;
+    font-weight: 500;
+    border-bottom: 2px solid #333 ;
+    padding: 8px;
+}
+
+.view_content > div > div{
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+
+
+/* 자주묻는질문 */
+
+/* 네비게이션 바 */
+
+
+.notice .qna{
+    font-size: 16px;
+}
+.ask {
+    font-weight: 700;
+}
+
+
+
+/* 리스트 */
+.ask-title-top {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.ask-title{
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.qna-title-top{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+
+

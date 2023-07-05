@@ -100,9 +100,16 @@ function checkboxTrueList(){
             price2 += Number(selectValue[i][1]);
             price3 += Number(selectValue[i][2]);
     }
-    exptPrice.innerText = price1.toLocaleString();
-    exptDeliveryPrice.innerText = price2.toLocaleString();
-    exptTotalPrice.innerText = price3.toLocaleString();
+    // exptPrice = price1.toLocaleString();
+    // exptDeliveryPrice.innerText = price2.toLocaleString();
+    // exptTotalPrice.innerText = price3.toLocaleString();
+
+    // exptPrice.value = price1.toLocaleString();
+    exptPrice.value = new Intl.NumberFormat().format(price1);
+    exptDeliveryPrice.value = new Intl.NumberFormat().format(price2);
+    exptTotalPrice.value = new Intl.NumberFormat().format(price3);
+
+
 
 }
 
@@ -162,22 +169,110 @@ $btn_del.addEventListener("click", (e => {
 // 선택상품 주문하기 post 요청,
 function gotopay(){
 
-    const from = document.getElementById("cartPayForm");
 
-    let checkboxes = form.elements["sellProductId"];
+
+
+
+
+    // selectedProductsList.push(exptPrice.textContent);
+    // selectedProductsList.push(exptDeliveryPrice.textContent);
+
+    // let json =
+
+
+    // let hiddenInput = document.createElement("input");
+    // hiddenInput.setAttribute("type", "hidden");
+    // hiddenInput.setAttribute("name", "selectedProducts");
+    // hiddenInput.setAttribute("value", json);
+    // form.appendChild(hiddenInput);
+
+    // form.submit();
+
+
+
+}
+
+document.getElementById("btn_gopay").onclick = function(){
+    const form = document.getElementById("cartPayForm");
+
+    const sellProductId = document.querySelectorAll("input[class^='cart_select']");
+    const cartAmount = document.querySelectorAll('input[class="item_count_box"]');
+
+    const exptPrice = document.getElementById("exptPrice").value;
+    const exptDeliveryPrice = document.getElementById("exptpay_del").value;
+    const exptTotalPrice = document.getElementById("exptTotalPrice").value;
+
+    let checkboxes = document.querySelectorAll('input[class^="cart_select"]');
+
     let selectedProducts = [];
 
+    let CartGeneralDTO =
+        {
+            cartSellProduct: {},
+            exptPrice: 0,
+            exptDeliveryPrice: 0,
+            exptTotalPrice: 0
+        };
+
     for (let i = 0; i < checkboxes.length; i++) {
+        let cartSellProduct = {
+            sellProductId: "",
+            cartAmount: 0
+        }
         if (checkboxes[i].checked) {
-            selectedProducts.push(checkboxes[i].value);
+            // selectedProducts.push(checkboxes[i].value);
+            cartSellProduct.sellProductId = sellProductId[i].getAttribute("id");
+            cartSellProduct.cartAmount = parseInt(cartAmount[i].getAttribute("value"));
+
+            CartGeneralDTO.cartSellProduct = cartSellProduct;
+
+            CartGeneralDTO.exptPrice = parseInt(exptPrice.replace(/,/g, ''));
+            CartGeneralDTO.exptDeliveryPrice = parseInt(exptDeliveryPrice.replace(/,/g, ''));
+            CartGeneralDTO.exptTotalPrice = parseInt(exptTotalPrice.replace(/,/g, ''));
+
+            selectedProducts.push(CartGeneralDTO);
         }
     }
-    let json = JSON.stringify(selectedProducts);
-    let hiddenInput = document.createElement("input");
-    hiddenInput.setAttribute("type", "hidden");
-    hiddenInput.setAttribute("name", "selectedProducts");
-    hiddenInput.setAttribute("value", json);
-    form.appendChild(hiddenInput);
-    form.submit();
+    $.ajax({
+        url: "/payment/pay",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(selectedProducts),
+        success : function (data){
+            console.log("전송완료");  // 서버로부터의 응답 데이터
+
+            console.log(data);
+            if(data == 'success'){
+                location.href = "/payment/pay";  // 겟매핑 주범....
+            }
+            else {
+                alert("선택하신 상품은 주문하실 수 없습니다. 해당 상품을 제외하고 다시 시도해주세요.")
+            }
+        },
+        error: function (error) {
+            console.log("실패");
+            alert("에러")
+        }
+    })
+    // fetch(, {
+    //
+    //     method: x,
+    //     headers: {
+    //         "Content-Type":
+    //     },
+    //     body:
+    // })
+    //     // .then(data => {
+    //     //     data.json().then();
+    //     // })
+    //     .then(response => {
+    //         location.href('');
+    //         console.log("전송완료");  // 서버로부터의 응답 데이터
+    //     })
+    //     .catch(error => {
+    //
+    //     })
+
+
 
 }

@@ -302,3 +302,20 @@ label[for='upload'] {
 .product-detail-area1 .selectImg {
     border: 2px solid #333333;
 }
+
+.category-list span:not(:last-child)::after {
+    content: '>';
+}
+
+.product-count button {
+    width: 26px;
+    height: 26px;
+}
+
+.btn_plus {
+    background-image: url('/common/images/bnt_plus.png');
+}
+
+.btn_min {
+    background-image: url('/common/images/bnt_min.png');
+}

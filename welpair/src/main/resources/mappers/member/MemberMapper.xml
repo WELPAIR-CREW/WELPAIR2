@@ -137,25 +137,6 @@
 
 
 <!--  2. 회원등록  -->
-<!--    <select id="getEmployeeList" resultMap="employeeListResultMap">-->
-<!--        select * from-->
-<!--            (SELECT-->
-<!--                 row_number() OVER (ORDER BY E.EMP_NO) AS rnum-->
-<!--&#45;&#45;                  버튼 확인을 위해 일부러 정렬 순서를 바꾼것. 원래 입사일 내림차순이 맞음-->
-<!--&#45;&#45;                  row_number() OVER (ORDER BY E.HIRE_DATE DESC) AS rnum-->
-<!--                 ,E.EMP_NO-->
-<!--                 ,E.EMP_NAME-->
-<!--                 ,E.EMP_EMAIL-->
-<!--                 ,E.EMP_PHONE-->
-<!--                 ,E.EMP_DEPT-->
-<!--                 ,E.JOB_CODE-->
-<!--                 ,E.HIRE_DATE-->
-<!--                 ,M.REGIST_DATE-->
-<!--             FROM T_EMPLOYEE E-->
-<!--             LEFT JOIN T_MEMBER M ON (E.EMP_NO = M.EMP_NO)-->
-<!--             WHERE E.IS_EXPIRE = 'N' AND E.EMP_NO LIKE 'E%')-->
-<!--        WHERE rnum BETWEEN #{startRow} AND #{endRow}-->
-<!--    </select>-->
     <select id="getEmployeeList" resultMap="employeeListResultMap">
         select * from
             (SELECT
@@ -184,6 +165,19 @@
         FROM T_EMPLOYEE E
     </select>
 
+    <insert id="registMember" parameterType="com.hielectro.welpair.member.model.dto.MemberDTO">
+        INSERT INTO T_MEMBER
+        VALUES
+        (
+          #{ empNo }
+        , #{ memPwd }
+        , sysdate
+        , default
+        , default
+        )
+    </insert>
+
+
 
 <!-- 3. 가입승인 - 신규가입요청 목록 -->
     <select id="reqList" resultMap="reqListResultMap">
@@ -201,5 +195,9 @@
           FROM T_REQ_JOIN
          WHERE IS_REGIST = 'N'
     </select>
+
+
+
+
 
 </mapper>
