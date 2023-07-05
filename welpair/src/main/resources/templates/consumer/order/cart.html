@@ -69,8 +69,8 @@
                     <!-- 상품 1개당 이벤트 발생시 생기는 리스트임 기본케이스 -->
                     <li th:each="cart, stat : ${cartList}" th:id="'cart_basic_list' + ${stat.count}">
                         <!-- 상품 info 박스 -->
-                        <div class="cart_info_box" th:id="'cart_basic_case' + ${stat.count}" name="sellProductId" th:value="${cart.cartSellProduct.sellProductId}">
-<!--                            <input type="checkbox" name="sellProductId" th:value="${cart.cartSellProduct.sellProductId}" hidden="" readonly>-->
+                        <div class="cart_info_box" th:id="'cart_basic_case' + ${stat.count}">
+                            <input type="hidden" name="sellProductId" th:value="${cart.cartSellProduct.sellProductId}" hidden="">
                                 <!-- 상품 정보 구역(체크박스,썸네일,정보,수량) -->
                             <div class="cart_order_prd">
                                 <!-- 상품선택 체크박스 -->
@@ -173,6 +173,8 @@
 
                     </div>
                 </div>
+                <input type="hidden" name="hddata" id="hddata">
+
                 <!-- 버튼박스 -->
                 <div class="bnt_order">
                     <button type="button" id="btn_gopay" class="go_pay"><span>선택상품<br>주문하기</span></button>

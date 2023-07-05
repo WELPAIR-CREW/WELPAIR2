@@ -26,6 +26,10 @@ a:hover, a:active { text-decoration: none; }
 
 }
 
+.alink {
+    align-items: center;
+}
+
 /* 각 구역 컨텐츠박스 */
 div[class$=contentsbox], .info_table{
     margin: 20px 0px;
@@ -119,16 +123,23 @@ li[class^=prd_list_] {
     max-height: 250px;
 }
 
+
 /* 내부스크롤바 안보이게 하기 */
 .prd_list_box::-webkit-scrollbar {
     display: none;
     width: 0 !important;
 }
 
+.prdTitle {
+    align-items: center;
+
+}
 
 .prd_list_body {
+    margin-top: 10px;
     height: 100px;
     margin-bottom: 20px;
+    align-items: center;
 }
 
 .list_body_2 a {
