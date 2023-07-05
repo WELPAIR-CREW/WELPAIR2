@@ -14,5 +14,5 @@ public class CategoryDTO {
     private String categoryName;
     private String refCategoryCode;
 
-
+    private CategoryDTO refCategory;
 }

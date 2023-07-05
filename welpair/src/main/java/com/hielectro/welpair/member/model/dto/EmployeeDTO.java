@@ -1,8 +1,5 @@
 package com.hielectro.welpair.member.model.dto;
 import lombok.*;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Getter

@@ -1,6 +1,7 @@
 package com.hielectro.welpair.member.controller;
 
 import com.hielectro.welpair.common.Pagination;
+import com.hielectro.welpair.member.model.dto.DeptDTO;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.dto.ReqDTO;
@@ -128,38 +129,6 @@ public class MemberController {
 
         List<EmployeeDTO> employeeList = memberService.getEmployeeList(selectCriteria);
 
-
-//        //부서코드에 부서이름 매핑하기-----------------------(부서 테이블 만드는 방법 대신 사용)
-//        Map<String, String> deptMap = new HashMap<>();
-//        deptMap.put("D1", "영업");
-//        deptMap.put("D2", "구매");
-//        deptMap.put("D3", "인사");
-//        deptMap.put("D4", "재무");
-//        deptMap.put("D5", "품질");
-//        deptMap.put("D6", "생산");
-//        deptMap.put("D7", "고객");
-//        deptMap.put("D8", "개발");
-//        deptMap.put("D9", "법무");
-//
-//        for(EmployeeDTO emp : employeeList) {
-//            String deptCode = emp.getEmpDept();
-//            String deptName = deptMap.get(deptCode);
-//            emp.setEmpDept(deptName);
-//        }
-//        //---------------------------------------------D1~D9 / J1~J6
-//        Map<String, String> jobMap = new HashMap<>();
-//        jobMap.put("J1", "사원");
-//        jobMap.put("J2", "대리");
-//        jobMap.put("J3", "과장");
-//        jobMap.put("J4", "차장");
-//        jobMap.put("J5", "부장");
-//        jobMap.put("J6", "이사");
-//        for(EmployeeDTO emp : employeeList) {
-//            String jobCode = emp.getJobCode();
-//            String jobName = jobMap.get(jobCode);
-//            emp.setJobCode(jobName);
-//        }
-
         model.addObject("employeeList", employeeList);
         model.addObject("selectCriteria", selectCriteria);
         model.setViewName("admin/member/member-regist1");
@@ -186,33 +155,25 @@ public class MemberController {
     }
 
 
-    //등록 버튼 눌렀을때 이동하는 회원등록페이지 1)Get방식요청
-//    @GetMapping("/registPage")
-//    public ModelAndView registPage(@RequestParam String empNo, ModelAndView model) {
-//        model.addObject("empNo", empNo);
-//        model.setViewName("admin/member/member-regist2");
-//        return model;
-//    }
-    //등록 버튼 눌렀을때 이동하는 회원등록페이지 2)Post방식요청
-//    @PostMapping("/registPage")
-//    public ModelAndView registPage(@RequestParam String empNo, ModelAndView model) {
-//
-//        System.out.println("form태그를 통해 empNo이 들어왔는지 확인 : " + empNo);
-//        model.addObject("empNo", empNo);
-//        model.setViewName("admin/member/member-regist2");
-//        return model;
-//    }
-    @PostMapping("/registPage")
-    public ModelAndView registPage(@RequestParam String empNo) {
+    @PostMapping("/registPage") //@ResponseBody를 붙이는건 ajax일때만 해당
+    public ModelAndView registPage(@ModelAttribute EmployeeDTO employee) {
+                                    //form.submit()해서 보내면 @ModelAttribute이고 body에 담아서 보내면 @RequestBody임
+
         ModelAndView model = new ModelAndView("admin/member/member-regist2");
-        System.out.println("form태그를 통해 empNo이 들어왔는지 확인 : " + empNo);
-        model.addObject("empNo", empNo);
+        System.out.println("employeeDTO로 들어왔는지 확인 : " + employee);
+        model.addObject("employee", employee);
+
         return model;
     }
 
+    @PostMapping("/registMember")
+    public String registMember(@ModelAttribute MemberDTO member) throws RegistMemberException {
 
-
-
+        System.out.println("회원등록 submit 후 들어오는지 확인---------------------");
+        System.out.println("회원등록 member = " + member); //여기서 memPwd=null로 들어오는것이 문제
+        memberService.registMember(member);
+        return "redirect:/member/regist"; //등록 후 회원등록(목록) 페이지로 리다이렉트
+    }
 
 
     @GetMapping("givePoint")
@@ -226,4 +187,75 @@ public class MemberController {
         return "admin/member/member-givePointHistory1";
     }
 
+
+
+
+
+
+
+//    로그인 창
+
+    /* 로그인창을 띄웁시다. */
+    @GetMapping("login")
+    public String login(Model model){
+
+        return "member/login";
+
+    }
+
+    @PostMapping("login")
+    public String loginForm(@RequestParam("empNo") String empNo,
+                            @RequestParam("memPwd") String memPwd){
+
+//        System.out.println("empNo = " + empNo + ", memPwd = " + memPwd);
+        return null;
+
+    }
+    @PostMapping("test")
+    public String testForm(Model model){
+
+        return "member/test";
+    }
+
+    @GetMapping("error")
+    public String error(Model model){
+
+        return "member/error";
+    }
+
+
+
+
+
+// 회원가입 창
+
+    /* 회원가입창을 띄웁시다. */
+    @GetMapping("registForm")
+    public String registForm(Model model){
+        return "member/registForm";
+    }
+
+    @PostMapping("registForm")
+    public String registSave(@RequestParam("empNo") String empNo,
+                            @RequestParam("memPwd") String memPwd){
+        System.out.println("empNo = " + empNo + ", memPwd = " + memPwd);
+
+        return null;
+
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

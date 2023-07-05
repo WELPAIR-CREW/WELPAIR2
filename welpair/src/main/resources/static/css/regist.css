@@ -1,0 +1,117 @@
+
+
+.title_regist > h1{
+    text-align: center;
+    margin-top: 80px;
+}
+
+.form{
+    text-align: center;
+}
+
+.first_input{
+    margin-top: 40px;
+}
+
+.input_name{
+    width: 460px;
+    height: 50px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px ;
+    margin-top: 16px;
+}
+
+.check {
+    width: 134px;
+    height: 50px;
+    border-radius: 6px;
+    background-color: #333;
+    color: white;
+    margin-left: 12px;
+    border-style: none;
+    cursor: pointer;
+    text-align: center;
+}
+.check:active{
+    background-color: #d9d9d9;
+    color: #333333;
+    border: none;
+
+}
+
+.pwd{
+    /* display: none; */
+    margin-top: 6px;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.error{
+    margin-left: 246px;
+    color: #f86969;
+}
+.ok{
+    margin-left: 294px;
+    color: #333;
+}
+
+.input{
+
+    width: 460px;
+    height: 50px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px ;
+    margin-top: 16px;
+}
+
+::placeholder{
+    padding-left: 12px;
+}
+
+.terms{
+    text-align: center;
+
+}
+
+.title_term{
+    margin-left: -325px;
+    margin-top: 30px;
+}
+
+.auth{
+    margin: 12px auto ;
+    width: 440px;
+    height: 200px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    padding: 10px;
+    overflow: auto;
+}
+
+
+.auth_inner {
+    text-align: left;
+}
+
+.bnt_regist_next{
+    text-align: center;
+
+}
+
+.bnt_next{
+    width: 460px;
+    height: 50px;
+    background-color: #333;
+    color: white;
+    border-style: none;
+    border-radius: 6px ;
+    margin: 18px 0 100px 0;
+    cursor: pointer;
+}
+
+.bnt_next:active{
+    background-color: #d9d9d9;
+    color: #333333;
+    border: none;
+}
+

@@ -39,9 +39,10 @@ public class CartController {
     @ResponseBody
     @PostMapping(value = "/cart/add", produces = "application/json; charset=utf-8")
     public Map<String, String> addCart(@ModelAttribute CartSellProductDTO cartSellProduct
-            , @RequestParam("empNo") String empNo
+            , @RequestParam("empNo") Object empNo1
     ) {
 
+        String empNo = (String) empNo1;
         // 카트별판매상품dto를 통해 매상품id와 수량 정보와, 회원정보ID가 넘어온다.
         System.out.println("선택상품 : " + cartSellProduct);
 
