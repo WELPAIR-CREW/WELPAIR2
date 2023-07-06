@@ -143,8 +143,8 @@
                         <td>
                             <input type="text" class="inputbox_addZipcode" name="addPostZipcode" id="zipcode"
                                 placeholder=" 우편번호" readonly required>
-                            <input type="button" value="우편번호 찾기" onclick="kakaopost()">
-                            <input type="text" class="inputbox_addBasic" name="addBasic" readonly required>
+                            <input type="button" id="searchZipCode" value="우편번호 찾기" >
+                            <input type="text" class="inputbox_addBasic" id="address1" name="addBasic" readonly required>
                             <input type="checkbox"><label class="labelbox"> 기본배송지로&nbsp;등록</label>
                         </td>
                         <!-- <td></td> -->
@@ -156,7 +156,7 @@
                     </tr>
                     <tr>
                         <td></td>
-                        <td><input type="text" class="inputbox_addDetail" name="addDetail" placeholder=" 상세주소를 입력하세요."
+                        <td><input type="text" class="inputbox_addDetail" id="address2" name="addDetail" placeholder=" 상세주소를 입력하세요."
                                 required></td>
                     </tr>
                     <tr>
@@ -274,8 +274,29 @@
 
     <!-- footer -->
     <div data-include-html="/../admin/footer" class="include"></div>
-
     <script src="/common/js/src/payment.js"></script>
+
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:inline="javascript">
+
+        const $searchZipCode = document.getElementById("searchZipCode");
+        // const $goMain = document.getElementById("goMain");
+
+        $searchZipCode.onclick = function() {
+
+            new daum.Postcode({
+                oncomplete: function(data){
+                    /* 팝업에서 검색결과 항목을 클릭했을 시 실행할 코드를 작성하는 부분 */
+                    document.getElementById("zipcode").value = data.zonecode;
+                    document.getElementById("address1").value = data.address;
+                    document.getElementById("address2").focus();
+                }
+            }).open();
+        }
+
+
+    </script>
+
 
 </body>
 

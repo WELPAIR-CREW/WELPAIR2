@@ -3,13 +3,19 @@ const sameorderer = document.getElementById("sameorderer");
 
 sameorderer.addEventListener("click", e => {
 
-    const ordererName = document.getElementById("ordererName").val;
-    const ordererPhone = document.getElementById("ordererPhone").val;
+    const ordererName = document.getElementById("ordererName");
+    const ordererPhone = document.getElementById("ordererPhone");
 
-    let recipientName = document.getElementById("recipientName").val;
-    let recipientPhone = document.getElementById("recipientPhone").val;
+    let recipientName = document.getElementById("recipientName");
+    let recipientPhone = document.getElementById("recipientPhone");
 
-    recipientName = ordererName;
-    recipientPhone = ordererPhone;
+    if(sameorderer.checked){
+        recipientName.value = ordererName.value;
+        recipientPhone.value = ordererPhone.value;
+    } else {
+        recipientName.value = '';
+        recipientPhone.value = '';
+    }
+
 
 })
