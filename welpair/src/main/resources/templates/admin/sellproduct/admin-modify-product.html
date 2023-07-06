@@ -5,21 +5,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상품 수정</title>
-    <link rel="stylesheet" href="../../CSS/header.css">
-    <link rel="stylesheet" href="../../CSS/main.css">
-    <link rel="stylesheet" href="../../CSS/product-detail.css">
-    <link rel="stylesheet" href="../../CSS/footer.css">
-    <script src="../../src/static/include.js"></script>
+    <title>판매상품 수정</title>
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/main.css">
+    <link rel="stylesheet" href="/common/css/product-detail.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <script th:src="@{/common/js/static/bundle.js}"></script>
+    <script th:src="@{/common/js/static/include.js}"></script>
 </head>
 
 <body>
-    <form>
-        <div data-include-html="./header_admin.html" class="include"></div>
-        <div class="product-modify-header">
-            <span class="product-modify-title">상품수정</span>
+    <form method="post" action="/sellproduct/modify" enctype="multipart/form-data">
+        <div data-include-html="/admin/header_admin" class="include"></div>
+        <div class="product-add-header">
+            <span class="product-add-title">판매상품 수정</span>
             <button>
-                상품수정
+                수정
             </button>
             <button type="reset">
                 취소
@@ -28,17 +29,20 @@
         </div>
         <section class="product-detail">
             <article class="product-detail-area1">
-                <img src="#">
-                <div class="thumbnail-img">
+                <div class="imagebox">
                     <img src="#">
-                    <img src="#">
-                    <img src="#">
-                    <img src="#">
-                    <img src="#">
-                    <img src="#">
+
+                    <div class="thumbnail-img">
+                        <img src="#">
+                        <img src="#">
+                        <img src="#">
+                        <img src="#">
+                        <img src="#">
+                        <img src="#">
+                    </div>
                 </div>
                 <label for="upload" class="upload">
-                    &gt; 이미지 업로드 (다중 파일) &lt;
+                    &gt; 이미지 업로드 &lt;
                 </label>
                 <div class="uploadimagelist"></div>
                 <div class="product-image-upload">
@@ -47,16 +51,31 @@
             </article>
             <article class="product-detail-area2">
                 <div class="product-add-info">
-                    상품명 : <input type="text" name="name" class="product-sale-name" placeholder="판매상품명 입력"><br>
-                    상품가격 : <input type="text" name="price" class="product-sale-price" placeholder="판매가격 입력"><br>
-                    상위 카테고리 : 
-                    <select name="parentCategory" id="refCategoryCode">
+                    카테고리 : <select name="categoryCode" id="categoryCode">
+                        <option value="">선택</option>
+                        <option value="3">TV</option>
+                        <option value="4">에이컨</option>
+                        <option value="5">냉장고</option>
+                        <option value="6">전자레인지</option>
+                        <option value="7">커피포트</option>
+                        <option value="8">에어프라이</option>
+                        <option value="9">인덕션</option>
+                    </select><br>
+                    상태 : <select name="productStatus" id="productStatus">
+                        <option value="신상">신상</option>
+                        <option value="리퍼">리퍼</option>
+                        <option value="전시">전시</option>
+                    </select><br>
+                    옵션 :
+                    <select name="productOption" id="productOption">
 
                     </select><br>
-                    하위 카테고리 : 
-                    <select name="subCategory" id="categoryCode">
+                    상품 :
+                    <select name="code" id="productName">
 
-                    </select>
+                    </select><br>
+                    제목 : <input type="text" name="title" class="page-title" placeholder="판매상품명 입력"><br>
+                    할인율 : <input type="text" name="discount" class="discount" placeholder="할인율 입력"><br>
                 </div>
             </article>
         </section>
@@ -65,9 +84,11 @@
             <span>상품 정보</span>
             <article class="product-info-list">
                 <div class="product-no">상품번호</div>
-                <div class="product-no-text"><input type="text" placeholder="상품번호 입력" name="productNo"></div>
+                <div class="product-no-text"></div>
                 <div class="product-status">상품상태</div>
-                <div class="product-status-text"><input type="text" placeholder="상품상태 입력" name="productStatus"></div>
+                <div class="product-status-text">
+
+                </div>
             </article>
             <article class="product-as-cert">
                 <div class="product-as">A/S 안내</div>
@@ -84,16 +105,127 @@
             </article>
         </section>
         <section class="product-detail-image">
-            <label for="DetailImage" class="detail">
+            <label for="detailImage" class="detail">
                 &gt; 상세 이미지 업로드 (단일 파일) &lt;
             </label>
             <div class="product-image-upload">
-                <input type="file" id="DetailImage" name="uploadDetailFile" accept="image/*">
+                <input type="file" id="detailImage" name="uploadDetailFile" accept="image/*">
             </div>
             <img src="#" alt="" srcset="">
         </section>
-        <div data-include-html="./footer.html" class="include"></div>
+        <div data-include-html="/admin/footer" class="include"></div>
     </form>
+    <script>
+        const upload = document.querySelector('#upload');
+        const thumbnail = document.querySelector(".thumbnail-img");
+        const detailUpload = document.querySelector("#detailImage");
+        const detailImage = document.querySelector(".product-detail-image > img");
+        const categoryCode = document.querySelector("#categoryCode");
+        const productOption = document.querySelector("#productOption");
+        const productName = document.querySelector("#productName");
+        const productStatus = document.querySelector("#productStatus");
+
+        [...thumbnail.children].forEach(item => {
+            item.addEventListener("mouseover", function () {
+                [...thumbnail.children].forEach(item => {
+                    item.classList.remove("selectImg")
+                })
+                this.classList.add("selectImg")
+                document.querySelector(".imagebox > img").src = this.src
+            })
+        })
+
+        upload.addEventListener('change', function () {
+            if (this.files.length > 6) {
+                alert('상품 이미지는 최대 6개까지 가능합니다.');
+                return;
+            }
+
+            [...thumbnail.children].forEach((item, index) => {
+                if (this.files[index]) {
+                    if (index == 0) {
+                        const largeImage = document.querySelector(".imagebox > img")
+                        largeImage.src = URL.createObjectURL(this.files[index])
+                        largeImage.style = "display: block"
+                        item.classList.add("selectImg")
+                    }
+                    item.src = URL.createObjectURL(this.files[index])
+                    item.style = "display: block"
+                } else {
+                    item.style = "display: none"
+                }
+            })
+        })
+
+        detailUpload.addEventListener('change', function () {
+            detailImage.src = URL.createObjectURL(this.files[0]);
+            detailImage.style = "display: block"
+        })
+
+        categoryCode.addEventListener('change', function () {
+            call('/sellproduct/optionList', 'post', { categoryCode: categoryCode.value })
+                .then(list => {
+                    productOption.innerHTML = '';
+                    const option = document.createElement("option");
+                    option.value = '';
+                    option.textContent = '선택';
+                    productOption.append(option);
+
+                    for (obj of list) {
+                        const option = document.createElement("option");
+                        option.value = obj.productOption;
+                        option.textContent = obj.productOption;
+                        productOption.append(option);
+                    }
+                })
+        })
+
+        productStatus.addEventListener('change', function () {
+            options = {
+                categoryCode: categoryCode.value,
+                productOption: productOption.value,
+                productStatus: productStatus.value
+            }
+            call('/sellproduct/productNameList', 'post', options)
+                .then(list => {
+                    productName.innerHTML = '';
+                    const option = document.createElement("option");
+                    option.value = '';
+                    option.textContent = '선택';
+                    productName.append(option);
+
+                    for (obj of list) {
+                        const option = document.createElement("option");
+                        option.value = obj.productCode;
+                        option.textContent = obj.productName;
+                        productName.append(option);
+                    }
+                })
+        })
+
+        productOption.addEventListener('change', function () {
+            options = {
+                categoryCode: categoryCode.value,
+                productOption: productOption.value,
+                productStatus: productStatus.value
+            }
+            call('/sellproduct/productNameList', 'post', options)
+                .then(list => {
+                    productName.innerHTML = '';
+                    const option = document.createElement("option");
+                    option.value = '';
+                    option.textContent = '선택';
+                    productName.append(option);
+
+                    for (obj of list) {
+                        const option = document.createElement("option");
+                        option.value = obj.productCode;
+                        option.textContent = obj.productName;
+                        productName.append(option);
+                    }
+                })
+        })
+    </script>
 </body>
 
 </html>

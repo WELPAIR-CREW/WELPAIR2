@@ -328,3 +328,10 @@ label[for='upload'] {
     border: 1px solid #ededed;
     box-sizing: border-box;
 }
+
+.product-detail1 article {
+    width: 510px;
+    height: 100%;
+    border: 1px solid #ededed;
+    margin: -1px;
+}
