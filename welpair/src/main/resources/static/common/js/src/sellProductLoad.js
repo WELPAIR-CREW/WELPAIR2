@@ -29,11 +29,6 @@ async function fetchSellProductListData() {
     pagination.currentPageNo = 1;
     setPagination(data1);
     createTable(data2);
-    let selectCells = document.querySelectorAll(".section-product-table tr td:nth-child(8)")
-    selectCells.forEach(cell => {
-        appendLink(cell.textContent, cell, 'modify/' + cell.textContent);
-        cell.firstChild.textContent = '';
-    })
     createPaging(selectSellProduct);
 }
 
