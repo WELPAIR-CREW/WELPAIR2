@@ -52,6 +52,19 @@ export const pagination = {
     endPageNo: 0,
 }
 
+export const createLink = (text, location = '') => {
+    const link = document.createElement('a');
+    link.textContent = text;
+    link.href = location;
+    return link;
+};
+
+export const appendLink = (text, parent, location = '') => {
+    const link = createLink(text, location);
+    parent.append(link);
+    return link;
+};
+
 export function createPaging(callbackFn) {
     const paging = document.querySelector('.paging');
     paging.innerHTML = '';
@@ -65,18 +78,6 @@ export function createPaging(callbackFn) {
         pagination.startPageNo = parseInt(pagination.currentPageNo / pagination.startPageNo) * pagination.endPageNo + 1;
         callbackFn(pagination.currentPageNo);
     }
-
-    const createLink = (text) => {
-        const link = document.createElement('a');
-        link.textContent = text;
-        return link;
-    };
-
-    const appendLink = (text, parent) => {
-        const link = createLink(text);
-        parent.append(link);
-        return link;
-    };
 
     const leftArrow = document.createElement('span');
     const leftLink = appendLink('<', leftArrow);

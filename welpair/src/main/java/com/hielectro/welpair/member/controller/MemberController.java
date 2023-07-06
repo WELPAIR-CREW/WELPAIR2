@@ -269,6 +269,7 @@ public class MemberController {
 
 
 
+
 //    로그인 창
 
     /* 로그인창을 띄웁시다. */
@@ -303,22 +304,7 @@ public class MemberController {
 
 
 
-// 회원가입 창
 
-    /* 회원가입창을 띄웁시다. */
-    @GetMapping("registForm")
-    public String registForm(Model model){
-        return "member/registForm";
-    }
-
-    @PostMapping("registForm")
-    public String registSave(@RequestParam("empNo") String empNo,
-                            @RequestParam("memPwd") String memPwd){
-        System.out.println("empNo = " + empNo + ", memPwd = " + memPwd);
-
-        return null;
-
-    }
 
 
 }

@@ -8,5 +8,7 @@ import java.util.List;
 public interface SearchService {
 
     /* 1-1 */
-    List<SearchDTO> searchResultByTitle(SearchDTO search);
+    List<SearchDTO> searchResultMain(SearchDTO search);
+
+    List<SearchDTO> searchDetailResult(SearchDTO search);
 }

@@ -41,8 +41,8 @@ function submitSearchForm(event) {
     event.preventDefault();
     console.log("옴옴옴??")
 
-    var searchTerm = document.getElementsByName("title")[0].value;
-    var searchURL = "/consumer/search/search?title=" + searchTerm;
+    let searchTerm = document.getElementsByName("title")[0].value;
+    let searchURL = "/search/search?title=" + searchTerm;
 
     window.location.href = searchURL;
 }

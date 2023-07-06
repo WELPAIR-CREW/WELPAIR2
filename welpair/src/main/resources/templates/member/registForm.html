@@ -7,21 +7,22 @@
     <link rel="stylesheet" type="text/css" href="/css">
     <link rel="stylesheet" type="text/css" href="../consumer/header_consumer.html">
 
-    <script
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 </head>
 <body>
 
-<form id="frm" action="/member/registForm" method="post">
+<form id="frm" th:action="@{/member/registForm}" method="post">
     <div class="article content_wrap">
         <div class="title_regist"><h1>회원가입</h1></div>
 <!--        <div class="form first_input int_name ">-->
 <!--            <input class="input" type="text" placeholder="이름" id="memberName" name="empName">-->
 <!--        </div>-->
         <div class="form int_mamberNo">
-            <input class="input_name" type="text" placeholder="사원번호" id="memberNo" name="empNo">
-<!--            <input class="check" value="사원번호"></input>-->
+            <input class="input_name" type="text" placeholder="사원번호" id="memberNo" name="empNo" oninput="checkId()">
+            <input type="button" class="check" value="사원번호" id="numCheck"><br>
+            <h4 id="okM">회원가입가능한 사번입니다.</h4>
+
         </div>
         <div class="form int_password">
             <input class="input pw" id="password1" type="password" placeholder="비밀번호" name="memPwd">
@@ -53,7 +54,7 @@
     </div>
 </div>
 <div class="bnt_regist_next">
-    <button class="bnt_next" type="submit">다음</button>
+    <input class="bnt_next" type="submit" value="가입">
 </div>
 </form>
 
@@ -69,9 +70,9 @@
     $('.footer1').load('../HTML/consumer/footer.html');
 
 
-    $('.check').click(function(){
-        alert('사원번호인증확인, 사번있는지 확인 여부해아함');
-    });
+    // $('.check').click(function(){
+    //     alert('사원번호인증확인, 사번있는지 확인 여부해아함');
+    // });
 
     // $('.bnt_next').click(function(){
     //     alert('회원가입진행합니다.')
@@ -121,6 +122,35 @@
         });
 
     });
+
+
+    function checkId(){
+
+        $("#numCheck").click(function(){
+
+            var empNo = $('#memberNo').val();
+            let obj = {empNo};
+            $.ajax({
+                url : '/member/idCheck',
+                type: 'post',
+                data: obj,
+                success:function(cnt){
+                    if(cnt > 0){   // 얘는 값이 있어서 성공
+                        $('#okM').css({'display':'block'});
+                        // $("#numCheck").prop("disabled",true);
+                    } else{  // 얘는 값이 없어서 실패
+                        alert('사번이 없습니다. 사번을 확인해주세요.');
+                        $('#memberNo').val('');
+                    }
+                },
+                error:function (error){
+                    alert('잘못된경로입니다. 다시 확인하세요.');
+                }
+
+            });
+        });
+
+    };
 
 
     $(function(){
@@ -194,6 +224,39 @@
     //     $("#password2").focus();
     //     return false;
     // }
+
+
+
+
+    // function checkId(){
+    //
+    //     $("#numCheck").click(function(){
+    //
+    //         var empNo = $('#memberNo').val();
+    //         let obj = {empNo};
+    //         $.ajax({
+    //             url : '/member/idCheck',
+    //             type: 'post',
+    //             data: obj,
+    //             success:function(cnt){
+    //                 if(cnt > 0){   // 얘는 값이 있어서 성공
+    //                     alert('사번확인완료! 회원가입가능합니다.');
+    //
+    //                 } else{  // 얘는 값이 없어서 실패
+    //                     alert('사번이 없습니다. 사번을 확인해주세요.');
+    //                     $('#empNo').val('');
+    //                 }
+    //             },
+    //             error:function (error){
+    //                 alert('잘못된경로입니다. 다시 확인하세요.');
+    //             }
+    //
+    //         });
+    //     });
+    //
+    // };
+
+
 
 </script>
 

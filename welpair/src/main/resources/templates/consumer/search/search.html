@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,12 +25,13 @@
             <div class="section-title">상세검색</div>
 
             <div class="section-detailSearch">
-                <form action="/search/search">
+<!--                <form action="/search/detail">-->
+                <form>
                     <!-- 상세 검색 옵션 -->
                     <div class="section-detailSearch-line1">
                         <div>
                             <span class="section-detailSearch-span">상품명
-                                <input type="text" name="title" id="title" class="section-detailSearch-input" placeholder="상품명입력" value="">
+                                <input type="text" name="title" id="title" class="section-detailSearch-input" placeholder="상품명입력">
                             </span>
                             <span class="section-detailSearch-span">카테고리
                                 <select id="categoryCode" class="section-detailSearch-input option1">
@@ -45,9 +46,9 @@
                                 </select>
                             </span>
                             <span class="section-detailSearch-input">가격
-                                <input type="number" name="minPrice" id="minPrice" class="section-detailSearch-input price" placeholder="최소 금액" value="">
+                                <input type="number" name="minPrice" id="minPrice" class="section-detailSearch-input price" placeholder="최소 금액" value=0 min="0">
                                 <span>~</span>
-                                <input type="number" name="maxPrice" id="maxPrice" class="section-detailSearch-input price" placeholder="최대 금액" value="">
+                                <input type="number" name="maxPrice" id="maxPrice" class="section-detailSearch-input price" placeholder="최대 금액" value=0>
                             </span>
                             <span>
                                 <input clas="searchCheck" type="checkbox"> 결과 내 검색
@@ -65,21 +66,25 @@
 
             <!-- 검색 결과 리스트 -->
             <div class="section-searchResult">
-                <div>
+                <div th:if="${prodSearchList.size() > 0}">
                     <ul>
-                        <li class="section-searchResult-product" th:each="searchDTO : ${prodSearchList}">
+                        <li class="section-searchResult-product" th:each="search : ${prodSearchList}">
                             <a href="#">
-                                <div name="thumbnailImage"><span th:text="${searchDTO.getThumbnailImage().thumbnailImageFileName}"></span></div>
+                                <div name="thumbnailImage"><span th:text="${search.getThumbnailImage().thumbnailImageFileName}"></span></div>
                                 <img src="#" alt="">
                             </a>
                             <div class="product-info">
-                                <div class="searchProdTitle" name="title"><span th:text="${searchDTO.sellPage.title}"></span></div>
-                                <div class="searchProdPrice" name="sellPrice"><span th:text="${searchDTO.sellprice}"></span></div>
-                                <div name="sellPageNo"><span th:text="${searchDTO.getSellItemPage().no}"></span></div>
+                                <div class="searchProdTitle" name="title"><span th:text="${search.sellPage.title}"></span></div>
+                                <div class="searchProdPrice" name="sellPrice"><span th:text="${search.sellPrice}"></span></div>
+                                <div name="sellPageNo"><span th:text="${search.getSellItemPage().no}"></span></div>
                             </div>
                         </li>
                     </ul>
                 </div>
+                <div th:unless="${prodSearchList.size() > 0}">
+                    <p th:text="${noResultMessage}"></p>
+                </div>
+
             </div>
 
 
