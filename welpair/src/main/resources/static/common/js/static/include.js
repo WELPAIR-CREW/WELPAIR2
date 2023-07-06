@@ -42,7 +42,7 @@ function submitSearchForm(event) {
     console.log("옴옴옴??")
 
     let searchTerm = document.getElementsByName("title")[0].value;
-    let searchURL = "search/search?title=" + searchTerm;
+    let searchURL = "/search/search?title=" + searchTerm;
 
     window.location.href = searchURL;
 }
