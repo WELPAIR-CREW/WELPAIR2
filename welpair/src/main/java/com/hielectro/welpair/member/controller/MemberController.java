@@ -4,10 +4,12 @@ import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -17,10 +19,13 @@ import java.util.*;
 public class MemberController {
 
     private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder; //회원등록할때 비밀번호 암호화 필요
 
     @Autowired
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, PasswordEncoder passwordEncoder) {
         this.memberService = memberService;
+        this.passwordEncoder = passwordEncoder;
+
     }
 
 
@@ -111,7 +116,6 @@ public class MemberController {
     public ModelAndView getEmployeeList(@RequestParam(required = false) String searchCondition, @RequestParam(required = false) String searchValue
             , @RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView model) {
 
-
         Map<String, String> searchMap = new HashMap<>();
         searchMap.put("searchCondition", searchCondition);
         searchMap.put("searchValue", searchValue);
@@ -155,11 +159,18 @@ public class MemberController {
 
     //2-3. 등록기능
     @PostMapping("/registMember")
-    public String registMember(@ModelAttribute MemberDTO member) throws RegistMemberException {
+    public String registMember(@ModelAttribute MemberDTO member, RedirectAttributes rttr) throws RegistMemberException {
 
         System.out.println("회원등록 submit 후 들어오는지 확인---------------------");
-        System.out.println("회원등록 member = " + member); //여기서 memPwd=null로 들어오는것이 문제
+        System.out.println("회원등록 member = " + member);
+
+        //비밀번호 암호화
+        member.setMemPwd(passwordEncoder.encode(member.getMemPwd()));
+
         memberService.registMember(member);
+
+        rttr.addFlashAttribute("message", "회원등록 RedirectAttributes 확인");
+
         return "redirect:/member/regist"; //등록 후 회원등록(목록) 페이지로 리다이렉트
     }
 
@@ -195,11 +206,56 @@ public class MemberController {
 
 
 
+    //4. 포인트지급 페이지
+    //4-1. 포인트지급을 위한 회원목록 조회
+    @GetMapping("/memberListForPoint")
+    public ModelAndView getMemberListforPoint(@RequestParam(required = false) String searchCondition, @RequestParam(required = false) String searchValue
+            , @RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView model) {
 
-    @GetMapping("givePoint")
-    public String getMemberListForPoint() {
-        return "admin/member/member-givePoint";
+        Map<String, String> searchMap = new HashMap<>();
+        searchMap.put("searchCondition", searchCondition);
+        searchMap.put("searchValue", searchValue);
+
+        int listLength = memberService.totalMemberCount(searchMap); //총 항목 수(검색 조건 적용)
+        int itemsPerPage = 10; //페이지당 항목 수
+        int displayPageCount = 5; //표시할 페이지 번호 수
+
+        int totalPages = 0;
+        totalPages = (int) Math.ceil((double) listLength / itemsPerPage);
+
+        SelectCriteria selectCriteria = null;
+
+        if(searchCondition != null && !"".equals(searchCondition)) { //검색어 있을때
+            selectCriteria = Pagenation.getSelectCriteria(currentPage, listLength, itemsPerPage, displayPageCount, searchCondition, searchValue, null);
+        } else { //검색어 없을때
+            selectCriteria = Pagenation.getSelectCriteria(currentPage, listLength, itemsPerPage, displayPageCount, null);
+        }
+
+        List<MemberDTO> memberList = memberService.getMemberListforPoint(selectCriteria);
+        System.out.println("복지포인트지급을 위한 회원목록 : " + memberList);
+        model.addObject("memberList", memberList);
+
+        //선택된 체크박스의 수
+        int selectedElementsCnt = 0;
+        System.out.println("선택된 체크박스의 수 : " + selectedElementsCnt);
+       // model.addObject("selectedElementsCnt", selectedElementsCnt);
+
+        model.addObject("selectCriteria", selectCriteria);
+        model.setViewName("admin/member/member-givePoint");
+        return model;
     }
+
+    //선택된 체크박스의 수를 업데이트하는 ajax요청을 받아주는 핸들러메소드
+//    @GetMapping("/getSelectedCount")
+//    @ResponseBody
+//    public int getSelectedCount() {
+//        //선택된 체크박스의 수를 초기화
+//        int selectedElementsCnt = 0;
+//        //체크박스의 상태를 확인하고 증가시키는 코드
+//        for(MemberDTO member : memberList)
+//    }
+
+
 
 
     @GetMapping("givePointHistory")
@@ -209,7 +265,7 @@ public class MemberController {
 
 
 
-
+//-------------------------------------------------------------------------------------------------------------
 
 
 
