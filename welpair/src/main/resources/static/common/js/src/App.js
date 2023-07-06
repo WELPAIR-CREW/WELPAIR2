@@ -43,10 +43,16 @@ export function createTable(data) {
 
         document.querySelector(".section-product-table tbody").append(tr);
     }
+
+    let selectCells = document.querySelectorAll(".section-product-table tr td:nth-child(8)")
+    selectCells.forEach(cell => {
+        appendLink(cell.textContent, cell, 'modify/' + cell.textContent);
+        cell.firstChild.textContent = '';
+    })
 }
 
 export const pagination = {
-    currentPageNo : 1,
+    currentPageNo: 1,
     maxPageNo: 0,
     startPageNo: 0,
     endPageNo: 0,
@@ -132,8 +138,9 @@ export function createPaging(callbackFn) {
     });
 
     pageLinks.forEach((link, index) => {
-        link.addEventListener('click', async function () {
+        link.addEventListener('click', async function (e) {
             if (link.classList.contains('select')) return;
+            e.preventDefault();
             await updatePage(pagination.startPageNo + index);
         });
     });
@@ -144,6 +151,7 @@ export function createTableCell(text) {
     td.textContent = text;
     return td;
 }
+
 export function setPagination(data) {
     pagination.maxPageNo = data.maxPageNo;
     pagination.startPageNo = data.startPageNo;

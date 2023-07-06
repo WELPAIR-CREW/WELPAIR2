@@ -87,14 +87,14 @@
                             <td>
                                 <div class="labelbox">이름</div>
                             </td>
-                            <td><input type="text" class="inputbox_name" name="ordererName" placeholder=" 이름을 입력하세요."
+                            <td><input type="text" class="inputbox_name" id="ordererName" name="ordererName" placeholder=" 이름을 입력하세요."
                                     required></td>
                         </tr>
                         <tr>
                             <td>
                                 <div class="labelbox">휴대폰번호</div>
                             </td>
-                            <td><input type="number" class="inputbox_phone" name="ordererPhone"
+                            <td><input type="number" class="inputbox_phone" id="ordererPhone" name="ordererPhone"
                                     placeholder=" 휴대폰 번호를 입력하세요.(숫자만 입력)" required></td>
                         </tr>
                     </table>
@@ -114,14 +114,14 @@
                         <td>
                             <div class="labelbox">이름</div>
                         </td>
-                        <td><input type="text" class="inputbox_name" name="recipientName" placeholder=" 이름을 입력하세요."
+                        <td><input type="text" class="inputbox_name" id="recipientName" name="recipientName" placeholder=" 이름을 입력하세요."
                                 required> </td>
                     </tr>
                     <tr>
                         <td>
                             <div class="labelbox">휴대폰&nbsp;번호</div>
                         </td>
-                        <td><input type="number" class="inputbox_phone" name="recipientPhone"
+                        <td><input type="number" class="inputbox_phone" id="recipientPhone" name="recipientPhone"
                                 placeholder=" 휴대폰 번호를 입력하세요.(숫자만 입력)" required></td>
                     </tr>
                     <tr>
@@ -129,10 +129,16 @@
                             <div class="labelbox">배송지&nbsp;선택</div>
                         </td>
                         <td>
-                            <select name="recipientAddress" id="recipientAddress" required>
-                                <option placeholder="" selected disabled hidden>배송지&nbsp;선택</option>
-                                <!-- ajax로 조회해서 추가될 부분  -->
-                                <!-- option value="기본배송지 1~3"></option> 정적코드 추가-->
+                            <select  name="recipientAddress" id="recipientAddress" required>
+                                <div th:each="memberAddress, stat : ${memberAddressList}">
+                                    <option placeholder="" selected disabled hidden>배송지&nbsp;선택</option>
+                                    <div th:each="address, stat : ${memberAddress.address}">
+                                        <option class="selectAddress" th:name="addressSelect" th:value="${address.addressId}" th:text="${stat.count} + '-' + ${address.addressName} "></option>
+
+                                    </div>
+
+                                </div>
+
                             </select>
                         </td>
                     </tr>
@@ -142,21 +148,15 @@
                         </td>
                         <td>
                             <input type="text" class="inputbox_addZipcode" name="addPostZipcode" id="zipcode"
-                                placeholder=" 우편번호" readonly required>
-                            <input type="button" value="우편번호 찾기" onclick="kakaopost()">
-                            <input type="text" class="inputbox_addBasic" name="addBasic" readonly required>
-                            <input type="checkbox"><label class="labelbox"> 기본배송지로&nbsp;등록</label>
+                                    placeholder=" 우편번호" readonly required>
+                            <input type="button" id="searchZipCode" value="우편번호 찾기" >
+                            <input type="text" class="inputbox_addBasic" id="address1" name="addBasic" readonly required>
+<!--                            <input type="checkbox"><label class="labelbox"> 기본배송지로&nbsp;등록</label>-->
                         </td>
-                        <!-- <td></td> -->
-                        <!-- 우편번호 카카오 api 적용 예정 
-                        https://postcode.map.daum.net/guide-->
-                        <!-- <td></td>
-                        
-                        <td></td> -->
                     </tr>
                     <tr>
                         <td></td>
-                        <td><input type="text" class="inputbox_addDetail" name="addDetail" placeholder=" 상세주소를 입력하세요."
+                        <td><input type="text" class="inputbox_addDetail" id="address2" name="addDetail" placeholder=" 상세주소를 입력하세요."
                                 required></td>
                     </tr>
                     <tr>
@@ -188,7 +188,8 @@
                                 <div class="paybox_total">총 주문금액</div>
                             </td>
                             <td>
-                                <div class="totalPrice" name="totalPrice" id="totalPrice"  th:text="${#numbers.formatDecimal(orderPrdList.totalPaymentPrice, 0, 'COMMA', 0, 'POINT')}"></div>
+                                <div class="totalPrice" name="totalPrice" id="totalPrice" th:text="${#numbers.formatDecimal(orderPrdList.totalPaymentPrice, 0, 'COMMA', 0, 'POINT')}"></div>
+                                <input type="hidden" th:value="${orderPrdList.totalPaymentPrice}" id="totalPriceHidden">
                             </td>
                             <td>
                                 <div class="paybox_total">&nbsp;원</div>
@@ -199,7 +200,7 @@
                                 <div class="paybox_existpoint">복지 포인트</div>
                             </td>
                             <td>
-                                <div class="totalPoint" name="totalPoint" id="existPoint">1,500,000</div>
+                                <div class="totalPoint" name="totalPoint" id="existPoint" th:value="${memberAddressList[0].pointBalance}" th:text="${memberAddressList[0].pointBalance}"></div>
                             </td>
                             <td>
                                 <div class="paybox_existpoint">&nbsp;원</div>
@@ -211,7 +212,8 @@
                                 <div class="paybox_availpoint">사용가능한 포인트</div>
                             </td>
                             <td>
-                                <div class="availablePoint" name="availablePoint" id="availablePoint">1,500,000</div>
+                                <div class="availablePoint" name="availablePoint" id="availablePoint" th:text="${memberAddressList[0].pointBalance}"></div>
+                                <input type="hidden"  th:value="${memberAddressList[0].pointBalance}" id="availablePointHidden">
                             </td>
                             <td>
                                 <div class="paybox_availpoint">&nbsp;원</div>
@@ -223,8 +225,9 @@
                                 <div class="paybox_usepoint">사용할 포인트</div>
                             </td>
                             <td>
-                                <div class="usePoint" name="usePoint" id="usePoint"><input type="text"
-                                        class="usePointBox" placeholder="사용할 포인트 입력 "></div>
+                                <div class="usePoint" name="usePoint">
+                                    <input type="number"  id="usePoint"
+                                        class="usePointBox" placeholder="사용할 포인트 입력"></div>
                             </td>
                             <td>
                                 <div class="paybox_usepoint">&nbsp;원</div>
@@ -235,7 +238,8 @@
                     </table>
                     <div class="etc_pay">
                         <div class="paybox_restpoint">남은&nbsp;결제금액</div>
-                        <div class="paybox_restPrice" name="restPrice" id="restPrice">1,000,000</div>
+                        <div class="paybox_restPrice" name="restPrice" id="restPrice" th:text="${#numbers.formatDecimal(orderPrdList.totalPaymentPrice, 0, 'COMMA', 0, 'POINT')}">
+                        </div>
                         <div class="paybox_restpoint">원</div>
 
                         <div class="payMethod">결제수단&nbsp;선택</div>
@@ -276,6 +280,34 @@
     <div data-include-html="/../admin/footer" class="include"></div>
 
     <script src="/common/js/src/payment.js"></script>
+
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:inline="javascript">
+
+        const $searchZipCode = document.getElementById("searchZipCode");
+        // const $goMain = document.getElementById("goMain");
+
+        $searchZipCode.onclick = function() {
+
+            new daum.Postcode({
+                oncomplete: function(data){
+                    document.getElementById("zipcode").value = data.zonecode;
+                    document.getElementById("address1").value = data.address;
+                    document.getElementById("address2").focus();
+                }
+            }).open();
+        }
+
+        let addressList = /*[[${memberAddressList[0].address}]]*/'';
+        if (addressList) {
+        addressFunc(addressList);
+        }
+
+
+
+    </script>
+
+
 
 </body>
 

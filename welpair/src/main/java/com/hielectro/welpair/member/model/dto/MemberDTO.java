@@ -1,4 +1,5 @@
 package com.hielectro.welpair.member.model.dto;
+import com.hielectro.welpair.mypage.model.dto.AddressDTO;
 import lombok.*;
 import java.sql.Date;
 import java.util.List;
@@ -20,5 +21,7 @@ public class MemberDTO {
     private List<MemberRoleDTO> memberList;  //
 
     private EmployeeDTO employee;
+
+    private List<AddressDTO> address;
 
 }
