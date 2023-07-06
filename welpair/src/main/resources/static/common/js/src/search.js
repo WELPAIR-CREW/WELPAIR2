@@ -30,39 +30,54 @@ $("#detailSearch").click(function (){
     if (title != "" || categoryCode != "" || minPrice != "" ||  maxPrice != "") {
 
         console.log(data);
-        const json = JSON.stringify(data)
-        console.log(json);
-
         $.ajax({
-
             url: "/search/detail",
-            data: json,
-            contentType: 'application/json',
+            data: data,
             type: 'post',
             success: function (data) {
                 console.log(data);
 
-                // $("#searchResultTable tbody").empty();
+                $("#section-searchResult ul").empty();
 
-                // $.each(data, function (index, stock) {
-                //     console.log(data)
-                //     let row = $("<tr></tr>");
-                //     row.append("<td>" + stock.stockNo + "</td>");
-                //     row.append("<td>" + stock.productCode + "</td>");
-                //     row.append("<td>" + stock.product.productName + "</td>");
-                //     row.append("<td>" + stock.stockType + "</td>");
-                //     row.append("<td>" + stock.stockDate + "</td>");
-                //     row.append("<td>" + stock.stockAmount + "</td>");
-                //     row.append("<td>" + stock.product.productAmount + "</td>");
-                //     row.append("<td>" + stock.stockComment + "</td>");
-                //
-                //     $("#searchResultTable tbody").append(row);
-                // });
+                $.each(data, function (index, search) {
+                    console.log(data)
+                    let listItem = $("<li></li>");
+                    listItem.addClass("section-searchResult-product");
 
-                // const totalRows = $("#searchResultTable tbody tr").length;
-                // totalPages = Math.ceil(totalRows / rowsPerPage);
-                //
-                // showPage(currentPage);
+                    let anchor = $("<a></a>").attr("href", "#");
+
+                    let thumbnailDiv = $("<div></div>").addClass("thumbnailImage");
+                    thumbnailDiv.append($("<span></span>").text(search.thumbnailImage.thumbnailImageFileName));
+
+                    let image = $("<img>").attr("src", "#").attr("alt", "");
+
+                    anchor.append(thumbnailDiv);
+                    anchor.append(image);
+                    listItem.append(anchor);
+
+                    let productInfoDiv = $("<div></div>").addClass("product-info");
+
+                    let titleDiv = $("<div></div>").addClass("searchProdTitle");
+                    titleDiv.append($("<span></span>").text(search.sellPage.title));
+
+                    let priceDiv = $("<div></div>").addClass("searchProdPrice");
+                    priceDiv.append($("<span></span>").text(search.sellPrice));
+
+                    let sellPageNoDiv = $("<div></div>").addClass("sellPageNo");
+                    sellPageNoDiv.append($("<span></span>").text(search.sellItemPage.no));
+
+                    productInfoDiv.append(titleDiv);
+                    productInfoDiv.append(priceDiv);
+                    productInfoDiv.append(sellPageNoDiv);
+
+                    listItem.append(productInfoDiv);
+
+                    $(".section-searchResult ul").append(listItem);
+                });
+
+                const totalItems = $(".section-searchResult ul li").length;
+
+                showPage(currentPage);
             },
             error: function (error) {
                 alert(error);

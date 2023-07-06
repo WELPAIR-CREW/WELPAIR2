@@ -11,7 +11,7 @@ import java.util.List;
 public interface SearchDAO {
     /* 1-1 */
 //    List<SearchDTO> searchResultByTitle(String title);
-    List<SearchDTO> searchResultMain(String title, String categoryCode);
+    List<SearchDTO> searchResultMain(String title, String categoryCode, String refCategoryCode, Integer minPrice, Integer maxPrice);
 
     List<SearchDTO> searchDetailResult(SearchDTO search);
 }
