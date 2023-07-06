@@ -66,6 +66,7 @@
 
             <!-- 검색 결과 리스트 -->
             <div class="section-searchResult">
+                <p th:text="${searchTerms}"></p>
                 <div th:if="${prodSearchList.size() > 0}">
                     <ul>
                         <li class="section-searchResult-product" th:each="search : ${prodSearchList}">

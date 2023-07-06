@@ -46,4 +46,10 @@ public interface MemberService extends UserDetailsService {
 
 
 
+    //4. 포인트지급
+    //회원목록 조회
+    List<MemberDTO> getMemberListforPoint(SelectCriteria selectCriteria);
+
+
+
 }

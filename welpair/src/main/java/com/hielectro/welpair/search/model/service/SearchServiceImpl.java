@@ -29,7 +29,7 @@ public class SearchServiceImpl implements SearchService {
         Integer minPrice = search.getMinPrice();
         Integer maxPrice = search.getMaxPrice();
 
-        List<SearchDTO> result = searchDAO.searchResultMain(title, categoryCode, refCategoryCode, minPrice, maxPrice);
+        List<SearchDTO> result = searchDAO.searchResultMain(search);
 
         System.out.println("============ 상품검색 서비스 1-1-1 out ============");
         return result;
