@@ -21,7 +21,7 @@ public class SearchDTO {
     private long sellprice;
 
     private SellPageDTO sellPage;
-    private List<ThumbnailImageDTO> thumbnailImageList;
+    private ThumbnailImageDTO thumbnailImage;
     private SellItemPageDTO sellItemPage;
     private SellProductDTO sellProduct;
     private ProductDTO product;

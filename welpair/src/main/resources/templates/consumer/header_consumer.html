@@ -5,12 +5,10 @@
         <a href="/admin/index">ADMIN</a>
 
         <div class="search-bar">
-<!--            <form id="search-form" action="/search/search" method="post">-->
-                <input type="text" class="search-box" name="title" placeholder="검색어 입력">
-                <a href="#" id="search-button">
-                    <img src="/common/images/search-icon.png" alt="search">
-                </a>
-<!--            </form>-->
+            <input type="text" class="search-box" name="title" placeholder="검색어 입력">
+            <a href="#" id="search-button">
+                <img src="/common/images/search-icon.png" alt="search">
+            </a>
         </div>
         <div class="my-info">
             <a href="#">MY</a>
@@ -25,15 +23,17 @@
 </header>
 <nav>
     <div class="header-category">
-        <div>
-            <span>MAIN</span>
-            <span>대형가전</span>
-            <span>소형가전</span>
-            <span>TV</span>
-            <span>에어컨</span>
-            <span>냉장고</span>
-            <span>기타</span>
-            <span>기타기타</span>
-        </div>
+        <ul>
+            <li><a href="/index">MAIN</a></li>
+            <li><a href="/search/search?categoryCode=1">대형가전</a></li>
+            <li><a href="/search/search?categoryCode=2">소형가전</a></li>
+            <li><a href="/search/search?categoryCode=3">TV</a></li>
+            <li><a href="/search/search?categoryCode=4">에어컨</a></li>
+            <li><a href="/search/search?categoryCode=5">냉장고</a></li>
+            <li><a href="/search/search?categoryCode=6">전자레인지</a></li>
+            <li><a href="/search/search?categoryCode=7">커피포트</a></li>
+            <li><a href="/search/search?categoryCode=8">에어프라이어</a></li>
+            <li><a href="/search/search?categoryCode=9">인덕션</a></li>
+        </ul>
     </div>
 </nav>

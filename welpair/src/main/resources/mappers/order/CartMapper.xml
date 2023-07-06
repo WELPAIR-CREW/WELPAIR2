@@ -55,15 +55,12 @@
             <result property="categoryCode" column="CATEGORY_CODE"/>
         </resultMap>
 
-<!--    <resultMap id="SellImageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellImageDTO">-->
-<!--        <id property="no" column="SELL_PAGE_NO"/>-->
-<!--        <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>-->
-<!--        <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>-->
-<!--        <result property="detailImageFileName" column="SELL_DETAIL_IMAGE_FILE_NAME"/>-->
-<!--        <result property="detailImageOriginFileName" column="SELL_DETAIL_IMAGE_ORGIN_FILE_NAME"/>-->
-<!--        <result property="path" column="FILE_PATH"/>-->
-<!--        <result property="createDate" column="CREATE_DATE"/>-->
-<!--    </resultMap>-->
+    <resultMap id="ThumbnailImageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
+        <id property="no" column="SELL_PAGE_NO"/>
+        <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>
+        <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>
+    </resultMap>
+
 
     <resultMap id="cartGeneralResultMap" type="com.hielectro.welpair.order.model.dto.CartGeneralDTO">
         <association property="cart" resultMap="cartResultMap"/>
@@ -71,7 +68,7 @@
         <association property="sellProduct" resultMap="SellProductResultMap"/>
         <association property="sellItemPage" resultMap="SellItemPageResultMap"/>
         <association property="sellPage" resultMap="SellPageResultMap"/>
-<!--        <association property="sellImage" resultMap="SellImageResultMap"/>-->
+        <association property="thumbImage" resultMap="ThumbnailImageResultMap"/>
         <association property="product" resultMap="ProductResultMap"/>
     </resultMap>
 
@@ -147,14 +144,14 @@
                , T_SELL_ITEM_PAGE D
                , T_SELL_PAGE E
                , T_PRODUCT G,
---                T_SELL_IMAGE F
+                 T_THUMB_IMAGE F
          WHERE A.EMP_NO = #{empNo}
            AND A.CART_NO = B.CART_NO(+)
            AND B.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID(+)
            AND C.SELL_PRODUCT_ID = D.SELL_PRODUCT_ID(+)
            AND D.SELL_PAGE_NO = E.SELL_PAGE_NO(+)
            AND C.PRODUCT_CODE = G.PRODUCT_CODE(+)
---            AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
+           AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
     </select>
 
     <update id="cartAmountChange" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">

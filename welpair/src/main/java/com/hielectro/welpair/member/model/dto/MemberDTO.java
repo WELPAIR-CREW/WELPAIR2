@@ -15,6 +15,7 @@ public class MemberDTO {
     private Date registDate;       // 가입날짜
     private int pointBalance;       // 포인트
     private String memAuth;         // 권한
+    private String isActivated;     //활성화여부 CHAR(1) 기본값Y
 
     private List<MemberRoleDTO> memberList;  //
 

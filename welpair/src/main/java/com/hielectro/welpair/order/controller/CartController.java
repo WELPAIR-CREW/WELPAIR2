@@ -1,7 +1,5 @@
 package com.hielectro.welpair.order.controller;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
@@ -126,14 +124,18 @@ public class CartController {
         List<CartGeneralDTO> cartList = cartService.cartAllInfoSelect(empNo);
 
 
+        System.out.println(cartList.size());
         for (CartGeneralDTO cart : cartList) {
-            priceMaker(cart);
-            model.addAttribute("expt", cartList.get(cartList.size()-1));
+            try {
+                priceMaker(cart);
+                System.out.println(cart.getSellPage());
+                model.addAttribute("expt", cartList.get(cartList.size()-1));
 
+            } catch (NullPointerException e) {
 
-
+                return "consumer/order/cart-blank";
+            }
         }
-
         // 3. 장바구니 상품정보 모델에 담아 뷰로 전달
         model.addAttribute("cartList", cartList);
 

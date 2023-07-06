@@ -14,7 +14,7 @@ public class EmployeeDTO {
     private String hireType;
     private String empEmail;
     private String empPhone;
-    private String empDept;
+    private String deptCode;
     private String jobCode;
     private Date hireDate;
     private Date expireDate;
