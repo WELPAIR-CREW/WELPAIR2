@@ -25,7 +25,7 @@
             <div class="nav-menu"><a href="member-view">회원조회</a></div>
             <div class="nav-menu"><a href="regist">회원등록</a></div>
             <div class="nav-menu"><b>가입승인</b></div>
-            <div class="nav-menu"><a href="givePoint">복지포인트지급</a></div>
+            <div class="nav-menu"><a href="memberListForPoint">복지포인트지급</a></div>
             <div class="nav-menu"><a href="givePointHistory">복지포인트지급이력</a></div>
         </div>
 
@@ -44,7 +44,8 @@
                 <table>
                     <thead>
                         <tr>
-                            <th class="checkbox-cell"><input type="checkbox" id="select-all2" onclick="allChecked()"></th>
+<!--                            <th class="checkbox-cell"><input type="checkbox" id="select-all2" onclick="allChecked()"></th>-->
+                            <th class="checkbox-cell"><input type="checkbox" id="select-all2"></th>
                             <th>요청일</th>
                             <th>아이디</th>
                             <th>이름</th>
@@ -54,7 +55,8 @@
                     <tbody>
                         <tr th:each="req:${reqList}">
                             <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" onclick="chkClicked()"
-                            th:value="${req.empNo}"></td>
+                                th:value="${req.empNo}"></td>
+<!--                            <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" th:value="${req.empNo}"></td>-->
                             <td th:text="${#dates.format(req.registDate, 'yyyy.MM.dd')}"></td>
                             <td th:text="${req.empNo}"></td>
                             <td th:text="${req.employee.empName}"></td>
@@ -94,63 +96,38 @@
 
 
     <script>
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     let selectAllCheckbox = document.getElementById('select-all');
-        //     let everyCheckbox = document.querySelectorAll('tbody td.checkbox-cell input[type="checkbox"]');
-        //
-        //     selectAllCheckbox.addEventListener('click', function () {
-        //         let isChecked = selectAllCheckbox.checked;
-        //
-        //         everyCheckbox.forEach(function (checkbox) {
-        //             checkbox.checked = isChecked;
-        //         });
-        //     });
-        // });
+        //체크박스 기능 (member-memberview 페이지에서보다 더 짧은 코드버전) 버튼에 사용하지 않는 onclick="함수"속성은 제거해야함
+        document.addEventListener('DOMContentLoaded', function () {
+            let selectAllCheckbox = document.getElementById('select-all2');
+            let everyCheckbox = document.querySelectorAll('tbody td.checkbox-cell input[type="checkbox"]');
 
-        function allChecked(target) {
-            //전체 체크박스
-            const checkbox = document.getElementById('select-all2');
-            //전체 체크박스 체크여부
-            const is_checked = checkbox.checked;
-            //전체 체크박스 체크여부가 true이면 일반 체크박스가 전부 체크되게
-            if (is_checked) {
-                chkAllChecked();
-            } else {
-                //전체 해제되게
-                chkAllUnChecked();
-            }
-        }
+            selectAllCheckbox.addEventListener('click', function () {
+                let isChecked = selectAllCheckbox.checked;
 
-        function chkAllChecked() {
-            document.querySelectorAll(".chk").forEach(function(v,i){
-                v.checked = true;
+                everyCheckbox.forEach(function (checkbox) {
+                    checkbox.checked = isChecked;
+                });
             });
-        }
+        });
 
-        function chkAllUnChecked() {
-            document.querySelectorAll(".chk").forEach(function (v,i) {
-                v.checked = false;
-            });
-        }
-
-        //개별 체크박스 체크
         function chkClicked() {
             //체크박스 수
             const allCount = document.querySelectorAll(".chk").length;
-            //체크된 체크박스의 수
+            //체크된 체크박스의 수 구하기
             const query = 'input[name="chk"]:checked';
             const selectedElements = document.querySelectorAll(query);
             const selectedElementsCnt = selectedElements.length;
-            console.log('체크된 체크박스 수 : ' + selectedElementsCnt);
-
-            //체크박스 수와 체크된 체크박스 수가 같다면 전체 체크박스가 체크되게 함
+            console.log('체크된 체크박스의 수 : ' + selectedElementsCnt);
+            //두 수가 같으면 전체 체크박스 체크되게함
             if(allCount == selectedElementsCnt) {
                 document.getElementById('select-all2').checked = true;
-            } else {
+            }
+            //다르면 전체 체크박스 해제
+            else {
                 document.getElementById('select-all2').checked = false;
             }
-
         }
+
 
         //가입승인 버튼
         function permissionMember() {

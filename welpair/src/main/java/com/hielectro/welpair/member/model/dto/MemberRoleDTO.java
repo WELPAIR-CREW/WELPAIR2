@@ -10,6 +10,6 @@ import lombok.*;
 public class MemberRoleDTO {
 
     private String memberNo;
-    private int authCode;
+    private int authCode;        // 권한코드
     private AuthorityDTO authority;    // 회원이 보유하고있는 권한
 }
