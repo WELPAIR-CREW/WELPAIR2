@@ -84,6 +84,8 @@ public class SellProductServiceImpl implements SellProductService {
             int result = 0;
 
             for(ThumbnailImageDTO thumbnail : thumbnailImageList) {
+                if (thumbnail == null) return;
+
                 thumbnail.setNo(sellPage.getNo());
                 result += productMapper.insertThumbnail(thumbnail);
             }

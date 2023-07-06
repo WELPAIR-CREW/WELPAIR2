@@ -385,8 +385,8 @@
         (
             'SN' || LPAD(SEQ_SELL_PAGE_NO.nextval, 10, '0')
         ,   #{ title }
-        ,   #{ detailImageFileName }
-        ,   #{ detailImageOriginFileName }
+        ,   #{ detailImageFileName , jdbcType=NULL}
+        ,   #{ detailImageOriginFileName , jdbcType=NULL}
         ,   #{ path }
         ,   SYSDATE
         )
@@ -410,8 +410,8 @@
         VALUES
         (
             #{ no }
-        ,   #{ thumbnailImageFileName }
-        ,   #{ thumbnailImageOriginFileName }
+        ,   #{ thumbnailImageFileName , jdbcType=NULL}
+        ,   #{ thumbnailImageOriginFileName , jdbcType=NULL}
         )
     </insert>
 

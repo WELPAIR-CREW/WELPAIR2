@@ -68,6 +68,7 @@ public class ThumbnailController {
 
         try {
             for (MultipartFile file : uploadFiles) {
+                ThumbnailImageDTO thumbnailImage = null;
                 String originFileName = null;
                 String ext = null;
                 String savedFileName = null;
@@ -78,15 +79,14 @@ public class ThumbnailController {
                     ext = originFileName.substring(originFileName.lastIndexOf("."));
                     savedFileName = UUID.randomUUID().toString().replace("-", "");
                     thumbnailSize360x = savedFileName + "_360x";
+                    file.transferTo(new File(absoluteOriginalImageDir + "/" + savedFileName + ext));
+                    Thumbnails.of(absoluteOriginalImageDir + "/" + savedFileName + ext).size(360, 360)
+                            .toFile(absoluteThumbnailImageDir + "/" + thumbnailSize360x + ext);
+
+                    thumbnailImage = new ThumbnailImageDTO();
+                    thumbnailImage.setThumbnailImageOriginFileName(originFileName);
+                    thumbnailImage.setThumbnailImageFileName(thumbnailSize360x + ext);
                 }
-
-                file.transferTo(new File(absoluteOriginalImageDir + "/" + savedFileName + ext));
-                Thumbnails.of(absoluteOriginalImageDir + "/" + savedFileName + ext).size(360, 360)
-                        .toFile(absoluteThumbnailImageDir + "/" + thumbnailSize360x + ext);
-
-                ThumbnailImageDTO thumbnailImage = new ThumbnailImageDTO();
-                thumbnailImage.setThumbnailImageOriginFileName(originFileName);
-                thumbnailImage.setThumbnailImageFileName(thumbnailSize360x + ext);
 
                 thumbnailImageList.add(thumbnailImage);
             }
@@ -99,13 +99,12 @@ public class ThumbnailController {
                 originFileName = uploadDetailFile.getOriginalFilename();
                 ext = originFileName.substring(originFileName.lastIndexOf("."));
                 savedFileName = UUID.randomUUID().toString().replace("-", "");
+                uploadDetailFile.transferTo(new File(absoluteOriginalImageDir + "/" + savedFileName + ext));
+                sellPage.setDetailImageOriginFileName(originFileName);
+                sellPage.setDetailImageFileName(savedFileName + ext);
             }
 
-            uploadDetailFile.transferTo(new File(absoluteOriginalImageDir + "/" + savedFileName + ext));
             sellPage.setPath("/common/images/");
-            sellPage.setDetailImageOriginFileName(originFileName);
-            sellPage.setDetailImageFileName(savedFileName + ext);
-
             productService.insertSellProduct(sellProduct);
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
