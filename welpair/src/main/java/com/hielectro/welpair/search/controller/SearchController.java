@@ -74,6 +74,7 @@ public class SearchController {
             model.addAttribute("noResultMessage", "검색한 결과가 없습니다.");
         }
 
+        model.addAttribute("searchTerms", createSearchTermsString(title));
         System.out.println("------------- 상품검색 컨트롤러 1-1 out -------------");
         return "consumer/search/search";
     }
@@ -102,7 +103,6 @@ public class SearchController {
 
         search.setSellPage(sellPage);
         search.setProduct(product);
-        System.out.println("ddddddddddddddddddddddddd");
         search.setMinPrice(minPrice);
         search.setMaxPrice(maxPrice);
 
@@ -123,8 +123,24 @@ public class SearchController {
             model.addAttribute("noResultMessage", "검색한 결과가 없습니다.");
         }
 
+        model.addAttribute("searchTerms", createSearchTermsString(title));
         System.out.println("------------- 상품 상세 검색 컨트롤러 2-2 out -------------");
         return prodSearchList;
     }
 
+
+
+    private String createSearchTermsString(String title) {
+        StringBuilder searchTerms = new StringBuilder();
+
+        if (title != null && !title.isEmpty()) {
+            searchTerms.append("검색어 : ").append(title).append(", ");
+        }
+
+        if (searchTerms.length() > 2) {
+            searchTerms.setLength(searchTerms.length() - 2);
+        }
+
+        return searchTerms.toString();
+    }
 }

@@ -55,14 +55,14 @@
           JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
           JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE
          WHERE D.IS_SELL = 'Y'
-            <if test="title != null and title != ''">
-                AND A.SELL_PAGE_TITLE LIKE '%' || #{title} || '%'
+            <if test="sellPage.title != null and sellPage.title != ''">
+                AND A.SELL_PAGE_TITLE LIKE '%' || #{sellPage.title} || '%'
             </if>
-            <if test="categoryCode != null and categoryCode != ''">
-                AND E.CATEGORY_CODE = #{categoryCode}
+            <if test="product.categoryCode != null and product.categoryCode != ''">
+                AND E.CATEGORY_CODE = #{product.categoryCode}
             </if>
-            <if test="refCategoryCode != null and refCategoryCode != ''">
-                AND F.REF_CATEGORY_CODE = #{refCategoryCode}
+            <if test="category.refCategoryCode != null and category.refCategoryCode != ''">
+                AND F.REF_CATEGORY_CODE = #{category.refCategoryCode}
             </if>
     </select>
     <select id="searchDetailResult" resultMap="prodSearchResultMap">

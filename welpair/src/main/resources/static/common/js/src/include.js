@@ -1,4 +1,4 @@
-function includeHTML() {
+export function includeHTML() {
     document.querySelectorAll('.include').forEach(el => {
         const target = el.dataset.includeHtml;
 

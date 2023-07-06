@@ -20,7 +20,7 @@
     <span class="large-category" th:text="${sellProduct.product.category.refCategory.categoryName}">카테고리</span>
     <span class="medium-category" th:text="${sellProduct.product.category.categoryName}">하위 카테고리</span>
 </div>
-<section class="product-detail">
+<section class="product-detail1">
     <article class="product-detail-area1">
         <div class="imagebox">
             <img th:src="|${sellProduct.sellItemPage.sellPage.path}thumbnail/${sellProduct.sellItemPage.sellPage.thumbnailImageList.get(0).thumbnailImageFileName}|"
@@ -140,7 +140,7 @@
         </div>
     </article>
 </section>
-<section class="product-detail-image">
+<section class="product-detail-image" th:if="${sellProduct.sellItemPage.sellPage.detailImageFileName}">
     <img th:src="|${sellProduct.sellItemPage.sellPage.path}original/${sellProduct.sellItemPage.sellPage.detailImageFileName}|">
 </section>
 <div data-include-html="/consumer/footer" class="include"></div>
@@ -186,7 +186,7 @@
         const formData = new URLSearchParams();
         formData.append('sellProductId', sellProductId);
         formData.append('cartAmount', count.value);
-        formData.append('empNo', 'E00043');
+        formData.append('empNo', 'E00017');
 
         const url = '/order/cart/add';
         const options = {
@@ -206,7 +206,7 @@
             })
             .then(data => {
                 console.log(data);
-                alert(data);
+                alert(data.message);
             })
             .catch(error => {
                 console.log(error);

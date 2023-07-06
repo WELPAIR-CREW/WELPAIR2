@@ -45,7 +45,7 @@
                 <table id="table-givepoint">
                     <thead>
                         <tr>
-                            <th class="checkbox-cell"><input type="checkbox" id="select-all"></th>
+                            <th class="checkbox-cell"><input type="checkbox" id="select-all3" onclick="allChecked()"></th>
                             <th>아이디</th>
                             <th>이름</th>
                             <th>이메일</th>
@@ -62,105 +62,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>T232010</td>
-                            <td>홍길동</td>
-                            <td>hong123@hielectronics.com</td>
-                            <td>010-1234-5678</td>
-                            <td>영업</td>
-                            <td>사원</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>P232011</td>
-                            <td>유관순</td>
-                            <td>yu123@hielectronics.com</td>
-                            <td>010-1234-5679</td>
-                            <td>영업</td>
-                            <td>대리</td>
-                            <td>4</td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>P232012</td>
-                            <td>김선달</td>
-                            <td>kim123@hielectronics.com</td>
-                            <td>010-2233-5678</td>
-                            <td>영업</td>
-                            <td>사원</td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>P141100</td>
-                            <td>정중하</td>
-                            <td>jung123@hielectronics.com</td>
-                            <td>010-3456-7894</td>
-                            <td>인사</td>
-                            <td>과장</td>
-                            <td>10</td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell"><input type="checkbox"></td>
-                            <td>P232000</td>
-                            <td>아무개</td>
-                            <td>mugae@hielectronics.com</td>
-                            <td>010-2233-5678</td>
-                            <td>인사</td>
-                            <td>대리</td>
-                            <td>5</td>
+                        <tr th:each="member:${memberList}">
+                            <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${member.empNo}"></td>
+                            <td th:text="${member.empNo}"></td>
+                            <td th:text="${member.employee.empName}"></td>
+                            <td th:text="${member.employee.empEmail}"></td>
+                            <td th:text="${member.employee.empPhone}"></td>
+                            <td th:text="${member.employee.deptDTO.deptName}"></td>
+                            <td th:text="${member.employee.jobDTO.jobName}"></td>
+                            <td th:text="${member.employee.yearCount}"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -182,20 +92,20 @@
                             <label>선택 회원 수</label>
                         </span>
                         <span class="count">
-                            <span>nn</span><label>명</label>
+                            <span id="selectedCount" th:text="${selectedElementsCnt ?: 0 }">0</span><label> 명</label>
                         </span>
                     </div>
 
                     <div class="form-group2">
                         <label for="reason">지급 사유</label>
-                        <select name="pointreason" id="">
+                        <select name="pointreason" id="reason">
                             <option value="general">정기지급</option>
                             <option value="special">특별지급</option>
                         </select>
                     </div>
 
                     <div class="form-group2">
-                        <label for="pointforeachmem">회원당 지급액</label>
+                        <label for="amount-input">회원당 지급액</label>
                         <input type="number" id=amount-input step="1000000" min="0" max="9000000">
                         <span id="amount-summary"></span>
                     </div>
@@ -223,18 +133,91 @@
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let selectAllCheckbox = document.getElementById('select-all');
-            let everyCheckbox = document.querySelectorAll('tbody td.checkbox-cell input[type="checkbox"]');
-    
-            selectAllCheckbox.addEventListener('click', function () {
-                let isChecked = selectAllCheckbox.checked;
-    
-                everyCheckbox.forEach(function (checkbox) {
-                    checkbox.checked = isChecked;
-                });
+
+        function allChecked(target) {
+            //전체 체크박스
+            const checkbox = document.getElementById('select-all3');
+            //전체 체크박스 체크여부
+            const is_checked = checkbox.checked;
+
+            //전체 체크박스 체크여부 true면 일반 체크박스 전부 체크되게
+            if (is_checked) {
+                chkAllChecked();
+
+                //체크된 체크박스의 수
+                const selectedElements = document.querySelectorAll('input.chk:checked');
+                const selectedElementsCnt = selectedElements.length;
+                //체크된 체크박스의 수를 표시하는 요소의 text를 위의 '체크된 체크박스 수'값으로 업데이트
+                document.getElementById('selectedCount').textContent = selectedElementsCnt;
+
+            } else {
+                //전체 해제되게
+                chkAllUnChecked();
+
+                //체크된 체크박스의 수
+                const selectedElements = document.querySelectorAll('input.chk:checked');
+                const selectedElementsCnt = selectedElements.length;
+                //체크된 체크박스의 수를 표시하는 요소의 text를 위의 '체크된 체크박스 수'값으로 업데이트
+                document.getElementById('selectedCount').textContent = selectedElementsCnt;
+
+            }
+        }
+
+        //전체 체크
+        function chkAllChecked() {
+            document.querySelectorAll(".chk").forEach(function(v,i){
+                v.checked = true;
             });
-        });
+        }
+
+        //전체 해제
+        function chkAllUnChecked() {
+            document.querySelectorAll(".chk").forEach(function (v,i) {
+                v.checked = false;
+            });
+        }
+
+        //개별 체크박스
+        function chkClicked() {
+            //체크박스 수
+            const allCount = document.querySelectorAll(".chk").length;
+            //체크된 체크박스의 수 구하기
+            const query = 'input[name="chk"]:checked';
+            const selectedElements = document.querySelectorAll(query);
+            const selectedElementsCnt = selectedElements.length;
+            console.log('체크된 체크박스의 수 : ' + selectedElementsCnt);
+            //두 수가 같으면 전체 체크박스 체크되게함
+            if(allCount == selectedElementsCnt) {
+                document.getElementById('select-all3').checked = true;
+            }
+            //다르면 전체 체크박스 해제
+            else {
+                document.getElementById('select-all3').checked = false;
+            }
+
+            //***체크된 체크박스의 수를 표시하는 요소의 text를 위의 '체크된 체크박스 수'값으로 업데이트
+            document.getElementById('selectedCount').textContent = selectedElementsCnt;
+        }
+
+
+
+        //지급하기 버튼을 눌렀을때 사용될 비동기처리 함수를 작성하기
+        function currentSelectedCount() {
+
+            $.ajax({
+               url: '/getSelectedCount', //URL 매핑
+               type: 'GET',
+               success: function(count) {
+                   $('#selectedCount').text(count);
+               }
+            });
+        }
+
+
+
+
+
+
 
 
         //@회원당지급액 입력시 요약하여 보여주기

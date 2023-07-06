@@ -94,6 +94,9 @@ public class SellProductServiceImpl implements SellProductService {
         }
     }
 
+    public SellProductDTO selectOneSellProduct(String pageNo) {
+        return productMapper.selectOneSellProduct(pageNo);
+    }
 
     @Override
     public List<SellProductDetailDTO> selectProductList(Map<String, String> productId) {
