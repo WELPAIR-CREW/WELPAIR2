@@ -28,4 +28,7 @@ public interface SellProductService {
 
     // DELETE
     int sellProductDelete(List<String> request) throws Exception;
+
+    // UPDATE
+    void modifySellProduct(SellProductDTO compareSellProduct, SellProductDTO sellProduct);
 }

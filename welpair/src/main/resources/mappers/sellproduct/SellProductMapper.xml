@@ -335,12 +335,12 @@
         , SELL_THUMB_IMAGE_FILE_NAME
         , SELL_THUMB_IMAGE_ORGIN_FILE_NAME
         FROM T_SELL_PRODUCT
-        JOIN T_PRODUCT USING (PRODUCT_CODE)
-        JOIN T_CATEGORY A ON (T_PRODUCT.CATEGORY_CODE = A.CATEGORY_CODE)
-        JOIN T_CATEGORY B ON (B.CATEGORY_CODE = A.REF_CATEGORY_CODE)
-        JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
-        JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
-        JOIN T_THUMB_IMAGE USING (SELL_PAGE_NO)
+        LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
+        LEFT JOIN T_CATEGORY A ON (T_PRODUCT.CATEGORY_CODE = A.CATEGORY_CODE)
+        LEFT JOIN T_CATEGORY B ON (B.CATEGORY_CODE = A.REF_CATEGORY_CODE)
+        LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
+        LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
+        LEFT JOIN T_THUMB_IMAGE USING (SELL_PAGE_NO)
         WHERE 1=1
         <if test="pageNo != null and pageNo != ''">
             AND SELL_PAGE_NO = #{ pageNo }
@@ -420,4 +420,25 @@
         FROM T_SELL_PRODUCT
         WHERE SELL_PRODUCT_ID = #{ id }
     </delete>
+
+    <update id="updateSellPage">
+        UPDATE T_SELL_PAGE
+           SET SELL_PAGE_TITLE = #{ title }
+             , SELL_DETAIL_IMAGE_FILE_NAME = #{ detailImageFileName }
+             , SELL_DETAIL_IMAGE_ORGIN_FILE_NAME = #{ detailImageOriginFileName }
+         WHERE SELL_PAGE_NO = #{ no }
+    </update>
+
+    <update id="updateSellProduct">
+        UPDATE T_SELL_PRODUCT
+           SET DISCOUNT = #{ discount }
+         WHERE SELL_PRODUCT_ID = #{ id }
+    </update>
+
+    <delete id="deleteThumbnail">
+        DELETE
+          FROM T_THUMB_IMAGE
+         WHERE SELL_PAGE_NO = #{ no }
+    </delete>
+
 </mapper>
