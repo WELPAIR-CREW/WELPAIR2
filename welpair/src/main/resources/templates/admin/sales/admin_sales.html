@@ -13,10 +13,12 @@
   <script src="/common/js/static/include.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/common/js/src/sales.js"></script>
 
 </head>
 
 <body>
+<!--<body th:onload="|testEvent(${monthlyList})|">-->
 <div data-include-html="/admin/header_admin" class="include"></div>
 <!-- 왼쪽 메뉴 베너 -->
 <section>
@@ -55,11 +57,17 @@
     </div>
 
     <!-- 1-2. 매출현황 테이블 -->
-    <table class="salesTable">
-<!--      <d th:text="${sales.payment.paymentType}"></d>-->
+    <table class="salesTable" >
+
       <tbody>
-        <th></th>
-        <td th:each="sales : ${monthlySales}" th:text="${sales.totalSales}"></td>
+        <tr>
+          <th>월</th>
+          <td th:each="sales : ${monthlyList}" th:text="${sales.month}"></td>
+        </tr>
+        <tr>
+          <th>매출액</th>
+          <td th:each="sales : ${monthlyList}" th:text="${sales.totalSales}"></td>
+        </tr>
       </tbody>
     </table>
 
@@ -76,5 +84,12 @@
 
 <!-- 스크립트 시작-->
 <script src="/common/js/src/sales.js"></script>
+<script th:inline="javascript">
+        let monthlyList = /*[[${monthlyList}]]*/'';
+  if (monthlyList) {
+    salesChart(monthlyList);
+  }
+
+</script>
 </body>
 </html>

@@ -22,9 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
             success: function (response) {
                 console.log('성공 왔어??');
                 console.log('response : ' + response);
-                monthlySales = response;
-                console.log('monthlySales : ' + monthlySales);
-                displaySalesData(monthlySales);
+                monthlyList = response;
+                console.log('monthlyList : ' + monthlyList);
+                displaySalesData(monthlyList);
+                salesChart (monthlyList);
             },
             error: function (xhr, status, error) {
                 console.error('Error:', error);
@@ -34,30 +35,19 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// 첫 화면 (전체검색)
-console.log('22-----------------------------------');
-let monthlyList = /*[[${monthlyList}]]*/ '';
-console.log(monthlyList);
-let jsonString = JSON.stringify(monthlyList);
-console.log('jsonString : ' + jsonString);
-let monthlySales = JSON.parse(jsonString);
-console.log('monthlySales : ' + monthlySales);
-console.log('22-----------------------------------');
-displaySalesData(monthlySales);
 
-//
-function displaySalesData(monthlySales) {
-    console.log(monthlySales);
+function displaySalesData(monthlyList) {
+    console.log(monthlyList);
 
     let salesTable1 = document.querySelector('.salesTable tbody');
     salesTable1.innerHTML = '';
 
-    if (!monthlySales || monthlySales.length === 0) {
+    if (!monthlyList || monthlyList.length === 0) {
         return;
     }
 
-    let months = monthlySales.map(sales => sales.month);
-    let totalSales = monthlySales.map(sales => sales.totalSales);
+    let months = monthlyList.map(sales => sales.month);
+    let totalSales = monthlyList.map(sales => sales.totalSales);
 
     // 1-1. 매출 데이터 테이블
 
@@ -70,8 +60,8 @@ function displaySalesData(monthlySales) {
     monthHeader.textContent = '월';
     row1.appendChild(monthHeader);
 
-    for (let i = 0; i < monthlySales.length; i++) {
-        let sales = monthlySales[i];
+    for (let i = 0; i < monthlyList.length; i++) {
+        let sales = monthlyList[i];
         let monthCell = document.createElement('td');
         monthCell.textContent = sales.month + '월';
         row1.appendChild(monthCell);
@@ -84,8 +74,8 @@ function displaySalesData(monthlySales) {
     salesHeader.textContent = '매출액';
     row2.appendChild(salesHeader);
 
-    for (let i = 0; i < monthlySales.length; i++) {
-        let sales = monthlySales[i];
+    for (let i = 0; i < monthlyList.length; i++) {
+        let sales = monthlyList[i];
         let totalSalesCell = document.createElement('td');
         totalSalesCell.textContent = formatNumber(sales.totalSales);
         row2.appendChild(totalSalesCell);
@@ -93,8 +83,12 @@ function displaySalesData(monthlySales) {
 
     salesTable.appendChild(row2);
 
+}
 
+function salesChart (monthlyList){
     // 1-2. 매출 데이터 그래프
+    let months = monthlyList.map(sales => sales.month);
+    let totalSales = monthlyList.map(sales => sales.totalSales);
 
     let salesChart = document.getElementById('salesChart').getContext('2d');
 

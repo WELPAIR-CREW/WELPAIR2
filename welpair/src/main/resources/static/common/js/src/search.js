@@ -1,6 +1,3 @@
-
-
-
 let currentPage = 1;
 const rowsPerPage = 10;
 let totalPages = null;
@@ -14,54 +11,71 @@ function showPage(page) {
 
 
 
-// 검색 버튼
-$("#historySearch").click(function (){
+// 상세 검색 버튼
+$("#detailSearch").click(function (){
 
-    let productCode = $("#productCode").val().toUpperCase();
-    let productName = $("#productName").val().toUpperCase();
-    let stockComment = $("#stockComment").val();
-    let stockTypeDefalut = $("#stockType").val();
-    let startDate = $("#startDate").val();
-    let endDate = $("#endDate").val();
+    console.log("검색 들어옴 ")
+
+    let title = $("#title").val().toUpperCase();
+    let categoryCode = $("#categoryCode").val();
+    let minPrice = $("#minPrice").val();
+    let maxPrice = $("#maxPrice").val();
 
     let data = {
-        productCode: productCode,
-        productName: productName,
-        stockComment: stockComment,
-        stockType: stockTypeDefalut,
-        startDate: startDate,
-        endDate: endDate
+        title: title,
+        categoryCode: categoryCode,
+        minPrice: minPrice,
+        maxPrice: maxPrice
     };
-    if (productCode != "" || productName != "" || stockComment != "" || stockTypeDefalut != "" || startDate != "" ||  endDate != "") {
+    if (title != "" || categoryCode != "" || minPrice != "" ||  maxPrice != "") {
 
         console.log(data);
         $.ajax({
-
-            url: "/inventory/admin_inventory_search",
+            url: "/search/detail",
             data: data,
             type: 'post',
             success: function (data) {
                 console.log(data);
 
-                $("#searchResultTable tbody").empty();
+                $("#section-searchResult ul").empty();
 
-                $.each(data, function (index, stock) {
+                $.each(data, function (index, search) {
                     console.log(data)
-                    let row = $("<tr></tr>");
-                    row.append("<td>" + stock.stockNo + "</td>");
-                    row.append("<td>" + stock.productCode + "</td>");
-                    row.append("<td>" + stock.product.productName + "</td>");
-                    row.append("<td>" + stock.stockType + "</td>");
-                    row.append("<td>" + stock.stockDate + "</td>");
-                    row.append("<td>" + stock.stockAmount + "</td>");
-                    row.append("<td>" + stock.product.productAmount + "</td>");
-                    row.append("<td>" + stock.stockComment + "</td>");
+                    let listItem = $("<li></li>");
+                    listItem.addClass("section-searchResult-product");
 
-                    $("#searchResultTable tbody").append(row);
+                    let anchor = $("<a></a>").attr("href", "#");
+
+                    let thumbnailDiv = $("<div></div>").addClass("thumbnailImage");
+                    thumbnailDiv.append($("<span></span>").text(search.thumbnailImage.thumbnailImageFileName));
+
+                    let image = $("<img>").attr("src", "#").attr("alt", "");
+
+                    anchor.append(thumbnailDiv);
+                    anchor.append(image);
+                    listItem.append(anchor);
+
+                    let productInfoDiv = $("<div></div>").addClass("product-info");
+
+                    let titleDiv = $("<div></div>").addClass("searchProdTitle");
+                    titleDiv.append($("<span></span>").text(search.sellPage.title));
+
+                    let priceDiv = $("<div></div>").addClass("searchProdPrice");
+                    priceDiv.append($("<span></span>").text(search.sellPrice));
+
+                    let sellPageNoDiv = $("<div></div>").addClass("sellPageNo");
+                    sellPageNoDiv.append($("<span></span>").text(search.sellItemPage.no));
+
+                    productInfoDiv.append(titleDiv);
+                    productInfoDiv.append(priceDiv);
+                    productInfoDiv.append(sellPageNoDiv);
+
+                    listItem.append(productInfoDiv);
+
+                    $(".section-searchResult ul").append(listItem);
                 });
 
-                const totalRows = $("#searchResultTable tbody tr").length;
-                totalPages = Math.ceil(totalRows / rowsPerPage);
+                const totalItems = $(".section-searchResult ul li").length;
 
                 showPage(currentPage);
             },
@@ -79,35 +93,35 @@ $("#historySearch").click(function (){
 // 페이징
 
 function updatePaginationButtons() {
-    $(".paging1").empty();
+    $(".paging").empty();
 
     const startPage = Math.floor((currentPage - 1) / 5) * 5 + 1;
     const endPage = Math.min(startPage + 4, totalPages);
 
     // if (startPage > 1) {
-    $(".paging1").append("<span id='prevPage'>&lt;</span>");
+    $(".paging").append("<span id='prevPage'>&lt;</span>");
     // }
 
     for (let i = startPage; i <= endPage; i++) {
         if (i === currentPage) {
-            $(".paging1").append("<span class='currentPage' style='color: #4D4D4D;'>" + i + "</span>");
+            $(".paging").append("<span class='currentPage' style='color: #4D4D4D;'>" + i + "</span>");
         } else {
-            $(".paging1").append("<span class='pageNum'>" + i + "</span>");
+            $(".paging").append("<span class='pageNum'>" + i + "</span>");
         }
     }
 
     // if (endPage < totalPages) {
-    $(".paging1").append("<span id='nextPage'>&gt;</span>");
+    $(".paging").append("<span id='nextPage'>&gt;</span>");
     // }
 }
 
-$(".paging1").on("click", ".pageNum", function() {
+$(".paging").on("click", ".pageNum", function() {
     currentPage = parseInt($(this).text());
     showPage(currentPage);
     updatePaginationButtons();
 });
 
-$(".paging1").on("click", "#prevPage", function() {
+$(".paging").on("click", "#prevPage", function() {
     if (currentPage > 1) {
         currentPage--;
         showPage(currentPage);
@@ -115,7 +129,7 @@ $(".paging1").on("click", "#prevPage", function() {
     }
 });
 
-$(".paging1").on("click", "#nextPage", function() {
+$(".paging").on("click", "#nextPage", function() {
     if (currentPage < totalPages) {
         currentPage++;
         showPage(currentPage);

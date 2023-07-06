@@ -17,23 +17,7 @@
     </select>
 
 
-    <!-- 1-1. 회원조회 - 회원목록 -->
-<!--    <resultMap id="memberListResultMap" type="com.hielectro.welpair.member.model.dto.MemberDTO">-->
-<!--        <id property="empNo" column="EMP_NO"/>-->
-<!--        <result property="memPwd" column="MEM_PWD"/>-->
-<!--        <result property="registDate" column="REGIST_DATE"/>-->
-<!--        <result property="pointBalance" column="POINT_BALANCE"/>-->
-<!--        <result property="memAuth" column="MEM_AUTH"/>-->
-<!--        <association property="employee" resultMap="employeeListResultMap"/>-->
-<!--    </resultMap>-->
-<!--    <resultMap id="employeeListResultMap" type="com.hielectro.welpair.member.model.dto.EmployeeDTO">-->
-<!--        <id property="empNo" column="EMP_NO"/>-->
-<!--        <result property="empName" column="EMP_NAME"/>-->
-<!--        <result property="empEmail" column="EMP_EMAIL"/>-->
-<!--        <result property="empPhone" column="EMP_PHONE"/>-->
-<!--    </resultMap>-->
-
-<!-- 위와 같은 결과  ( 위는 분리하여관리, 재상용 용이 / 아래는 가독성 )-->
+<!-- 회원조회   -->
     <resultMap id="memberListResultMap" type="com.hielectro.welpair.member.model.dto.MemberDTO">
         <id property="empNo" column="EMP_NO"/>
         <result property="memPwd" column="MEM_PWD"/>
@@ -48,20 +32,7 @@
             <result property="isExpire" column="IS_EXPIRE"/>
         </association>
     </resultMap>
-
-<!--    <resultMap id="employeeListResultMap" type="com.hielectro.welpair.member.model.dto.EmployeeDTO">-->
-<!--        <id property="empNo" column="EMP_NO"/>-->
-<!--        <result property="hireDate" column="HIRE_DATE"/>-->
-<!--        <result property="empName" column="EMP_NAME"/>-->
-<!--        <result property="empEmail" column="EMP_EMAIL"/>-->
-<!--        <result property="empPhone" column="EMP_PHONE"/>-->
-<!--        <result property="empDept" column="EMP_DEPT"/>-->
-<!--        <result property="jobCode" column="JOB_CODE"/>-->
-<!--        <result property="isExpire" column="IS_EXPIRE"/>-->
-<!--        <association property="memberDTO" javaType="com.hielectro.welpair.member.model.dto.MemberDTO">-->
-<!--            <result property="registDate" column="REGIST_DATE"/>-->
-<!--        </association>-->
-<!--    </resultMap>-->
+<!--  회원등록(직원목록)  -->
     <resultMap id="employeeListResultMap" type="com.hielectro.welpair.member.model.dto.EmployeeDTO">
         <id property="empNo" column="EMP_NO"/>
         <result property="hireDate" column="HIRE_DATE"/>
@@ -79,10 +50,10 @@
             <result property="jobName" column="JOB_NAME"/>
         </association>
     </resultMap>
-
-    <resultMap id="reqListResultMap" type="com.hielectro.welpair.member.model.dto.ReqDTO">
+<!-- 가입승인(가입요청목록) -->
+    <resultMap id="reqListResultMap" type="com.hielectro.welpair.member.model.dto.MemberDTO">
         <result property="empNo" column="EMP_NO"/>
-        <result property="reqDate" column="REQ_DATE"/>
+        <result property="registDate" column="REGIST_DATE"/>
         <association property="employee" javaType="com.hielectro.welpair.member.model.dto.EmployeeDTO">
             <result property="empName" column="EMP_NAME"/>
             <result property="empEmail" column="EMP_EMAIL"/>
@@ -98,7 +69,6 @@
                    , M.MEM_PWD
                    , M.REGIST_DATE
                    , M.POINT_BALANCE
-                   , M.MEM_AUTH
                    , E.EMP_NAME
                    , E.EMP_EMAIL
                    , E.EMP_PHONE
@@ -107,10 +77,11 @@
               JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
               <if test='isExpired != null and isExpired.equals("Y")'>
               WHERE E.IS_EXPIRE = 'Y'
-              ORDER BY M.EMP_NO
+--               ORDER BY M.EMP_NO
               </if>
               )
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
+        ORDER BY REGIST_DATE DESC
     </select>
 
 
@@ -140,9 +111,9 @@
     <select id="getEmployeeList" resultMap="employeeListResultMap">
         select * from
             (SELECT
-                 row_number() OVER (ORDER BY E.EMP_NO) AS rnum
---               버튼 확인을 위해 일부러 정렬 순서를 바꾼것. 원래 입사일 내림차순이 맞음
---               row_number() OVER (ORDER BY E.HIRE_DATE DESC) AS rnum
+--            row_number() OVER (ORDER BY E.EMP_NO) AS rnum
+--            위는 버튼 확인을 위해 일부러 정렬 순서를 바꾼것. 원래 입사일 내림차순이 맞음
+              row_number() OVER (ORDER BY E.HIRE_DATE DESC) AS rnum
                  ,E.EMP_NO
                   ,E.EMP_NAME
                   ,E.EMP_EMAIL
@@ -153,7 +124,7 @@
                   ,M.REGIST_DATE
              FROM T_EMPLOYEE E
               LEFT JOIN T_MEMBER M ON (E.EMP_NO = M.EMP_NO)
-              JOIN T_DEPT D ON (E.EMP_DEPT = D.DEPT_CODE)
+              JOIN T_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
               JOIN T_JOB J ON (E.JOB_CODE = J.JOB_CODE)
              WHERE E.IS_EXPIRE = 'N' AND E.EMP_NO LIKE 'E%')
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
@@ -176,25 +147,36 @@
         , default
         )
     </insert>
+    <insert id="regisMemberRole" parameterType="String">
+        INSERT INTO T_MEMBER_ROLE
+            (MEM_NO, AUTH_CODE)
+        VALUES
+            (#{ empNo }, 2)
+    </insert>
 
 
 
-<!-- 3. 가입승인 - 신규가입요청 목록 -->
+<!-- 3. 가입승인 - 가입요청 목록 -->
     <select id="reqList" resultMap="reqListResultMap">
-        SELECT R.REQ_DATE, R.EMP_NO, E.EMP_NAME, E.EMP_EMAIL
-        FROM T_REQ_JOIN R
-        JOIN T_EMPLOYEE E ON (R.EMP_NO = E.EMP_NO)
-        WHERE R.IS_REGIST = 'N'
-        ORDER BY R.REQ_DATE DESC
+        SELECT M.REGIST_DATE, M.EMP_NO, E.EMP_NAME, E.EMP_EMAIL
+        FROM T_MEMBER M
+        JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
+        WHERE M.IS_ACTIVATED = 'N'
+        ORDER BY M.REGIST_DATE DESC
     </select>
 
 <!--  신규가입요청 수  -->
     <select id="reqJoinCount" resultType="_int" parameterType="hashmap">
-        SELECT
-            COUNT(*)
-          FROM T_REQ_JOIN
-         WHERE IS_REGIST = 'N'
+        SELECT COUNT(*) FROM T_MEMBER M
+        WHERE M.IS_ACTIVATED = 'N'
     </select>
+<!--  승인버튼  -->
+    <update id="updateForPermission" parameterType="String">
+        UPDATE T_MEMBER M
+        SET M.REGIST_DATE = SYSDATE
+          , M.IS_ACTIVATED = 'Y'
+        WHERE M.EMP_NO = #{ empNo }
+    </update>
 
 
 

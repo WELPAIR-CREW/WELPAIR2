@@ -133,10 +133,10 @@
 
         //전체 체크박스 체크여부 true면 일반 체크박스 전부 체크되게
         if (is_checked) {
-            chkAllChecked()
+            chkAllChecked();
         } else {
             //전체 해제되게
-            chkAllUnChecked()
+            chkAllUnChecked();
         }
     }
 
@@ -151,7 +151,7 @@
     function chkAllUnChecked() {
         document.querySelectorAll(".chk").forEach(function (v,i) {
             v.checked = false;
-        })
+        });
     }
 
     //개별 체크박스
@@ -159,7 +159,7 @@
         //체크박스 수
         const allCount = document.querySelectorAll(".chk").length;
         //체크된 체크박스의 수 구하기
-        const query = 'input[name="chk"]:checked'
+        const query = 'input[name="chk"]:checked';
         const selectedElements = document.querySelectorAll(query);
         const selectedElementsCnt = selectedElements.length;
         console.log('체크된 체크박스의 수 : ' + selectedElementsCnt);
