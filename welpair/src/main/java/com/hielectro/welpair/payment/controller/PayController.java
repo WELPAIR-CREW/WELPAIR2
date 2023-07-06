@@ -50,8 +50,9 @@ public class PayController {
         model.addAttribute("orderPrdList", orderPrdList);
 
 
-        // 3. 멤버 복지포인트 조회해오기
+        // 3. 멤버 조회해오기
 
+//        payService.selectMemberById(empNo);
 
 
 
