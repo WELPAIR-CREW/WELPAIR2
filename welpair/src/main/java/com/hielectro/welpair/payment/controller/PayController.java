@@ -1,5 +1,7 @@
 package com.hielectro.welpair.payment.controller;
 
+import com.hielectro.welpair.member.model.dto.MemberDTO;
+import com.hielectro.welpair.mypage.model.dto.AddressDTO;
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
 import com.hielectro.welpair.payment.model.dto.OrderPayReqDTO;
@@ -26,8 +28,7 @@ public class PayController {
     }
 
     @GetMapping("pay")
-    public String gotopay(@ModelAttribute OrderPayReqDTO orderPrdList, Model model
-                            , String empNo){
+    public String gotopay(@ModelAttribute OrderPayReqDTO orderPrdList, Model model){
 
         System.out.println("======payment GetMapping 들어옴===========");
         System.out.println(orderPrdList);
@@ -52,8 +53,11 @@ public class PayController {
 
         // 3. 멤버 조회해오기
 
-//        payService.selectMemberById(empNo);
-
+        // 3-1. (아이디 -> 배송지 전체테이블, 멤버 포인트 )
+        System.out.println("empNo========`=========" + empNo);
+        List<MemberDTO> memberAddressList = payService.selectMemberById(empNo);
+        System.out.println(memberAddressList);
+        model.addAttribute("memberAddressList", memberAddressList);
 
 
 
