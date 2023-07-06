@@ -37,7 +37,8 @@ $("#detailSearch").click(function (){
             success: function (data) {
                 console.log(data);
 
-                $("#section-searchResult ul").empty();
+                const searchResultsList = $(".section-searchResult ul");
+                searchResultsList.empty();
 
                 $.each(data, function (index, search) {
                     console.log(data)
