@@ -37,8 +37,9 @@
         <result property="productPrice" column="PRODUCT_PRICE"></result>
         <result property="categoryCode" column="CATEGORY_CODE"></result>
     </resultMap>
-    <resultMap id="getCategoryResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
+    <resultMap id="getCategoryResultMap" type="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
         <result property="categoryCode" column="CATEGORY_CODE"></result>
+        <result property="categoryName" column="CATEGORY_NAME"></result>
         <result property="refCategoryCode" column="REF_CATEGORY_CODE"></result>
     </resultMap>
 
@@ -64,6 +65,9 @@
             <if test="category.refCategoryCode != null and category.refCategoryCode != ''">
                 AND F.REF_CATEGORY_CODE = #{category.refCategoryCode}
             </if>
+        <if test="product.productStatus != null and product.productStatus != ''">
+            AND E.PRODUCT_STATUS = #{product.productStatus}
+        </if>
     </select>
     <select id="searchDetailResult" resultMap="prodSearchResultMap">
         SELECT
@@ -83,11 +87,25 @@
         <if test="product.categoryCode != null and product.categoryCode != ''">
             AND E.CATEGORY_CODE = #{product.categoryCode}
         </if>
+        <if test="product.productStatus != null and product.productStatus != ''">
+            AND E.PRODUCT_STATUS = #{product.productStatus}
+        </if>
         <if test="minPrice != null and minPrice != ''">
             AND E.PRODUCT_PRICE * (1 - D.DISCOUNT) >= #{minPrice}
         </if>
         <if test="maxPrice != null and maxPrice != ''">
             AND E.PRODUCT_PRICE * (1 - D.DISCOUNT) &lt;= #{maxPrice}
         </if>
+    </select>
+
+    <select id="searchTermsCategory" parameterType="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
+        SELECT CATEGORY_NAME
+          FROM T_CATEGORY
+         WHERE CATEGORY_CODE = #{categoryCode}
+    </select>
+    <select id="searchTermsRefCategory" parameterType="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
+        SELECT CATEGORY_NAME
+          FROM T_CATEGORY
+         WHERE CATEGORY_CODE = #{refCategoryCode}
     </select>
 </mapper>
