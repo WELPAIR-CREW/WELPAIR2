@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class AuthorityDTO {
+public class MemberRoleDTO {
 
 
     private String memNo;

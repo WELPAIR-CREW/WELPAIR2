@@ -14,5 +14,6 @@ public class RegistDTO {
     private String memPwd;
     private String registDate;
     private String pointBalance;
+    private String memAuth;
 
 }

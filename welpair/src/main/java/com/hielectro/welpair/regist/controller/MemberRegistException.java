@@ -1,4 +1,4 @@
-package com.hielectro.welpair.common;
+package com.hielectro.welpair.regist.controller;
 
 public class MemberRegistException extends Throwable {
 
