@@ -30,15 +30,15 @@
         <section class="product-detail">
             <article class="product-detail-area1">
                 <div class="imagebox">
-                    <img src="#">
-
+                    <th:block th:if="${productInfo.sellItemPage.sellPage.thumbnailImageList}">
+                        <img th:src="|${productInfo.sellItemPage.sellPage.path}thumbnail/${productInfo.sellItemPage.sellPage.thumbnailImageList.get(0).thumbnailImageFileName}|" style="display: block">
+                    </th:block>
                     <div class="thumbnail-img">
-                        <img src="#">
-                        <img src="#">
-                        <img src="#">
-                        <img src="#">
-                        <img src="#">
-                        <img src="#">
+                        <th:block th:if="${productInfo.sellItemPage.sellPage.thumbnailImageList}">
+                            <img th:each="thumb : ${productInfo.sellItemPage.sellPage.thumbnailImageList}"
+                                 th:src="|${productInfo.sellItemPage.sellPage.path}thumbnail/${thumb.thumbnailImageFileName}|"
+                                 style="display: block">
+                        </th:block>
                     </div>
                 </div>
                 <label for="upload" class="upload">
@@ -51,31 +51,8 @@
             </article>
             <article class="product-detail-area2">
                 <div class="product-add-info">
-                    카테고리 : <select name="categoryCode" id="categoryCode">
-                        <option value="">선택</option>
-                        <option value="3">TV</option>
-                        <option value="4">에이컨</option>
-                        <option value="5">냉장고</option>
-                        <option value="6">전자레인지</option>
-                        <option value="7">커피포트</option>
-                        <option value="8">에어프라이</option>
-                        <option value="9">인덕션</option>
-                    </select><br>
-                    상태 : <select name="productStatus" id="productStatus">
-                        <option value="신상">신상</option>
-                        <option value="리퍼">리퍼</option>
-                        <option value="전시">전시</option>
-                    </select><br>
-                    옵션 :
-                    <select name="productOption" id="productOption">
-
-                    </select><br>
-                    상품 :
-                    <select name="code" id="productName">
-
-                    </select><br>
-                    제목 : <input type="text" name="title" class="page-title" placeholder="판매상품명 입력"><br>
-                    할인율 : <input type="text" name="discount" class="discount" placeholder="할인율 입력"><br>
+                    제목 : <input type="text" name="title" class="page-title" placeholder="판매상품명 입력" th:value="${productInfo.sellItemPage.sellPage.title}"><br>
+                    할인율 : <input type="text" name="discount" class="discount" placeholder="할인율 입력" th:value="${productInfo.discount}"><br>
                 </div>
             </article>
         </section>
@@ -111,7 +88,7 @@
             <div class="product-image-upload">
                 <input type="file" id="detailImage" name="uploadDetailFile" accept="image/*">
             </div>
-            <img src="#" alt="" srcset="">
+            <img th:src="|${productInfo.sellItemPage.sellPage.path}original/${productInfo.sellItemPage.sellPage.detailImageFileName}|">
         </section>
         <div data-include-html="/admin/footer" class="include"></div>
     </form>
@@ -120,10 +97,6 @@
         const thumbnail = document.querySelector(".thumbnail-img");
         const detailUpload = document.querySelector("#detailImage");
         const detailImage = document.querySelector(".product-detail-image > img");
-        const categoryCode = document.querySelector("#categoryCode");
-        const productOption = document.querySelector("#productOption");
-        const productName = document.querySelector("#productName");
-        const productStatus = document.querySelector("#productStatus");
 
         [...thumbnail.children].forEach(item => {
             item.addEventListener("mouseover", function () {
@@ -160,70 +133,6 @@
         detailUpload.addEventListener('change', function () {
             detailImage.src = URL.createObjectURL(this.files[0]);
             detailImage.style = "display: block"
-        })
-
-        categoryCode.addEventListener('change', function () {
-            call('/sellproduct/optionList', 'post', { categoryCode: categoryCode.value })
-                .then(list => {
-                    productOption.innerHTML = '';
-                    const option = document.createElement("option");
-                    option.value = '';
-                    option.textContent = '선택';
-                    productOption.append(option);
-
-                    for (obj of list) {
-                        const option = document.createElement("option");
-                        option.value = obj.productOption;
-                        option.textContent = obj.productOption;
-                        productOption.append(option);
-                    }
-                })
-        })
-
-        productStatus.addEventListener('change', function () {
-            options = {
-                categoryCode: categoryCode.value,
-                productOption: productOption.value,
-                productStatus: productStatus.value
-            }
-            call('/sellproduct/productNameList', 'post', options)
-                .then(list => {
-                    productName.innerHTML = '';
-                    const option = document.createElement("option");
-                    option.value = '';
-                    option.textContent = '선택';
-                    productName.append(option);
-
-                    for (obj of list) {
-                        const option = document.createElement("option");
-                        option.value = obj.productCode;
-                        option.textContent = obj.productName;
-                        productName.append(option);
-                    }
-                })
-        })
-
-        productOption.addEventListener('change', function () {
-            options = {
-                categoryCode: categoryCode.value,
-                productOption: productOption.value,
-                productStatus: productStatus.value
-            }
-            call('/sellproduct/productNameList', 'post', options)
-                .then(list => {
-                    productName.innerHTML = '';
-                    const option = document.createElement("option");
-                    option.value = '';
-                    option.textContent = '선택';
-                    productName.append(option);
-
-                    for (obj of list) {
-                        const option = document.createElement("option");
-                        option.value = obj.productCode;
-                        option.textContent = obj.productName;
-                        productName.append(option);
-                    }
-                })
         })
     </script>
 </body>
