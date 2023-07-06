@@ -1,12 +1,14 @@
 package com.hielectro.welpair.sellproduct.controller;
 
-import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
-import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
-import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
-import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
-import lombok.extern.slf4j.Slf4j;
-import net.coobird.thumbnailator.Thumbnails;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
+import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
+
+import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 
 @Controller
 @RequestMapping("/sellproduct")
@@ -33,10 +38,9 @@ public class ThumbnailController {
 
     @PostMapping("add")
     public String registSellProduct(@ModelAttribute SellProductDTO sellProduct,
-                                    @RequestParam String title,
-                                    @ModelAttribute List<MultipartFile> uploadFiles,
-                                    @ModelAttribute MultipartFile uploadDetailFile
-    ) {
+            @RequestParam String title,
+            @ModelAttribute List<MultipartFile> uploadFiles,
+            @ModelAttribute MultipartFile uploadDetailFile) {
         if (uploadFiles.size() > 6) {
             throw new IllegalStateException("상품 이미지는 최대 6개까지 등록 가능합니다.");
         }
@@ -65,15 +69,17 @@ public class ThumbnailController {
         try {
             for (MultipartFile file : uploadFiles) {
                 String originFileName = file.getOriginalFilename();
-                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String ext = null;
+                if (originFileName != null && !originFileName.equals("")) {
+                    
+                    ext = originFileName.substring(originFileName.lastIndexOf("."));
+                }
                 String savedFileName = UUID.randomUUID().toString().replace("-", "");
                 String thumbnailSize360x = savedFileName + "_360x";
 
                 file.transferTo(new File(absoluteOriginalImageDir + "/" + savedFileName + ext));
                 Thumbnails.of(absoluteOriginalImageDir + "/" + savedFileName + ext).size(360, 360)
                         .toFile(absoluteThumbnailImageDir + "/" + thumbnailSize360x + ext);
-                Thumbnails.of(absoluteOriginalImageDir + "/" + savedFileName  + ext).size(60, 60)
-                        .toFile(absoluteThumbnailImageDir + "/" + savedFileName + "_60x" + ext);
 
                 ThumbnailImageDTO thumbnailImage = new ThumbnailImageDTO();
                 thumbnailImage.setThumbnailImageOriginFileName(originFileName);
@@ -83,7 +89,11 @@ public class ThumbnailController {
             }
 
             String originFileName = uploadDetailFile.getOriginalFilename();
-            String ext = originFileName.substring(originFileName.lastIndexOf("."));
+            String ext = null;
+            if (originFileName != null && !originFileName.equals("")) {
+
+                ext = originFileName.substring(originFileName.lastIndexOf("."));
+            }
             String savedFileName = UUID.randomUUID().toString().replace("-", "");
 
             uploadDetailFile.transferTo(new File(absoluteOriginalImageDir + "/" + savedFileName + ext));
@@ -104,13 +114,12 @@ public class ThumbnailController {
                 boolean isDeleted1 = deleteFile.delete();
 
                 File deleteThumbnail = new File(absoluteOriginalImageDir + "/"
-                        + file.getThumbnailImageFileName().substring(0, file.getThumbnailImageFileName().lastIndexOf(".")) + "_60x" + ext);
-                File deleteThumbnail2 = new File(absoluteOriginalImageDir + "/"
-                        + file.getThumbnailImageFileName().substring(0, file.getThumbnailImageFileName().lastIndexOf(".")) + "_360x" + ext);
+                        + file.getThumbnailImageFileName().substring(0,
+                                file.getThumbnailImageFileName().lastIndexOf("."))
+                        + "_360x" + ext);
                 boolean isDeleted2 = deleteThumbnail.delete();
-                boolean isDeleted3 = deleteThumbnail2.delete();
 
-                if ((isDeleted1 && isDeleted2) && isDeleted3) {
+                if (isDeleted1 && isDeleted2) {
                     cnt++;
                 }
             }
@@ -123,7 +132,24 @@ public class ThumbnailController {
     }
 
     @PostMapping("modify")
-    public String modifySellProduct() {
+    public String modifySellProduct(HttpServletRequest request,
+            @ModelAttribute SellProductDTO sellProduct,
+            @RequestParam String title,
+            @ModelAttribute List<MultipartFile> uploadFiles,
+            @ModelAttribute MultipartFile uploadDetailFile) {
+
+        /* 이전에 저장되었던 Session의 결과값과 비교하여 수정된 부분이 있다면 Update 실행 */
+        HttpSession session = request.getSession();
+        SellProductDTO compare = (SellProductDTO) session.getAttribute("productInfo");
+        SellPageDTO compareSellPage = compare.getSellItemPage().getSellPage();
+        SellPageDTO sellPage = sellProduct.getSellItemPage().getSellPage();
+
+        if (compareSellPage.getTitle().equals(sellPage.getTitle()))
+
+            System.out.println("-------------------------------Thumbnail Controller -------------------------");
+        System.out.println();
+
+        session.removeAttribute("productInfo");
         return "";
     }
 }

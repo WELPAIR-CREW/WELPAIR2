@@ -140,7 +140,7 @@
         </div>
     </article>
 </section>
-<section class="product-detail-image">
+<section class="product-detail-image" th:if="${sellProduct.sellItemPage.sellPage.detailImageFileName}">
     <img th:src="|${sellProduct.sellItemPage.sellPage.path}original/${sellProduct.sellItemPage.sellPage.detailImageFileName}|">
 </section>
 <div data-include-html="/consumer/footer" class="include"></div>

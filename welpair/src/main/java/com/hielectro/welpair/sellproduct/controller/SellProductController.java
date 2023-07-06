@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.*;
@@ -52,12 +53,16 @@ public class SellProductController {
     }
 
     @GetMapping("modify/{sellPageNo}")
-    public String modifySellProduct(Model model, @PathVariable String sellPageNo) {
+    public String modifySellProduct(Model model, HttpServletRequest request, @PathVariable String sellPageNo) {
         Map<String, String> map = new HashMap<>();
+
         map.put("sellPageNo", sellPageNo);
         SellProductDTO sellProduct = productService.selectOneSellProduct(sellPageNo);
-        System.out.println(sellProduct);
         model.addAttribute("productInfo", sellProduct);
+
+        /* 판매 상품 페이지가 수정되었는지 판단하기 위해 Session에 결과값을 저장 */
+        HttpSession session = request.getSession();
+        session.setAttribute("productInfo", sellProduct);
 
         return "admin/sellproduct/admin-modify-product";
     }
