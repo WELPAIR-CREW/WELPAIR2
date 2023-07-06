@@ -32,42 +32,42 @@
                 <ul class="order_prd_ul">
                     <li class="prd_list_head">
                         <!-- thymeleaf... 셀렉아이템 갯수 변수사용  -->
-                        <div th:text="'Total: ' + ${payList.size()}" class="list_head_1"></div>
-                        <div class="list_head_2">상품정보</div>
-                        <div class="list_head_3">수량</div>
-                        <div class="list_head_4">금액</div>
-                        <div class="list_head_5">배송비</div>
-                        <div class="list_head_6">총&nbsp;금액</div>
+                        <div th:text="'개수: ' + ${orderPrdList.orderPrdList.size()}" class="list_head_1"></div>
+                        <div class="list_head_2">상품이름</div>
+                        <div class="list_head_3">수   량</div>
+<!--                        <div class="list_head_4">금액</div>-->
+<!--                        <div class="list_head_5">배송비</div>-->
+                        <div class="list_head_6">주문금액</div>
                     </li>
                     <!-- 담은 상품들 받아와서 추가해야함 -->
                     <div class="prd_list_box">
-                        <li th:each="payPrd, stat : ${payList}" class="prd_list_body" >
-                            <div class="list_body_1" th:id></div>
+                        <li th:each="orderPrd, stat : ${orderPrdList.orderPrdList}" class="prd_list_body" >
+                            <div class="list_body_1" th:text="${stat.count}"></div>
                             <div class="list_body_2">
-                                <a href="http://127.0.0.1/HTML/index.html" class="alink">
+<!--                                <a href="http://127.0.0.1/HTML/index.html" class="alink">-->
                                     <!-- 상품썸네일 구역 -->
-                                    <div class="thumb_box">
-                                        <!-- 상품썸네일 이미지-->
-                                        <span class="thumb_img">
-                                            <img th:if="${payPrd?.sellPage?.path != null}" th:src="'../..' + ${payPrd.sellPage.path}" class="thumbimg">
-                                            <img th:unless="${payPrd?.sellPage?.path != null }" src="/common/images/thumbnailbox.png" class="thumbimg" alt="thumbnail">
-                                        </span>
-                                    </div>
+<!--                                    <div class="thumb_box">-->
+<!--                                        &lt;!&ndash; 상품썸네일 이미지&ndash;&gt;-->
+<!--                                        <span class="thumb_img">-->
+<!--                                            <img th:if="${orderPrd.sellPage?.path != null}" th:src="'../..' + ${orderPrd.sellPage.path}" class="thumbimg">-->
+<!--                                            <img th:unless="${orderPrd?.sellPage?.path != null }" src="/common/images/thumbnailbox.png" class="thumbimg" alt="thumbnail">-->
+<!--                                        </span>-->
+<!--                                    </div>-->
                                     <!-- 상품이름 작성구역  -->
                                     <div class="prdTitle">
-                                        <div class="" name="" th:if="${payPrd.sellPage?.title != null}" th:text="${payPrd.sellPage.title}"></div>
-                                        <div class="" name="" th:unless="${payPrd.sellPage?.title != null}">상품 판매페이지를 찾을 수 없습니다.</div>
-                                        <div class="" name="" th:if="${payPrd.sellProduct.isSell == 'N'}">판매중인 상품이 아닙니다.</div>
-                                        <div class="" name="" th:text="${payPrd.product.productName}">balnk</div>
+<!--                                        <div class="" name="" th:if="${orderPrd.sellPage?.title != null}" th:text="${orderPrd.sellPage.title}"></div>-->
+<!--                                        <div class="" name="" th:unless="${orderPrd.sellPage?.title != null}">상품 판매페이지를 찾을 수 없습니다.</div>-->
+<!--                                        <div class="" name="" th:if="${orderPrd.sellProduct.isSell == 'N'}">판매중인 상품이 아닙니다.</div>-->
+                                        <div class="" name="" th:text="${orderPrd.Sellproduct.product.productName}">balnk</div>
                                     </div>
-                                </a>
+<!--                                </a>-->
                             </div>
                             <div class="list_body_3">
-                                <input type="number" class="" th:value="${payPrd.cartSellProduct.cartAmount}" placeholder="1" disabled >
+                                <input type="number" class="" th:value="${orderPrd.productOrderAmount}" placeholder="1" disabled >
                             </div>
-                            <div class="list_body_4" th:text="${#numbers.formatDecimal(cartPayPrice.exptPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>
-                            <div class="list_body_5" th:text="${#numbers.formatDecimal(cartPayPrice.exptDeliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>
-                            <div class="list_body_6" th:text="${#numbers.formatDecimal(cartPayPrice.exptTotalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>
+<!--                            <div class="list_body_4" th:text="${#numbers.formatDecimal(orderPrd.productOrderPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>-->
+<!--                            <div class="list_body_5" th:text="${#numbers.formatDecimal(orderPrd.exptDeliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>-->
+                            <div class="list_body_6" th:text="${#numbers.formatDecimal(orderPrd.productOrderPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>
                         </li>
                     </div>
                 </ul>
@@ -188,10 +188,10 @@
                                 <div class="paybox_total">총 주문금액</div>
                             </td>
                             <td>
-                                <div class="totalPrice" name="totalPrice" id="totalPrice">2,000,000</div>
+                                <div class="totalPrice" name="totalPrice" id="totalPrice"  th:text="${#numbers.formatDecimal(orderPrdList.totalPaymentPrice, 0, 'COMMA', 0, 'POINT')}"></div>
                             </td>
                             <td>
-                                <div class="paybox_total" th:text="${#numbers.formatDecimal(cartPayPrice.exptTotalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>
+                                <div class="paybox_total">&nbsp;원</div>
                             </td>
                         </tr>
                         <tr>

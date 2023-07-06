@@ -8,7 +8,6 @@ import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.*;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -28,6 +27,7 @@ public class CartGeneralDTO {
 
     private int price;
     private int totalPrice;
+
 
     private int exptPrice;
     private int exptDeliveryPrice;

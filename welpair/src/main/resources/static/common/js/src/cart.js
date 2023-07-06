@@ -146,12 +146,21 @@ document.getElementById("btn_gopay").onclick =
 function(){
 
 
+
     const sellProductId = document.querySelectorAll("input[class^='cart_select']");
     const cartAmount = document.querySelectorAll('input[class="item_count_box"]');
+    const prdName = document.getElementsByClassName("prd_productName");
+
+    const price = document.querySelectorAll('div[class^="price_box"]');
+    const deliveryPrice = document.querySelectorAll('div[class^="delivery_box"]');
+    const totalPrice = document.querySelectorAll('div[class^="totla_price_box"]');
 
     const exptPrice = document.getElementById("exptPrice").value;
     const exptDeliveryPrice = document.getElementById("exptpay_del").value;
     const exptTotalPrice = document.getElementById("exptTotalPrice").value;
+
+    let checkTotalPrice = 0;
+
     let checkboxes = document.querySelectorAll('input[class^="cart_select"]');
 
     if([...checkboxes].filter(item => item.checked).length == 0) {
@@ -169,77 +178,65 @@ function(){
         let count = 0;
         for (let i = 0; i < checkboxes.length; i++) {
 
-            let cartPayList =
+            let orderPrdList =
                 {
-                    cartSellProduct: {
-                        sellProductId: "",
-                        cartAmount: 0
-                    },
-                    exptPrice: 0,
-                    exptDeliveryPrice: 0,
-                    exptTotalPrice: 0,
+                    sellProductId:  "",
+                    productOrderAmount: 0,
+                    productOrderPrice: 0,
                 };
 
             if (checkboxes[i].checked) {
 
                 {
                     const input = document.createElement('input');
-                    input.name = 'cartPayList[' + count + '].cartSellProduct.sellProductId';
+                    input.name = 'orderPrdList[' + count + '].sellProductId';
                     input.type = 'hidden';
-                    input.value = cartPayList.cartSellProduct.sellProductId = sellProductId[i].getAttribute("id");
+                    input.value = sellProductId[i].getAttribute("id");
                     formData.append(input);
                 }
                 {
                     const input = document.createElement('input');
-                    input.name = 'cartPayList[' + count + '].cartSellProduct.cartAmount';
+                    input.name = 'orderPrdList[' + count + '].productOrderAmount';
                     input.type = 'hidden';
-                    input.value = cartPayList.cartSellProduct.cartAmount = parseInt(cartAmount[i].getAttribute("value"));
+                    // input.value = orderPrdList.cartSellProduct.cartAmount = parseInt(cartAmount[i].getAttribute("value"));
+                    input.value = parseInt(cartAmount[i].getAttribute("value"));
                     formData.append(input);
 
                 }
                 {
+                    // 상품명
                     const input = document.createElement('input');
-                    input.name = 'cartPayList[' + count + '].exptPrice';
+                    input.name = 'orderPrdList[' + count + '].Sellproduct.product.productName';
                     input.type = 'hidden';
-                    input.value = parseInt(exptPrice.replace(/,/g, ''));
+                    input.value = prdName[i].getAttribute("name");
                     formData.append(input);
-
                 }
                 {
                     const input = document.createElement('input');
-                    input.name = 'cartPayList[' + count + '].exptDeliveryPrice';
+                    input.name = 'orderPrdList[' + count + '].productOrderPrice';
                     input.type = 'hidden';
-                    input.value = parseInt(exptDeliveryPrice.replace(/,/g, ''));
+                    // input.value = orderPrdList.price = parseInt(price[i].getAttribute("value"));
+                    input.value = parseInt(price[i].getAttribute("value"))
+                                + parseInt(deliveryPrice[i].getAttribute("value"));
+                                // +  parseInt(totalPrice[i].getAttribute("value"));
+
                     formData.append(input);
 
+                    checkTotalPrice += Number(input.value);
                 }
-                {
-                    const input = document.createElement('input');
-                    input.name = 'cartPayList[' + count + '].exptTotalPrice';
-                    input.type = 'hidden';
-                    input.value =  parseInt(exptTotalPrice.replace(/,/g, ''));
-                    formData.append(input);
-
-                }
-
-                // const input = document.createElement('input');
-                // cartList.cartSellProduct.sellProductId = sellProductId[i].getAttribute("id");
-                // cartList.cartSellProduct.cartAmount = parseInt(cartAmount[i].getAttribute("value"));
-                //
-                // cartList.exptPrice = parseInt(exptPrice.replace(/,/g, ''));
-                // cartList.exptDeliveryPrice = parseInt(exptDeliveryPrice.replace(/,/g, ''));
-                // cartList.exptTotalPrice = parseInt(exptTotalPrice.replace(/,/g, ''));
-
-                // 폼에 FormData 추가
-                // document.getElementById("hddata").value = JSON.stringify(selectedProducts);
-
-                // selectedProducts.push(cartPayList);
-            }
             ++count;
+            }
         }
+        console.log(checkTotalPrice);
+        // let expttotal =  parseInt(exptTotalPrice.replace(/,/g, ''));
+        if(checkTotalPrice == parseInt(exptTotalPrice.replace(/,/g, ''))){
 
-        document.body.append(formData);
-        formData.submit()
+            document.body.append(formData);
+            formData.submit()
+
+        } else {
+            alert("주문 합계 금액이 상이합니다. 오류발생")
+        }
 
     }
 

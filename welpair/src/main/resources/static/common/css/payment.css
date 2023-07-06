@@ -17,7 +17,8 @@ a:hover, a:active { text-decoration: none; }
     width: 1196px;
 }
 .order_prd_area {
-    height: 350px;
+    height: 200px;
+    font-size: 20px;
 }
 
 
@@ -137,7 +138,7 @@ li[class^=prd_list_] {
 
 .prd_list_body {
     margin-top: 10px;
-    height: 100px;
+    height: 20px;
     margin-bottom: 20px;
     align-items: center;
 }

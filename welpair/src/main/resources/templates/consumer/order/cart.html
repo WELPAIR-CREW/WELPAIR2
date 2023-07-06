@@ -96,7 +96,7 @@
                                         <div class="prd_pageTitle" name="sellPageTitle" th:if="${cart.sellPage?.title != null}" th:text="${cart.sellPage.title}"></div>
                                         <div class="prd_pageTitle" name="sellPageTitle" th:unless="${cart.sellPage?.title != null}">상품 판매페이지를 찾을 수 없습니다.</div>
                                         <div class="prd_pageTitle" name="no-sellPageTitle" th:if="${cart.sellProduct.isSell == 'N'}">판매중인 상품이 아닙니다.</div>
-                                        <div class="prd_productName "th:id="'productName' + ${stat.count}" th:name="productName" th:text="${cart.product.productName}" th:value="${cart.sellProduct.id}">balnk</div>
+                                        <div class="prd_productName "th:id="'productName' + ${stat.count}" th:name="${cart.product.productName}" th:text="${cart.product.productName}" th:value="${cart.sellProduct.id}">balnk</div>
                                     </div>
 <!--                                </a>-->
                                 </a>
@@ -121,17 +121,17 @@
                             <div class="price_area">
                                 <!-- 상품금액 -->
                                 <div class="cart_order_price">
-                                    <div class="price_box" th:id="'price_' + ${stat.count}" name="" th:text="${#numbers.formatDecimal(cart.price, 0, 'COMMA', 0, 'POINT')} + ' 원'">balnk</div>
+                                    <div class="price_box" th:id="'price_' + ${stat.count}" name="" th:value="${cart.price}" th:text="${#numbers.formatDecimal(cart.price, 0, 'COMMA', 0, 'POINT')} + ' 원'">balnk</div>
 <!--                                    <div class="price_box" id="price" >balnk</div>-->
                                 </div>
                                 <!-- 배송비 작성구역 -->
                                 <div class="cart_order_delivery">
-                                    <div class="delivery_box" th:id="'deliveryPrice_' + ${stat.count}" name="" th:text="${#numbers.formatDecimal(cart.cartSellProduct.deliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
+                                    <div class="delivery_box" th:id="'deliveryPrice_' + ${stat.count}" name="" th:value="${cart.cartSellProduct.deliveryPrice}" th:text="${#numbers.formatDecimal(cart.cartSellProduct.deliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
 <!--                                    <div class="delivery_box" id="'deliveryPrice">blank</div>-->
                                 </div>
                                 <!-- 총금액 작성구역 -->
                                 <div class="cart_order_total_price">
-                                    <div class="totla_price_box" th:id="'totalPrice_' + ${stat.count}" name="" th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
+                                    <div class="totla_price_box" th:id="'totalPrice_' + ${stat.count}" name="" th:value="${cart.totalPrice}" th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">blank</div>
 <!--                                    <div class="totla_price_box" id="totalPrice">blank</div>-->
                                 </div>
                                 <!-- 상품금액 닫기 -->

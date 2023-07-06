@@ -61,7 +61,7 @@
     </resultMap>
 
     <!-- 선택한 카트 상품 조회 -->
-    <select id="selectProductById" parameterType="com.hielectro.welpair.payment.model.dto.CartPayReqDTO" resultMap="cartGeneralResultMap">
+    <select id="selectProductById" parameterType="com.hielectro.welpair.payment.model.dto.OrderPayReqDTO" resultMap="cartGeneralResultMap">
         SELECT
             B.DELIVERY_PRICE
              , F.PRODUCT_PRICE
