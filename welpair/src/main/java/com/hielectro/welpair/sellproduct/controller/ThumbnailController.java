@@ -68,14 +68,17 @@ public class ThumbnailController {
 
         try {
             for (MultipartFile file : uploadFiles) {
-                String originFileName = file.getOriginalFilename();
+                String originFileName = null;
                 String ext = null;
-                if (originFileName != null && !originFileName.equals("")) {
-                    
+                String savedFileName = null;
+                String thumbnailSize360x = null;
+
+                if (file.getOriginalFilename() != null && !file.getOriginalFilename().equals("")) {
+                    originFileName = file.getOriginalFilename();
                     ext = originFileName.substring(originFileName.lastIndexOf("."));
+                    savedFileName = UUID.randomUUID().toString().replace("-", "");
+                    thumbnailSize360x = savedFileName + "_360x";
                 }
-                String savedFileName = UUID.randomUUID().toString().replace("-", "");
-                String thumbnailSize360x = savedFileName + "_360x";
 
                 file.transferTo(new File(absoluteOriginalImageDir + "/" + savedFileName + ext));
                 Thumbnails.of(absoluteOriginalImageDir + "/" + savedFileName + ext).size(360, 360)
@@ -88,13 +91,15 @@ public class ThumbnailController {
                 thumbnailImageList.add(thumbnailImage);
             }
 
-            String originFileName = uploadDetailFile.getOriginalFilename();
+            String originFileName = null;
             String ext = null;
-            if (originFileName != null && !originFileName.equals("")) {
+            String savedFileName = null;
 
+            if (uploadDetailFile.getOriginalFilename() != null && !uploadDetailFile.getOriginalFilename().equals("")) {
+                originFileName = uploadDetailFile.getOriginalFilename();
                 ext = originFileName.substring(originFileName.lastIndexOf("."));
+                savedFileName = UUID.randomUUID().toString().replace("-", "");
             }
-            String savedFileName = UUID.randomUUID().toString().replace("-", "");
 
             uploadDetailFile.transferTo(new File(absoluteOriginalImageDir + "/" + savedFileName + ext));
             sellPage.setPath("/common/images/");
