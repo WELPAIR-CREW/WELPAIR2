@@ -22,50 +22,9 @@
 
         <!-- 타이틀바디 -->
         <div class="section-content">
-            <div class="section-title">상세검색</div>
+            <div class="section-title">????</div>
 
-            <div class="section-detailSearch">
-<!--                <form action="/search/detail">-->
-                <form>
-                    <!-- 상세 검색 옵션 -->
-                    <div class="section-detailSearch-line1">
-                        <div>
-                            <span class="section-detailSearch-span">상품명
-                                <input type="text" name="title" id="title" class="section-detailSearch-input" placeholder="상품명입력">
-                            </span>
-                            <span class="section-detailSearch-span">카테고리
-                                <select id="categoryCode" class="section-detailSearch-input option1">
-                                    <option value="">선택</option>
-                                    <option value="3">TV</option>
-                                    <option value="4">에어컨</option>
-                                    <option value="5">냉장고</option>
-                                    <option value="6">전자레인지</option>
-                                    <option value="7">커피포트</option>
-                                    <option value="8">에어프라이어</option>
-                                    <option value="9">인덕션</option>
-                                </select>
-                            </span>
-                            <span class="section-detailSearch-input">가격
-                                <input type="number" name="minPrice" id="minPrice" class="section-detailSearch-input price" placeholder="최소 금액" value=0 min="0">
-                                <span>~</span>
-                                <input type="number" name="maxPrice" id="maxPrice" class="section-detailSearch-input price" placeholder="최대 금액" value=0>
-                            </span>
-                            <span>
-                                <input clas="searchCheck" type="checkbox"> 결과 내 검색
-                            </span>
-                            <span>
-                                <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
-                                <input id="detailSearch" class="btn_basic" type="button" value="검색">
-                            </span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <!-- 검색 수량, 정렬 기준 -->
-
-            <!-- 검색 결과 리스트 -->
-            <div class="section-searchResult">
+            <div class="section-categorySearch">
                 <div th:if="${prodSearchList.size() > 0}">
                     <ul>
                         <li class="section-searchResult-product" th:each="search : ${prodSearchList}">
@@ -84,7 +43,6 @@
                 <div th:unless="${prodSearchList.size() > 0}">
                     <p th:text="${noResultMessage}"></p>
                 </div>
-
             </div>
 
 

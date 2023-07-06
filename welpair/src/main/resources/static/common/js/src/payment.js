@@ -1,10 +1,6 @@
-/*  수량 cartSellProduct.cartAmount[]
-    상품id cartSellProduct.sellProductId[]
 
-*   exptPrice
-    exptDeliveryPrice
-    exptTotalPrice
-    *
-    *
-* */
+const sameorderer = document.getElementById("sameorderer");
 
+sameorderer.addEventListener("click", e => {
+
+})

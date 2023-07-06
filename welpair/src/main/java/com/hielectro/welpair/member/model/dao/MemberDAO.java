@@ -9,8 +9,6 @@ public interface MemberDAO {
 
     MemberDTO findMemberById(String empNo);
 
-    EmployeeDTO selectMemberByUserId(String empNo);
-
 
 
 }
