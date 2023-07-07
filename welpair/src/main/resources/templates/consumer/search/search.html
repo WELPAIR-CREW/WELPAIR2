@@ -28,12 +28,13 @@
 
         <div class="section-detailSearch">
             <!--                <form action="/search/detail">-->
-            <form>
+            <form id="searchForm">
                 <!-- 상세 검색 옵션 -->
                 <div class="section-detailSearch-line1">
                     <div>
                         <span class="section-detailSearch-span">상품명
-                            <input type="text" name="title" id="title" class="section-detailSearch-input" placeholder="상품명입력">
+                            <input type="text" name="title" id="title" class="section-detailSearch-input"
+                                   placeholder="상품명입력">
                         </span>
                         <span class="section-detailSearch-span">카테고리
                             <select id="categoryCode" class="section-detailSearch-input option1">
@@ -48,16 +49,18 @@
                             </select>
                         </span>
                         <span class="section-detailSearch-input">가격
-                            <input type="number" name="minPrice" id="minPrice" class="section-detailSearch-input price" placeholder="최소 금액" value=0 min="0">
+                            <input type="number" name="minPrice" id="minPrice" class="section-detailSearch-input price"
+                                   placeholder="최소 금액" value=0 min="0">
                             <span>~</span>
-                            <input type="number" name="maxPrice" id="maxPrice" class="section-detailSearch-input price" placeholder="최대 금액" value=0>
+                            <input type="number" name="maxPrice" id="maxPrice" class="section-detailSearch-input price"
+                                   placeholder="최대 금액" value=0>
                         </span>
                         <span>
                             <input clas="searchCheck" type="checkbox"> 결과 내 검색
                         </span>
                         <span>
                             <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
-                            <input id="detailSearch" class="btn_basic" type="button" value="검색">
+                            <input id="detailSearch" class="btn_basic" type="submit" value="검색">
                         </span>
                     </div>
                 </div>
@@ -72,17 +75,17 @@
                 <ul>
                     <li class="section-searchResult-product" th:each="search, index : ${prodSearchList}">
                         <a th:href="@{'/products/' + ${search.sellItemPage.no}}">
-                            <div name="thumbnailImage">
-                                <span th:text="${search.getThumbnailImage().thumbnailImageFileName}"></span>
-                            </div>
-                            <img th:src="@{'/thumbnail/' + ${search.getThumbnailImage().thumbnailImageFileName}}" alt="">
+                            <div name="thumbnailImage"></div>
+                            <img th:src="|${search.sellPage.path}thumbnail/${search.getThumbnailImage().thumbnailImageFileName}|"
+                                     alt="">
+
                         </a>
                         <div class="product-info">
                             <div class="searchProdTitle" name="title">
                                 <span th:text="${search.sellPage.title}"></span>
                             </div>
                             <div class="searchProdPrice" name="sellPrice">
-                                <span th:text="${search.sellPrice} + '원'"></span>
+                                <span th:text="${#numbers.formatDecimal(search.sellPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></span>
                             </div>
                         </div>
                     </li>

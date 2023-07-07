@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
     let currentPage = 1;
     const rowsPerPage = 10;
@@ -14,8 +14,9 @@ $(document).ready(function() {
     }
 
 
-// 상세 검색 버튼
-    $("#detailSearch").click(function () {
+    // 상세 검색 버튼
+    $('#searchForm').on('submit', function (event) {
+        event.preventDefault();
 
         console.log("검색 들어옴 ")
         // 이전 검색 결과 삭제
@@ -26,13 +27,18 @@ $(document).ready(function() {
         let categoryCode = $("#categoryCode").val();
         let minPrice = $("#minPrice").val();
         let maxPrice = $("#maxPrice").val();
-
+        const search = window.location.search;
+        const params = new URLSearchParams(search);
         let data = {
-            title: title,
-            categoryCode: categoryCode,
+            'sellPage.title': title,
+            'product.categoryCode': categoryCode,
+            'category.refCategoryCode': params.get('refCategoryCode'),
+            'product.productStatus': params.get('productStatus'),
             minPrice: minPrice,
             maxPrice: maxPrice
+
         };
+
         if (title != "" || categoryCode != "" || minPrice != "" || maxPrice != "") {
 
             console.log(data);
@@ -53,11 +59,17 @@ $(document).ready(function() {
 
                         let anchor = $("<a></a>").attr("href", "/products/" + search.sellItemPage.no);
 
+                        // let thumbnailDiv = $("<div></div>").addClass("thumbnailImage");
+                        // thumbnailDiv.append($("<span></span>").text(search.thumbnailImage.thumbnailImageFileName));
+                        //
+                        // let image = $("<img>").attr("src", "#").attr("alt", "");
+
+
                         let thumbnailDiv = $("<div></div>").addClass("thumbnailImage");
-                        thumbnailDiv.append($("<span></span>").text(search.thumbnailImage.thumbnailImageFileName));
+                        let image = $("<img>").attr("src", search.sellPage.path + "thumbnail/" + search.thumbnailImage.thumbnailImageFileName)
+                            .attr("alt", "");
 
-                        let image = $("<img>").attr("src", "#").attr("alt", "");
-
+                        thumbnailDiv.append(image);
                         anchor.append(thumbnailDiv);
                         anchor.append(image);
                         listItem.append(anchor);
@@ -68,14 +80,18 @@ $(document).ready(function() {
                         titleDiv.append($("<span></span>").text(search.sellPage.title));
 
                         let priceDiv = $("<div></div>").addClass("searchProdPrice");
-                        priceDiv.append($("<span></span>").text(search.sellPrice));
+                        priceDiv.append($("<span></span>").text(search.sellPrice.toLocaleString() + '원'));
+                        // priceDiv.append($("<span></span>").text(search.sellPrice));
+
+
 
                         productInfoDiv.append(titleDiv);
                         productInfoDiv.append(priceDiv);
 
                         listItem.append(productInfoDiv);
 
-                        $(".section-searchResult ul").append(listItem);
+                        // $(".section-searchResult ul").append(listItem);
+                        searchResultsList.append(listItem);
                     });
 
                     const totalItems = data.length;
@@ -143,4 +159,6 @@ $(document).ready(function() {
             updatePaginationButtons();
         }
     });
+
+    // $('#searchForm').submit();
 });

@@ -23,12 +23,6 @@ public class SearchServiceImpl implements SearchService {
 
         System.out.println("============ 상품검색 서비스 1-1 in ============");
 
-        String title = search.getSellPage().getTitle();
-        String categoryCode = search.getProduct().getCategoryCode();
-        String refCategoryCode = search.getCategory().getRefCategoryCode();
-        Integer minPrice = search.getMinPrice();
-        Integer maxPrice = search.getMaxPrice();
-
         List<SearchDTO> result = searchDAO.searchResultMain(search);
 
         System.out.println("============ 상품검색 서비스 1-1 out ============");
@@ -39,7 +33,6 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<SearchDTO> searchDetailResult(SearchDTO search) {
         System.out.println("============ 상품 상세 검색 서비스 2-1 in ============");
-
 
         List<SearchDTO> result = searchDAO.searchDetailResult(search);
         System.out.println("============ 상품 상세 검색 서비스 2-1 out ============");

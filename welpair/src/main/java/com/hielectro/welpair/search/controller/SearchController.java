@@ -1,19 +1,14 @@
 package com.hielectro.welpair.search.controller;
 
-import com.hielectro.welpair.common.Search;
 import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.search.model.dto.SearchDTO;
 import com.hielectro.welpair.search.model.service.SearchService;
 import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
-import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.lang.model.SourceVersion;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,7 +47,7 @@ public class SearchController {
 
         sellPage.setTitle(title);
         product.setCategoryCode(categoryCode);
-        product.setProductOption(productStatus);
+        product.setProductStatus(productStatus);
         category.setRefCategoryCode(refCategoryCode);
 
         search.setSellPage(sellPage);
@@ -88,33 +83,37 @@ public class SearchController {
      */
     @PostMapping("detail")
     @ResponseBody
-    public List<SearchDTO> searchDetailResult(Model model, @RequestParam(required = false) String title,
-                                              @RequestParam(required = false) String categoryCode,
-                                              @RequestParam(value = "productStatus", required = false) String productStatus,
-                                              @RequestParam(required = false) Integer minPrice,
-                                              @RequestParam(required = false) Integer maxPrice) {
+//    public List<SearchDTO> searchDetailResult(Model model, @RequestParam(required = false) String title,
+//                                              @RequestParam(required = false) String categoryCode,
+//                                              @RequestParam(required = false) String productStatus,
+//                                              @RequestParam(required = false) Integer minPrice,
+//                                              @RequestParam(required = false) Integer maxPrice) {
+    public List<SearchDTO> searchDetailResult(Model model, SearchDTO search) {
         System.out.println("------------- 상품 상세 검색 컨트롤러 2-1 in -------------");
 
-        SearchDTO search = new SearchDTO();
-        SellPageDTO sellPage = new SellPageDTO();
-        ProductDTO product = new ProductDTO();
-        String refCategoryCode = null;
+        System.out.println(search);
+//        SearchDTO search = new SearchDTO();
+        SellPageDTO sellPage = search.getSellPage();
+        ProductDTO product = search.getProduct();
+        CategoryDTO category = search.getCategory();
 
-        product.setCategoryCode(categoryCode);
-        product.setProductOption(productStatus);
-
-        System.out.println("sellPage = " + sellPage);
-        System.out.println("product = " + product);
-
-        search.setSellPage(sellPage);
-        search.setProduct(product);
-        search.setMinPrice(minPrice);
-        search.setMaxPrice(maxPrice);
-
-        System.out.println("search = " + search);
-
+//        String refCategoryCode = null;
+//
+//        product.setCategoryCode(categoryCode);
+//        product.setProductStatus(productStatus);
+//
+//        System.out.println("sellPage = " + sellPage);
+//        System.out.println("product = " + product);
+//
+//        search.setSellPage(sellPage);
+//        search.setProduct(product);
+//        search.setMinPrice(minPrice);
+//        search.setMaxPrice(maxPrice);
+//
+//        System.out.println("search = " + search);
+//
         List<SearchDTO> prodSearchList = null;
-
+//
         if(search != null){
             prodSearchList = searchService.searchDetailResult(search);
             System.out.println("prodSearchList = " + prodSearchList);
@@ -128,7 +127,8 @@ public class SearchController {
             model.addAttribute("noResultMessage", "검색한 결과가 없습니다.");
         }
 
-        model.addAttribute("searchTerms", createSearchTerms(title, categoryCode, refCategoryCode, productStatus));
+        model.addAttribute("searchTerms", createSearchTerms(sellPage.getTitle(), product.getCategoryCode(),
+                category.getRefCategoryCode(), product.getProductStatus()));
         System.out.println("------------- 상품 상세 검색 컨트롤러 2-2 out -------------");
         return prodSearchList;
     }
