@@ -32,6 +32,15 @@ public class RegistServiceImpl implements RegistService {
 
         return cnt;
     }
+//    @Override
+//    public int idMemberCheck(String empNo){
+//
+//        int result = mapper.idMemberCheck(empNo);
+//
+//        return result;
+//
+//    }
+
 
     @Override
     @Transactional

@@ -37,6 +37,13 @@
         WHERE EMP_NO = #{ empNo }
     </select>
 
+<!--    <select id="idMemberCheck" parameterType="String" resultMap="int">-->
+<!--        SELECT-->
+<!--            COUNT(EMP_NO)-->
+<!--        FROM T_MEMBER-->
+<!--        WHER EMP_NO = #{ empNo }-->
+<!--    </select>-->
+
 
 
 <!--    <insert id="insertMember" parameterType="com.hielectro.welpair.regist.model.dto.RegistDTO" >-->
@@ -79,7 +86,7 @@
           , MEM_PWD
           , REGIST_DATE
           , POINT_BALANCE
-          , MEM_AUTH
+          , IS_ACTIVATED
         )
         VALUES
             (
@@ -87,7 +94,7 @@
                 , #{ memPwd }
                 , SYSDATE
                 , default
-                , default
+                , 'N'
             )
     </insert>
     <insert id="insertMemberRole" parameterType="com.hielectro.welpair.regist.model.dto.MemberRoleDTO">
