@@ -13,8 +13,9 @@ import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 
 public interface SellProductService {
     // SELECT
-    public int sellProductSearchCount(Map<String, String> search);
-    public List<SellProductDetailDTO> selectProductList(Map<String, String> productId);
+    int sellProductSearchCount(Map<String, String> search);
+    List<SellProductDetailDTO> selectProductList(Map<String, String> productId);
+    SellProductDTO selectOneSellProduct(String pageNo);
     List<ReviewManagerDTO> selectReviewList(Map<String, Object> searchMap);
     int reviewSearchCount(Map<String, Object> searchMap);
     List<QnAManagerDTO> selectQnAList(Map<String, Object> searchMap);
@@ -27,4 +28,7 @@ public interface SellProductService {
 
     // DELETE
     int sellProductDelete(List<String> request) throws Exception;
+
+    // UPDATE
+    void modifySellProduct(SellProductDTO compareSellProduct, SellProductDTO sellProduct);
 }

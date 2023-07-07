@@ -1,5 +1,5 @@
 import { includeHTML } from './include.js'
-import {call, createPaging, createTable, pagination, setPagination} from './App.js'
+import {appendLink, call, createLink, createPaging, createTable, pagination, setPagination} from './App.js'
 
 const searchBtn = document.querySelector(".first-button");
 searchBtn.addEventListener('click', fetchSellProductListData);

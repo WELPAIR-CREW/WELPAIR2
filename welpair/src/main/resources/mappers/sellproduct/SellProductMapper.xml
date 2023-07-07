@@ -41,7 +41,7 @@
     </resultMap>
 
     <resultMap id="ThumbnailImageDTO" type="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
-        <id property="no" column="SELL_PAGE_NO"/>
+        <result property="no" column="SELL_PAGE_NO"/>
         <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>
         <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>
     </resultMap>
@@ -123,6 +123,9 @@
         </if>
         <if test="name != '' and name != null">
             AND PRODUCT_NAME LIKE '%' || #{ name } || '%'
+        </if>
+        <if test="sellPageNo != null and sellPageNo != ''">
+            AND SELL_PAGE_NO = #{ sellPageNo }
         </if>
         )
         <if test="pageNo != '0' and pageNo != null">
@@ -309,14 +312,38 @@
 
     <select id="selectOneSellProduct" resultMap="SellProductResultMap">
         SELECT
-               *
-          FROM T_SELL_PRODUCT
-          JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
-          JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
-          JOIN T_THUMB_IMAGE USING (SELL_PAGE_NO)
-         WHERE 1=1
+        SELL_PRODUCT_ID
+        , PRODUCT_CODE
+        , DISCOUNT
+        , IS_SELL
+        , PRODUCT_CODE
+        , PRODUCT_NAME
+        , PRODUCT_STATUS
+        , PRODUCT_AMOUNT
+        , PRODUCT_PRICE
+        , PRODUCT_OPTION
+        , PRODUCT_NATION
+        , A.*
+        , B.CATEGORY_CODE AS REF_CATEGORY_CODE
+        , B.CATEGORY_NAME AS REF_CATEGORY_NAME
+        , SELL_PAGE_NO
+        , SELL_PAGE_TITLE
+        , SELL_DETAIL_IMAGE_FILE_NAME
+        , SELL_DETAIL_IMAGE_ORGIN_FILE_NAME
+        , FILE_PATH
+        , CREATE_DATE
+        , SELL_THUMB_IMAGE_FILE_NAME
+        , SELL_THUMB_IMAGE_ORGIN_FILE_NAME
+        FROM T_SELL_PRODUCT
+        LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
+        LEFT JOIN T_CATEGORY A ON (T_PRODUCT.CATEGORY_CODE = A.CATEGORY_CODE)
+        LEFT JOIN T_CATEGORY B ON (B.CATEGORY_CODE = A.REF_CATEGORY_CODE)
+        LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
+        LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
+        LEFT JOIN T_THUMB_IMAGE USING (SELL_PAGE_NO)
+        WHERE 1=1
         <if test="pageNo != null and pageNo != ''">
-          AND SELL_PRODUCT_ID = #{ pageNo }
+            AND SELL_PAGE_NO = #{ pageNo }
         </if>
     </select>
 
@@ -358,8 +385,8 @@
         (
             'SN' || LPAD(SEQ_SELL_PAGE_NO.nextval, 10, '0')
         ,   #{ title }
-        ,   #{ detailImageFileName }
-        ,   #{ detailImageOriginFileName }
+        ,   #{ detailImageFileName , jdbcType=NULL}
+        ,   #{ detailImageOriginFileName , jdbcType=NULL}
         ,   #{ path }
         ,   SYSDATE
         )
@@ -383,8 +410,8 @@
         VALUES
         (
             #{ no }
-        ,   #{ thumbnailImageFileName }
-        ,   #{ thumbnailImageOriginFileName }
+        ,   #{ thumbnailImageFileName , jdbcType=NULL}
+        ,   #{ thumbnailImageOriginFileName , jdbcType=NULL}
         )
     </insert>
 
@@ -393,4 +420,25 @@
         FROM T_SELL_PRODUCT
         WHERE SELL_PRODUCT_ID = #{ id }
     </delete>
+
+    <update id="updateSellPage">
+        UPDATE T_SELL_PAGE
+           SET SELL_PAGE_TITLE = #{ title }
+             , SELL_DETAIL_IMAGE_FILE_NAME = #{ detailImageFileName }
+             , SELL_DETAIL_IMAGE_ORGIN_FILE_NAME = #{ detailImageOriginFileName }
+         WHERE SELL_PAGE_NO = #{ no }
+    </update>
+
+    <update id="updateSellProduct">
+        UPDATE T_SELL_PRODUCT
+           SET DISCOUNT = #{ discount }
+         WHERE SELL_PRODUCT_ID = #{ id }
+    </update>
+
+    <delete id="deleteThumbnail">
+        DELETE
+          FROM T_THUMB_IMAGE
+         WHERE SELL_PAGE_NO = #{ no }
+    </delete>
+
 </mapper>

@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    //회원조회
+    //1. 회원조회 페이지
     @Override
     public List<MemberDTO> getMemberList(SelectCriteria selectCriteria) {
         List<MemberDTO> memberList = memberMapper.getMemberList(selectCriteria);
@@ -125,7 +125,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    //회원등록-직원목록 조회
+    //2. 회원등록-직원목록 조회
     @Override
     public List<EmployeeDTO> getEmployeeList(SelectCriteria selectCriteria) {
         List<EmployeeDTO> employeeList = memberMapper.getEmployeeList(selectCriteria);
@@ -162,7 +162,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    //가입승인 - 가입요청 목록
+    //3. 가입승인 - 가입요청 목록
     @Override
     public List<MemberDTO> reqList() {
         List<MemberDTO> reqList = memberMapper.reqList();
@@ -189,5 +189,16 @@ public class MemberServiceImpl implements MemberService {
             }
         }
     }
+
+
+    //4. 포인트지급 페이지
+    @Override
+    public List<MemberDTO> getMemberListforPoint(SelectCriteria selectCriteria) {
+        List<MemberDTO> memberList = memberMapper.getMemberListforPoint(selectCriteria);
+        return memberList;
+    }
+
+
+
 
 }

@@ -24,4 +24,6 @@ public class EmployeeDTO {
     private DeptDTO deptDTO;
     private JobDTO jobDTO;
 
+    private int yearCount; //포인트지급 페이지에 표시하는 근속연수
+
 }

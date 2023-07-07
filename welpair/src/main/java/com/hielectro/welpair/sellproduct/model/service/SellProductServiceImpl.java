@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.*;
-import org.apache.ibatis.annotations.Mapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
@@ -14,6 +14,7 @@ import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class SellProductServiceImpl implements SellProductService {
     private final SellProductMapper productMapper;
 
@@ -48,7 +49,7 @@ public class SellProductServiceImpl implements SellProductService {
 
     @Override
     @Transactional
-    public void insertSellProduct(SellProductDTO sellProduct) throws IllegalStateException{
+    public void insertSellProduct(SellProductDTO sellProduct) throws IllegalStateException {
         SellItemPageDTO sellItemPage = sellProduct.getSellItemPage();
         SellPageDTO sellPage = sellItemPage.getSellPage();
         List<ThumbnailImageDTO> thumbnailImageList = sellPage.getThumbnailImageList();
@@ -83,7 +84,9 @@ public class SellProductServiceImpl implements SellProductService {
         {
             int result = 0;
 
-            for(ThumbnailImageDTO thumbnail : thumbnailImageList) {
+            for (ThumbnailImageDTO thumbnail : thumbnailImageList) {
+                if (thumbnail == null) return;
+
                 thumbnail.setNo(sellPage.getNo());
                 result += productMapper.insertThumbnail(thumbnail);
             }
@@ -94,6 +97,9 @@ public class SellProductServiceImpl implements SellProductService {
         }
     }
 
+    public SellProductDTO selectOneSellProduct(String pageNo) {
+        return productMapper.selectOneSellProduct(pageNo);
+    }
 
     @Override
     public List<SellProductDetailDTO> selectProductList(Map<String, String> productId) {
@@ -109,6 +115,7 @@ public class SellProductServiceImpl implements SellProductService {
     public List<QnAManagerDTO> selectQnAList(Map<String, Object> searchMap) {
         return productMapper.selectQnAList(searchMap);
     }
+
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public int sellProductDelete(List<String> request) throws IllegalStateException {
@@ -127,5 +134,61 @@ public class SellProductServiceImpl implements SellProductService {
         return result;
     }
 
+    @Transactional
+    public void modifySellProduct(SellProductDTO compareSellProduct, SellProductDTO sellProduct) {
+        SellPageDTO compareSellPage = compareSellProduct.getSellItemPage().getSellPage();
+        SellPageDTO sellPage = sellProduct.getSellItemPage().getSellPage();
+        List<ThumbnailImageDTO> thumbnailImageList = sellPage.getThumbnailImageList();
+        List<ThumbnailImageDTO> compareThumbnailImageList = compareSellPage.getThumbnailImageList();
 
+        System.out.println("modifySellProduct : " + sellPage + "-------------------------");
+
+        // 1. 판매상품 페이지 수정
+        if (!(compareSellPage.getTitle().equals(sellPage.getTitle())
+            && compareSellPage.getDetailImageFileName().equals(sellPage.getDetailImageFileName()))) {
+            log.info("페이지 수정");
+            int result = productMapper.updateSellPage(sellPage);
+
+            if (!(result > 0)) {
+                throw new IllegalStateException("SellPage Update Failed");
+            }
+        }
+
+        // 2. 판매상품 수정
+        if (compareSellProduct.getDiscount() != sellProduct.getDiscount()) {
+            int result = productMapper.updateSellProduct(sellProduct);
+
+            if (!(result > 0)) {
+                throw new IllegalStateException("SellProduct Update Failed");
+            }
+        }
+
+        // 2. 페이지의 썸네일 삭제
+        if (compareThumbnailImageList != null) {
+            log.info("썸네일 삭제");
+            int result = 0;
+            result += productMapper.deleteThumbnail(sellPage.getNo());
+
+            if (result != compareThumbnailImageList.size()) {
+                throw new IllegalStateException("Thumbnail Delete Failed");
+            }
+        }
+
+        // 3. 페이지의 썸네일 추가
+        if (sellPage.getThumbnailImageList() != null) {
+            log.info("썸네일 추가");
+            int result = 0;
+
+            for (ThumbnailImageDTO thumbnail : thumbnailImageList) {
+                if (thumbnail == null) return;
+
+                thumbnail.setNo(sellPage.getNo());
+                result += productMapper.insertThumbnail(thumbnail);
+            }
+
+            if (result != thumbnailImageList.size()) {
+                throw new IllegalStateException("Thumbnail Insert Failed");
+            }
+        }
+    }
 }

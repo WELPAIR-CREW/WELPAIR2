@@ -22,7 +22,7 @@ public class CartController {
 
     private final CartService cartService;
 
-    private final String empNo = "E00033";
+    private final String empNo = "E00017";
 
     private CartController(CartService cartService) {
         this.cartService = cartService;
@@ -207,7 +207,7 @@ public class CartController {
 
 
     // 단품 금액 생성 메소드
-    public void priceMaker(CartGeneralDTO cart) {
+    public static void priceMaker(CartGeneralDTO cart) {
 
         // 1품목 가격 (가격 * 수량)
         cart.setPrice((int)(cart.getProduct().getProductPrice() * ((1.0 - cart.getSellProduct().getDiscount()))) * cart.getCartSellProduct().getCartAmount());

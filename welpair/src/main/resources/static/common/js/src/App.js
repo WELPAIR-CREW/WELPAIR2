@@ -43,14 +43,33 @@ export function createTable(data) {
 
         document.querySelector(".section-product-table tbody").append(tr);
     }
+
+    let selectCells = document.querySelectorAll(".section-product-table tr td:nth-child(8)")
+    selectCells.forEach(cell => {
+        appendLink(cell.textContent, cell, 'modify/' + cell.textContent);
+        cell.firstChild.textContent = '';
+    })
 }
 
 export const pagination = {
-    currentPageNo : 1,
+    currentPageNo: 1,
     maxPageNo: 0,
     startPageNo: 0,
     endPageNo: 0,
 }
+
+export const createLink = (text, location = '') => {
+    const link = document.createElement('a');
+    link.textContent = text;
+    link.href = location;
+    return link;
+};
+
+export const appendLink = (text, parent, location = '') => {
+    const link = createLink(text, location);
+    parent.append(link);
+    return link;
+};
 
 export function createPaging(callbackFn) {
     const paging = document.querySelector('.paging');
@@ -65,18 +84,6 @@ export function createPaging(callbackFn) {
         pagination.startPageNo = parseInt(pagination.currentPageNo / pagination.startPageNo) * pagination.endPageNo + 1;
         callbackFn(pagination.currentPageNo);
     }
-
-    const createLink = (text) => {
-        const link = document.createElement('a');
-        link.textContent = text;
-        return link;
-    };
-
-    const appendLink = (text, parent) => {
-        const link = createLink(text);
-        parent.append(link);
-        return link;
-    };
 
     const leftArrow = document.createElement('span');
     const leftLink = appendLink('<', leftArrow);
@@ -131,8 +138,9 @@ export function createPaging(callbackFn) {
     });
 
     pageLinks.forEach((link, index) => {
-        link.addEventListener('click', async function () {
+        link.addEventListener('click', async function (e) {
             if (link.classList.contains('select')) return;
+            e.preventDefault();
             await updatePage(pagination.startPageNo + index);
         });
     });
@@ -143,6 +151,7 @@ export function createTableCell(text) {
     td.textContent = text;
     return td;
 }
+
 export function setPagination(data) {
     pagination.maxPageNo = data.maxPageNo;
     pagination.startPageNo = data.startPageNo;

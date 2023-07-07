@@ -15,6 +15,7 @@ public interface SellProductMapper {
     // SELECT
     int sellProductSearchCount(Map<String, String> search);
     List<SellProductDetailDTO> selectProductList(Map<String, String> sellProductCode);
+    SellProductDTO selectOneSellProduct(String pageNo);
     List<ReviewManagerDTO> selectReviewList(Map<String, Object> searchMap);
     int reviewSearchCount(Map<String, Object> searchMap);
     int qnaSearchCount(Map<String, Object> searchMap);
@@ -31,5 +32,11 @@ public interface SellProductMapper {
 
     // DELETE
     int sellProductDelete(String id);
+    int deleteThumbnail(String no);
+
+    // UPDATE
+    int updateSellPage(SellPageDTO sellPage);
+
+    int updateSellProduct(SellProductDTO sellProduct);
 }
 

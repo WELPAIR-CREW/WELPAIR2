@@ -17,13 +17,18 @@ a:hover, a:active { text-decoration: none; }
     width: 1196px;
 }
 .order_prd_area {
-    height: 350px;
+    height: 200px;
+    font-size: 20px;
 }
 
 
 .pay_area {
     height: 460px;
 
+}
+
+.alink {
+    align-items: center;
 }
 
 /* 각 구역 컨텐츠박스 */
@@ -119,16 +124,23 @@ li[class^=prd_list_] {
     max-height: 250px;
 }
 
+
 /* 내부스크롤바 안보이게 하기 */
 .prd_list_box::-webkit-scrollbar {
     display: none;
     width: 0 !important;
 }
 
+.prdTitle {
+    align-items: center;
+
+}
 
 .prd_list_body {
-    height: 100px;
+    margin-top: 10px;
+    height: 20px;
     margin-bottom: 20px;
+    align-items: center;
 }
 
 .list_body_2 a {
