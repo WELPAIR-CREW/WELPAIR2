@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hielectro.welpair.post.admin.model.dao.AdminBoardDAO">
+
+    <resultMap id="adminBoardResult" type="com.hielectro.welpair.post.admin.model.dto.AdminBoardDTO">
+        <id property="boardNo" column="BOARD_NO"/>
+        <result property="boardCategory" column="BOARD_CATEGORY"/>
+        <result property="boardTitle" column="BOARD_TITLE"/>
+        <result property="boardContent" column="BOARD_CONTENT"/>
+        <result property="boardDate" column="BOARD_DATE"/>
+        <result property="empNo" column="EMP_NO"/>
+        <result property="isPrivate" column="IS_PRIVATE"/>
+    </resultMap>
+
+
+    <insert id="boardSave" parameterType="com.hielectro.welpair.post.admin.model.dto.AdminBoardDTO">
+        INSERT
+        INTO T_BOARD A (
+            A.BOARD_NO
+        ,   A.BOARD_CATEGORY
+        ,   A.BOARD_TITLE
+        ,   A.BOARD_CONTENT
+        ,   A.BOARD_DATE
+        ,   A.EMP_NO
+        ,   A.IS_PRIVATE
+        )
+        VALUES
+        (
+            SEQ_BOARD_NO.NEXTVAL
+        ,   #{ boardCategory }
+        ,   #{ boardTitle }
+        ,   #{ boardContent }
+        ,   SYSDATE
+        ,   #{ empNo }
+        ,   #{ isPrivate }
+        )
+    </insert>
+
+</mapper>
