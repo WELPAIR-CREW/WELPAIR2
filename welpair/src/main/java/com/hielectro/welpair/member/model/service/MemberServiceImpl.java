@@ -199,6 +199,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+    //5. 포인트지급이력
+    //5-1. 요약
+    @Override
+    public List<PointHistoryDTO> pointHistorySummary() {
+        List<PointHistoryDTO> pointHistorySummaryList = memberMapper.pointHistorySummary();
+        return pointHistorySummaryList;
+    }
+    // 5-2. 상세
+    @Override
+    public List<PointHistoryDTO> pointHistoryDetail(int eventId) {
+        List<PointHistoryDTO> pointHistoryDetailList = memberMapper.pointHistoryDetail(eventId);
+        return pointHistoryDetailList;
+    }
+
+
 
 
 }

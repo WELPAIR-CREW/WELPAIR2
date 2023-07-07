@@ -2,6 +2,7 @@ package com.hielectro.welpair.member.model.dao;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
+import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 import java.util.Map;
@@ -35,5 +36,12 @@ public interface MemberMapper {
     List<MemberDTO> getMemberListforPoint(SelectCriteria selectCriteria);
 
 
+
+    //5. 포인트지급이력
+    //5-1. 포인트지급이력(요약)
+    List<PointHistoryDTO> pointHistorySummary();
+
+    //5-2. 포인트지급이력(상세)
+    List<PointHistoryDTO> pointHistoryDetail(int eventId);
 
 }
