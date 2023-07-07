@@ -75,10 +75,11 @@ public class RegistController {
 
     @PostMapping("/idCheck")
     @ResponseBody
-    public int idCheck(@RequestParam("empNo") String empNo){
+    public int idCheck(@RequestParam("empNo") String empNo) throws MemberRegistException {
 
         System.out.println(empNo);
         int cnt = registService.idCheck(empNo);
+
 
         return cnt;
 

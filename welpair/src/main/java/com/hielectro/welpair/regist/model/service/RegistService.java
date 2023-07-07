@@ -9,6 +9,9 @@ public interface RegistService {
 
     int idCheck(String empNo);
 
+//    int idMemberCheck(String empNo);
+
+
 
     void registSave(RegistDTO regist) throws MemberRegistException;
 }

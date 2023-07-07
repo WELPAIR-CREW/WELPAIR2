@@ -2,18 +2,14 @@ package com.hielectro.welpair.sellproduct.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
@@ -39,6 +35,12 @@ public class ThumbnailController {
 
     public ThumbnailController(SellProductServiceImpl productService) {
         this.productService = productService;
+    }
+
+
+    @GetMapping("add")
+    public String addSellProduct() {
+        return "admin/sellproduct/admin-add-product";
     }
 
     @PostMapping("add")
@@ -76,6 +78,21 @@ public class ThumbnailController {
         return "redirect:/products/" + sellPage.getNo();
     }
 
+    @GetMapping("modify/{sellPageNo}")
+    public String modifySellProduct(Model model, HttpServletRequest request, @PathVariable String sellPageNo) {
+        Map<String, String> map = new HashMap<>();
+
+        map.put("sellPageNo", sellPageNo);
+        SellProductDTO sellProduct = productService.selectOneSellProduct(sellPageNo);
+        model.addAttribute("productInfo", sellProduct);
+
+        /* 판매 상품 페이지가 수정되었는지 판단하기 위해 Session에 결과값을 저장 */
+        HttpSession session = request.getSession();
+        session.setAttribute("productInfo", sellProduct);
+        System.out.println(session.getAttribute("productInfo"));
+        return "admin/sellproduct/admin-modify-product";
+    }
+
     @PostMapping("modify")
     public String modifySellProduct(HttpServletRequest request,
                                     @ModelAttribute SellProductDTO sellProduct,
@@ -97,12 +114,17 @@ public class ThumbnailController {
             return "redirect:/products/" + sellPage.getNo();
         }
 
-        // 기존에 입력되어 있던 이미지 파일들 삭제
-        int cnt = deleteImageFiles(compareSellPage.getThumbnailImageList());
-        cnt += deleteImageFile(compareSellPage.getDetailImageFileName()) ? 1 : 0;
+        // 기존에 등록되어 있던 이미지 파일들 삭제
+        // 1. 썸네일 이미지가 업로드 되었을 시 기존 썸네일 삭제
+        if (!uploadFiles.get(0).isEmpty()) {
+            int cnt = deleteImageFiles(compareSellPage.getThumbnailImageList());
+            log.info("[ThumbnailController] " + cnt + "개의 Thumbnail 삭제 완료!");
+        }
 
-        if (cnt > 0) {
-            log.info("[ThumbnailController] " + cnt + "개의 사진 삭제 완료!");
+        // 2. 상세 이미지가 업로드 되었을 시 기존 상세 이미지 삭제
+        if (!uploadDetailFile.isEmpty()) {
+            int cnt = deleteImageFile(compareSellPage.getDetailImageFileName()) ? 1 : 0;
+            log.info("[ThumbnailController] DetailImage 삭제 완료!");
         }
 
         System.out.println("uploadFilesSize : " + uploadFiles.size() + "--------------------------------");

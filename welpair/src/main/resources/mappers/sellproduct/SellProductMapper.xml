@@ -424,8 +424,8 @@
     <update id="updateSellPage">
         UPDATE T_SELL_PAGE
            SET SELL_PAGE_TITLE = #{ title }
-             , SELL_DETAIL_IMAGE_FILE_NAME = #{ detailImageFileName }
-             , SELL_DETAIL_IMAGE_ORGIN_FILE_NAME = #{ detailImageOriginFileName }
+             , SELL_DETAIL_IMAGE_FILE_NAME = #{ detailImageFileName, jdbcType=NULL}
+             , SELL_DETAIL_IMAGE_ORGIN_FILE_NAME = #{ detailImageOriginFileName, jdbcType=NULL}
          WHERE SELL_PAGE_NO = #{ no }
     </update>
 
