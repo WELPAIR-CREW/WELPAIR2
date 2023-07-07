@@ -163,7 +163,7 @@ public class SellProductServiceImpl implements SellProductService {
             }
         }
 
-        // 2. 페이지의 썸네일 삭제
+        // 3. 페이지의 썸네일 삭제
         if (compareThumbnailImageList != null) {
             log.info("썸네일 삭제");
             int result = 0;
@@ -174,7 +174,7 @@ public class SellProductServiceImpl implements SellProductService {
             }
         }
 
-        // 3. 페이지의 썸네일 추가
+        // 4. 페이지의 썸네일 추가
         if (sellPage.getThumbnailImageList() != null) {
             log.info("썸네일 추가");
             int result = 0;
