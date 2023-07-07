@@ -13,40 +13,59 @@
     <title>Write</title>
 
     <script src="http://code.jquery.com/jquery-3.7.0.min.js" ></script>
-    <script th:src="@{../common/js/static/include.js}"></script>
-
 
 </head>
 <body>
-<!--<div class="header1"></div>-->
+<div class="header1"></div>
 <div data-include-html="/consumer/header_consumer" class="include"></div>
 
 <div class="wrap">
-    <div class="content_wrap">
-        <div class="title_wrap">
-            <div class="board_title"><h2>게시글 작성</h2></div>
-        </div>
-        <div class="write_wrap">
-            <div class="write_first">
-                <textarea class="write_title" maxlength="48" contenteditable="true" placeholder="제목"></textarea>
+    <form action="/post/board-write" method="post" id="boardWrite">
+        <div class="content_wrap">
+            <div class="title_wrap">
+                <div class="board_title"><h2>게시글 작성</h2></div>
             </div>
-            <div class="write_third">
-                <select name="" id="" >
-                    <option value="">카테고리 선택</option>
-                    <option value="공지사항">공지사항</option>
-                    <option value="자주묻는질문">자주묻는질문</option>
-                    <option value="Q&A">Q&A</option>
+            <div class="write_wrap">
+                <div class="write_first">
+                    <textarea class="write_title" maxlength="48" contenteditable="true" placeholder="제목"
+                                name="boardTitle" id="postTitle"></textarea>
+                </div>
+                <div class="write_third">
+                    <select name="boardCategory" id="postCate">
+                        <option value="0" selected disabled>카테고리를 선택해주세요.</option>
+                        <option value="BOARD_1">문의</option>
+                        <option value="BOARD_2">리뷰</option>
+                        <option value="BOARD_3">공지사항</option>
+                        <option value="BOARD_4">자주묻는질문</option>
+                    </select>
+                    <select name="isPrivate" id="postPrivate" class="boardPrivate">
+                        <option value="0" selected disabled>글 공개 여부 선택</option>
+                        <option value="Y">공개</option>
+                        <option value="N">비공개</option>
+                    </select>
 
-                </select>
+                </div>
+                <div class="write_second">
+<!--                    <div class="editor">-->
+<!--                        <button id="btn-bold"><b>B</b></button>-->
+<!--                        <button id="btn-italic"><i>I</i></button>-->
+<!--                        <button id="btn-underline"><u>U</u></button>-->
+<!--                        <button id="btn-strike"><s>S</s></button>-->
+<!--                        <button id="btn-ordered-list">OL</button>-->
+<!--                        <button id="btn-unordered-list">UL</button>-->
+<!--                    </div>-->
+                    <textarea class="write_content" maxlength="800" contenteditable="true" placeholder="내용을 입력하세요."
+                                name="boardContent" id="postContent"></textarea>
+                </div>
             </div>
-            <div class="write_second">
-                <textarea class="write_content" maxlength="800" contenteditable="true" placeholder="내용을 입력하세요."></textarea>
+            <div class="button">
+                <div class="bnt_go_list">
+                    <input type="button" value="목록으로"><a href="#"></a>
+                    <input class="update" type="submit" value="등록하기"></a>
+                </div>
             </div>
         </div>
-        <div class="bnt_go_list">
-            <input type="button" value="목록으로"><a href="#"></a>
-        </div>
-    </div>
+    </form>
 
 </div>
 <div class="footer1"></div>
@@ -56,9 +75,37 @@
 
 
 
-<!--<script>-->
-<!--    $('.header1').load('/common/css/header.css');-->
-<!--    $('.footer1').load('/common/css/footer.html');-->
-<!--</script>-->
+<script>
+    $('.header1').load('/consumer/header_consumer');
+    $('.footer1').load('/consumer/footer');
+
+$(function(){
+    $("#boardWrite").submit(function(){
+        if($("#postTitle").val().trim()== ""){
+            alert("제목을 입력해주세요.");
+            return false;
+        }
+        if($("#postCate").val()== 0 ){
+            alert("카테고리를 선택해주세요.");
+            return false;
+        }
+        if($("#postPrivate").val()== 0){
+            alert("글 공개여부를 선택해주세요.");
+            return false;
+        }
+        if($("#postContent").val().trim() == ""){
+            alert("내용을 입력해주세요.");
+            return false;
+        } else {
+            alert("글이 등록되었습니다.");
+            return true;
+        }
+
+    });
+});
+
+
+
+</script>
 
 </html>

@@ -5,6 +5,7 @@ import com.hielectro.welpair.member.controller.RegistMemberException;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
+import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -50,6 +51,14 @@ public interface MemberService extends UserDetailsService {
     //회원목록 조회
     List<MemberDTO> getMemberListforPoint(SelectCriteria selectCriteria);
 
+
+    //5. 포인트지급이력
+
+    //5-1. 요약
+    List<PointHistoryDTO> pointHistorySummary();
+
+    //5-2. 상세
+    List<PointHistoryDTO> pointHistoryDetail(int eventId);
 
 
 }

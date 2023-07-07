@@ -2,6 +2,7 @@ package com.hielectro.welpair.sellproduct.model.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.*;
@@ -134,6 +135,7 @@ public class SellProductServiceImpl implements SellProductService {
         return result;
     }
 
+    @Override
     @Transactional
     public void modifySellProduct(SellProductDTO compareSellProduct, SellProductDTO sellProduct) {
         SellPageDTO compareSellPage = compareSellProduct.getSellItemPage().getSellPage();
@@ -144,12 +146,18 @@ public class SellProductServiceImpl implements SellProductService {
         System.out.println("modifySellProduct : " + sellPage + "-------------------------");
 
         // 1. 판매상품 페이지 수정
-        if (!(compareSellPage.getTitle().equals(sellPage.getTitle())
-            && compareSellPage.getDetailImageFileName().equals(sellPage.getDetailImageFileName()))) {
+        String compareTitle = compareSellPage.getTitle();
+        String sellTitle = sellPage.getTitle();
+        String compareDetailImageFileName = Optional.ofNullable(compareSellPage.getDetailImageFileName()).orElse("");
+        String sellDetailImageFileName = sellPage.getDetailImageFileName();
+
+        boolean isPageModificationNeeded = !compareTitle.equals(sellTitle) || !compareDetailImageFileName.equals(sellDetailImageFileName);
+
+        if (isPageModificationNeeded) {
             log.info("페이지 수정");
             int result = productMapper.updateSellPage(sellPage);
 
-            if (!(result > 0)) {
+            if (result <= 0) {
                 throw new IllegalStateException("SellPage Update Failed");
             }
         }
@@ -164,7 +172,12 @@ public class SellProductServiceImpl implements SellProductService {
         }
 
         // 3. 페이지의 썸네일 삭제
-        if (compareThumbnailImageList != null) {
+        log.info("compareThumbnailImageList : " + compareThumbnailImageList);
+        Optional<String> thumbnailImageFileNameOptional = Optional.ofNullable(compareThumbnailImageList)
+                .filter(list -> !list.isEmpty())
+                .map(list -> list.get(0).getThumbnailImageFileName());
+
+        if (thumbnailImageFileNameOptional.isPresent()) {
             log.info("썸네일 삭제");
             int result = 0;
             result += productMapper.deleteThumbnail(sellPage.getNo());

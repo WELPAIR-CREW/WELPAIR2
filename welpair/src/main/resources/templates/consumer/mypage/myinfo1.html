@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원정보-본인인증</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/mypage.css">
+    <script src="/common/js/static/include.js"></script>
+</head>
+
+<body>
+    <!-- header -->
+<!--    <div data-include-html="/consumer/header_mypage" class="include"></div>-->
+<!--    <head th:replace="/consumer/header_mypage :: html-head"></head>-->
+    <div th:replace="/consumer/header_mypage :: header"></div>
+
+    <!-- @마이페이지 첫 화면 정하기 -->
+
+    <section>
+        <div class="section-title">회원정보</div>
+
+        <div id="identify">
+            <button><a href="마이페이지 첫 화면으로 이동하도록">×</a></button>
+            <div>본인 인증</div>
+            <input type="password" name="identify" id="input-password" placeholder="비밀번호를 입력하세요">
+            <button id="button-password">
+                확인
+            </button>
+            <!-- @ 버튼에 a태그 넣었을때 문제 발생...형제 요소에 적용한 css확인-->
+
+        </div>
+    </section>
+
+
+
+    <!-- footer -->
+    <div data-include-html="/consumer/footer" class="include"></div>
+
+</body>
+
+</html>
