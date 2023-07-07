@@ -19,9 +19,6 @@ let categoryCode = null;
 let productStatus = null;
 
 async function fetchOptionListData() {
-    categoryCode = document.querySelector("#select-category");
-    productStatus = document.querySelector("#productStatus");
-
     const urls = ['/sellproduct/categoryList', '/sellproduct/statusList'];
     const requests = urls.map(url => call(url, 'post'))
     const [category, status] = await Promise.all(requests);

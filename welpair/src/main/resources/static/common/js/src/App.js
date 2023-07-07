@@ -94,6 +94,7 @@ export function createPaging(callbackFn) {
     for (let i = pagination.startPageNo; i <= pagination.maxPageNo && i <= pagination.endPageNo; i++) {
         const span = document.createElement('span');
         const link = appendLink(i, span);
+        link.removeAttribute('href');
 
         if (i === pagination.currentPageNo) {
             link.classList.add('select');
