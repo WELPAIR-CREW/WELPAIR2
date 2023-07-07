@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.*;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +52,18 @@ public class SellProductController {
     @ResponseBody
     public List<ProductDTO> selectOptionList(@RequestBody ProductDTO product) {
         return productService.selectOptionList(product);
+    }
+
+    @PostMapping("categoryList")
+    @ResponseBody
+    public List<CategoryDTO> selectCategoryList() {
+        return productService.selectCategoryList();
+    }
+
+    @PostMapping("statusList")
+    @ResponseBody
+    public List<ProductDTO> selectProductList() {
+        return productService.selectProductStatus();
     }
 
     @PostMapping("productNameList")

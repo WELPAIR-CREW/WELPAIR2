@@ -1,4 +1,4 @@
-export const call = (url, method, request) => {
+export const call = (url, method, request = null) => {
     let options = {
         headers: {
             'Content-Type': 'application/json',

@@ -194,7 +194,7 @@
                     option.textContent = '선택';
                     productName.append(option);
 
-                    for (obj of list) {
+                    for (let obj of list) {
                         const option = document.createElement("option");
                         option.value = obj.productCode;
                         option.textContent = obj.productName;
@@ -204,7 +204,7 @@
         })
 
         productOption.addEventListener('change', function () {
-            options = {
+            const options = {
                 categoryCode: categoryCode.value,
                 productOption: productOption.value,
                 productStatus: productStatus.value
@@ -217,7 +217,7 @@
                     option.textContent = '선택';
                     productName.append(option);
 
-                    for (obj of list) {
+                    for (let obj of list) {
                         const option = document.createElement("option");
                         option.value = obj.productCode;
                         option.textContent = obj.productName;

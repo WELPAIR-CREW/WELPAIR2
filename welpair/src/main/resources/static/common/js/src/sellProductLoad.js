@@ -1,5 +1,5 @@
 import { includeHTML } from './include.js'
-import {appendLink, call, createLink, createPaging, createTable, pagination, setPagination} from './App.js'
+import { call, createPaging, createTable, pagination, setPagination} from './App.js'
 
 const searchBtn = document.querySelector(".first-button");
 searchBtn.addEventListener('click', fetchSellProductListData);
@@ -15,12 +15,55 @@ headerCheckBox.addEventListener('click', function () {
 
 let code = null;
 let name = null;
+let categoryCode = null;
+let productStatus = null;
+
+async function fetchOptionListData() {
+    categoryCode = document.querySelector("#select-category");
+    productStatus = document.querySelector("#productStatus");
+
+    const urls = ['/sellproduct/categoryList', '/sellproduct/statusList'];
+    const requests = urls.map(url => call(url, 'post'))
+    const [category, status] = await Promise.all(requests);
+
+    [...category].filter(item => item.categoryCode > 2)
+        .forEach((item, index) => {
+            if (index == 0) {
+                const option = document.createElement("option");
+                option.value = '';
+                option.textContent = '선택';
+                categoryCode.append(option);
+            }
+
+            const option = document.createElement("option");
+            option.value = item.categoryCode;
+            option.textContent = item.categoryName;
+            categoryCode.append(option);
+        });
+
+    [...status].forEach((item, index) => {
+        if (index == 0) {
+            const option = document.createElement("option");
+            option.value = '';
+            option.textContent = '선택';
+            productStatus.append(option);
+        }
+
+        const option = document.createElement("option");
+        option.value = item.productStatus;
+        option.textContent = item.productStatus;
+        productStatus.append(option);
+    })
+}
 
 async function fetchSellProductListData() {
     code = document.querySelector(".product-code").value
     name = document.querySelector(".name").value
+    categoryCode = document.querySelector("#select-category").value;
+    productStatus = document.querySelector("#productStatus").value;
+
     const pageNo = 1;
-    const map = {code, name, pageNo};
+    const map = {code, name, categoryCode, productStatus, pageNo};
 
     const urls = ['/sellproduct/sellProductCountAPI', '/sellproduct/sellProductListAPI'];
     const requests = urls.map(url => call(url, 'post', map))
@@ -33,7 +76,7 @@ async function fetchSellProductListData() {
 }
 
 async function selectSellProduct(pageNo = 1) {
-    const map = {code, name, pageNo};
+    const map = {code, name, categoryCode, productStatus, pageNo};
 
     call('/sellproduct/sellProductListAPI', 'post', map)
         .then(data => {
@@ -47,6 +90,10 @@ async function deleteSellProduct() {
         .map(item => item.parentElement.nextElementSibling.textContent);
     console.log(request);
 
+    if (!confirm("삭제하시겠습니까?")) {
+        return;
+    }
+
     call("/sellproduct/sellProductDeleteAPI", "post", request)
         .then(data => {
             if (data > 0) {
@@ -59,4 +106,5 @@ async function deleteSellProduct() {
 }
 
 await fetchSellProductListData();
+await fetchOptionListData();
 includeHTML();

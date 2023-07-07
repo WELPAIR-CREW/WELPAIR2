@@ -116,6 +116,10 @@
                 return;
             }
 
+            while (thumbnail.children.length < this.files.length) {
+                thumbnail.append(document.createElement("img"));
+            }
+
             [...thumbnail.children].forEach((item, index) => {
                 if (this.files[index]) {
                     if (index == 0) {
