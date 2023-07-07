@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -83,41 +84,21 @@ public class SearchController {
      */
     @PostMapping("detail")
     @ResponseBody
-//    public List<SearchDTO> searchDetailResult(Model model, @RequestParam(required = false) String title,
-//                                              @RequestParam(required = false) String categoryCode,
-//                                              @RequestParam(required = false) String productStatus,
-//                                              @RequestParam(required = false) Integer minPrice,
-//                                              @RequestParam(required = false) Integer maxPrice) {
     public List<SearchDTO> searchDetailResult(Model model, SearchDTO search) {
         System.out.println("------------- 상품 상세 검색 컨트롤러 2-1 in -------------");
 
         System.out.println(search);
-//        SearchDTO search = new SearchDTO();
+
         SellPageDTO sellPage = search.getSellPage();
         ProductDTO product = search.getProduct();
         CategoryDTO category = search.getCategory();
 
-//        String refCategoryCode = null;
-//
-//        product.setCategoryCode(categoryCode);
-//        product.setProductStatus(productStatus);
-//
-//        System.out.println("sellPage = " + sellPage);
-//        System.out.println("product = " + product);
-//
-//        search.setSellPage(sellPage);
-//        search.setProduct(product);
-//        search.setMinPrice(minPrice);
-//        search.setMaxPrice(maxPrice);
-//
-//        System.out.println("search = " + search);
-//
         List<SearchDTO> prodSearchList = null;
-//
         if(search != null){
             prodSearchList = searchService.searchDetailResult(search);
             System.out.println("prodSearchList = " + prodSearchList);
             model.addAttribute("prodSearchList", prodSearchList);
+
 
         } else{
             model.addAttribute("prodSearchList", Collections.emptyList());
@@ -132,7 +113,6 @@ public class SearchController {
         System.out.println("------------- 상품 상세 검색 컨트롤러 2-2 out -------------");
         return prodSearchList;
     }
-
 
 
     private String createSearchTerms(String title, String categoryCode, String refCategoryCode, String productStatus) {

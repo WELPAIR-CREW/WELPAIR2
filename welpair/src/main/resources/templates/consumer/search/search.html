@@ -56,18 +56,19 @@
                                    placeholder="최대 금액" value=0>
                         </span>
                         <span>
-                            <input clas="searchCheck" type="checkbox"> 결과 내 검색
-                        </span>
-                        <span>
                             <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
                             <input id="detailSearch" class="btn_basic" type="submit" value="검색">
                         </span>
                     </div>
                 </div>
+                <ul class="search-sorting">
+                    <li onclick="sortResults('price_desc')">가격 내림차순</li><p> | </p>
+                    <li onclick="sortResults('price_asc')">가격 오름차순</li><p> | </p>
+                    <li onclick="sortResults('title_desc')">상품명 내림차순</li><p> | </p>
+                    <li onclick="sortResults('title_asc')">상품명 오름차순</li>
+                </ul>
             </form>
         </div>
-
-        <!-- 검색 수량, 정렬 기준 -->
 
         <!-- 검색 결과 리스트 -->
         <div class="section-searchResult">

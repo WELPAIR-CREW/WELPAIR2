@@ -100,6 +100,20 @@
         <if test="maxPrice != null and maxPrice != ''">
             AND E.PRODUCT_PRICE * (1 - D.DISCOUNT) &lt;= #{maxPrice}
         </if>
+        <choose>
+            <when test="sortType == 'price_desc'">
+                ORDER BY SELLPRICE DESC
+            </when>
+            <when test="sortType == 'price_asc'">
+                ORDER BY SELLPRICE ASC
+            </when>
+            <when test="sortType == 'title_desc'">
+                ORDER BY A.SELL_PAGE_TITLE DESC
+            </when>
+            <when test="sortType == 'title_asc'">
+                ORDER BY A.SELL_PAGE_TITLE ASC
+            </when>
+        </choose>
     </select>
 
     <select id="searchTermsCategory" parameterType="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
