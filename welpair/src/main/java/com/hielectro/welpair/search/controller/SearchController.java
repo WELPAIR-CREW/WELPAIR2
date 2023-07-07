@@ -36,7 +36,8 @@ public class SearchController {
     @GetMapping("search")
     public String searchResultMain(Model model, @RequestParam(value = "title", required = false) String title
                                             ,@RequestParam(value = "categoryCode", required = false) String categoryCode
-                                            ,@RequestParam(value = "refCategoryCode", required = false) String refCategoryCode){
+                                            ,@RequestParam(value = "refCategoryCode", required = false) String refCategoryCode
+                                            ,@RequestParam(value = "productStatus", required = false) String productStatus){
         System.out.println("------------- 상품검색 컨트롤러 1-1 in -------------");
 
         SearchDTO search = new SearchDTO();
@@ -47,9 +48,11 @@ public class SearchController {
         System.out.println("title = " + title);
         System.out.println("categoryCode = " + categoryCode);
         System.out.println("refCategoryCode = " + refCategoryCode);
+        System.out.println("productStatus = " + productStatus);
 
         sellPage.setTitle(title);
         product.setCategoryCode(categoryCode);
+        product.setProductOption(productStatus);
         category.setRefCategoryCode(refCategoryCode);
 
         search.setSellPage(sellPage);
@@ -74,7 +77,7 @@ public class SearchController {
             model.addAttribute("noResultMessage", "검색한 결과가 없습니다.");
         }
 
-        model.addAttribute("searchTerms", createSearchTermsString(title));
+        model.addAttribute("searchTerms", createSearchTerms(title, categoryCode, refCategoryCode, productStatus));
         System.out.println("------------- 상품검색 컨트롤러 1-1 out -------------");
         return "consumer/search/search";
     }
@@ -87,6 +90,7 @@ public class SearchController {
     @ResponseBody
     public List<SearchDTO> searchDetailResult(Model model, @RequestParam(required = false) String title,
                                               @RequestParam(required = false) String categoryCode,
+                                              @RequestParam(value = "productStatus", required = false) String productStatus,
                                               @RequestParam(required = false) Integer minPrice,
                                               @RequestParam(required = false) Integer maxPrice) {
         System.out.println("------------- 상품 상세 검색 컨트롤러 2-1 in -------------");
@@ -94,9 +98,10 @@ public class SearchController {
         SearchDTO search = new SearchDTO();
         SellPageDTO sellPage = new SellPageDTO();
         ProductDTO product = new ProductDTO();
+        String refCategoryCode = null;
 
-        sellPage.setTitle(title);
         product.setCategoryCode(categoryCode);
+        product.setProductOption(productStatus);
 
         System.out.println("sellPage = " + sellPage);
         System.out.println("product = " + product);
@@ -123,19 +128,34 @@ public class SearchController {
             model.addAttribute("noResultMessage", "검색한 결과가 없습니다.");
         }
 
-        model.addAttribute("searchTerms", createSearchTermsString(title));
+        model.addAttribute("searchTerms", createSearchTerms(title, categoryCode, refCategoryCode, productStatus));
         System.out.println("------------- 상품 상세 검색 컨트롤러 2-2 out -------------");
         return prodSearchList;
     }
 
 
 
-    private String createSearchTermsString(String title) {
+    private String createSearchTerms(String title, String categoryCode, String refCategoryCode, String productStatus) {
         StringBuilder searchTerms = new StringBuilder();
 
         if (title != null && !title.isEmpty()) {
-            searchTerms.append("검색어 : ").append(title).append(", ");
+            searchTerms.append("<검색어> ").append(title).append(", ");
         }
+        if (productStatus != null && !productStatus.isEmpty()) {
+            searchTerms.append("<카테고리> ").append(productStatus).append(", ");
+        }
+
+        if (categoryCode != null && !categoryCode.isEmpty()){
+            String categoryName = null;
+            categoryName = searchService.searchTermsCategory(categoryCode);
+            searchTerms.append("<카테고리> ").append(categoryName).append(", ");
+        }
+        if (refCategoryCode != null && !refCategoryCode.isEmpty()){
+            String categoryName = null;
+            categoryName = searchService.searchTermsRefCategory(refCategoryCode);
+            searchTerms.append("<카테고리> ").append(categoryName).append(", ");
+        }
+
 
         if (searchTerms.length() > 2) {
             searchTerms.setLength(searchTerms.length() - 2);

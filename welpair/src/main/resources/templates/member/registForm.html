@@ -15,11 +15,11 @@
 <form id="frm" th:action="@{/member/registForm}" method="post">
     <div class="article content_wrap">
         <div class="title_regist"><h1>회원가입</h1></div>
-<!--        <div class="form first_input int_name ">-->
-<!--            <input class="input" type="text" placeholder="이름" id="memberName" name="empName">-->
-<!--        </div>-->
+        <!--        <div class="form first_input int_name ">-->
+        <!--            <input class="input" type="text" placeholder="이름" id="memberName" name="empName">-->
+        <!--        </div>-->
         <div class="form int_mamberNo">
-            <input class="input_name" type="text" placeholder="사원번호" id="memberNo" name="empNo" oninput="checkId()">
+            <input class="input_name" type="text" placeholder="사원번호" id="memberNo" name="empNo">
             <input type="button" class="check" value="사원번호" id="numCheck"><br>
             <h4 id="okM">회원가입가능한 사번입니다.</h4>
 
@@ -29,33 +29,33 @@
         </div>
         <div class="form int_passwordCheck">
             <input class="input pw" id="password2" type="password" placeholder="비밀번호확인" name="pwd2">
-            <h4 class="pwd error" >비밀번호가 일치하지않습니다.</h4>
-            <h4 class="pwd ok" >비밀번호가 일치합니다.</h4>
+            <h4 class="pwd error">비밀번호가 일치하지않습니다.</h4>
+            <h4 class="pwd ok">비밀번호가 일치합니다.</h4>
         </div>
     </div>
-<div class="terms terms_wrap">
-    <div class="title_term">
-        <input type="checkbox" id="term_ch">
-        <span class="titleTerm">웰페어 이용약관</span>
+    <div class="terms terms_wrap">
+        <div class="title_term">
+            <input type="checkbox" id="term_ch">
+            <span class="titleTerm">웰페어 이용약관</span>
+        </div>
+        <div class="auth">
+            <p class="auth_inner">
+                네이버는 기본적으로 여러분 모두에게 동일한 내용의 서비스를 제공합니다.
+                다만, '청소년보호법' 등 관련 법령이나 기타 개별 서비스 제공에서의 특별한 필요에 의해서
+                연령 또는 일정한 등급을 기준으로 이용자를 구분하여 제공하는 서비스의 내용, 이용 시간,
+                이용 횟수 등을 다르게 하는 등 일부 이용을 제한하는 경우가 있습니다. 자세한 내용은 역시
+                각 서비스 상의 안내, 공지사항, 고객센터 도움말 등에서 확인하실 수 있습니다.
+                네이버는 기본적으로 여러분 모두에게 동일한 내용의 서비스를 제공합니다.
+                다만, '청소년보호법' 등 관련 법령이나 기타 개별 서비스 제공에서의 특별한 필요에 의해서
+                연령 또는 일정한 등급을 기준으로 이용자를 구분하여 제공하는 서비스의 내용, 이용 시간,
+                이용 횟수 등을 다르게 하는 등 일부 이용을 제한하는 경우가 있습니다. 자세한 내용은 역시
+                각 서비스 상의 안내, 공지사항, 고객센터 도움말 등에서 확인하실 수 있습니다.
+            </p>
+        </div>
     </div>
-    <div class="auth">
-        <p class="auth_inner">
-            네이버는 기본적으로 여러분 모두에게 동일한 내용의 서비스를 제공합니다.
-            다만, '청소년보호법' 등 관련 법령이나 기타 개별 서비스 제공에서의 특별한 필요에 의해서
-            연령 또는 일정한 등급을 기준으로 이용자를 구분하여 제공하는 서비스의 내용, 이용 시간,
-            이용 횟수 등을 다르게 하는 등 일부 이용을 제한하는 경우가 있습니다. 자세한 내용은 역시
-            각 서비스 상의 안내, 공지사항, 고객센터 도움말 등에서 확인하실 수 있습니다.
-            네이버는 기본적으로 여러분 모두에게 동일한 내용의 서비스를 제공합니다.
-            다만, '청소년보호법' 등 관련 법령이나 기타 개별 서비스 제공에서의 특별한 필요에 의해서
-            연령 또는 일정한 등급을 기준으로 이용자를 구분하여 제공하는 서비스의 내용, 이용 시간,
-            이용 횟수 등을 다르게 하는 등 일부 이용을 제한하는 경우가 있습니다. 자세한 내용은 역시
-            각 서비스 상의 안내, 공지사항, 고객센터 도움말 등에서 확인하실 수 있습니다.
-        </p>
+    <div class="bnt_regist_next">
+        <input class="bnt_next" type="submit" value="가입">
     </div>
-</div>
-<div class="bnt_regist_next">
-    <input class="bnt_next" type="submit" value="가입">
-</div>
 </form>
 
 <div class="footer1"></div>
@@ -86,34 +86,34 @@
 
     // 비밀번호 일치 확인 js.///////////////
 
-    $(function(){
+    $(function () {
 
         $('.error').hide();
         $('.ok').hide();
 
-        $('input').keyup(function(){
+        $('input').keyup(function () {
 
             var pwd1 = $('#password1').val();
             var pwd2 = $("#password2").val();
 
-            if(pwd1 != "" || pwd2 !=""){
+            if (pwd1 != "" || pwd2 != "") {
 
-                if(pwd1 == pwd2){
+                if (pwd1 == pwd2) {
                     $('.error').hide();
                     $('.ok').show();
                     $(".bnt_next").removeAttr("disabled");
-                    $("#password1").css({'border' : '2px solid #3e4feb'});
-                    $("#password2").css({'border' : '2px solid #3e4feb'});
-                    $(".ok").css({"color" : "#3e4feb"});
+                    $("#password1").css({'border': '2px solid #3e4feb'});
+                    $("#password2").css({'border': '2px solid #3e4feb'});
+                    $(".ok").css({"color": "#3e4feb"});
 
                     return true
-                } else{
+                } else {
                     $('.error').show();
                     $('.ok').hide();
                     $('.bnt_next').attr('disabled', 'disabled');
-                    $("#password1").css({'border' : '2px solid red'});
-                    $("#password2").css({'border' : '2px solid red'});
-                    $(".error").css({"color" : "red"});
+                    $("#password1").css({'border': '2px solid red'});
+                    $("#password2").css({'border': '2px solid red'});
+                    $(".error").css({"color": "red"});
                     return false
                 }
 
@@ -122,59 +122,83 @@
         });
 
     });
+    $("#numCheck").click(() => checkId());
 
-
-    function checkId(){
-
-        $("#numCheck").click(function(){
-
-            var empNo = $('#memberNo').val();
-            let obj = {empNo};
-            $.ajax({
-                url : '/member/idCheck',
-                type: 'post',
-                data: obj,
-                success:function(cnt){
-                    if(cnt > 0){   // 얘는 값이 있어서 성공
-                        $('#okM').css({'display':'block'});
-                        // $("#numCheck").prop("disabled",true);
-                    } else{  // 얘는 값이 없어서 실패
-                        alert('사번이 없습니다. 사번을 확인해주세요.');
-                        $('#memberNo').val('');
-                    }
-                },
-                error:function (error){
-                    alert('잘못된경로입니다. 다시 확인하세요.');
+    function checkId() {
+        var empNo = $('#memberNo').val();
+        let obj = {empNo};
+        $.ajax({
+            url: '/member/idCheck',
+            type: 'post',
+            data: obj,
+            success: function (cnt) {
+                if(cnt > 0){   // 얘는 값이 있어서 성공
+                     $('#okM').css({'display':'block'});
+                    // $("#numCheck").prop("disabled",true);
+                } else{  // 얘는 값이 없어서 실패
+                    alert('사번이 없습니다. 사번을 확인해주세요.');
+                    $('#memberNo').val('');
                 }
+            },
+            error: function (error) {
+                alert('잘못된경로입니다. 다시 확인하세요.');
+            }
 
-            });
         });
-
     };
 
 
-    $(function(){
-        $("#frm").submit(function(){
+    // function checkId(){
+    //
+    //     $("#numCheck").click(function(){
+    //
+    //         var empNo = $('#memberNo').val();
+    //         let obj = {empNo};
+    //         $.ajax({
+    //             url : '/member/idCheck',
+    //             type: 'post',
+    //             data: obj,
+    //             success:function(cnt){
+    //                 if(cnt > 0){   // 얘는 값이 있어서 성공
+    //                     $('#okM').css({'display':'block'});
+    //                     // $("#numCheck").prop("disabled",true);
+    //                 } else{  // 얘는 값이 없어서 실패
+    //                     alert('사번이 없습니다. 사번을 확인해주세요.');
+    //                     $('#memberNo').val('');
+    //                 }
+    //             },
+    //             error:function (error){
+    //                 alert('잘못된경로입니다. 다시 확인하세요.');
+    //             }
+    //
+    //         });
+    //     });
+    //
+    // };
+
+
+    $(function () {
+        $("#frm").submit(function () {
             // if($("#memberName").val().trim() == ""){
             //     alert("이름을 입력하세요.");
             //     $("#memberName").focus();
             //     return false;
             // }
-            if($("#memberNo").val().trim() == ""){
+            if ($("#memberNo").val().trim() == "") {
                 alert("사원번호을 입력하세요.");
                 $("#memberNo").focus();
                 return false;
             }
-            if($("#password1").val().trim() == ""){
+            if ($("#password1").val().trim() == "") {
                 alert("비밀번호를 입력하세요.");
                 $("#password1").focus();
                 return false;
             }
-            if($('#term_ch')[0].checked === false){
+            if ($('#term_ch')[0].checked === false) {
                 alert("이용약관에 동의해주세요");
                 $("#term_ch").focus();
                 return false;
-            } else{
+            } else {
                 alert('회원가입이 완료되었습니다.');
                 return true;
             }
@@ -226,8 +250,6 @@
     // }
 
 
-
-
     // function checkId(){
     //
     //     $("#numCheck").click(function(){
@@ -255,7 +277,6 @@
     //     });
     //
     // };
-
 
 
 </script>
