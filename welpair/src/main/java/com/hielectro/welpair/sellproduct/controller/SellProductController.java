@@ -47,26 +47,6 @@ public class SellProductController {
         return "admin/sellproduct/" + url;
     }
 
-    @GetMapping("add")
-    public String addSellProduct() {
-        return "admin/sellproduct/admin-add-product";
-    }
-
-    @GetMapping("modify/{sellPageNo}")
-    public String modifySellProduct(Model model, HttpServletRequest request, @PathVariable String sellPageNo) {
-        Map<String, String> map = new HashMap<>();
-
-        map.put("sellPageNo", sellPageNo);
-        SellProductDTO sellProduct = productService.selectOneSellProduct(sellPageNo);
-        model.addAttribute("productInfo", sellProduct);
-
-        /* 판매 상품 페이지가 수정되었는지 판단하기 위해 Session에 결과값을 저장 */
-        HttpSession session = request.getSession();
-        session.setAttribute("productInfo", sellProduct);
-
-        return "admin/sellproduct/admin-modify-product";
-    }
-
     @PostMapping("optionList")
     @ResponseBody
     public List<ProductDTO> selectOptionList(@RequestBody ProductDTO product) {

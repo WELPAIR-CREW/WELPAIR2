@@ -32,5 +32,11 @@ public interface SellProductMapper {
 
     // DELETE
     int sellProductDelete(String id);
+    int deleteThumbnail(String no);
+
+    // UPDATE
+    int updateSellPage(SellPageDTO sellPage);
+
+    int updateSellProduct(SellProductDTO sellProduct);
 }
 

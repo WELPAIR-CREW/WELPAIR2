@@ -17,5 +17,5 @@ public class AddressDTO {
     private String addressPhone;
     private String empNo;
 
-    private MemberDTO memberDTO;
+//    private MemberDTO memberDTO;
 }

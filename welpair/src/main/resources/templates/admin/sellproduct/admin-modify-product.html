@@ -91,6 +91,8 @@
             <img th:src="|${productInfo.sellItemPage.sellPage.path}original/${productInfo.sellItemPage.sellPage.detailImageFileName}|">
         </section>
         <div data-include-html="/admin/footer" class="include"></div>
+        <input type="hidden" name="sellItemPage.sellPage.no" th:value="${productInfo.sellItemPage.sellPage.no}">
+        <input type="hidden" name="id" th:value="${productInfo.id}">
     </form>
     <script>
         const upload = document.querySelector('#upload');

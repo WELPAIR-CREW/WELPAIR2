@@ -60,6 +60,57 @@
         <association property="product" resultMap="ProductResultMap"/>
     </resultMap>
 
+
+
+    <resultMap id="employeeResultMap" type="com.hielectro.welpair.member.model.dto.EmployeeDTO">
+        <id property="empNo" column="EMP_NO"/>
+        <result property="empName" column="EMP_NAME"/>
+        <result property="empPhone" column="EMP_PHONE"/>
+
+        <association property="memberDTO" resultMap="memberResultMap"/>
+    </resultMap>
+
+
+    <!--    <resultMap id="memberInfoResultMap" type="memberResultMap">-->
+    <!--        <association property="." resultMap="memberResultMap"/>-->
+    <!--        <association property="employee" resultMap="employeeResultMap"/>-->
+    <!--        <collection property="address" resultMap="addressResultMap"/>-->
+    <!--    </resultMap>-->
+
+
+
+
+    <resultMap id="memberResultMap" type="com.hielectro.welpair.member.model.dto.MemberDTO">
+        <id property="empNo" column="EMP_NO"/>
+        <result property="pointBalance" column="POINT_BALANCE"/>
+        <collection property="address" resultMap="addressResultMap"/>
+    </resultMap>
+
+    <resultMap id="addressResultMap" type="com.hielectro.welpair.mypage.model.dto.AddressDTO">
+        <id property="addressId" column="ADDRESS_ID"/>
+        <result property="isDefaultAddress" column="IS_DEFAULT_ADDRESS"/>
+        <result property="addressDetail" column="ADDRESS_DETAIL"/>
+        <result property="addressName" column="ADDRESS_NAME"/>
+        <result property="addressPhone" column="ADDRESS_PHONE"/>
+        <result property="empNo" column="EMP_NO"/>
+
+    </resultMap>
+
+    <!-- 멤버 배송지주소, 포인트 잔액 조회 -->
+    <select id="selectMemberById" resultMap="memberResultMap">
+        SELECT
+               M.EMP_NO
+             , M.POINT_BALANCE
+             , A.ADDRESS_ID
+             , A.ADDRESS_DETAIL
+             , A.ADDRESS_NAME
+             , A.ADDRESS_PHONE
+        FROM T_MEMBER M
+        JOIN T_ADDRESS A ON (A.EMP_NO = M.EMP_NO)
+        WHERE A.EMP_NO = #{ empNo }
+    </select>
+
+
     <!-- 선택한 카트 상품 조회 -->
     <select id="selectProductById" parameterType="com.hielectro.welpair.payment.model.dto.OrderPayReqDTO" resultMap="cartGeneralResultMap">
         SELECT
@@ -79,8 +130,16 @@
           AND B.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID(+)
           AND C.SELL_PRODUCT_ID = D.SELL_PRODUCT_ID(+)
           AND D.SELL_PAGE_NO = E.SELL_PAGE_NO(+)
-          AND C.PRODUCT_CODE = F.PRODUCT_CODE(+)
+          AND C.PRODUCT_CODE = F.PRODUC  T_CODE(+)
     </select>
+
+
+
+
+
+
+
+
 
 
 </mapper>
