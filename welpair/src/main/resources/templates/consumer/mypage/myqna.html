@@ -6,20 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내가쓴글-문의</title>
-    <link rel="stylesheet" href="../../CSS/header.css">
-    <link rel="stylesheet" href="../../CSS/footer.css">
-    <link rel="stylesheet" href="../../CSS/mypage.css">
-    <script src="../../src/static/include.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/mypage.css">
+    <script src="/common/js/static/include.js"></script>
 </head>
 
 <body>
     <!-- header -->
-    <div data-include-html="./header.html" class="include"></div>
+    <div th:replace="/consumer/header_mypage :: header"></div>
 
     <section>
         <div class="section-title mywriting">
             <span>내가 쓴 글</span>
-            <span><a href="./myreview.html">리뷰</a></span>
+            <span><a href="myreview.html">리뷰</a></span>
             <span>|&nbsp;</span>
             <span><b>문의</b></span>
         </div>
@@ -130,7 +131,7 @@
 
 
     <!-- footer -->
-    <div data-include-html="./footer.html" class="include"></div>
+    <div data-include-html="/consumer/footer" class="include"></div>
 
 
     <script>

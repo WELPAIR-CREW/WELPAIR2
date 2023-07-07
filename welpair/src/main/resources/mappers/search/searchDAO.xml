@@ -18,9 +18,11 @@
     <resultMap id="getSellPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
         <result property="no" column="SELL_PAGE_NO"></result>
         <result property="title" column="SELL_PAGE_TITLE"></result>
+        <result property="path" column="FILE_PATH"/>
     </resultMap>
     <resultMap id="getThumbnailImageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
-        <result property="no" column="SELL_PAGE_NO"></result>
+        <result property="no" column="SELL_PAGE_NO"/>
+        <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>
     </resultMap>
     <resultMap id="getSellItemPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
         <result property="no" column="SELL_PAGE_NO"></result>
@@ -49,6 +51,7 @@
              , E.PRODUCT_PRICE * (1 - D.DISCOUNT) AS SELLPRICE /*AS 판매가격*/
              , B.SELL_THUMB_IMAGE_FILE_NAME /*AS 썸네일이미지*/
              , A.SELL_PAGE_NO /*AS 판매페이지주소*/
+             , A.FILE_PATH
           FROM T_SELL_PAGE A
           JOIN T_THUMB_IMAGE B ON B.SELL_PAGE_NO = A.SELL_PAGE_NO
           JOIN T_SELL_ITEM_PAGE C ON C.SELL_PAGE_NO = A.SELL_PAGE_NO
@@ -71,10 +74,11 @@
     </select>
     <select id="searchDetailResult" resultMap="prodSearchResultMap">
         SELECT
-        A.SELL_PAGE_TITLE /* AS 판매상품명*/
+          A.SELL_PAGE_TITLE /* AS 판매상품명*/
         , E.PRODUCT_PRICE * (1 - D.DISCOUNT) AS SELLPRICE /*AS 판매가격*/
         , B.SELL_THUMB_IMAGE_FILE_NAME /*AS 썸네일이미지*/
         , A.SELL_PAGE_NO /*AS 판매페이지주소*/
+        , A.FILE_PATH
         FROM T_SELL_PAGE A
         JOIN T_THUMB_IMAGE B ON B.SELL_PAGE_NO = A.SELL_PAGE_NO
         JOIN T_SELL_ITEM_PAGE C ON C.SELL_PAGE_NO = A.SELL_PAGE_NO
@@ -96,6 +100,20 @@
         <if test="maxPrice != null and maxPrice != ''">
             AND E.PRODUCT_PRICE * (1 - D.DISCOUNT) &lt;= #{maxPrice}
         </if>
+        <choose>
+            <when test="sortType == 'price_desc'">
+                ORDER BY SELLPRICE DESC
+            </when>
+            <when test="sortType == 'price_asc'">
+                ORDER BY SELLPRICE ASC
+            </when>
+            <when test="sortType == 'title_desc'">
+                ORDER BY A.SELL_PAGE_TITLE DESC
+            </when>
+            <when test="sortType == 'title_asc'">
+                ORDER BY A.SELL_PAGE_TITLE ASC
+            </when>
+        </choose>
     </select>
 
     <select id="searchTermsCategory" parameterType="com.hielectro.welpair.inventory.model.dto.CategoryDTO">

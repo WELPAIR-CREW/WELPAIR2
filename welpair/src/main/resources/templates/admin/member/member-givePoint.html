@@ -26,7 +26,7 @@
             <div class="nav-menu"><a href="regist">회원등록</a></div>
             <div class="nav-menu"><a href="reqList">가입승인</a></div>
             <div class="nav-menu"><b>복지포인트지급</b></div>
-            <div class="nav-menu"><a href="givePointHistory">복지포인트지급이력</a></div>
+            <div class="nav-menu"><a href="pointHistorySummary">복지포인트지급이력</a></div>
         </div>
 
         <div class="box">
@@ -54,7 +54,14 @@
                                 <select id="filter-dept">
                                     <option value="all">All</option>
                                     <option value="dept1">영업</option>
+                                    <option value="dept2">구매</option>
                                     <option value="dept2">인사</option>
+                                    <option value="dept2">재무</option>
+                                    <option value="dept2">품질</option>
+                                    <option value="dept2">생산</option>
+                                    <option value="dept2">고객</option>
+                                    <option value="dept2">개발</option>
+                                    <option value="dept2">법무</option>
                                 </select>
                             </th>
                             <th>직급</th>
@@ -62,7 +69,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="member:${memberList}">
+                        <tr th:each="member:${memberList}" class="member-row">
                             <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${member.empNo}"></td>
                             <td th:text="${member.empNo}"></td>
                             <td th:text="${member.employee.empName}"></td>
@@ -201,17 +208,51 @@
 
 
 
-        //지급하기 버튼을 눌렀을때 사용될 비동기처리 함수를 작성하기
-        function currentSelectedCount() {
+        //부서 필터 적용하기
+        document.getElementById('filter-dept').addEventListener('change', function() {
+           filterTableByDept(this.value);
+        });
 
-            $.ajax({
-               url: '/getSelectedCount', //URL 매핑
-               type: 'GET',
-               success: function(count) {
-                   $('#selectedCount').text(count);
-               }
-            });
+        function filterTableByDept(selectedDept) {
+            //tbody에서 모든 행 가져오기
+            // let rows = document.getElementById('table-givepoint').getElementsByTagName('tbody')[0].rows;
+            let rows = document.getElementsByClassName('member-row');
+
+            for(let i=0; i<rows.length; i++) {
+                let row = rows[i];
+
+                //현재 행의 부서 열 값
+                let dept = row.cells[5].textContent.trim();
+
+                //선택된 부서에 따라 행을 보이고 숨기기
+                if(selectedDept === 'All' || dept === selectedDept) {
+                    row.style.display = ''; //행을 보이게함
+                } else {
+                    row.style.display = 'none';
+                }
+            }
         }
+
+
+
+
+
+
+
+
+
+
+        //지급하기 버튼을 눌렀을때 사용될 비동기처리 함수를 작성하기
+        // function currentSelectedCount() {
+        //
+        //     $.ajax({
+        //        url: '/getSelectedCount', //URL 매핑
+        //        type: 'GET',
+        //        success: function(count) {
+        //            $('#selectedCount').text(count);
+        //        }
+        //     });
+        // }
 
 
 
@@ -251,20 +292,20 @@
 
 
         // @테이블 제목행의 6,7,8열에 필터 적용시키기 (일단 6번째 열만) (모든 행이 숨겨지는 문제 발생, 테이블 위치 문제도 해결해야)
-        const filter = document.getElementById("filter-dept")
-        filter.addEventListener('change', function() {
-            const filterValue = this.value; //<select>에서 선택된 값을 filterValue에 저장
-            const rows = document.querySelectorAll('#table-givepoint tbody tr'); //필터링대상 행들을 변수에 저장
-
-            rows.forEach(row => {
-                const columnValue = row.querySelector('td:nth-child(6)').textContent;
-                if(columnValue === filterValue || filterValue === 'all') {
-                    row.style.display = ''; //기본 css설정대로 행이 표시된다
-                } else {
-                    row.style.display = 'none'; //해당 행이 보여지지 않는다
-                }
-            });
-        });
+        // const filter = document.getElementById("filter-dept")
+        // filter.addEventListener('change', function() {
+        //     const filterValue = this.value; //<select>에서 선택된 값을 filterValue에 저장
+        //     const rows = document.querySelectorAll('#table-givepoint tbody tr'); //필터링대상 행들을 변수에 저장
+        //
+        //     rows.forEach(row => {
+        //         const columnValue = row.querySelector('td:nth-child(6)').textContent;
+        //         if(columnValue === filterValue || filterValue === 'all') {
+        //             row.style.display = ''; //기본 css설정대로 행이 표시된다
+        //         } else {
+        //             row.style.display = 'none'; //해당 행이 보여지지 않는다
+        //         }
+        //     });
+        // });
     
     </script>
 </body>

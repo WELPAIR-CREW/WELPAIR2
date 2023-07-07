@@ -8,7 +8,6 @@ import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.*;
 
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +18,8 @@ public class SearchDTO {
 
     private int minPrice;
     private int maxPrice;
-    private long sellPrice;
+    private int sellPrice;
+    private String sortType;
 
     private SellPageDTO sellPage;
     private ThumbnailImageDTO thumbnailImage;

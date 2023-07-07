@@ -79,6 +79,36 @@ textarea{
 }
 
 
+/* 카테고리 선택 부분 */
+
+select:first-child{
+    width: 680px;
+    height: 40px;
+    outline-style: none;
+    /* appearance: none; */
+    border: none;
+    padding-left: 20px;
+    /* background-color: #f7f7f7; */
+    border-radius: 2px;
+    color: #757575;
+
+
+}
+.boardPrivate{
+    width: 310px;
+    height: 40px;
+    outline-style: none;
+    /* appearance: none; */
+    border: none;
+    padding-left: 20px;
+    /* background-color: #f7f7f7; */
+    border-radius: 2px;
+    color: #757575;
+
+
+}
+
+
 /* ********** 내용 부분 ********** */
 .write_second{
     width: 1000px;
@@ -101,16 +131,73 @@ textarea{
 }
 
 
+/* ********* 에디터 부분 ********* */
+
+.editor{
+    margin-top: 12px;
+    margin-bottom: 12px;
+    text-align: right;
+}
+.editor > button
+{
+    width: 30px;
+    height: 25px;
+}
+
+
+
 /* 목록버튼 */
+/*.bnt_go_list{*/
+/*    width: 100px;*/
+/*    height: 40px;*/
+/*    margin-top: 100px;*/
+/*    margin: auto;*/
+/*    !* border-top: 2px solid #333; *!*/
+/*}*/
+
+/*.bnt_go_list > input {*/
+/*    cursor: pointer;*/
+/*    width: 100px;*/
+/*    height: 40px;*/
+/*    margin: auto;*/
+/*    margin-top: 50px;*/
+/*    margin-bottom: 200px;*/
+/*    !* border: 1px solid #757575; *!*/
+/*    border-radius: 3px;*/
+/*    background-color: #333;*/
+/*    color: #fcfcfc;*/
+
+/*}*/
+
+.button{
+    text-align: center;
+}
 .bnt_go_list{
     width: 100px;
     height: 40px;
     margin-top: 100px;
     margin: auto;
+    display: inline;
     /* border-top: 2px solid #333; */
 }
 
-.bnt_go_list > input {
+.bnt_go_list > input:first-child {
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 200px;
+    /* border: 1px solid #757575; */
+    border-radius: 3px;
+    background-color: #fcfcfc;
+    color: #333;
+    border: 1px solid #333;
+
+}
+
+
+.update {
     cursor: pointer;
     width: 100px;
     height: 40px;
@@ -121,27 +208,15 @@ textarea{
     border-radius: 3px;
     background-color: #333;
     color: #fcfcfc;
-
+    margin-left: 8px;
 }
 
 
 
 
-/* 카테고리 선택 부분 */
-
-select{
-    width: 1000px;
-    height: 40px;
-    outline-style: none;
-    /* appearance: none; */
-    border: none;
-    padding-left: 20px;
-    /* background-color: #f7f7f7; */
-    border-radius: 2px;
-    color: #757575;
 
 
-}
+
 
 
 
