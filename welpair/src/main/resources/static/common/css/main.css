@@ -210,6 +210,12 @@ input {
     white-space: nowrap;
 }
 
+.section-product-table a {
+    text-decoration: none;
+    font-weight: bold;
+    color: skyblue;
+}
+
 .section-product-table input[type='checkbox'] {
     width: 22px;
     height: 22px;

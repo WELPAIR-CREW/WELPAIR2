@@ -43,12 +43,6 @@ export function createTable(data) {
 
         document.querySelector(".section-product-table tbody").append(tr);
     }
-
-    let selectCells = document.querySelectorAll(".section-product-table tr td:nth-child(8)")
-    selectCells.forEach(cell => {
-        appendLink(cell.textContent, cell, 'modify/' + cell.textContent);
-        cell.firstChild.textContent = '';
-    })
 }
 
 export const pagination = {

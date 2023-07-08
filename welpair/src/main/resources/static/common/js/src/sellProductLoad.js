@@ -1,5 +1,5 @@
-import { includeHTML } from './include.js'
-import { call, createPaging, createTable, pagination, setPagination} from './App.js'
+import { appendLink, call, createPaging, createTable, pagination, setPagination } from './App.js';
+import { includeHTML } from './include.js';
 
 const searchBtn = document.querySelector(".first-button");
 searchBtn.addEventListener('click', fetchSellProductListData);
@@ -62,7 +62,7 @@ async function fetchSellProductListData() {
     productStatus = document.querySelector("#productStatus").value;
 
     const pageNo = 1;
-    const map = {code, name, categoryCode, productStatus, pageNo};
+    const map = { code, name, categoryCode, productStatus, pageNo };
 
     const urls = ['/sellproduct/sellProductCountAPI', '/sellproduct/sellProductListAPI'];
     const requests = urls.map(url => call(url, 'post', map))
@@ -71,15 +71,17 @@ async function fetchSellProductListData() {
     pagination.currentPageNo = 1;
     setPagination(data1);
     createTable(data2);
+    createSellPageLink();
     createPaging(selectSellProduct);
 }
 
 async function selectSellProduct(pageNo = 1) {
-    const map = {code, name, categoryCode, productStatus, pageNo};
+    const map = { code, name, categoryCode, productStatus, pageNo };
 
     call('/sellproduct/sellProductListAPI', 'post', map)
         .then(data => {
-            createTable(data)
+            createTable(data);
+            createSellPageLink();   
         })
 }
 
@@ -102,6 +104,14 @@ async function deleteSellProduct() {
                 alert("삭제에 실패하였습니다.");
             }
         })
+}
+
+function createSellPageLink() {
+    let selectCells = document.querySelectorAll(".section-product-table tr td:nth-child(3)");
+    selectCells.forEach(cell => {
+        appendLink(cell.textContent, cell, 'modify/' + cell.textContent);
+        cell.firstChild.textContent = '';
+    })
 }
 
 await fetchSellProductListData();
