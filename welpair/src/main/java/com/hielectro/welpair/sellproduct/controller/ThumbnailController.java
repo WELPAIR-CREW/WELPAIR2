@@ -26,12 +26,11 @@ import net.coobird.thumbnailator.Thumbnails;
 @Slf4j
 public class ThumbnailController {
     private final SellProductServiceImpl productService;
-    private String rootPath = System.getProperty("user.dir");
-    private String baseDir = "/src/main/resources/static";
-    private String originalImageDir = "/common/images/original";
-    private String thumbnailImageDir = "/common/images/thumbnail";
-    private String absoluteOriginalImageDir = rootPath + baseDir + originalImageDir;
-    private String absoluteThumbnailImageDir = rootPath + baseDir + thumbnailImageDir;
+    private String rootPath = "C:/upload/";
+    private String originalImageDir = "original";
+    private String thumbnailImageDir = "thumbnail";
+    private String absoluteOriginalImageDir = rootPath + originalImageDir;
+    private String absoluteThumbnailImageDir = rootPath + thumbnailImageDir;
 
     public ThumbnailController(SellProductServiceImpl productService) {
         this.productService = productService;

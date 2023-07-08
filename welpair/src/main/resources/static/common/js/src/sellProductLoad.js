@@ -22,6 +22,8 @@ async function fetchOptionListData() {
     const urls = ['/sellproduct/categoryList', '/sellproduct/statusList'];
     const requests = urls.map(url => call(url, 'post'))
     const [category, status] = await Promise.all(requests);
+    const categoryInput = document.querySelector("#select-category");
+    const statusInput = document.querySelector("#productStatus");
 
     [...category].filter(item => item.categoryCode > 2)
         .forEach((item, index) => {
@@ -29,13 +31,13 @@ async function fetchOptionListData() {
                 const option = document.createElement("option");
                 option.value = '';
                 option.textContent = '선택';
-                categoryCode.append(option);
+                categoryInput.append(option);
             }
 
             const option = document.createElement("option");
             option.value = item.categoryCode;
             option.textContent = item.categoryName;
-            categoryCode.append(option);
+            categoryInput.append(option);
         });
 
     [...status].forEach((item, index) => {
@@ -43,13 +45,13 @@ async function fetchOptionListData() {
             const option = document.createElement("option");
             option.value = '';
             option.textContent = '선택';
-            productStatus.append(option);
+            statusInput.append(option);
         }
 
         const option = document.createElement("option");
         option.value = item.productStatus;
         option.textContent = item.productStatus;
-        productStatus.append(option);
+        statusInput.append(option);
     })
 }
 
