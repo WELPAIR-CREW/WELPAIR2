@@ -32,7 +32,7 @@
                 <ul class="order_prd_ul">
                     <li class="prd_list_head">
                         <!-- thymeleaf... 셀렉아이템 갯수 변수사용  -->
-                        <div th:text="'개수: ' + ${orderPrdList.orderPrdList.size()}" class="list_head_1"></div>
+                        <div th:text="'상품개수: ' + ${orderPrdList.orderPrdList.size()}" class="list_head_1"></div>
                         <div class="list_head_2">상품이름</div>
                         <div class="list_head_3">수   량</div>
 <!--                        <div class="list_head_4">금액</div>-->
@@ -58,16 +58,19 @@
 <!--                                        <div class="" name="" th:if="${orderPrd.sellPage?.title != null}" th:text="${orderPrd.sellPage.title}"></div>-->
 <!--                                        <div class="" name="" th:unless="${orderPrd.sellPage?.title != null}">상품 판매페이지를 찾을 수 없습니다.</div>-->
 <!--                                        <div class="" name="" th:if="${orderPrd.sellProduct.isSell == 'N'}">판매중인 상품이 아닙니다.</div>-->
-                                        <div class="" name="" th:text="${orderPrd.Sellproduct.product.productName}">balnk</div>
+                                        <div class="" id="itemName" th:text="${orderPrd.Sellproduct.product.productName}">balnk</div>
+                                        <input type="hidden" name="sellProductId" th:value="${orderPrd.sellProductId}" >
                                     </div>
 <!--                                </a>-->
                             </div>
                             <div class="list_body_3">
-                                <input type="number" class="" th:value="${orderPrd.productOrderAmount}" placeholder="1" disabled >
+                                <input type="number" class="" name="productOrderAmount" th:value="${orderPrd.productOrderAmount}" placeholder="1" disabled >
+
                             </div>
 <!--                            <div class="list_body_4" th:text="${#numbers.formatDecimal(orderPrd.productOrderPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>-->
 <!--                            <div class="list_body_5" th:text="${#numbers.formatDecimal(orderPrd.exptDeliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>-->
                             <div class="list_body_6" th:text="${#numbers.formatDecimal(orderPrd.productOrderPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></div>
+                            <input type="hidden"  name="productOrderPrice" th:value="${orderPrd.productOrderPrice}">
                         </li>
                     </div>
                 </ul>
@@ -75,8 +78,9 @@
 
         </div>
 
-        <form action="/payment/pay/result" method="post">
+<!--        <form action="/payment/pay/result" method="post">-->
 
+        <form action="">
             <!-- 주문자정보 구역 -->
             <div class="orderer_area">
                 <!-- 소제목 -->
@@ -87,7 +91,7 @@
                             <td>
                                 <div class="labelbox">이름</div>
                             </td>
-                            <td><input type="text" class="inputbox_name" id="ordererName" name="ordererName" placeholder=" 이름을 입력하세요."
+                            <td><input type="text" class="inputbox_name" id="ordererName" name="ordererName" th:value="${memberAddressList.get(0).employee.empName}" placeholder=" 이름을 입력하세요."
                                     required></td>
                         </tr>
                         <tr>
@@ -95,7 +99,7 @@
                                 <div class="labelbox">휴대폰번호</div>
                             </td>
                             <td><input type="number" class="inputbox_phone" id="ordererPhone" name="ordererPhone"
-                                    placeholder=" 휴대폰 번호를 입력하세요.(숫자만 입력)" required></td>
+                                       th:value="${#strings.replace(memberAddressList.get(0).employee.empPhone, '-', '')}" placeholder=" 휴대폰 번호를 입력하세요.(숫자만 입력)" required></td>
                         </tr>
                     </table>
                 </div>
@@ -161,9 +165,9 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="labelbox">배송지정일</div>
+                            <div class="labelbox">배송희망일</div>
                         </td>
-                        <td><input type="date" class="inputbox_delivery_date" required></td>
+                        <td><input type="date" id="deliveryDate" class="inputbox_delivery_date" required></td>
                     </tr>
                     <tr>
                         <td>
@@ -174,6 +178,7 @@
                 </table>
 
             </div>
+        </form>
 
             <!-- 결제수단 구역 -->
             <div class="pay_area">
@@ -200,7 +205,7 @@
                                 <div class="paybox_existpoint">복지 포인트</div>
                             </td>
                             <td>
-                                <div class="totalPoint" name="totalPoint" id="existPoint" th:value="${memberAddressList[0].pointBalance}" th:text="${memberAddressList[0].pointBalance}"></div>
+                                <div class="totalPoint" name="totalPoint" id="existPoint" th:value="${memberAddressList[0].pointBalance}" th:text="${#numbers.formatDecimal(memberAddressList[0].pointBalance, 0, 'COMMA', 0, 'POINT')}"></div>
                             </td>
                             <td>
                                 <div class="paybox_existpoint">&nbsp;원</div>
@@ -212,7 +217,7 @@
                                 <div class="paybox_availpoint">사용가능한 포인트</div>
                             </td>
                             <td>
-                                <div class="availablePoint" name="availablePoint" id="availablePoint" th:text="${memberAddressList[0].pointBalance}"></div>
+                                <div class="availablePoint"  id="availablePoint" th:text="${#numbers.formatDecimal(memberAddressList[0].pointBalance, 0, 'COMMA', 0, 'POINT')}"></div>
                                 <input type="hidden"  th:value="${memberAddressList[0].pointBalance}" id="availablePointHidden">
                             </td>
                             <td>
@@ -225,7 +230,7 @@
                                 <div class="paybox_usepoint">사용할 포인트</div>
                             </td>
                             <td>
-                                <div class="usePoint" name="usePoint">
+                                <div class="usePoint" >
                                     <input type="number"  id="usePoint"
                                         class="usePointBox" placeholder="사용할 포인트 입력"></div>
                             </td>
@@ -238,8 +243,9 @@
                     </table>
                     <div class="etc_pay">
                         <div class="paybox_restpoint">남은&nbsp;결제금액</div>
-                        <div class="paybox_restPrice" name="restPrice" id="restPrice" th:text="${#numbers.formatDecimal(orderPrdList.totalPaymentPrice, 0, 'COMMA', 0, 'POINT')}">
+                        <div class="paybox_restPrice" id="restPrice" th:text="${#numbers.formatDecimal(orderPrdList.totalPaymentPrice, 0, 'COMMA', 0, 'POINT')}">
                         </div>
+                        <input type="hidden" id="restPriceHidden">
                         <div class="paybox_restpoint">원</div>
 
                         <div class="payMethod">결제수단&nbsp;선택</div>
@@ -249,16 +255,16 @@
                         <div class="payMethod_select">
                             <div class="creditcard">
                                 <label>
-                                    <input type="radio" name="payMethod" id="creditCard" value="creditCard" checked>
-                                    <!-- <label for="creditCard">신용/체크카드</label> -->
-                                    <span class="creditCard_custom"></span>
-                                    <p>신용/체크카드</p>
+<!--                                    <input type="radio" name="payMethod" id="creditCard" value="creditCard" checked>-->
+<!--                                    &lt;!&ndash; <label for="creditCard">신용/체크카드</label> &ndash;&gt;-->
+<!--                                    <span class="creditCard_custom"></span>-->
+<!--                                    <p>신용/체크카드</p>-->
                                 </label>
 
                             </div>
                             <div class="kakakopay">
                                 <label>
-                                    <input type="radio" name="payMethod" id="KakaoPay" value="KakaoPay">
+                                    <input type="radio" name="payMethod" id="KakaoPay_btn" value="KakaoPay" checked>
                                     <!-- <label for="KakaoPay">카카오페이</label> -->
                                     <span class="KakaoPay_custom"></span>
                                     <p>카카오페이</p>
@@ -266,12 +272,12 @@
                             </div>
                         </div>
                         <div class="goto_payment">
-                            <input type="submit" class="" value="결제하기">
+                            <input type="button" class="" id="paying_btn" value="결제하기">
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+<!--        </form>-->
     </div>
 
 
@@ -282,8 +288,9 @@
     <script src="/common/js/src/payment.js"></script>
 
     <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script th:inline="javascript">
 
+    <script th:inline="javascript">
+        // ------------------- 우편번호 검색------------------------
         const $searchZipCode = document.getElementById("searchZipCode");
         // const $goMain = document.getElementById("goMain");
 
@@ -298,11 +305,33 @@
             }).open();
         }
 
+    //---------------------- 배송지 선택 js 함수 호출--------------------------
         let addressList = /*[[${memberAddressList[0].address}]]*/'';
         if (addressList) {
         addressFunc(addressList);
         }
 
+    // -----------------------------결제버튼-----------------------------------------
+
+        document.getElementById("paying_btn").addEventListener("click", e =>
+
+        {
+            // ------------- 폼 필수입력값 체크 --------------------------
+            let inputRequired = Array.from(document.querySelectorAll('input[required]')); // 필수입력값 체크
+
+            for (let i = 0; i < inputRequired.length; i++) {
+                if(inputRequired[i].value === ''){
+                    return inputRequired[i].focus();
+                }
+            }
+
+            // ------------- 데이터 셋팅 ---------------------
+
+
+            josnDataSet();
+
+
+        });
 
 
     </script>

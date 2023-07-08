@@ -44,28 +44,150 @@ function addressFunc(addr){
                 address2.value = addressList[i].addressDetail.split("/")[2];
                 recipientName.value =  addressList[i].addressName;
                 recipientPhone.value = parseInt(addressList[i].addressPhone.replace(/-/g, ''));
-
             }
-
         }
     })
 }
 
 
 let usepoint = document.getElementById("usePoint");
+
+let totalPrice = parseInt(document.getElementById("totalPriceHidden").value);
+let restPrice = document.getElementById("restPrice");
+let restPriceHidden = document.getElementById("restPriceHidden");
+let availablePoint = parseInt(document.getElementById("availablePointHidden").value);
+restPriceHidden.value =  totalPrice -usepoint.value;
+
 usepoint.addEventListener("blur", e => {
 
-    let totalPrice = document.getElementById("totalPriceHidden");
-    let restPrice = document.getElementById("restPrice");
-    let availablePoint = document.getElementById("availablePointHidden");
 
-    if(usepoint.value <= totalPrice.value && usepoint.value <= availablePoint.value && usepoint.value >= 0){
-        restPrice.textContent = (totalPrice.value - usepoint.value).toLocaleString();
+    if(usepoint.value <= totalPrice && usepoint.value <= availablePoint && usepoint.value >= 0){
+        restPrice.textContent = (totalPrice - usepoint.value).toLocaleString();
+        restPriceHidden.value =  totalPrice -usepoint.value;
+
     } else {
         alert("사용가능한 포인트를 다시 입력해주세요.");
         usepoint.value = 0;
     }
 });
+
+
+
+function josnDataSet(){
+
+    const sellProductId = document.getElementsByName("sellProductId");
+    const productOrderAmount = document.getElementsByName("productOrderAmount");
+    const productOrderPrice = document.getElementsByName("productOrderPrice");
+    const deliveryDate = document.getElementById("deliveryDate");
+    const addressSelect = document.getElementsByName("addressSelect");
+
+    let productOrderList = [];
+
+    for (let i = 0; i < sellProductId.length; i++) {
+        let productOrder = {
+            sellProductId : ""
+            , productOrderAmount : 0
+            , productOrderPrice : 0
+            , deliveryDate : ""
+        };
+        productOrder.sellProductId = sellProductId[i].value;
+        productOrder.productOrderAmount = productOrderAmount[i].value;
+        productOrder.productOrderPrice = productOrderPrice[i].value;
+        productOrder.deliveryDate = deliveryDate.value;
+
+        productOrderList.push(productOrder);
+    };
+
+    let paymentList = [];
+
+    let orderPayment = { paymentList : paymentList };
+
+    let order = {
+        totalPrice :totalPrice
+        , orderType : '일반주문'
+        , addressId : [...addressSelect].filter( i => i.selected)[0].value
+        , productOrderList : productOrderList
+        , orderPayment : orderPayment
+    };
+
+    // --- 복지포인트 사용시
+    if(usepoint.value > 0){
+
+            let payment = {
+                paymentPrice : 0
+                , paymentType : ""
+            };
+
+            payment.paymentPrice = usepoint.value;
+            payment.paymentType = '복지포인트';
+
+            paymentList.push(payment);
+
+            orderPayment.paymentList = paymentList;
+            order.orderPayment = orderPayment;
+
+            // 복지포인트 전액 결제시
+        if(totalPrice === usepoint.value  && parseInt(restPriceHidden.value) === 0){
+            $.ajax({
+                type:'post',
+                url:'/payment/payment.go',
+                contentType:"application/json",
+                data: JSON.stringify(order), //  결제요청 데이터 전송
+                success:function(response){
+                    location.href = '/payment/pay-success';
+                },
+                error:function(e){
+                    alert("결제요청 실패 : 응답 없음");
+                }
+            });
+
+        }
+    }
+
+    // ----- 카카오 -------
+    const KakaoPay_btn = document.getElementById("KakaoPay_btn");
+
+    if(restPriceHidden.value > 0 && KakaoPay_btn.checked){
+
+        let payment = {
+            paymentPrice : 0
+            , paymentType : ""
+        };
+
+        payment.paymentPrice = restPriceHidden.value;
+        payment.paymentType = '카카오페이';
+
+        paymentList.push(payment);
+
+        orderPayment.paymentList = paymentList;
+        order.orderPayment = orderPayment;
+
+        const item_name = document.getElementById("itemName").textContent;
+
+        $.ajax({
+            type:'post',
+            // url:'/payment/kakaopay/do',
+            url:'/payment/payment.go',
+            contentType:"application/json",
+            data: JSON.stringify(order), //  결제요청 데이터 전송
+            success:function(response){
+                location.href = response.next_redirect_pc_url;
+            },
+            error:function(e){
+                alert("결제요청 실패 : 응답 없음");
+            }
+        });
+
+        // -----  복지포인트만
+    } else {
+        return alert("결제수단을 다시 한번 확인해주세요.");
+    }
+
+}
+
+
+
+
 
 
 

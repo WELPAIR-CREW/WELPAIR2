@@ -7,12 +7,12 @@
 
     <!-- OrderDTO resultMap-->
     <resultMap id="orderResultMap" type="com.hielectro.welpair.order.model.dto.OrderDTO" >
-        <id property="orderNo" column="PRODUCT_ORDER_NO"/>
-        <result property="orderDate" column="ORDER_NO"/>
-        <result property="totalPrice" column="SELL_PRODUCT_ID"/>
-        <result property="addressId" column="PRODUCT_ORDER_AMOUNT"/>
-        <result property="deliveryType" column="PRODUCT_ORDER_PRICE"/>
-        <result property="memberNo" column="DELIVERY_DATE"/>
+        <id property="orderNo" column="ORDER_NO"/>
+        <result property="orderDate" column="ORDER_DATE"/>
+        <result property="totalPrice" column="TOTAL_PRICE"/>
+        <result property="orderType" column="ORDER_TYPE"/>
+        <result property="memberNo" column="EMP_NO"/>
+        <result property="addressId" column="ADDRESS_ID"/>
 
         <collection property="productOrderList" resultMap="productOrderResultMap"/>
     </resultMap>
@@ -43,6 +43,13 @@
     <resultMap id="SellPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
         <id property="no" column="SELL_PAGE_NO"/>
         <result property="title" column="SELL_PAGE_TITLE"/>
+        <result property="detailImageFileName" column="SELL_DETAIL_IMAGE_FILE_NAME"/>
+        <result property="detailImageOriginFileName" column="SELL_DETAIL_IMAGE_ORGIN_FILE_NAME"/>
+        <result property="path" column="FILE_PATH"/>
+        <result property="createDate" column="CREATE_DATE"/>
+
+        <collection property="thumbnailImageList" resultMap="ThumbnailImageResultMap"/>
+
     </resultMap>
 
     <resultMap id="ProductResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">

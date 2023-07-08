@@ -4,33 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hielectro.welpair.payment.model.dao.PayMapper">
 
-    <resultMap id="cartResultMap" type="com.hielectro.welpair.order.model.dto.CartDTO" >
-        <id property="cartNo" column="CART_NO"/>
-        <result property="empNo" column="EMP_NO"/>
-        <collection property="cartSellProductList" resultMap="cartSellProductResultMap"/>
-    </resultMap>
-
-    <resultMap id="cartSellProductResultMap" type="com.hielectro.welpair.order.model.dto.CartSellProductDTO" >
-        <id property="cartNo" column="CART_NO"/>
-        <id property="sellProductId" column="SELL_PRODUCT_ID"/>
-        <result property="cartAmount" column="CART_AMOUNT"/>
-        <result property="deliveryPrice" column="DELIVERY_PRICE"/>
-    </resultMap>
 
     <resultMap id="SellProductResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
         <id property="id" column="SELL_PRODUCT_ID"/>
         <result property="code" column="PRODUCT_CODE"/>
         <result property="discount" column="DISCOUNT"/>
         <result property="isSell" column="IS_SELL"/>
+
+        <association property="product" resultMap="ProductResultMap"/>
     </resultMap>
-    <resultMap id="SellItemPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
-        <id property="no" column="SELL_PAGE_NO"/>
-        <id property="id" column="SELL_PRODUCT_ID"/>
-    </resultMap>
-    <resultMap id="SellPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
-        <id property="no" column="SELL_PAGE_NO"/>
-        <result property="title" column="SELL_PAGE_TITLE"/>
-    </resultMap>
+
 
     <resultMap id="ProductResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
         <id property="productCode" column="PRODUCT_CODE"/>
@@ -43,47 +26,29 @@
         <result property="categoryCode" column="CATEGORY_CODE"/>
     </resultMap>
 
-    <resultMap id="ThumbnailImageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
-        <id property="no" column="SELL_PAGE_NO"/>
-        <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>
-        <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>
-    </resultMap>
-
-
-    <resultMap id="cartGeneralResultMap" type="com.hielectro.welpair.order.model.dto.CartGeneralDTO">
-        <association property="cart" resultMap="cartResultMap"/>
-        <association property="cartSellProduct" resultMap="cartSellProductResultMap"/>
-        <association property="sellProduct" resultMap="SellProductResultMap"/>
-        <association property="sellItemPage" resultMap="SellItemPageResultMap"/>
-        <association property="sellPage" resultMap="SellPageResultMap"/>
-        <association property="thumbImage" resultMap="ThumbnailImageResultMap"/>
-        <association property="product" resultMap="ProductResultMap"/>
-    </resultMap>
-
-
 
     <resultMap id="employeeResultMap" type="com.hielectro.welpair.member.model.dto.EmployeeDTO">
         <id property="empNo" column="EMP_NO"/>
         <result property="empName" column="EMP_NAME"/>
         <result property="empPhone" column="EMP_PHONE"/>
-
-        <association property="memberDTO" resultMap="memberResultMap"/>
     </resultMap>
 
-
-    <!--    <resultMap id="memberInfoResultMap" type="memberResultMap">-->
-    <!--        <association property="." resultMap="memberResultMap"/>-->
-    <!--        <association property="employee" resultMap="employeeResultMap"/>-->
-    <!--        <collection property="address" resultMap="addressResultMap"/>-->
-    <!--    </resultMap>-->
-
-
-
+    <resultMap id="productOrderResultMap" type="com.hielectro.welpair.order.model.dto.ProductOrderDTO">
+        <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="orderNo" column="ORDER_NO"/>
+        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="productOrderAmount" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="productOrderPrice" column="PRODUCT_ORDER_PRICE"/>
+        <result property="deliveryDate" column="DELIVERY_DATE"/>
+        <association property="Sellproduct" resultMap="SellProductResultMap"/>
+    </resultMap>
 
     <resultMap id="memberResultMap" type="com.hielectro.welpair.member.model.dto.MemberDTO">
         <id property="empNo" column="EMP_NO"/>
         <result property="pointBalance" column="POINT_BALANCE"/>
+        <association property="employee" resultMap="employeeResultMap"/>
         <collection property="address" resultMap="addressResultMap"/>
+
     </resultMap>
 
     <resultMap id="addressResultMap" type="com.hielectro.welpair.mypage.model.dto.AddressDTO">
@@ -94,44 +59,50 @@
         <result property="addressPhone" column="ADDRESS_PHONE"/>
         <result property="empNo" column="EMP_NO"/>
 
+
     </resultMap>
 
-    <!-- 멤버 배송지주소, 포인트 잔액 조회 -->
+    <!-- 멤버 정보, 배송지주소, 포인트 잔액 조회 -->
     <select id="selectMemberById" resultMap="memberResultMap">
         SELECT
                M.EMP_NO
              , M.POINT_BALANCE
+             , E.EMP_NAME
+             , E.EMP_PHONE
+             , E.EMP_EMAIL
              , A.ADDRESS_ID
              , A.ADDRESS_DETAIL
              , A.ADDRESS_NAME
              , A.ADDRESS_PHONE
         FROM T_MEMBER M
+        JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
         JOIN T_ADDRESS A ON (A.EMP_NO = M.EMP_NO)
         WHERE A.EMP_NO = #{ empNo }
     </select>
 
 
     <!-- 선택한 카트 상품 조회 -->
-    <select id="selectProductById" parameterType="com.hielectro.welpair.payment.model.dto.OrderPayReqDTO" resultMap="cartGeneralResultMap">
+    <select id="selectProductById" resultMap="SellProductResultMap">
         SELECT
-            B.DELIVERY_PRICE
-             , F.PRODUCT_PRICE
-             , C.DISCOUNT
-             , F.PRODUCT_NAME
-             , E.SELL_PAGE_TITLE
-             , E.FILE_PATH
-        FROM
-            T_CART_SELL_PRODUCT B
-           , T_SELL_PRODUCT C
-           , T_SELL_ITEM_PAGE D
-           , T_SELL_PAGE E
-           , T_PRODUCT F
-        WHERE C.SELL_PRODUCT_ID = #{sellProductId}
-          AND B.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID(+)
-          AND C.SELL_PRODUCT_ID = D.SELL_PRODUCT_ID(+)
-          AND D.SELL_PAGE_NO = E.SELL_PAGE_NO(+)
-          AND C.PRODUCT_CODE = F.PRODUC  T_CODE(+)
+               A.SELL_PRODUCT_ID
+             , A.PRODUCT_CODE
+             , A.DISCOUNT
+             , A.IS_SELL
+             , B.PRODUCT_NAME
+             , B.PRODUCT_PRICE
+        FROM T_SELL_PRODUCT A JOIN T_PRODUCT B ON (A.PRODUCT_CODE = B.PRODUCT_CODE)
+        WHERE A.SELL_PRODUCT_ID = #{sellProductId}
     </select>
+
+    <!-- order table 데이터 입력 -->
+    <insert id="insertOrder" parameterType="com.hielectro.welpair.order.model.dto.OrderDTO"
+            useGeneratedKeys="true" keyColumn="ORDER_NO" keyProperty="orderNo">
+        INSERT INTO T_ORDER
+            (ORDER_NO, ORDER_DATE, TOTAL_PRICE, ORDER_TYPE, EMP_NO, ADDRESS_ID)
+        VALUES
+            ('O' || LPAD(SEQ_CART_NO.NEXTVAL, 6, '0'), SYSDATE, #{totalPrice}, #{orderType}, #{memberNo}, #{addressId})
+    </insert>
+
 
 
 

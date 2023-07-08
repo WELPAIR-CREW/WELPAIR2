@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+// 고치기
+import static com.hielectro.welpair.common.PriceCalculator.empNo;
+
 
 @Slf4j
 @Controller
@@ -21,8 +24,6 @@ import java.util.*;
 public class CartController {
 
     private final CartService cartService;
-
-    private final String empNo = "E00017";
 
     private CartController(CartService cartService) {
         this.cartService = cartService;
@@ -39,10 +40,9 @@ public class CartController {
     @ResponseBody
     @PostMapping(value = "/cart/add", produces = "application/json; charset=utf-8")
     public Map<String, String> addCart(@ModelAttribute CartSellProductDTO cartSellProduct
-            , @RequestParam("empNo") Object empNo1
+//            , @RequestParam("empNo") Object empNo1
     ) {
 
-        String empNo = (String) empNo1;
         // 카트별판매상품dto를 통해 매상품id와 수량 정보와, 회원정보ID가 넘어온다.
         System.out.println("선택상품 : " + cartSellProduct);
 
