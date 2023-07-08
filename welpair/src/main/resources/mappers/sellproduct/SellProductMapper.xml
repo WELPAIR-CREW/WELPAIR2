@@ -41,6 +41,7 @@
         <result property="detailImageOriginFileName" column="SELL_DETAIL_IMAGE_ORGIN_FILE_NAME"/>
         <result property="path" column="FILE_PATH"/>
         <result property="createDate" column="CREATE_DATE"/>
+        <result property="sellStatus" column="SELL_STATUS"/>
 
         <collection property="thumbnailImageList" resultMap="ThumbnailImageDTO"/>
     </resultMap>
@@ -370,6 +371,7 @@
         , SELL_PAGE_TITLE
         , SELL_DETAIL_IMAGE_FILE_NAME
         , SELL_DETAIL_IMAGE_ORGIN_FILE_NAME
+        , SELL_STATUS
         , FILE_PATH
         , CREATE_DATE
         , SELL_THUMB_IMAGE_FILE_NAME
@@ -429,6 +431,7 @@
         ,   #{ detailImageOriginFileName , jdbcType=NULL}
         ,   #{ path }
         ,   SYSDATE
+        ,   #{ sellStatus }
         )
         <selectKey keyColumn="SELL_PAGE_NO" keyProperty="no" resultType="string" order="AFTER">
             SELECT 'SN' || LPAD(SEQ_SELL_PAGE_NO.currval, 10, '0')
@@ -464,6 +467,7 @@
     <update id="updateSellPage">
         UPDATE T_SELL_PAGE
            SET SELL_PAGE_TITLE = #{ title }
+             , SELL_STATUS = #{ sellStatus }
            <if test="detailImageFileName != null and detailImageFileName != ''">
              , SELL_DETAIL_IMAGE_FILE_NAME = #{ detailImageFileName, jdbcType=NULL}
              , SELL_DETAIL_IMAGE_ORGIN_FILE_NAME = #{ detailImageOriginFileName, jdbcType=NULL}

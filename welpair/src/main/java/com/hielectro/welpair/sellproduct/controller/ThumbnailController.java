@@ -45,12 +45,16 @@ public class ThumbnailController {
     @PostMapping("add")
     public String registSellProduct(@ModelAttribute SellProductDTO sellProduct,
                                     @RequestParam String title,
+                                    @RequestParam String sellStatus,
                                     @ModelAttribute List<MultipartFile> uploadFiles,
                                     @ModelAttribute MultipartFile uploadDetailFile) {
         if (uploadFiles.size() > 6) {
             throw new IllegalStateException("상품 이미지는 최대 6개까지 등록 가능합니다.");
         }
 
+        System.out.println("--------------------- add SellStatus ---------------------");
+        System.out.println(sellStatus);
+        System.out.println("--------------------- add SellStatus ---------------------");
         File dir = new File(absoluteOriginalImageDir);
         File dir2 = new File(absoluteThumbnailImageDir);
 
@@ -62,6 +66,7 @@ public class ThumbnailController {
         List<ThumbnailImageDTO> thumbnailImageList = new ArrayList<>();
         SellPageDTO sellPage = new SellPageDTO();
         sellPage.setTitle(title);
+        sellPage.setSellStatus(sellStatus);
         sellPage.setThumbnailImageList(thumbnailImageList);
         sellProduct.setSellItemPage(new SellItemPageDTO());
         sellProduct.getSellItemPage().setSellPage(sellPage);
@@ -96,8 +101,13 @@ public class ThumbnailController {
     public String modifySellProduct(HttpServletRequest request,
                                     @ModelAttribute SellProductDTO sellProduct,
                                     @RequestParam String title,
+                                    @RequestParam String sellStatus,
                                     @ModelAttribute List<MultipartFile> uploadFiles,
                                     @ModelAttribute MultipartFile uploadDetailFile) {
+
+        System.out.println("--------------------- modify SellStatus ---------------------");
+        System.out.println(sellStatus);
+        System.out.println("--------------------- modify SellStatus ---------------------");
 
         /* 이전에 저장되었던 Session의 결과값과 비교하여 수정된 부분이 있다면 Update 실행 */
         HttpSession session = request.getSession();
@@ -108,7 +118,8 @@ public class ThumbnailController {
         /* 업로드된 이미지 파일이 0개이고 제목이 같고 할인율이 동일하면 return */
         if (uploadFiles.get(0).isEmpty() && uploadDetailFile.isEmpty()
                 && compareSellProduct.getDiscount() == sellProduct.getDiscount()
-                && compareSellPage.getTitle().equals(title)) {
+                && compareSellPage.getTitle().equals(title)
+                && compareSellPage.getSellStatus().equals(sellStatus)) {
 
             return "redirect:/products/" + sellPage.getNo();
         }
@@ -130,6 +141,7 @@ public class ThumbnailController {
 
         try {
             sellPage.setTitle(title);
+            sellPage.setSellStatus(sellStatus);
             makeThumbnailImage(uploadFiles, sellPage);
             makeDetailImage(uploadDetailFile, sellPage);
             sellPage.setPath("/common/images/");
