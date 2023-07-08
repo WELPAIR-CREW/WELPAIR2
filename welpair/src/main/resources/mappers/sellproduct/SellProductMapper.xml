@@ -60,6 +60,7 @@
         <result property="option" column="PRODUCT_OPTION"/>
         <result property="pageNo" column="SELL_PAGE_NO"/>
         <result property="title" column="SELL_PAGE_TITLE"/>
+        <result property="sellStatus" column="SELL_STATUS"/>
     </resultMap>
 
     <resultMap id="ReviewManagerDTO" type="com.hielectro.welpair.board.model.dto.ReviewManagerDTO">
@@ -107,6 +108,7 @@
         , PRODUCT_OPTION
         , SELL_PAGE_NO
         , SELL_PAGE_TITLE
+        , SELL_STATUS
         FROM T_SELL_PRODUCT
         LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
         LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
@@ -123,6 +125,9 @@
         </if>
         <if test="categoryCode != null and categoryCode != ''">
             AND CATEGORY_CODE = #{ categoryCode }
+        </if>
+        <if test="sellStatus != null and sellStatus != ''">
+            AND SELL_STATUS = #{ sellStatus }
         </if>
         )
 
@@ -141,6 +146,7 @@
         , PRODUCT_OPTION
         , SELL_PAGE_NO
         , SELL_PAGE_TITLE
+        , SELL_STATUS
         FROM T_SELL_PRODUCT
         LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
         LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
@@ -157,6 +163,9 @@
         </if>
         <if test="categoryCode != null and categoryCode != ''">
             AND CATEGORY_CODE = #{ categoryCode }
+        </if>
+        <if test="sellStatus != null and sellStatus != ''">
+            AND SELL_STATUS = #{ sellStatus }
         </if>
         )
         <if test="pageNo != '0' and pageNo != null">

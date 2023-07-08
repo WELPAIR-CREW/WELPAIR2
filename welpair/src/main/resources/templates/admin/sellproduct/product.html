@@ -48,6 +48,13 @@
                         <select name="productStatus" id="productStatus" class="section-selectbox-select">
                         </select>
                     </span>
+                    <span class="section-selectbox-span">판매여부
+                        <select name="productStatus" id="sellStatus" class="section-selectbox-select">
+                            <option value="">선택</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                    </span>
                 <button class="button first-button">삭제</button>
             </div>
         </div><br>
@@ -57,6 +64,7 @@
             <table class="section-product-table">
                 <colgroup>
                     <col style="width: 50px;">
+                    <col style="width: 170px;">
                     <col style="width: 170px;">
                     <col style="width: 170px;">
                     <col style="width: 170px;">
@@ -78,6 +86,7 @@
                     <th>할인율</th>
                     <th>상품옵션</th>
                     <th>판매페이지제목</th>
+                    <th>판매여부</th>
                 </tr>
                 </thead>
                 <tbody>

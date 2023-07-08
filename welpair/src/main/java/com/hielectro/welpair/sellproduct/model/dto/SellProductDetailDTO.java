@@ -17,4 +17,5 @@ public class SellProductDetailDTO {
     private float discount;
     private String option;
     private String title;
+    private String sellStatus;
 }

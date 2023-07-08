@@ -17,6 +17,7 @@ let code = null;
 let name = null;
 let categoryCode = null;
 let productStatus = null;
+let sellStatus = null;
 
 async function fetchOptionListData() {
     const urls = ['/sellproduct/categoryList', '/sellproduct/statusList'];
@@ -60,9 +61,10 @@ async function fetchSellProductListData() {
     name = document.querySelector(".name").value
     categoryCode = document.querySelector("#select-category").value;
     productStatus = document.querySelector("#productStatus").value;
-
+    sellStatus = document.querySelector("#sellStatus").value;
+    
     const pageNo = 1;
-    const map = { code, name, categoryCode, productStatus, pageNo };
+    const map = { code, name, categoryCode, productStatus, sellStatus, pageNo };
 
     const urls = ['/sellproduct/sellProductCountAPI', '/sellproduct/sellProductListAPI'];
     const requests = urls.map(url => call(url, 'post', map))
