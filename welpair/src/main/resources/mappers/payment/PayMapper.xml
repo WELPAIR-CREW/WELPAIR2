@@ -100,7 +100,31 @@
         INSERT INTO T_ORDER
             (ORDER_NO, ORDER_DATE, TOTAL_PRICE, ORDER_TYPE, EMP_NO, ADDRESS_ID)
         VALUES
-            ('O' || LPAD(SEQ_CART_NO.NEXTVAL, 6, '0'), SYSDATE, #{totalPrice}, #{orderType}, #{memberNo}, #{addressId})
+            ('O' || LPAD(SEQ_ORDER_NO.NEXTVAL, 6, '0'), SYSDATE, #{totalPrice}, #{orderType}, #{memberNo}, #{addressId})
+    </insert>
+
+    <delete id="deleteOrder" >
+        DELETE FROM T_ORDER WHERE ORDER_NO = #{orderNo}
+    </delete>
+
+    <insert id="insertPayment" parameterType="com.hielectro.welpair.payment.model.dto.PaymentDTO"
+            useGeneratedKeys="true" keyColumn="PAYMENT_NO" keyProperty="paymentNo">
+        INSERT INTO T_PAYMENT (PAYMENT_NO, PAYMENT_DATE, PAYMENT_PRICE, PAYMENT_TYPE, TID)
+        VALUES ( 'PY' || LPAD(SEQ_PAYMENT_NO.NEXTVAL, 6, '0'), SYSDATE, #{paymentPrice}, #{paymentType}, NVL(#{tid}, null))
+    </insert>
+
+    <insert id="insertOrderPayment">
+        INSERT INTO T_ORDER_PAYMENT (ORDER_NO, PAYMENT_NO)
+        VALUES (#{orderNo}, #{paymentNo})
+    </insert>
+
+    <insert id="insertProductOrder" parameterType="com.hielectro.welpair.order.model.dto.ProductOrderDTO">
+        INSERT INTO T_PRODUCT_ORDER
+            (PRODUCT_ORDER_NO, ORDER_NO, SELL_PRODUCT_ID,
+             PRODUCT_ORDER_AMOUNT, PRODUCT_ORDER_PRICE, DELIVERY_DATE)
+        VALUES
+            ( 'O' || LPAD(SEQ_PRODUCT_ORDER_NO.NEXTVAL, 6, '0'), #{orderNo}, #{sellProductId},
+             #{productOrderAmount}, #{productOrderPrice}, #{deliveryDate})
     </insert>
 
 

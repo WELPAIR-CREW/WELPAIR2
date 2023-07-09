@@ -1,5 +1,6 @@
 package com.hielectro.welpair.payment.model.dto;
 
+import com.hielectro.welpair.order.model.dto.OrderDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -25,7 +26,7 @@ public class KKPReadyRequest {
     private String cancel_url;  // 결제 취소 시 redirect url, 최대 255자
     private String fail_url;    // 결제 실패 시 redirect url, 최대 255자
 
-
+    private OrderDTO order;
 
 
 

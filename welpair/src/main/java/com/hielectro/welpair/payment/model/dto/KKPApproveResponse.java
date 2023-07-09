@@ -1,5 +1,6 @@
 package com.hielectro.welpair.payment.model.dto;
 
+import com.hielectro.welpair.order.model.dto.OrderDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,6 +17,10 @@ public class KKPApproveResponse {
     private String partner_user_id;     // 가맹점 회원 id, 결제 준비 API 요청과 일치해야 함
     private String pg_token;        // 결제승인 요청을 인증하는 토큰 사용자 결제 수단 선택 완료 시,
                                     // approval_url로 redirection해줄 때 pg_token을 query string으로 전달
+
     private String payload;         // 결제 승인 요청에 대해 저장하고 싶은 값, 최대 200자
+
+    private OrderDTO order;
+
 
 }

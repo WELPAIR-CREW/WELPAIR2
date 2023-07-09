@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.sql.SQLTransactionRollbackException;
 import java.util.List;
 
 import static com.hielectro.welpair.common.PriceCalculator.empNo;
@@ -74,13 +75,13 @@ public class PayController {
 
     // 결제수단에 따른 매핑 나누기
     @PostMapping("/payment.go")
-    public String gotopay(@RequestBody OrderDTO order, @RequestParam(required = false) String item_name, RedirectAttributes rttr
+    public String gotopay(@RequestBody OrderDTO order, RedirectAttributes rttr, Model model
                     //            , @AuthenticationPrincipal User user
                         ) throws Exception {
 
-        log.info("리다이렉트 매핑 컨트롤러 들어옴");
+        log.info("리다이렉트용 매핑 컨트롤러 들어옴");
 
-        // ORDER테이블에 데이터 넣어서 주문번호 받아오기
+        // ORDER테이블에 데이터 넣어서 주문번호 orderNo 바로 받아오기
         order.setMemberNo(empNo);  // 회원 아이디, 나중에 로그인 열기
         boolean result = payService.insertOrder(order);
 
@@ -90,10 +91,8 @@ public class PayController {
         }
 
         log.info(order.getOrderNo());
-
         rttr.addFlashAttribute("order", order);
-        rttr.addFlashAttribute("item_name", item_name);
-
+//        model.addAttribute("order", order);
 
         // 카카오페이 결제 포함시
        if(order.getOrderPayment().getPaymentList().stream()
@@ -101,20 +100,73 @@ public class PayController {
            return "redirect:/payment/kakaopay/do";
 
        } else {   // 복지포인트로 전액 결제 완료
-           return "redirect:/consumer/payment/pay-success";
+           // success 매핑으로 가서 데이터 저장
+
+           return "redirect:/payment/pay-success";
        }
-
-
     }
 
-//    @GetMapping("/cancel")
-//    public String payCancel(RedirectAttributes rttr) {
-//
-//        // order 테이블 삭제해야함
-//        rttr.addFlashAttribute("orderNo", orderNo);
-//
-//        return "redirect:/payment/consumer/pay-fail";
-//    }
+    @GetMapping("/pay-fail")
+    public String payFail(@ModelAttribute("orderNo") String orderNo) throws Exception{
+
+        log.info("pay-fail 매핑들어옴===> " + orderNo);
+        // order 테이블 삭제해야함
+        boolean result = payService.deleteOrder(orderNo);
+
+        return "/consumer/payment/pay-fail";
+    }
+
+    @GetMapping("/pay-success")
+    public String paySuccess(@ModelAttribute("order") OrderDTO order) throws Exception {
+
+        log.info("pay-success 매핑들어옴===> " + order);
+        // 1. payment insert // paymentNo 가져옴 ---> 2. orderPayment insert 동시진행
+
+        // orderNo 미리 셋팅
+        order.getOrderPayment().setOrderNo(order.getOrderNo());
+
+        // tid가 null이면 테이블 데이터삽입시 오류가 생겨서 강제로 none 문자열값을 넣어준다.
+        order.getOrderPayment().getPaymentList().stream()
+                .filter(item -> item.getPaymentType().contains("복지"))
+                .forEach(item -> item.setTid("NONE"));
+
+        order.getOrderPayment().getPaymentList().forEach(item -> {
+                    log.info("item : " + item);
+                    try {
+
+                        payService.insertPayment(item);
+                        log.info("paymentNo : " + item.getPaymentNo() + " orderNo : " + order.getOrderNo());
+
+                        payService.insertOrderPayment(order.getOrderNo(), item.getPaymentNo());
+
+                    } catch (SQLTransactionRollbackException e) {
+                        System.out.println("!!!!!!!!!!pay insert 실패!!!!!!!!!");
+                        payService.deleteOrder(order.getOrderNo());
+                    }
+                }
+        );
+
+        // 3. productorder list insert
+        order.getProductOrderList().forEach( product -> {
+            log.info("product : " + product);
+            product.setOrderNo(order.getOrderNo());
+            try {
+                payService.insertProductOrder(product);
+            } catch (SQLTransactionRollbackException e) {
+                System.out.println("!!!!!!!!!!productorder insert 실패!!!!!!!!!");
+                payService.deleteOrder(order.getOrderNo());
+
+
+            }
+        });
+
+        // 4. 포인트 사용시 포인트파트 팀원 메소드에 토스하기 (paymentNo, empNo, pointAmount, pointType
+
+
+        // 5. 시간되면 주문내역 뿌리기
+
+        return "/consumer/payment/pay-success";
+    }
 
 
 }

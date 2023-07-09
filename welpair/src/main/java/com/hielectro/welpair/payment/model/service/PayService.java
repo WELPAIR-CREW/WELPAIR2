@@ -1,14 +1,12 @@
 package com.hielectro.welpair.payment.model.service;
 
 import com.hielectro.welpair.member.model.dto.MemberDTO;
-import com.hielectro.welpair.mypage.model.dto.AddressDTO;
-import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.OrderDTO;
 import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
+import com.hielectro.welpair.payment.model.dto.PaymentDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
-import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 
+import java.sql.SQLTransactionRollbackException;
 import java.util.List;
 
 
@@ -21,5 +19,13 @@ public interface PayService {
     boolean insertOrder(OrderDTO order);
 
 
+    boolean deleteOrder(String orderNo);
+
+
+    void insertPayment(PaymentDTO item) throws SQLTransactionRollbackException;
+
+    void insertOrderPayment(String paymentNo, String orderNo) throws SQLTransactionRollbackException;
+
+    void insertProductOrder(ProductOrderDTO product) throws SQLTransactionRollbackException;
 }
 

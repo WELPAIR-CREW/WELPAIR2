@@ -1,10 +1,7 @@
 package com.hielectro.welpair.payment.model.service;
 
 import com.hielectro.welpair.order.model.dto.OrderDTO;
-import com.hielectro.welpair.payment.model.dto.KKPApproveRequest;
-import com.hielectro.welpair.payment.model.dto.KKPApproveResponse;
-import com.hielectro.welpair.payment.model.dto.KKPReadyRequest;
-import com.hielectro.welpair.payment.model.dto.KKPReadyResponse;
+import com.hielectro.welpair.payment.model.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +18,7 @@ public class KakaoPayService {
     private final KKPApproveRequest approveRequest = new KKPApproveRequest();
 
 
-    public KKPReadyResponse payReady() {
+    public KKPReadyResponse payReady(OrderDTO order) {
 
         // request 값 담기
         MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
@@ -36,6 +33,7 @@ public class KakaoPayService {
         param.add("approval_url", readyRequest.getApproval_url());
         param.add("cancel_url", readyRequest.getCancel_url());
         param.add("fail_url", readyRequest.getFail_url());
+        param.add("order", String.valueOf(readyRequest.getOrder()));
 
         // 카카오에서 요구하는 요청 파라미터, 헤더 정보들  requestEntity에 전부 담기
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(param, this.getHeaders());
@@ -64,6 +62,7 @@ public class KakaoPayService {
         param.add("partner_order_id", approveRequest.getPartner_order_id());
         param.add("partner_user_id", approveRequest.getPartner_user_id());
         param.add("pg_token", approveRequest.getPg_token());
+        param.add("order", String.valueOf(approveRequest.getOrder()));
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(param, this.getHeaders());
         RestTemplate template = new RestTemplate();
@@ -95,7 +94,11 @@ public class KakaoPayService {
         readyRequest.setCid("TC0ONETIME");
         readyRequest.setPartner_order_id(order.getOrderNo());
         readyRequest.setPartner_user_id(order.getMemberNo());
-        readyRequest.setTotal_amount(order.getTotalPrice());
+
+        readyRequest.setTotal_amount(order.getOrderPayment().getPaymentList().stream()
+                                    .filter(item->item.getPaymentType().contains("카카오페이"))
+                                            .mapToInt(PaymentDTO::getPaymentPrice).sum());
+
         readyRequest.setItem_name(itemName + "외 " + readyRequest.getQuantity() + "건");
         readyRequest.setItem_code(order.getProductOrderList().get(0).getSellProductId() + "외" + readyRequest.getQuantity() + "건");
         readyRequest.setTax_free_amount(0);
@@ -103,6 +106,7 @@ public class KakaoPayService {
         readyRequest.setApproval_url("http://localhost:8888/payment/kakaopay/completed");
         readyRequest.setCancel_url("http://localhost:8888/payment/kakaopay/cancel");
         readyRequest.setFail_url("http://localhost:8888/payment/kakaopay/fail");
+        readyRequest.setOrder(order);
 
     }
 
@@ -114,6 +118,7 @@ public class KakaoPayService {
         approveRequest.setPartner_user_id(readyRequest.getPartner_user_id());
         approveRequest.setPg_token(pg_token);
 
+        approveRequest.setOrder(readyRequest.getOrder());
     }
 
 
