@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.*;
 import lombok.extern.slf4j.Slf4j;
@@ -47,30 +48,22 @@ public class SellProductController {
         return "admin/sellproduct/" + url;
     }
 
-    @GetMapping("add")
-    public String addSellProduct() {
-        return "admin/sellproduct/admin-add-product";
-    }
-
-    @GetMapping("modify/{sellPageNo}")
-    public String modifySellProduct(Model model, HttpServletRequest request, @PathVariable String sellPageNo) {
-        Map<String, String> map = new HashMap<>();
-
-        map.put("sellPageNo", sellPageNo);
-        SellProductDTO sellProduct = productService.selectOneSellProduct(sellPageNo);
-        model.addAttribute("productInfo", sellProduct);
-
-        /* 판매 상품 페이지가 수정되었는지 판단하기 위해 Session에 결과값을 저장 */
-        HttpSession session = request.getSession();
-        session.setAttribute("productInfo", sellProduct);
-
-        return "admin/sellproduct/admin-modify-product";
-    }
-
     @PostMapping("optionList")
     @ResponseBody
     public List<ProductDTO> selectOptionList(@RequestBody ProductDTO product) {
         return productService.selectOptionList(product);
+    }
+
+    @PostMapping("categoryList")
+    @ResponseBody
+    public List<CategoryDTO> selectCategoryList() {
+        return productService.selectCategoryList();
+    }
+
+    @PostMapping("statusList")
+    @ResponseBody
+    public List<ProductDTO> selectProductList() {
+        return productService.selectProductStatus();
     }
 
     @PostMapping("productNameList")

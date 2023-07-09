@@ -53,63 +53,13 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <!-- @@@ 수업코드-타임리프 템플릿 표현식
-                        <tr th:each="menu: ${ menuList }">
-                            <td th:text="${ menu.code}"></td>
-                            <td th:text="${ menu.name}"></td>
-                            <td th:text="${ menu.price}"></td>
-                            <td th:text="${ menu.categoryCode}"></td>
-                            <td th:text="${ menu.orderableStatus}"></td>
-                        </tr> -->
-
-                        <tr>
-                            <td>P231011</td>
-                            <td>홍길동</td>
-                            <td>영업</td>
-                            <td>사원</td>
-                            <td>1</td>
-                            <td>1,000,000</td>
-                        </tr>
-                        <tr>
-                            <td>P231012</td>
-                            <td>유관순</td>
-                            <td>영업</td>
-                            <td>차장</td>
-                            <td>9</td>
-                            <td>1,000,000</td>
-                        </tr>
-                        <tr>
-                            <td>P231013</td>
-                            <td>김선달</td>
-                            <td>영업</td>
-                            <td>대리</td>
-                            <td>4</td>
-                            <td>1,000,000</td>
-                        </tr>
-                        <tr>
-                            <td>P231014</td>
-                            <td>윤봉길</td>
-                            <td>영업</td>
-                            <td>사원</td>
-                            <td>1</td>
-                            <td>1,000,000</td>
-                        </tr>
-                        <tr>
-                            <td>P231015</td>
-                            <td>임꺽정</td>
-                            <td>영업</td>
-                            <td>과장</td>
-                            <td>7</td>
-                            <td>1,000,000</td>
-                        </tr>
-                        <tr>
-                            <td>P231016</td>
-                            <td>장보고</td>
-                            <td>영업</td>
-                            <td>과장</td>
-                            <td>6</td>
-                            <td>1,000,000</td>
+                        <tr th:each="detail:${pointHistoryDetailList}">
+                            <td th:text="${detail.empNo}">P231011</td>
+                            <td th:text="${detail.employeeDTO.empName}">홍길동</td>
+                            <td th:text="${detail.deptDTO.deptName}">영업</td>
+                            <td th:text="${detail.jobDTO.jobName}">사원</td>
+                            <td th:text="${detail.employeeDTO.yearCount}">1</td>
+                            <td th:text="${detail.pointAmount}">1,000,000</td>
                         </tr>
                     </tbody>
                 </table>

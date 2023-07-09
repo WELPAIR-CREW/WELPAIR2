@@ -17,6 +17,7 @@ public class SellPageDTO {
     private String detailImageOriginFileName;
     private String path;
     private Date createDate;
+    private String sellStatus;
 
     List<ThumbnailImageDTO> thumbnailImageList;
 }

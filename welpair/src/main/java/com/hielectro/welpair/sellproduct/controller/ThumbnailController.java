@@ -2,18 +2,14 @@ package com.hielectro.welpair.sellproduct.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
@@ -30,26 +26,35 @@ import net.coobird.thumbnailator.Thumbnails;
 @Slf4j
 public class ThumbnailController {
     private final SellProductServiceImpl productService;
-    private String rootPath = System.getProperty("user.dir");
-    private String baseDir = "/src/main/resources/static";
-    private String originalImageDir = "/common/images/original";
-    private String thumbnailImageDir = "/common/images/thumbnail";
-    private String absoluteOriginalImageDir = rootPath + baseDir + originalImageDir;
-    private String absoluteThumbnailImageDir = rootPath + baseDir + thumbnailImageDir;
+    private String rootPath = "C:/upload/";
+    private String originalImageDir = "original";
+    private String thumbnailImageDir = "thumbnail";
+    private String absoluteOriginalImageDir = rootPath + originalImageDir;
+    private String absoluteThumbnailImageDir = rootPath + thumbnailImageDir;
 
     public ThumbnailController(SellProductServiceImpl productService) {
         this.productService = productService;
     }
 
+
+    @GetMapping("add")
+    public String addSellProduct() {
+        return "admin/sellproduct/admin-add-product";
+    }
+
     @PostMapping("add")
     public String registSellProduct(@ModelAttribute SellProductDTO sellProduct,
                                     @RequestParam String title,
+                                    @RequestParam String sellStatus,
                                     @ModelAttribute List<MultipartFile> uploadFiles,
                                     @ModelAttribute MultipartFile uploadDetailFile) {
         if (uploadFiles.size() > 6) {
             throw new IllegalStateException("상품 이미지는 최대 6개까지 등록 가능합니다.");
         }
 
+        System.out.println("--------------------- add SellStatus ---------------------");
+        System.out.println(sellStatus);
+        System.out.println("--------------------- add SellStatus ---------------------");
         File dir = new File(absoluteOriginalImageDir);
         File dir2 = new File(absoluteThumbnailImageDir);
 
@@ -61,6 +66,7 @@ public class ThumbnailController {
         List<ThumbnailImageDTO> thumbnailImageList = new ArrayList<>();
         SellPageDTO sellPage = new SellPageDTO();
         sellPage.setTitle(title);
+        sellPage.setSellStatus(sellStatus);
         sellPage.setThumbnailImageList(thumbnailImageList);
         sellProduct.setSellItemPage(new SellItemPageDTO());
         sellProduct.getSellItemPage().setSellPage(sellPage);
@@ -76,12 +82,32 @@ public class ThumbnailController {
         return "redirect:/products/" + sellPage.getNo();
     }
 
+    @GetMapping("modify/{sellPageNo}")
+    public String modifySellProduct(Model model, HttpServletRequest request, @PathVariable String sellPageNo) {
+        Map<String, String> map = new HashMap<>();
+
+        map.put("sellPageNo", sellPageNo);
+        SellProductDTO sellProduct = productService.selectOneSellProduct(sellPageNo);
+        model.addAttribute("productInfo", sellProduct);
+
+        /* 판매 상품 페이지가 수정되었는지 판단하기 위해 Session에 결과값을 저장 */
+        HttpSession session = request.getSession();
+        session.setAttribute("productInfo", sellProduct);
+        System.out.println(session.getAttribute("productInfo"));
+        return "admin/sellproduct/admin-modify-product";
+    }
+
     @PostMapping("modify")
     public String modifySellProduct(HttpServletRequest request,
                                     @ModelAttribute SellProductDTO sellProduct,
                                     @RequestParam String title,
+                                    @RequestParam String sellStatus,
                                     @ModelAttribute List<MultipartFile> uploadFiles,
                                     @ModelAttribute MultipartFile uploadDetailFile) {
+
+        System.out.println("--------------------- modify SellStatus ---------------------");
+        System.out.println(sellStatus);
+        System.out.println("--------------------- modify SellStatus ---------------------");
 
         /* 이전에 저장되었던 Session의 결과값과 비교하여 수정된 부분이 있다면 Update 실행 */
         HttpSession session = request.getSession();
@@ -92,23 +118,30 @@ public class ThumbnailController {
         /* 업로드된 이미지 파일이 0개이고 제목이 같고 할인율이 동일하면 return */
         if (uploadFiles.get(0).isEmpty() && uploadDetailFile.isEmpty()
                 && compareSellProduct.getDiscount() == sellProduct.getDiscount()
-                && compareSellPage.getTitle().equals(title)) {
+                && compareSellPage.getTitle().equals(title)
+                && compareSellPage.getSellStatus().equals(sellStatus)) {
 
             return "redirect:/products/" + sellPage.getNo();
         }
 
-        // 기존에 입력되어 있던 이미지 파일들 삭제
-        int cnt = deleteImageFiles(compareSellPage.getThumbnailImageList());
-        cnt += deleteImageFile(compareSellPage.getDetailImageFileName()) ? 1 : 0;
+        // 기존에 등록되어 있던 이미지 파일들 삭제
+        // 1. 썸네일 이미지가 업로드 되었을 시 기존 썸네일 삭제
+        if (!uploadFiles.get(0).isEmpty()) {
+            int cnt = deleteImageFiles(compareSellPage.getThumbnailImageList());
+            log.info("[ThumbnailController] " + cnt + "개의 Thumbnail 삭제 완료!");
+        }
 
-        if (cnt > 0) {
-            log.info("[ThumbnailController] " + cnt + "개의 사진 삭제 완료!");
+        // 2. 상세 이미지가 업로드 되었을 시 기존 상세 이미지 삭제
+        if (!uploadDetailFile.isEmpty()) {
+            int cnt = deleteImageFile(compareSellPage.getDetailImageFileName()) ? 1 : 0;
+            log.info("[ThumbnailController] DetailImage 삭제 완료!");
         }
 
         System.out.println("uploadFilesSize : " + uploadFiles.size() + "--------------------------------");
 
         try {
             sellPage.setTitle(title);
+            sellPage.setSellStatus(sellStatus);
             makeThumbnailImage(uploadFiles, sellPage);
             makeDetailImage(uploadDetailFile, sellPage);
             sellPage.setPath("/common/images/");

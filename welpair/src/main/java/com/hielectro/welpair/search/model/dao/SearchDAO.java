@@ -10,8 +10,15 @@ import java.util.List;
 @Mapper
 public interface SearchDAO {
     /* 1-1 */
-//    List<SearchDTO> searchResultByTitle(String title);
     List<SearchDTO> searchResultMain(SearchDTO search);
 
+    /* 2-1 */
     List<SearchDTO> searchDetailResult(SearchDTO search);
+
+    /* 99 */
+
+    String searchTermsCategory(String categoryCode);
+    String searchTermsRefCategory(String refCategoryCode);
+
+
 }

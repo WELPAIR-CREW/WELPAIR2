@@ -53,20 +53,17 @@
                 <div class="product-add-info">
                     제목 : <input type="text" name="title" class="page-title" placeholder="판매상품명 입력" th:value="${productInfo.sellItemPage.sellPage.title}"><br>
                     할인율 : <input type="text" name="discount" class="discount" placeholder="할인율 입력" th:value="${productInfo.discount}"><br>
+                    판매여부 : <select name="sellStatus">
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
                 </div>
             </article>
         </section>
 
         <section class="product-info">
             <span>상품 정보</span>
-            <article class="product-info-list">
-                <div class="product-no">상품번호</div>
-                <div class="product-no-text"></div>
-                <div class="product-status">상품상태</div>
-                <div class="product-status-text">
-
-                </div>
-            </article>
+            
             <article class="product-as-cert">
                 <div class="product-as">A/S 안내</div>
                 <div class="product-as-text">
@@ -114,6 +111,10 @@
             if (this.files.length > 6) {
                 alert('상품 이미지는 최대 6개까지 가능합니다.');
                 return;
+            }
+
+            while (thumbnail.children.length < this.files.length) {
+                thumbnail.append(document.createElement("img"));
             }
 
             [...thumbnail.children].forEach((item, index) => {

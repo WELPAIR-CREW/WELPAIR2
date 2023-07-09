@@ -2,8 +2,10 @@ package com.hielectro.welpair.member.controller;
 
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
+import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.member.model.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -257,11 +259,52 @@ public class MemberController {
 
 
 
-
-    @GetMapping("givePointHistory")
-    public String getPointHistoryList() {
+    //5. 포인트 지급이력 페이지
+    //포인트지급이력(요약)
+    @GetMapping("/pointHistory")
+    public String pointHistory() {
         return "admin/member/member-givePointHistory1";
     }
+
+
+    //포인트지급이력(요약)
+    @GetMapping("/pointHistorySummary")
+    public ModelAndView pointHistorySummary(ModelAndView model) {
+
+        List<PointHistoryDTO> pointHistorySummaryList = memberService.pointHistorySummary();
+        System.out.println("컨트롤러에 지급이력요약목록 들어오는지 확인 : " + pointHistorySummaryList);
+
+        model.addObject("pointHistorySummaryList", pointHistorySummaryList);
+        model.setViewName("admin/member/member-givePointHistory1");
+        return model;
+    }
+
+
+    //포인트지급이력(상세)
+    @GetMapping("/pointHistoryDetail")
+    public ModelAndView pointHistoryDetail(@RequestParam int eventId, ModelAndView model) {
+
+        System.out.println("컨트롤러에 eventId가 들어오는지 확인 : " + eventId);
+
+        List<PointHistoryDTO> pointHistoryDetailList = memberService.pointHistoryDetail(eventId);
+        System.out.println("컨트롤러에 지급이력상세목록 들어오는지 확인 : " + pointHistoryDetailList);
+
+        model.addObject("pointHistoryDetailList", pointHistoryDetailList);
+        model.setViewName("admin/member/member-givePointHistory2");
+        return model;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

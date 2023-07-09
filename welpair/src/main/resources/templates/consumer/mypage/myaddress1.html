@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배송지관리1</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/mypage.css">
+    <script src="/common/js/static/include.js"></script>
+</head>
+
+<body>
+    <!-- header -->
+    <div th:replace="/consumer/header_mypage :: header"></div>
+
+    <!-- @관련소스 찾아보기 -->
+
+    <section>
+        <div class="section-title">배송지 관리</div>
+        
+        <div class="m_myaddress" id="area_receive_address_list" v-cloak>
+            <a class="btn_register" href="배송지 등록 페이지 연결" data-href="{ '_type': 'modal' }"><i class="ico_plus"></i><b>배송지 추가하기</b></a>
+            <!-- 배송지 목록 -->
+            <ul v-if="paginator !== null && paginator.totalCount > 0" class="mm_address-list">
+
+                
+                <li v-for="(address, index) in paginator.items"
+                    :key="address.seq"
+                    class="mm_address-item"
+                    :class="{ '__address-on': address.isDefault }">
+
+                    <dl>
+                        <dt>
+                            <b v-text="address.receiverName"></b>
+                            <b v-if="address.isDefault" class="mm_tag __tag_secondary__">기본배송지</b>
+                        </dt>
+                        <dd v-text="address.receiverMobile ==  '' ? address.receiverTel : address.receiverMobile"></dd>
+                        <dd><span v-text="address.zipCode.trim()"></span>{{ address.roadAddress }}</dd>
+                    </dl>
+                    <div class="mm_btnbox">
+                        <a class="btn_edit" v-on:click="setUpdateAddr(index)" href="/mypage/receive-address/edit" data-href="{ '_type': 'modal' }"><i class="mco_edit"></i><b>수정</b></a>
+                        <button v-if="!address.isDefault" type="button" class="btn_delete" v-on:click="removeReceiveAddress(address)"><i class="mco_delete"></i><b>삭제</b></button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+
+    </section>
+
+
+
+    <!-- footer -->
+    <div data-include-html="/consumer/footer" class="include"></div>
+
+</body>
+
+</html>

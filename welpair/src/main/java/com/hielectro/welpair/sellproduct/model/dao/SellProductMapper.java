@@ -3,6 +3,7 @@ package com.hielectro.welpair.sellproduct.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.*;
 import org.apache.ibatis.annotations.Mapper;
@@ -22,6 +23,8 @@ public interface SellProductMapper {
     List<QnAManagerDTO> selectQnAList(Map<String, Object> searchMap);
     List<ProductDTO> selectOptionList(ProductDTO product);
     List<ProductDTO> selectProductNameList(ProductDTO product);
+    List<CategoryDTO> selectCategoryList();
+    List<ProductDTO> selectProductStatus();
 
 
     // INSERT
@@ -38,5 +41,6 @@ public interface SellProductMapper {
     int updateSellPage(SellPageDTO sellPage);
 
     int updateSellProduct(SellProductDTO sellProduct);
+
 }
 
