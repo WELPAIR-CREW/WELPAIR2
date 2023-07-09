@@ -5,6 +5,7 @@ import com.hielectro.welpair.order.model.dto.OrderDTO;
 import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
 import com.hielectro.welpair.payment.model.dto.PaymentDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -27,4 +28,5 @@ public interface PayMapper {
     int insertOrderPayment(String orderNo, String paymentNo);
 
     int insertProductOrder(ProductOrderDTO product);
+
 }

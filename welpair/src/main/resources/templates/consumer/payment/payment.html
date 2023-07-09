@@ -32,7 +32,7 @@
                 <ul class="order_prd_ul">
                     <li class="prd_list_head">
                         <!-- thymeleaf... 셀렉아이템 갯수 변수사용  -->
-                        <div th:text="'상품개수: ' + ${orderPrdList.orderPrdList.size()}" class="list_head_1"></div>
+                        <div th:text="'개수: ' + ${orderPrdList.orderPrdList.size()}" class="list_head_1"></div>
                         <div class="list_head_2">상품이름</div>
                         <div class="list_head_3">수   량</div>
 <!--                        <div class="list_head_4">금액</div>-->
@@ -47,11 +47,9 @@
 <!--                                <a href="http://127.0.0.1/HTML/index.html" class="alink">-->
                                     <!-- 상품썸네일 구역 -->
 <!--                                    <div class="thumb_box">-->
-<!--                                        &lt;!&ndash; 상품썸네일 이미지&ndash;&gt;-->
-<!--                                        <span class="thumb_img">-->
-<!--                                            <img th:if="${orderPrd.sellPage?.path != null}" th:src="'../..' + ${orderPrd.sellPage.path}" class="thumbimg">-->
+                                        <!-- 상품썸네일 이미지-->
+<!--                                            <img th:if="${orderPrd.sellPage?.path != null}" th:src="${orderPrd.sellPage.path} + ${thumbnail[stat.index].thumbnailImageFileName}" class="thumbimg">-->
 <!--                                            <img th:unless="${orderPrd?.sellPage?.path != null }" src="/common/images/thumbnailbox.png" class="thumbimg" alt="thumbnail">-->
-<!--                                        </span>-->
 <!--                                    </div>-->
                                     <!-- 상품이름 작성구역  -->
                                     <div class="prdTitle">

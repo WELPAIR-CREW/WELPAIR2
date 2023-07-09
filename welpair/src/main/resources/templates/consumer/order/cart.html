@@ -86,10 +86,10 @@
                                     <!-- 상품썸네일 구역 -->
                                     <div class="cart_thumb_box">
                                         <!-- 상품썸네일 이미지-->
-                                        <span class="cart_thumb_img" name="thumbImage">
-                                            <img th:if="${cart?.sellPage?.path != null}" th:src="'../..' + ${cart.sellPage.path}" class="thumbimg">
+<!--                                        <span class="cart_thumb_img" name="thumbImage">-->
+                                            <img th:if="${cart?.sellPage?.path != null}" th:src="${cart.sellPage.path} + ${thumbnail[stat.index].thumbnailImageFileName}" class="thumbimg">
                                             <img th:unless="${cart?.sellPage?.path != null }" src="/common/images/thumbnailbox.png" class="thumbimg" alt="thumbnail">
-                                          </span>
+<!--                                          </span>-->
                                     </div>
                                     <!-- 상품이름 작성구역  -->
                                     <div class="prd_name">

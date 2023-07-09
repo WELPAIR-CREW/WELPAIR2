@@ -1,12 +1,13 @@
 package com.hielectro.welpair.payment.controller;
 
-import com.hielectro.welpair.common.PriceCalculator;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.order.model.dto.OrderDTO;
 import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
+import com.hielectro.welpair.order.model.service.CartService;
 import com.hielectro.welpair.payment.model.dto.OrderPayReqDTO;
 import com.hielectro.welpair.payment.model.service.PayService;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLTransactionRollbackException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.hielectro.welpair.common.PriceCalculator.empNo;
@@ -25,9 +27,11 @@ import static com.hielectro.welpair.common.PriceCalculator.empNo;
 public class PayController {
 
     private final PayService payService;
+    private final CartService cartService;
 
-    private PayController(PayService payService) {
+    private PayController(PayService payService, CartService cartService) {
         this.payService = payService;
+        this.cartService = cartService;
     }
 
     @PostMapping("/payment.do")
@@ -41,10 +45,13 @@ public class PayController {
 
         // 1. 선택 상품 조회
         int totalPrice = 0;
+
         // 상품 조회해서 product에 데이터에서 받아온 id, 요청 수량에 따른 orderPrice 수정 못하게 셋팅하기
         for (ProductOrderDTO product : orderPrdList.getOrderPrdList()) {
 
-        SellProductDTO prd = payService.selectProductById(product.getSellProductId());
+
+            SellProductDTO prd = payService.selectProductById(product.getSellProductId());
+
 
             if (prd.getIsSell().equals('N')) {
                 System.out.println("판매중인 상품이 아닙니다. 다시 주문해주세요.");
@@ -55,6 +62,7 @@ public class PayController {
 
             totalPrice += product.getProductOrderPrice();
             orderPrdList.setTotalPaymentPrice(totalPrice);
+
         }
         System.out.println("================================\n" + orderPrdList + "\n========================================");
 

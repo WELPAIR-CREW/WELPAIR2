@@ -145,7 +145,23 @@
     </select>
 
     <select id="cartAllInfoSelect" resultMap="cartGeneralResultMap">
-        SELECT *
+        SELECT  A.CART_NO
+                , A.EMP_NO
+                , B.SELL_PRODUCT_ID
+                , B.CART_AMOUNT
+                , B.DELIVERY_PRICE
+                , C.PRODUCT_CODE
+                , C.DISCOUNT
+                , C.IS_SELL
+                , D.SELL_PAGE_NO
+                , E.SELL_PAGE_TITLE
+                , E.SELL_DETAIL_IMAGE_FILE_NAME
+                , E.SELL_DETAIL_IMAGE_ORGIN_FILE_NAME
+                , E.FILE_PATH
+                , G.PRODUCT_NAME
+                , G.PRODUCT_STATUS
+                , G.PRODUCT_AMOUNT
+                , G.PRODUCT_PRICE
           FROM   T_CART A
                , T_CART_SELL_PRODUCT B
                , T_SELL_PRODUCT C
@@ -160,6 +176,13 @@
            AND D.SELL_PAGE_NO = E.SELL_PAGE_NO(+)
            AND C.PRODUCT_CODE = G.PRODUCT_CODE(+)
 --            AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
+    </select>
+
+    <select id="selectThumbnailImage" resultMap="ThumbnailImageResultMap">
+        SELECT SELL_PAGE_NO
+             , SELL_THUMB_IMAGE_FILE_NAME
+          FROM T_THUMB_IMAGE
+         WHERE SELL_PAGE_NO = #{no}
     </select>
 
     <update id="cartAmountChange" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">

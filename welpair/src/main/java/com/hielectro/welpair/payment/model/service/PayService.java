@@ -5,6 +5,7 @@ import com.hielectro.welpair.order.model.dto.OrderDTO;
 import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
 import com.hielectro.welpair.payment.model.dto.PaymentDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 
 import java.sql.SQLTransactionRollbackException;
 import java.util.List;
@@ -27,5 +28,6 @@ public interface PayService {
     void insertOrderPayment(String paymentNo, String orderNo) throws SQLTransactionRollbackException;
 
     void insertProductOrder(ProductOrderDTO product) throws SQLTransactionRollbackException;
+
 }
 
