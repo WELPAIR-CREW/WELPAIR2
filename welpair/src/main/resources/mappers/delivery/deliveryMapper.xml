@@ -10,6 +10,17 @@
         <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
         <result property="driverId" column="DRIVER_ID"/>
         <result property="deliveryStatus" column="DELIVERY_STATUS"/>
+
+        <association property="productByOrder" resultMap="productByOrderDTO"/>
+    </resultMap>
+
+    <resultMap id="productByOrderDTO" type="com.hielectro.welpair.delivery.model.dto.ProductByOrderDTO">
+        <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="orderNo" column="ORDER_NO"/>
+        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="amount" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="orderPrice" column="PRODUCT_ORDER_PRICE"/>
+        <result property="deliveryDate" column="DELIVERY_DATE"/>
     </resultMap>
 
 
@@ -33,14 +44,8 @@
     </resultMap>
 
 
-
-
-
-
-
-
     <!-- 배송조회에서 주문번호로조회 할 수 있게 DELIVERY + PRODUCT_ORDER JOIN -->
-    <select id="deliveryDeliver" resultMap="deliveryDTO">
+    <select id="deliveryDelivery" resultMap="deliveryDTO">
         SELECT TE.PRODUCT_ORDER_NO
              , TE.DRIVER_ID
              , TE.DELIVERY_STATUS
@@ -55,7 +60,7 @@
                       ON TE.PRODUCT_ORDER_NO = PO.PRODUCT_ORDER_NO
     </select>
 
-    <!-- 쌍방조회용 DRIVER + DELIVERY JOIN -->
+    <!-- DRIVER + DELIVERY JOIN -->
     <select id="deliveryDriver" resultMap="driverDTO">
         SELECT TR.DRIVER_ID
              , TR.DRIVER_NAME
@@ -64,9 +69,46 @@
              , TE.DRIVER_ID
              , TE.DELIVERY_STATUS
         FROM T_DRIVER TR
-                 JOIN T_DELIVERY TE
-                      ON TR.DRIVER_ID = TE.DRIVER_ID
+        JOIN T_DELIVERY TE
+          ON TR.DRIVER_ID = TE.DRIVER_ID
     </select>
+
+    <!-- 3조인 ORDER + PRODUCT_ORDER JOIN + DELIVERY __1 -->
+    <select id="orderProduct" resultMap="deliveryDTO">
+        SELECT TR.ORDER_NO
+             , TR.ORDER_DATE
+             , TR.TOTAL_PRICE
+             , TR.DELIVERY_TYPE
+             , TR.EMP_NO
+             , PO.ORDER_NO
+             , PO.PRODUCT_ORDER_NO
+             , PO.SELL_PRODUCT_ID
+             , PO.PRODUCT_ORDER_AMOUNT
+             , PO.PRODUCT_ORDER_PRICE
+             , PO.DELIVERY_DATE
+          FROM T_ORDER TR
+          JOIN T_PRODUCT_ORDER PO
+            ON TR.ORDER_NO = PO.ORDER_NO
+    </select>
+
+    <!-- 3조인 ORDER + PRODUCT_ORDER JOIN + DELIVERY __2 -->
+    <select id="orderProductDelivery" resultMap="deliveryDTO">
+        SELECT    PO.ORDER_NO
+                , PO.PRODUCT_ORDER_NO
+                , PO.SELL_PRODUCT_ID
+                , PO.PRODUCT_ORDER_AMOUNT
+                , PO.PRODUCT_ORDER_PRICE
+                , PO.DELIVERY_DATE
+                , TD.PRODUCT_ORDER_NO
+                , TD.DRIVER_ID
+                , TD.DELIVERY_STATUS
+          FROM T_PRODUCT_ORDER PO
+          JOIN T_DELIVERY TD
+            ON PO.PRODUCT_ORDER_NO = TD.PRODUCT_ORDER_NO
+    </select>
+
+    <!-- -->
+
 
 
 </mapper>

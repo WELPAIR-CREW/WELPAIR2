@@ -1,5 +1,6 @@
 package com.hielectro.welpair.delivery.controller;
 
+import com.hielectro.welpair.delivery.model.dto.DeliveryDTO;
 import com.hielectro.welpair.delivery.model.dto.DriverDTO;
 import com.hielectro.welpair.delivery.model.service.deliveryService;
 import org.springframework.stereotype.Controller;
@@ -21,19 +22,18 @@ public class DeliveryController {
 
     /* 배송 전체 현황 */
     @GetMapping("delivery_main")
-    public String deliveryMain(Model model) {
+    public String deliveryList(Model model) {
 //      service의 메소드호출. 반환값 결과값에 따라 보여주는 View를 다르게 한다.
-        List<DriverDTO> list = service.deliveryDriver();
-        System.out.println(list);
-        model.addAttribute("list", list);
+        List<DeliveryDTO> deliverylist = service.deliveryDelivery();
+        System.out.println(deliverylist);
+        model.addAttribute("deliveryList", deliverylist);
         return "admin/delivery/delivery_main";
-
     }
 
     /* 상품준비중 */
     @GetMapping("delivery_prepare")
     public String deliveryprepare() {
-        List<DriverDTO> list = service.deliveryDriver();
+        List<DeliveryDTO> list = service.deliveryDelivery();
 
 
         return "admin/delivery/delivery_prepare";
@@ -53,6 +53,5 @@ public class DeliveryController {
     public String deliverycomplete() {
 
         return "admin/delivery/delivery_complete";
-
     }
 }
