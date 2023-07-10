@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배송지 등록</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/mypage.css">
+    <script src="/common/js/static/include.js"></script>
+</head>
+
+<body>
+    <!-- header -->
+    <div th:replace="/consumer/header_mypage :: header"></div>
+
+    <section>
+        <div class="section-title">배송지 등록</div>
+        <form action="" method="post" id="form-myaddress">
+
+            <div class="form-group3">
+                <div><label for="name">받는 사람</label></div>
+                <div><input type="text" name="receiver-name" required placeholder="이름을 입력하세요"></div>
+            </div>
+            <div class="form-group3">
+                <div><label for="phone">휴대폰 번호</label></div>
+                <div><input type="tel" name="receiver-phone" required placeholder="연락 가능한 번호를 입력하세요"></div>
+            </div>
+
+            <div class="form-group3">
+                <div><label for="address">주소</label></div>
+                <span>
+                    <!-- @우편번호 자동으로 입력 -->
+                    <input type="number" readonly id="input-zipcode">
+                    <button id="button-zipcode">우편번호 찾기</button>
+                </span>
+                <!-- @우편번호와 함께 기본주소 자동으로 입력 -->
+                <div><input type="text" readonly></div>
+                <div><input type="text" required placeholder="상세주소를 입력하세요"></div>
+            </div>
+            <input type="checkbox" name="default-address">
+            <label id="set-default">기본 배송지로 설정하기</label>
+
+            <div>
+                <span>
+                    <button class="wide-button2">
+                        <a href="">입력취소</a>
+                    </button>
+                </span>
+                <span>
+                    <button class="wide-button2 dark" type="submit">등록하기</button>
+                </span>
+            </div>
+        </form>
+
+    </section>
+
+
+
+    <!-- footer -->
+    <div data-include-html="/consumer/footer" class="include"></div>
+
+    <script>
+        
+    </script>
+
+</body>
+
+</html>

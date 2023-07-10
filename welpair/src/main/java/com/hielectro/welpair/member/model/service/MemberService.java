@@ -5,11 +5,9 @@ import com.hielectro.welpair.member.controller.RegistMemberException;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
-import org.apache.ibatis.annotations.Mapper;
+import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import com.hielectro.welpair.member.model.dto.ReqDTO;
 
-import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Map;
 
@@ -42,9 +40,25 @@ public interface MemberService extends UserDetailsService {
 
 
     //3-1. 가입승인 - 가입요청 목록
-    List<ReqDTO> reqList();
+    List<MemberDTO> reqList();
     int reqJoinCount();
+    //승인버튼 눌렀을때
+    void updateForPermission(List<String> empNos) throws RegistMemberException;
 
+
+
+    //4. 포인트지급
+    //회원목록 조회
+    List<MemberDTO> getMemberListforPoint(SelectCriteria selectCriteria);
+
+
+    //5. 포인트지급이력
+
+    //5-1. 요약
+    List<PointHistoryDTO> pointHistorySummary();
+
+    //5-2. 상세
+    List<PointHistoryDTO> pointHistoryDetail(int eventId);
 
 
 }

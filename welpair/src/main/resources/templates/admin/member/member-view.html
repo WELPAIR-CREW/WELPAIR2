@@ -30,8 +30,8 @@
         <div class="nav-menu"><b>회원조회</b></div>
         <div class="nav-menu"><a href="regist">회원등록</a></div> <!-- 이렇게 URL매핑된 컨트롤러 메서드 실행됨 -->
         <div class="nav-menu"><a href="reqList">가입승인</a></div>
-        <div class="nav-menu"><a href="givePoint">복지포인트지급</a></div>
-        <div class="nav-menu"><a href="givePointHistory">복지포인트지급이력</a></div>
+        <div class="nav-menu"><a href="memberListForPoint">복지포인트지급</a></div>
+        <div class="nav-menu"><a href="pointHistorySummary">복지포인트지급이력</a></div>
     </div>
 
     <div class="box">
@@ -133,10 +133,10 @@
 
         //전체 체크박스 체크여부 true면 일반 체크박스 전부 체크되게
         if (is_checked) {
-            chkAllChecked()
+            chkAllChecked();
         } else {
             //전체 해제되게
-            chkAllUnChecked()
+            chkAllUnChecked();
         }
     }
 
@@ -151,7 +151,7 @@
     function chkAllUnChecked() {
         document.querySelectorAll(".chk").forEach(function (v,i) {
             v.checked = false;
-        })
+        });
     }
 
     //개별 체크박스
@@ -159,7 +159,7 @@
         //체크박스 수
         const allCount = document.querySelectorAll(".chk").length;
         //체크된 체크박스의 수 구하기
-        const query = 'input[name="chk"]:checked'
+        const query = 'input[name="chk"]:checked';
         const selectedElements = document.querySelectorAll(query);
         const selectedElementsCnt = selectedElements.length;
         console.log('체크된 체크박스의 수 : ' + selectedElementsCnt);

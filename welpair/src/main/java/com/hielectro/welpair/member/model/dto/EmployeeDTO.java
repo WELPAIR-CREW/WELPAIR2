@@ -14,7 +14,7 @@ public class EmployeeDTO {
     private String hireType;
     private String empEmail;
     private String empPhone;
-    private String empDept;
+    private String deptCode;
     private String jobCode;
     private Date hireDate;
     private Date expireDate;
@@ -23,5 +23,7 @@ public class EmployeeDTO {
     private MemberDTO memberDTO;
     private DeptDTO deptDTO;
     private JobDTO jobDTO;
+
+    private int yearCount; //포인트지급 페이지에 표시하는 근속연수
 
 }

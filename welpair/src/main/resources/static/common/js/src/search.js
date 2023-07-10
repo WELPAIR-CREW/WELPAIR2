@@ -1,69 +1,81 @@
-
-
-
 let currentPage = 1;
 const rowsPerPage = 10;
 let totalPages = null;
 
-function showPage(page) {
-    $("#searchResultTable tbody tr").hide();
-    const startIndex = (page - 1) * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    $("#searchResultTable tbody tr").slice(startIndex, endIndex).show();
-}
 
+// 상세 검색 버튼
+$('#searchForm').on('submit', function (event) {
+    event.preventDefault();
 
+    console.log("검색 들어옴 ")
+    // 이전 검색 결과 삭제
+    $("#section-searchResult ul").empty();
+    console.log("검색 들어옴옴옴 ")
 
-// 검색 버튼
-$("#historySearch").click(function (){
-
-    let productCode = $("#productCode").val().toUpperCase();
-    let productName = $("#productName").val().toUpperCase();
-    let stockComment = $("#stockComment").val();
-    let stockTypeDefalut = $("#stockType").val();
-    let startDate = $("#startDate").val();
-    let endDate = $("#endDate").val();
-
+    // 검색어 입력 값 가져오기
+    let title = $("#title").val().toUpperCase();
+    let categoryCode = $("#categoryCode").val();
+    let minPrice = $("#minPrice").val();
+    let maxPrice = $("#maxPrice").val();
+    const search = window.location.search;
+    const params = new URLSearchParams(search);
     let data = {
-        productCode: productCode,
-        productName: productName,
-        stockComment: stockComment,
-        stockType: stockTypeDefalut,
-        startDate: startDate,
-        endDate: endDate
+        'sellPage.title': title,
+        'product.categoryCode': categoryCode,
+        'category.refCategoryCode': params.get('refCategoryCode'),
+        'product.productStatus': params.get('productStatus'),
+        minPrice: minPrice,
+        maxPrice: maxPrice
+
     };
-    if (productCode != "" || productName != "" || stockComment != "" || stockTypeDefalut != "" || startDate != "" ||  endDate != "") {
+
+    if (title != "" || categoryCode != "" || minPrice != "" || maxPrice != "") {
 
         console.log(data);
         $.ajax({
-
-            url: "/inventory/admin_inventory_search",
+            url: "/search/detail",
             data: data,
             type: 'post',
             success: function (data) {
                 console.log(data);
 
-                $("#searchResultTable tbody").empty();
+                const searchResultsList = $(".section-searchResult ul");
+                searchResultsList.empty();
 
-                $.each(data, function (index, stock) {
+                $.each(data, function (index, search) {
                     console.log(data)
-                    let row = $("<tr></tr>");
-                    row.append("<td>" + stock.stockNo + "</td>");
-                    row.append("<td>" + stock.productCode + "</td>");
-                    row.append("<td>" + stock.product.productName + "</td>");
-                    row.append("<td>" + stock.stockType + "</td>");
-                    row.append("<td>" + stock.stockDate + "</td>");
-                    row.append("<td>" + stock.stockAmount + "</td>");
-                    row.append("<td>" + stock.product.productAmount + "</td>");
-                    row.append("<td>" + stock.stockComment + "</td>");
+                    let listItem = $("<li></li>");
+                    listItem.addClass("section-searchResult-product");
 
-                    $("#searchResultTable tbody").append(row);
+                    let anchor = $("<a></a>").attr("href", "/products/" + search.sellItemPage.no);
+                    let thumbnailDiv = $("<div></div>").addClass("thumbnailImage");
+                    let image = $("<img>").attr("src", search.sellPage.path + "thumbnail/" + search.thumbnailImage.thumbnailImageFileName)
+                        .attr("alt", "");
+
+                    thumbnailDiv.append(image);
+                    anchor.append(thumbnailDiv);
+                    anchor.append(image);
+                    listItem.append(anchor);
+
+                    let productInfoDiv = $("<div></div>").addClass("product-info");
+
+                    let titleDiv = $("<div></div>").addClass("searchProdTitle");
+                    titleDiv.append($("<span></span>").text(search.sellPage.title));
+
+                    let priceDiv = $("<div></div>").addClass("searchProdPrice");
+                    priceDiv.append($("<span></span>").text(search.sellPrice.toLocaleString() + '원'));
+
+                    productInfoDiv.append(titleDiv);
+                    productInfoDiv.append(priceDiv);
+                    listItem.append(productInfoDiv);
+                    searchResultsList.append(listItem);
                 });
 
-                const totalRows = $("#searchResultTable tbody tr").length;
-                totalPages = Math.ceil(totalRows / rowsPerPage);
+                const totalItems = data.length;
+                totalPages = Math.ceil(totalItems / rowsPerPage);
 
                 showPage(currentPage);
+                updatePaginationButtons();
             },
             error: function (error) {
                 alert(error);
@@ -75,50 +87,142 @@ $("#historySearch").click(function (){
 });
 
 
+$(document).ready(function () {
+
+
+
 
 // 페이징
 
+
+    $(".paging").on("click", ".pageNum", function () {
+        currentPage = parseInt($(this).text());
+        showPage(currentPage);
+        updatePaginationButtons();
+    });
+
+    $(".paging").on("click", "#prevPage", function () {
+        if (currentPage > 1) {
+            currentPage--;
+            showPage(currentPage);
+            updatePaginationButtons();
+        }
+    });
+
+    $(".paging").on("click", "#nextPage", function () {
+        if (currentPage < totalPages) {
+            currentPage++;
+            showPage(currentPage);
+            updatePaginationButtons();
+        }
+    });
+
+    $(".search-sorting li").on("click", function() {
+        const sortType = $(this).attr("th:value");
+        sortResults(sortType);
+    });
+
+    // $('#searchForm').submit();
+});
+
+// 정렬 기준
+function sortResults(sortType) {
+    let title = $("#title").val().toUpperCase();
+    let categoryCode = $("#categoryCode").val();
+    let minPrice = $("#minPrice").val();
+    let maxPrice = $("#maxPrice").val();
+    const search = window.location.search;
+    const params = new URLSearchParams(search);
+    let data = {
+        'sellPage.title': title,
+        'product.categoryCode': categoryCode,
+        'category.refCategoryCode': params.get('refCategoryCode'),
+        'product.productStatus': params.get('productStatus'),
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+        sortType: sortType
+    };
+
+    $.ajax({
+        url: "/search/detail",
+        data: data,
+        type: 'post',
+        success: function(data) {
+            const searchResultsList = $(".section-searchResult ul");
+            searchResultsList.empty();
+
+            $.each(data, function (index, search) {
+                console.log(data)
+                let listItem = $("<li></li>");
+                listItem.addClass("section-searchResult-product");
+
+                let anchor = $("<a></a>").attr("href", "/products/" + search.sellItemPage.no);
+                let thumbnailDiv = $("<div></div>").addClass("thumbnailImage");
+                let image = $("<img>").attr("src", search.sellPage.path + "thumbnail/" + search.thumbnailImage.thumbnailImageFileName)
+                    .attr("alt", "");
+
+                thumbnailDiv.append(image);
+                anchor.append(thumbnailDiv);
+                anchor.append(image);
+                listItem.append(anchor);
+
+                let productInfoDiv = $("<div></div>").addClass("product-info");
+
+                let titleDiv = $("<div></div>").addClass("searchProdTitle");
+                titleDiv.append($("<span></span>").text(search.sellPage.title));
+
+                let priceDiv = $("<div></div>").addClass("searchProdPrice");
+                priceDiv.append($("<span></span>").text(search.sellPrice.toLocaleString() + '원'));
+
+                productInfoDiv.append(titleDiv);
+                productInfoDiv.append(priceDiv);
+                listItem.append(productInfoDiv);
+                searchResultsList.append(listItem);
+            });
+
+            const totalItems = data.length;
+            totalPages = Math.ceil(totalItems / rowsPerPage);
+
+            showPage(currentPage);
+            updatePaginationButtons();
+        },
+        error: function(error) {
+            alert(error);
+        }
+    });
+
+}
+function showPage(page) {
+    const startIndex = (page - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    const $listItems = $(".section-searchResult ul li");
+
+    $listItems.hide().slice(startIndex, endIndex).show();
+}
+
 function updatePaginationButtons() {
-    $(".paging1").empty();
+    $(".paging").empty();
+
+    if (totalPages <= 1) {
+        return;
+    }
 
     const startPage = Math.floor((currentPage - 1) / 5) * 5 + 1;
     const endPage = Math.min(startPage + 4, totalPages);
 
-    // if (startPage > 1) {
-    $(".paging1").append("<span id='prevPage'>&lt;</span>");
-    // }
+    if (startPage > 1) {
+        $(".paging").append("<span id='prevPage'><</span>");
+    }
 
     for (let i = startPage; i <= endPage; i++) {
         if (i === currentPage) {
-            $(".paging1").append("<span class='currentPage' style='color: #4D4D4D;'>" + i + "</span>");
+            $(".paging").append("<span class='currentPage' style='color: #4D4D4D;'>" + i + "</span>");
         } else {
-            $(".paging1").append("<span class='pageNum'>" + i + "</span>");
+            $(".paging").append("<span class='pageNum'>" + i + "</span>");
         }
     }
 
-    // if (endPage < totalPages) {
-    $(".paging1").append("<span id='nextPage'>&gt;</span>");
-    // }
+    if (endPage < totalPages) {
+        $(".paging").append("<span id='nextPage'>></span>");
+    }
 }
-
-$(".paging1").on("click", ".pageNum", function() {
-    currentPage = parseInt($(this).text());
-    showPage(currentPage);
-    updatePaginationButtons();
-});
-
-$(".paging1").on("click", "#prevPage", function() {
-    if (currentPage > 1) {
-        currentPage--;
-        showPage(currentPage);
-        updatePaginationButtons();
-    }
-});
-
-$(".paging1").on("click", "#nextPage", function() {
-    if (currentPage < totalPages) {
-        currentPage++;
-        showPage(currentPage);
-        updatePaginationButtons();
-    }
-});

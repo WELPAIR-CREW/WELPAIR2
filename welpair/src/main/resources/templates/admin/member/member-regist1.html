@@ -25,8 +25,8 @@
             <div class="nav-menu"><a href="member-view">회원조회</a></div>
             <div class="nav-menu"><b>회원등록</b></div>
             <div class="nav-menu"><a href="reqList">가입승인</a></div>
-            <div class="nav-menu"><a href="givePoint">복지포인트지급</a></div>
-            <div class="nav-menu"><a href="givePointHistory">복지포인트지급이력</a></div>
+            <div class="nav-menu"><a href="memberListForPoint">복지포인트지급</a></div>
+            <div class="nav-menu"><a href="pointHistorySummary">복지포인트지급이력</a></div>
         </div>
 
         <div class="box">
@@ -71,12 +71,7 @@
                             <td th:if="${#strings.isEmpty(employee.memberDTO?.registDate)}">
 
 <!--                        등록 버튼 눌렀을때 이동하는 회원등록페이지 (POST방식 요청)-->
-                            <button class="button-square2 regist" >등록</button>
-<!--                        <button class="button-square2 test" th:data-employee="${employee}">등록</button>-->
-<!--                        <button class="button-square2" th:onclick="'registEmp(\'' + ${employee.empNo} + '\')'">등록</button>-->
-<!--                        <button class="button-square2" th:onclick="|javascript:registEmp('${employee.empNo}')|">등록</button>-->
-<!--                        <button class="button-square2" data-emp-no="${employee.empNo}" onclick="registEmp(this.getAttribute('data-emp-no'))">등록</button>-->
-
+                            <button class="button-square2 regist">등록</button>
                             </td>
                             <td th:if="${not #strings.isEmpty(employee.memberDTO?.registDate)}" th:text="완료"></td>
                         </tr>
@@ -172,7 +167,7 @@
                 document.body.appendChild(form);
                 form.submit();
             }
-        })
+        });
     </script>
 
 </body>

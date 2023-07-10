@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상세검색</title>
+    <title th:text="${searchTerms != null ? (searchTerms.startsWith('<검색어> ') ? '상세검색' :
+                      (searchTerms.startsWith('<카테고리> ') ? '카테고리': '')) : 'Advanced Search'}"></title>
     <link rel="stylesheet" href="/common/css/main.css">
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/footer.css">
@@ -15,88 +16,108 @@
 </head>
 <!-- 헤더 -->
 <body>
-    <div data-include-html="/consumer/header_consumer" class="include"></div>
+<div data-include-html="/consumer/header_consumer" class="include"></div>
 
-    <!-- 검색 결과 시작 -->
-    <section>
+<!-- 검색 결과 시작 -->
+<section>
 
-        <!-- 타이틀바디 -->
-        <div class="section-content">
-            <div class="section-title">상세검색</div>
+    <!-- 타이틀바디 -->
+    <div class="section-content">
+        <div class="section-title" th:text="${searchTerms}"></div>
+        <div class="section-count" th:text="'TOTAL :  ' + ${prodSearchList.size()}"></div>
 
-            <form action="/search/search">
-                <div class="section-detailSearch">
-                    <!-- 상세 검색 옵션 -->
-                    <div class="section-detailSearch-line1">
-                        <div>
-                            <span class="section-detailSearch-span">상품명
-                                <input type="text" name="productName" class="section-detailSearch-input" placeholder="상품명입력">
-                            </span>
-                            <span class="section-detailSearch-span">카테고리
-                                <select id="categoryCode" class="section-detailSearch-input option1">
-                                    <option value="">선택</option>
-                                    <option value="3">TV</option>
-                                    <option value="4">에어컨</option>
-                                    <option value="5">냉장고</option>
-                                    <option value="6">전자레인지</option>
-                                    <option value="7">커피포트</option>
-                                    <option value="8">에어프라이어</option>
-                                    <option value="9">인덕션</option>
-                                </select>
-                            </span>
-                            <span class="section-detailSearch-input">가격
-                                <input type="number" name="minPrice" class="section-detailSearch-input price" placeholder="최소 금액">
-                                <span>~</span>
-                                <input type="number" name="maxPrice" class="section-detailSearch-input price" placeholder="최대 금액">
-                            </span>
-                            <span>
-                                <input clas="searchCheck" type="checkbox"> 결과 내 검색
-                            </span>
-                            <span>
-                                <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
-                                <input id="sendProductSearch" class="btn_basic" type="button" value="검색">
-                            </span>
-                        </div>
+        <div class="section-detailSearch">
+            <!--                <form action="/search/detail">-->
+            <form id="searchForm">
+                <!-- 상세 검색 옵션 -->
+                <div class="section-detailSearch-line1">
+                    <div>
+                        <span class="section-detailSearch-span">상품명
+                            <input type="text" name="title" id="title" class="section-detailSearch-input"
+                                   placeholder="상품명입력">
+                        </span>
+                        <span class="section-detailSearch-span">카테고리
+                            <select id="categoryCode" class="section-detailSearch-input option1">
+                                <option value="">선택</option>
+                                <option value="3">TV</option>
+                                <option value="4">에어컨</option>
+                                <option value="5">냉장고</option>
+                                <option value="6">전자레인지</option>
+                                <option value="7">커피포트</option>
+                                <option value="8">에어프라이어</option>
+                                <option value="9">인덕션</option>
+                            </select>
+                        </span>
+                        <span class="section-detailSearch-input">가격
+                            <input type="number" name="minPrice" id="minPrice" class="section-detailSearch-input price"
+                                   placeholder="최소 금액" value=0 min="0">
+                            <span>~</span>
+                            <input type="number" name="maxPrice" id="maxPrice" class="section-detailSearch-input price"
+                                   placeholder="최대 금액" value=0>
+                        </span>
+                        <span>
+                            <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
+                            <input id="detailSearch" class="btn_basic" type="submit" value="검색">
+                        </span>
                     </div>
                 </div>
+                <ul class="search-sorting">
+                    <li onclick="sortResults('price_desc')">가격 내림차순</li><p> | </p>
+                    <li onclick="sortResults('price_asc')">가격 오름차순</li><p> | </p>
+                    <li onclick="sortResults('title_desc')">상품명 내림차순</li><p> | </p>
+                    <li onclick="sortResults('title_asc')">상품명 오름차순</li>
+                </ul>
             </form>
-
-            <!-- 검색 수량, 정렬 기준 -->
-
-            <!-- 검색 결과 리스트 -->
-            <div class="section-searchResult">
-                <div>
-                    <ul>
-                        <li class="section-searchResult-product" th:each="searchDTO : ${prodSearchList}">
-                            <a href="#">
-                                <img src="#" alt="">
-                            </a>
-                            <div class="product-info">
-                                <div class="searchProdTitle" name="name"><span th:text="${searchDTO.sellPage.title}"></span></div>
-                                <div class="searchProdPrice" name="sellPrice"><span th:text="${searchDTO.sellprice}"></span></div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-
-            <!-- 페이징 -->
-            <div class="paging1">
-                <span id="prevPage">&lt;</span>
-                <span class="currentPage">1</span>
-                <span class="pageNum">2</span>
-                <span class="pageNum">3</span>
-                <span class="pageNum">4</span>
-                <span class="pageNum">5</span>
-                <span id="nextPage">&gt;</span>
-            </div>
         </div>
-    </section>
+
+        <!-- 검색 결과 리스트 -->
+        <div class="section-searchResult">
+            <div th:if="${prodSearchList.size() > 0}">
+                <ul>
+                    <li class="section-searchResult-product" th:each="search, index : ${prodSearchList}">
+                        <a th:href="@{'/products/' + ${search.sellItemPage.no}}">
+                            <div name="thumbnailImage"></div>
+                            <img th:src="|${search.sellPage.path}thumbnail/${search.getThumbnailImage().thumbnailImageFileName}|"
+                                     alt="">
+
+                        </a>
+                        <div class="product-info">
+                            <div class="searchProdTitle" name="title">
+                                <span th:text="${search.sellPage.title}"></span>
+                            </div>
+                            <div class="searchProdPrice" name="sellPrice">
+                                <span th:text="${#numbers.formatDecimal(search.sellPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div th:unless="${prodSearchList.size() > 0}">
+                <p th:text="${noResultMessage}"></p>
+            </div>
+
+        </div>
 
 
-    <!-- footer -->
-    <div data-include-html="/admin/footer" class="include"></div>
-    <script src="/common/js/src/search.js"></script>
+        <!-- 페이징 -->
+        <div class="paging">
+            <span id="prevPage">&lt;</span>
+            <span class="currentPage">1</span>
+            <span class="pageNum">2</span>
+            <span class="pageNum">3</span>
+            <span class="pageNum">4</span>
+            <span class="pageNum">5</span>
+            <span id="nextPage">&gt;</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- footer -->
+<div data-include-html="/consumer/footer" class="include"></div>
+<script src="/common/js/src/search.js"></script>
+<!--<script>-->
+<!--    ${searchTerms}-->
+<!--</script>-->
 </body>
 </html>

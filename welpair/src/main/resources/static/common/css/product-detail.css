@@ -319,3 +319,19 @@ label[for='upload'] {
 .btn_min {
     background-image: url('/common/images/bnt_min.png');
 }
+
+.product-detail1 {
+    display: flex;
+    width: 1020px;
+    height: 510px;
+    margin-top: 0px;
+    border: 1px solid #ededed;
+    box-sizing: border-box;
+}
+
+.product-detail1 article {
+    width: 510px;
+    height: 100%;
+    border: 1px solid #ededed;
+    margin: -1px;
+}

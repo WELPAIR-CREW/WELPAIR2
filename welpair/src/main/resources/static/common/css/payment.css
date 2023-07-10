@@ -17,13 +17,18 @@ a:hover, a:active { text-decoration: none; }
     width: 1196px;
 }
 .order_prd_area {
-    height: 350px;
+    height: 200px;
+    font-size: 20px;
 }
 
 
 .pay_area {
     height: 460px;
 
+}
+
+.alink {
+    align-items: center;
 }
 
 /* 각 구역 컨텐츠박스 */
@@ -83,13 +88,7 @@ input[type=checkbox] {
 
 /* 주문상품 */
 
-.order_prd_ul {
-    height: 30px;
-    /* display: flex; */
-    list-style-type: none;
-    font-size: 14px;
-    text-align: center;
-}
+
 
 
 li[class^=prd_list_] {
@@ -113,22 +112,24 @@ li[class^=prd_list_] {
     width: 180px;
 }
 
-.prd_list_box {
-    overflow: scroll;
-    /* IE scroll 숨김 */
-    max-height: 250px;
-}
+
 
 /* 내부스크롤바 안보이게 하기 */
 .prd_list_box::-webkit-scrollbar {
     display: none;
-    width: 0 !important;
+    /*width: 0 !important;*/
 }
 
+.prdTitle {
+    align-items: center;
+
+}
 
 .prd_list_body {
-    height: 100px;
+    margin-top: 10px;
+    height: 20px;
     margin-bottom: 20px;
+    align-items: center;
 }
 
 .list_body_2 a {
@@ -332,4 +333,19 @@ input[type=submit]{
     font-weight: bold;
     border-radius: 6px;
 
+}
+
+
+div[class="prd_list_box"]  {
+    max-height: 120px!important;
+    overflow: scroll;
+    /* IE scroll 숨김 */
+}
+
+.order_prd_ul {
+    height: 30px;
+    /* display: flex; */
+    list-style-type: none;
+    font-size: 16px;
+    text-align: center;
 }

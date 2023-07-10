@@ -4,9 +4,11 @@ import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public interface CartService {
     List<CartGeneralDTO> cartAllInfoSelect(String empNo);
@@ -26,4 +28,6 @@ public interface CartService {
     boolean cartAmountChange(CartSellProductDTO changeAmount);
 
     boolean deleteCartProduct(ArrayList<String> productList, String empNo);
+
+    List<ThumbnailImageDTO> selectThumbnailImage(String no);
 }

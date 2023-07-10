@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- css -->
+  <link rel="stylesheet" href="/common/css/payment_fail.css">
+  <link rel="stylesheet" href="/common/css/header.css">
+  <link rel="stylesheet" href="/common/css/footer.css">
+  <!-- script -->
+  <script src="/common/js/static/include.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+
+  <title>welpair</title>
+</head>
+<!-- 헤더 -->
+<div data-include-html="/consumer/header_consumer" class="include"></div>
+
+<body>
+<!--  컨테이너 -->
+<div class="payment_result_container">
+
+  <div class="text_container">
+
+    <div>주문이 완료되었습니다.</div>
+    <div class="btn">
+      <a href="/index"><button>메인으로 이동</button></a>
+      <a href="/mypage"><button>마이페이지로 이동</button></a>
+    </div>
+  </div>
+
+</div>
+
+
+
+<!-- footer -->
+<div data-include-html="/../admin/footer" class="include"></div>
+</body>
+
+</html>

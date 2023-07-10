@@ -1,10 +1,12 @@
 package com.hielectro.welpair.order.controller;
 
+import com.hielectro.welpair.common.PriceCalculator;
 import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
 import com.hielectro.welpair.order.model.service.CartService;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+// 고치기
+import static com.hielectro.welpair.common.PriceCalculator.empNo;
+
 
 @Slf4j
 @Controller
@@ -21,8 +26,6 @@ import java.util.*;
 public class CartController {
 
     private final CartService cartService;
-
-    private final String empNo = "E00033";
 
     private CartController(CartService cartService) {
         this.cartService = cartService;
@@ -39,10 +42,9 @@ public class CartController {
     @ResponseBody
     @PostMapping(value = "/cart/add", produces = "application/json; charset=utf-8")
     public Map<String, String> addCart(@ModelAttribute CartSellProductDTO cartSellProduct
-            , @RequestParam("empNo") Object empNo1
+//            , @RequestParam("empNo") Object empNo1
     ) {
 
-        String empNo = (String) empNo1;
         // 카트별판매상품dto를 통해 매상품id와 수량 정보와, 회원정보ID가 넘어온다.
         System.out.println("선택상품 : " + cartSellProduct);
 
@@ -123,18 +125,28 @@ public class CartController {
         // 2. 장바구니 관련 테이블 리스트로 받아옴
         List<CartGeneralDTO> cartList = cartService.cartAllInfoSelect(empNo);
 
+        List<ThumbnailImageDTO> thumbnail = new ArrayList<>();
 
+
+
+        System.out.println(cartList.size());
         for (CartGeneralDTO cart : cartList) {
-            priceMaker(cart);
-            System.out.println(cart.getSellPage());
-            model.addAttribute("expt", cartList.get(cartList.size()-1));
+            try {
+                priceMaker(cart);
+                System.out.println(cart.getSellPage());
+                model.addAttribute("expt", cartList.get(cartList.size()-1));
+                // 썸네일이미지 1번째 사진만 가져오기
+                thumbnail.add(cartService.selectThumbnailImage(cart.getSellPage().getNo()).get(0));
+                System.out.println(thumbnail);
 
+            } catch (NullPointerException e) {
 
-
+                return "consumer/order/cart-blank";
+            }
         }
-
         // 3. 장바구니 상품정보 모델에 담아 뷰로 전달
         model.addAttribute("cartList", cartList);
+        model.addAttribute("thumbnail", thumbnail);
 
         return "consumer/order/cart";
 
@@ -204,10 +216,11 @@ public class CartController {
 
 
     // 단품 금액 생성 메소드
-    public void priceMaker(CartGeneralDTO cart) {
+    public static void priceMaker(CartGeneralDTO cart) {
 
         // 1품목 가격 (가격 * 수량)
-        cart.setPrice((int)(cart.getProduct().getProductPrice() * ((1.0 - cart.getSellProduct().getDiscount()))) * cart.getCartSellProduct().getCartAmount());
+        cart.setPrice(new PriceCalculator().amountOfPrice(cart.getProduct().getProductPrice(), cart.getSellProduct().getDiscount(), cart.getCartSellProduct().getCartAmount()));
+
         // 1품목 총합계 (1품목 가격 + 배송비)
         cart.setTotalPrice(cart.getPrice() + cart.getCartSellProduct().getDeliveryPrice());
 

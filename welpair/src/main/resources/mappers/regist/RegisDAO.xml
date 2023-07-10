@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hielectro.welpair.regist.model.dao.RegistDAO">
+    
+    <resultMap id="employeeDTOResult" type="com.hielectro.welpair.regist.model.dto.EmployeeDTO">
+        <id property="empNo" column="EMP_NO"/>
+        <result property="empName" column="EMP_NAME"/>
+        <result property="hireType" column="HIRE_TYPE"/>
+        <result property="empEmail" column="EMP_EMAIL"/>
+        <result property="empPhone" column="EMP_PHONE"/>
+        <result property="empDept" column="EMP_DEPT"/>
+        <result property="jobCode" column="JOB_CODE"/>
+        <result property="hireDate" column="HIRE_DATE"/>
+        <result property="expireDate" column="EXPIRE_DATE"/>
+        <result property="isExpire" column="IS_EXPIRE"/>
+    </resultMap>
+
+    <resultMap id="registDTOResult" type="com.hielectro.welpair.regist.model.dto.RegistDTO">
+        <id property="empNo" column="EMP_NO"/>
+        <result property="memPwd" column="MEM_PWD"/>
+        <result property="registDate" column="REGIST_DATE"/>
+        <result property="pointBalance" column="POINT_BALANCE"/>
+        <result property="memAuth" column="MEM_AUTH"/>
+
+    </resultMap>
+    <resultMap id="memberRoleDTOResult" type="com.hielectro.welpair.regist.model.dto.MemberRoleDTO">
+        <result property="empNo" column="MEM_NO"/>
+        <result property="authCode" column="AUTH_CODE"/>
+    </resultMap>
+
+    <select id="idCheck" parameterType="String" resultType="int">
+        SELECT
+            COUNT(EMP_NO)
+        FROM T_EMPLOYEE
+        WHERE EMP_NO = #{ empNo }
+    </select>
+
+<!--    <select id="idMemberCheck" parameterType="String" resultMap="int">-->
+<!--        SELECT-->
+<!--            COUNT(EMP_NO)-->
+<!--        FROM T_MEMBER-->
+<!--        WHER EMP_NO = #{ empNo }-->
+<!--    </select>-->
+
+
+
+<!--    <insert id="insertMember" parameterType="com.hielectro.welpair.regist.model.dto.RegistDTO" >-->
+<!--        INSERT ALL-->
+<!--        INTO T_MEMBER-->
+<!--        (-->
+<!--            EMP_NO-->
+<!--        , MEM_PWD-->
+<!--        , REGIST_DATE-->
+<!--        , POINT_BALANCE-->
+<!--        , MEM_AUTH-->
+<!--        )-->
+<!--        VALUES-->
+<!--            (-->
+<!--                #{ empNo }-->
+<!--            , #{ memPwd }-->
+<!--            , SYSDATE-->
+<!--            , default-->
+<!--            , default-->
+<!--            )-->
+<!--        INTO T_MEMBER_ROLE-->
+<!--        (-->
+<!--                MEM_NO-->
+<!--             ,  AUTH_CODE-->
+<!--        )-->
+<!--        VALUES-->
+<!--        (-->
+<!--            #{ empNo }-->
+<!--        ,   default-->
+<!--        )-->
+
+<!--        </insert>-->
+
+
+        <insert id="insertMember" parameterType="com.hielectro.welpair.regist.model.dto.RegistDTO">
+        INSERT
+        INTO T_MEMBER
+            (
+            EMP_NO
+          , MEM_PWD
+          , REGIST_DATE
+          , POINT_BALANCE
+          , IS_ACTIVATED
+        )
+        VALUES
+            (
+                  #{ empNo }
+                , #{ memPwd }
+                , SYSDATE
+                , default
+                , 'N'
+            )
+    </insert>
+    <insert id="insertMemberRole" parameterType="com.hielectro.welpair.regist.model.dto.MemberRoleDTO">
+        INSERT
+        INTO T_MEMBER_ROLE
+        (
+            MEM_NO
+         ,  AUTH_CODE
+        )
+        VALUES
+        (
+            #{ empNo }
+        ,   '2'
+        )
+    </insert>
+    
+</mapper>

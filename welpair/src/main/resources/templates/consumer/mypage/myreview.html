@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내가쓴글-리뷰</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/mypage.css">
+    <script src="/common/js/static/include.js"></script>
+</head>
+
+<body>
+    <!-- header -->
+    <div th:replace="/consumer/header_mypage :: header"></div>
+
+    <section>
+        <div class="section-title">내가쓴글</div>
+
+        <div id="over-wishlist">
+            <span>
+                <span id="overline-check">
+                    <input type="checkbox" id="select-all2">
+                    <label>전체선택</label>
+                </span>
+                <span id="left-button">
+                    <button>선택담기</button>
+                    <label>&nbsp|&nbsp</label>
+                    <button>선택삭제</button>
+                </span>
+            </span>
+        </div>
+
+        <div id="wishlist">
+            <div class="wishlist-item">
+                <input type="checkbox">
+                <img src="../../img/thumbnailbox.png" alt="썸네일">
+                <span>
+                    <div>상품명상품명상품명상품명1</div>
+                    <div>옵션명옵션명옵션명1</div>
+                    <div>99,000원</div>
+                </span>
+                <span class="left-button2">
+                    <button>담기</button>
+                    <button>×</button>
+                </span>
+            </div>
+            <div class="wishlist-item">
+                <input type="checkbox">
+                <img src="../../img/thumbnailbox.png" alt="썸네일">
+                <span>
+                    <div>상품명상품명상품명상품명1</div>
+                    <div>옵션명옵션명옵션명1</div>
+                    <div>99,000원</div>
+                </span>
+                <span class="left-button2">
+                    <button>담기</button>
+                    <button>×</button>
+                </span>
+            </div>
+            <div class="wishlist-item">
+                <input type="checkbox">
+                <img src="../../img/thumbnailbox.png" alt="썸네일">
+                <span>
+                    <div>상품명상품명상품명상품명1</div>
+                    <div>옵션명옵션명옵션명1</div>
+                    <div>99,000원</div>
+                </span>
+                <span class="left-button2">
+                    <button>담기</button>
+                    <button>×</button>
+                </span>
+            </div>
+            <div class="wishlist-item">
+                <input type="checkbox">
+                <img src="../../img/thumbnailbox.png" alt="썸네일">
+                <span>
+                    <div>상품명상품명상품명상품명1</div>
+                    <div>옵션명옵션명옵션명1</div>
+                    <div>99,000원</div>
+                </span>
+                <span class="left-button2">
+                    <button>담기</button>
+                    <button>×</button>
+                </span>
+            </div>
+            <div class="wishlist-item">
+                <input type="checkbox">
+                <img src="../../img/thumbnailbox.png" alt="썸네일">
+                <span>
+                    <div>상품명상품명상품명상품명1</div>
+                    <div>옵션명옵션명옵션명1</div>
+                    <div>99,000원</div>
+                </span>
+                <span class="left-button2">
+                    <button>담기</button>
+                    <button>×</button>
+                </span>
+            </div>
+        </div>
+
+        <div class="paging">
+            <span>&lt;</span>
+            <span>1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+            <span>&gt;</span>
+        </div>
+
+
+    </section>
+
+
+
+    <!-- footer -->
+    <div data-include-html="/consumer/footer" class="include"></div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let selectAllCheckbox = document.getElementById('select-all2');
+            // let everyCheckbox = document.querySelectorAll('tbody td.checkbox-cell input[type="checkbox"]');
+
+            selectAllCheckbox.addEventListener('click', function () {
+                let isChecked = selectAllCheckbox.checked;
+
+                everyCheckbox.forEach(function (checkbox) {
+                    checkbox.checked = isChecked;
+                });
+            });
+        });
+
+    </script>
+</body>
+
+</html>
