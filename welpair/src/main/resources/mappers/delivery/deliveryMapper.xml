@@ -6,10 +6,45 @@
 
 
     <!-- 배송관련 deliveryDTO -->
+    <resultMap id="orderProductDTO" type="com.hielectro.welpair.delivery.model.dto.OrderProductDTO">
+        <result property="orderDate" column="ORDER_DATE"/>
+        <result property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="productName" column="PRODUCT_NAME"/>
+        <result property="amount" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="deliveryDate" column="DELIVERY_DATE"/>
+        <result property="deliveryStatus" column="DELIVERY_STATUS"/>
+    </resultMap>
+
     <resultMap id="deliveryDTO" type="com.hielectro.welpair.delivery.model.dto.DeliveryDTO">
         <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
         <result property="driverId" column="DRIVER_ID"/>
         <result property="deliveryStatus" column="DELIVERY_STATUS"/>
+
+        <association property="productByOrder" resultMap="productByOrderDTO"/>
+        <collection property="sellProduct" resultMap="sellProductDTO"/>
+    </resultMap>
+
+    <resultMap id="sellProductDTO" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
+        <id property="id" column="SELL_PRODUCT_ID"/>
+        <result property="code" column="PRODUCT_CODE"/>
+        <result property="discount" column="DISCOUNT"/>
+        <result property="isSell" column="IS_SELL"/>
+
+        <association property="product" resultMap="productDTO"/>
+    </resultMap>
+
+    <resultMap id="productDTO" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
+        <id property="productCode" column="PRODUCT_CODE"/>
+        <result property="productName" column="PRODUCT_NAME"/>
+    </resultMap>
+
+    <resultMap id="productByOrderDTO" type="com.hielectro.welpair.delivery.model.dto.ProductByOrderDTO">
+        <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="orderNo" column="ORDER_NO"/>
+        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="amount" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="orderPrice" column="PRODUCT_ORDER_PRICE"/>
+        <result property="deliveryDate" column="DELIVERY_DATE"/>
     </resultMap>
 
 
@@ -32,6 +67,13 @@
         <collection property="delivery" resultMap="deliveryDTO"/>
     </resultMap>
 
+    <resultMap id="adminOrderDTO" type="com.hielectro.welpair.delivery.model.dto.DeliveryDTO">
+        <id property="orderNo" column="ORDER_NO"/>
+        <result property="orderDate" column="ORDER_DATE"/>
+        <result property="totalPrice" column="TOTAL_PRICE"/>
+        <result property="deliveryType" column="DELIVERY_TYPE"/>
+        <result property="empNo" column="EMP_NO"/>
+    </resultMap>
 
 
 
@@ -40,7 +82,7 @@
 
 
     <!-- 배송조회에서 주문번호로조회 할 수 있게 DELIVERY + PRODUCT_ORDER JOIN -->
-    <select id="deliveryDeliver" resultMap="deliveryDTO">
+    <select id="deliveryDelivery" resultMap="orderProductDTO">
         SELECT TE.PRODUCT_ORDER_NO
              , TE.DRIVER_ID
              , TE.DELIVERY_STATUS
@@ -50,12 +92,19 @@
              , PO.PRODUCT_ORDER_AMOUNT
              , PO.PRODUCT_ORDER_PRICE
              , PO.DELIVERY_DATE
+             , P.PRODUCT_NAME
+             , T.ORDER_DATE
         FROM T_DELIVERY TE
-                 JOIN T_PRODUCT_ORDER PO
-                      ON TE.PRODUCT_ORDER_NO = PO.PRODUCT_ORDER_NO
+        JOIN T_PRODUCT_ORDER PO
+          ON TE.PRODUCT_ORDER_NO = PO.PRODUCT_ORDER_NO
+        JOIN T_SELL_PRODUCT TSP
+          ON PO.SELL_PRODUCT_ID = TSP.SELL_PRODUCT_ID
+        JOIN T_PRODUCT P
+          ON P.PRODUCT_CODE = TSP.PRODUCT_CODE
+        JOIN T_ORDER T on PO.ORDER_NO = T.ORDER_NO
     </select>
 
-    <!-- 쌍방조회용 DRIVER + DELIVERY JOIN -->
+    <!-- DRIVER + DELIVERY JOIN -->
     <select id="deliveryDriver" resultMap="driverDTO">
         SELECT TR.DRIVER_ID
              , TR.DRIVER_NAME
@@ -64,9 +113,84 @@
              , TE.DRIVER_ID
              , TE.DELIVERY_STATUS
         FROM T_DRIVER TR
-                 JOIN T_DELIVERY TE
-                      ON TR.DRIVER_ID = TE.DRIVER_ID
+        JOIN T_DELIVERY TE
+          ON TR.DRIVER_ID = TE.DRIVER_ID
     </select>
+
+    <!-- 3조인 ORDER + PRODUCT_ORDER JOIN + DELIVERY __1 -->
+    <select id="orderProduct" resultMap="deliveryDTO">
+        SELECT TR.ORDER_NO
+             , TR.ORDER_DATE
+             , TR.TOTAL_PRICE
+             , TR.DELIVERY_TYPE
+             , TR.EMP_NO
+             , PO.ORDER_NO
+             , PO.PRODUCT_ORDER_NO
+             , PO.SELL_PRODUCT_ID
+             , PO.PRODUCT_ORDER_AMOUNT
+             , PO.PRODUCT_ORDER_PRICE
+             , PO.DELIVERY_DATE
+          FROM T_ORDER TR
+          JOIN T_PRODUCT_ORDER PO
+            ON TR.ORDER_NO = PO.ORDER_NO
+    </select>
+
+    <!-- 3조인 ORDER + PRODUCT_ORDER JOIN + DELIVERY __2 -->
+    <select id="orderProductDelivery" resultMap="deliveryDTO">
+        SELECT    PO.ORDER_NO
+                , PO.PRODUCT_ORDER_NO
+                , PO.SELL_PRODUCT_ID
+                , PO.PRODUCT_ORDER_AMOUNT
+                , PO.PRODUCT_ORDER_PRICE
+                , PO.DELIVERY_DATE
+                , TD.PRODUCT_ORDER_NO
+                , TD.DRIVER_ID
+                , TD.DELIVERY_STATUS
+          FROM T_PRODUCT_ORDER PO
+          JOIN T_DELIVERY TD
+            ON PO.PRODUCT_ORDER_NO = TD.PRODUCT_ORDER_NO
+    </select>
+
+    <!-- 상품명을 찾기위한 T_PRODUCT + T_SELL_PRODUCT + T_PRODUCT_ORDER __1 -->
+    <select id="orderProductName" resultMap="deliveryDTO">
+        SELECT SP.SELL_PRODUCT_ID
+             , SP.PRODUCT_CODE
+             , SP.DISCOUNT
+             , SP.IS_SELL
+             , TR.PRODUCT_ORDER_NO
+             , TR.ORDER_NO
+             , TR.SELL_PRODUCT_ID
+             , TR.PRODUCT_ORDER_AMOUNT
+             , TR.PRODUCT_ORDER_PRICE
+             , TR.DELIVERY_DATE
+          FROM T_SELL_PRODUCT SP
+          JOIN T_PRODUCT_ORDER TR
+            ON SP.SELL_PRODUCT_ID = TR.SELL_PRODUCT_ID
+
+    </select>
+
+    <!-- 상품명을 찾기위한 T_PRODUCT + T_SELL_PRODUCT + T_PRODUCT_ORDER __1 -->
+    <select id="orderProductNames" resultMap="deliveryDTO">
+        SELECT TP.PRODUCT_CODE
+             , TP.PRODUCT_NAME
+             , TP.PRODUCT_STATUS
+             , TP.PRODUCT_AMOUNT
+             , TP.PRODUCT_PRICE
+             , TP.PRODUCT_OPTION
+             , TP.PRODUCT_NATION
+             , TP.CATEGORY_CODE
+             , SP.SELL_PRODUCT_ID
+             , SP.PRODUCT_CODE
+             , SP.DISCOUNT
+             , SP.IS_SELL
+          FROM T_PRODUCT TP
+          JOIN T_SELL_PRODUCT SP
+            ON TP.PRODUCT_CODE = SP.PRODUCT_CODE
+    </select>
+
+
+
+
 
 
 </mapper>

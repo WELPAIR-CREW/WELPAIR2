@@ -32,11 +32,11 @@ public class SpringSecurityConfiguration {
     }
 
     /* 리소스내의 정적 리소스 무시 */
-//    @Bean
-//    public WebSecurityCustomizer configure(){
-//
-//        return (web) -> web.ignoring().antMatchers("/css/**", "/js/**");
-//    }
+    @Bean
+    public WebSecurityCustomizer configure(){
+
+        return (web) -> web.ignoring().antMatchers("/common/**");
+    }
 
     /* HTTP 요청에 대한 권한 설정 */
     @Bean

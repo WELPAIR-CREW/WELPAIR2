@@ -14,7 +14,7 @@
 
 <div data-include-html="/admin/header_admin" class="include"></div>
 
-    <!-- -->
+<!-- -->
 
 <div class="container">
 
@@ -34,72 +34,75 @@
         <br><br>
 
         <div class="padding">
-        <form>
+            <form>
 
-            <select name="delivery">
-                <option value="del2">상품준비중</option>
-                <option value="del3">배송중</option>
-                <option value="del4">배송완료</option>
-                <option value="etc" selected>기타</option>
-            </select>
-            <input type="submit" value="변경">
+                <select name="delivery">
+                    <option value="del2">상품준비중</option>
+                    <option value="del3">배송중</option>
+                    <option value="del4">배송완료</option>
+                    <option value="etc" selected>기타</option>
+                </select>
+                <input type="submit" value="변경">
 
-            <input type="submit" value="기간별 조회">
-            <img src="../../img/calendar.png" alt="">
-
-
-            <table border="1px">
+                <input type="submit" value="기간별 조회">
+                <img src="../../img/calendar.png" alt="">
 
 
-                <thead>
+                <table border="1px">
 
-                <tr>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="checkbox-cell"><input type="checkbox" id="select-all" onclick="allChecked()"></th>
+                            <th>주문일자</th>
+                            <th>주문번호</th>
+                            <th>상품명</th>
+                            <th>수량</th>
+                            <th>수령인</th>
+                            <th>배송지정일</th>
+                            <th>진행상태</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="delivery:${deliveryList}">
+                            <td class="checkbox-cell">
+                                <input type="checkbox" name="chk" class="chk" onclick="chkClicked()"></td>
+                            <!--                        <td th:text="${#dates.format(delivery.adminOrder.orderDate , 'yyyy.MM.dd')}"></td>-->
+                            <td></td>
+                            <td th:text="${delivery.productOrderNo}"></td>
+                            <!--                        <td th:text="${delivery}"></td>-->
+                            <td></td>
+                            <td th:text="${delivery.productByOrder.amount}"></td>
+                            <!--                        <td th:text="${delivery.delivery.empEmail}"></td>-->
+                            <td></td>
+                            <td th:text="${delivery.productByOrder.deliveryDate}"></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                    <th><input type="checkbox" name="" id="checkAll"/></th>
-                    <th>주문일자</th>
-                    <th>주문번호</th>
-                    <th>상품명</th>
-                    <th>수량</th>
-                    <th>수취인</th>
-                    <th>배송지정일</th>
-                    <th>배송인</th>
-                </tr>
+                    <br><br>
 
-                <tr>
-                    <td><input type="checkbox" name="chk_box" class="checkSelect"/></td>
-                    <th>주문일자</th>
-                    <th>주문번호</th>
-                    <th>상품명</th>
-                    <th>수량</th>
-                    <th>수취인</th>
-                    <th>배송지정일</th>
-                    <th>배송인</th>
-                </tr>
+                </table>
 
-                </thead>
+                <br>
+                <div>
+                    <p style="text-align: center;">
+                        <span>&lt;</span>
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>></span>
+                    </p>
+                </div>
 
-                <br><br>
+                <br>
 
-            </table>
+            </form>
 
-            <br>
-            <div>
-                <p style="text-align: center;">
-                    <span>&lt;</span>
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
-                    <span>4</span>
-                    <span>5</span>
-                    <span>></span>
-                </p>
-            </div>
-
-            <br>
-
-        </form>
-
-        </form>
+            </form>
         </div>
     </section>
 </div>

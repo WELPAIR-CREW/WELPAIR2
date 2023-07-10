@@ -5,6 +5,7 @@ import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,6 +78,11 @@ public class CartServiceImpl implements CartService {
             result += cartMapper.deleteCartProduct(product, empNo);
         }
         return result < productList.size() ? true : false;
+    }
+
+    @Override
+    public List<ThumbnailImageDTO> selectThumbnailImage(String no) {
+        return cartMapper.selectThumbnailImage(no);
     }
 
 }

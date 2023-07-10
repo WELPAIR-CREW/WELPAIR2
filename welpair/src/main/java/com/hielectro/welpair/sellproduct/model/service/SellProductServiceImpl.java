@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.*;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,16 @@ public class SellProductServiceImpl implements SellProductService {
 
     public SellProductServiceImpl(SellProductMapper productMapper) {
         this.productMapper = productMapper;
+    }
+
+    @Override
+    public List<CategoryDTO> selectCategoryList() {
+        return productMapper.selectCategoryList();
+    }
+
+    @Override
+    public List<ProductDTO> selectProductStatus() {
+        return productMapper.selectProductStatus();
     }
 
     @Override
