@@ -29,6 +29,11 @@ public class SearchServiceImpl implements SearchService {
         return result;
     }
 
+    @Override
+    public int searchCount(SearchDTO search) {
+        return searchDAO.searchCount(search);
+    }
+
     /* 2-1 */
     @Override
     public List<SearchDTO> searchDetailResult(SearchDTO search) {

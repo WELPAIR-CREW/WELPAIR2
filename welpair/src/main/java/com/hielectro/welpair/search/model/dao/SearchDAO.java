@@ -11,6 +11,7 @@ import java.util.List;
 public interface SearchDAO {
     /* 1-1 */
     List<SearchDTO> searchResultMain(SearchDTO search);
+    int searchCount(SearchDTO search);
 
     /* 2-1 */
     List<SearchDTO> searchDetailResult(SearchDTO search);

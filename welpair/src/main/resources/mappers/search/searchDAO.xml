@@ -31,7 +31,6 @@
     <resultMap id="getSellProductResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
         <result property="id" column="SELL_PRODUCT_ID"></result>
         <result property="discount" column="DISCOUNT"></result>
-        <result property="isSell" column="IS_SELL"></result>
         <result property="productCode" column="PRODUCT_CODE"></result>
     </resultMap>
     <resultMap id="getProductResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
@@ -46,28 +45,58 @@
     </resultMap>
 
     <select id="searchResultMain" resultMap="prodSearchResultMap">
+        SELECT * FROM(
+            SELECT
+                   ROWNUM AS RN
+                 , A.SELL_PAGE_TITLE /* AS 판매상품명*/
+                 , E.PRODUCT_PRICE * (1 - D.DISCOUNT) AS SELLPRICE /*AS 판매가격*/
+                 , B.SELL_THUMB_IMAGE_FILE_NAME /*AS 썸네일이미지*/
+                 , A.SELL_PAGE_NO /*AS 판매페이지주소*/
+                 , A.FILE_PATH
+              FROM T_SELL_PAGE A
+              LEFT JOIN T_THUMB_IMAGE B ON B.SELL_PAGE_NO = A.SELL_PAGE_NO
+              LEFT JOIN T_SELL_ITEM_PAGE C ON C.SELL_PAGE_NO = A.SELL_PAGE_NO
+              LEFT JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID
+              LEFT JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
+              LEFT JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE
+             WHERE A.SELL_STATUS = 'Y'
+                <if test="sellPage.title != null and sellPage.title != ''">
+                    AND A.SELL_PAGE_TITLE LIKE '%' || #{sellPage.title} || '%'
+                </if>
+                <if test="product.categoryCode != null and product.categoryCode != ''">
+                    AND E.CATEGORY_CODE = #{product.categoryCode}
+                </if>
+                <if test="category.refCategoryCode != null and category.refCategoryCode != ''">
+                    AND F.REF_CATEGORY_CODE = #{category.refCategoryCode}
+                </if>
+            <if test="product.productStatus != null and product.productStatus != ''">
+                AND E.PRODUCT_STATUS = #{product.productStatus}
+            </if>)
+            <if test="pageNo != '0' and pageNo != null">
+                WHERE 1=1
+                AND RN &gt; ( (TO_NUMBER(#{ pageNo }) - 1) * 10)
+                AND RN &lt;= ( TO_NUMBER(#{ pageNo }) * 10)
+            </if>
+    </select>
+    <select id="searchCount" resultType="_int">
         SELECT
-               A.SELL_PAGE_TITLE /* AS 판매상품명*/
-             , E.PRODUCT_PRICE * (1 - D.DISCOUNT) AS SELLPRICE /*AS 판매가격*/
-             , B.SELL_THUMB_IMAGE_FILE_NAME /*AS 썸네일이미지*/
-             , A.SELL_PAGE_NO /*AS 판매페이지주소*/
-             , A.FILE_PATH
-          FROM T_SELL_PAGE A
-          JOIN T_THUMB_IMAGE B ON B.SELL_PAGE_NO = A.SELL_PAGE_NO
-          JOIN T_SELL_ITEM_PAGE C ON C.SELL_PAGE_NO = A.SELL_PAGE_NO
-          JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID
-          JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
-          JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE
-         WHERE D.IS_SELL = 'Y'
-            <if test="sellPage.title != null and sellPage.title != ''">
-                AND A.SELL_PAGE_TITLE LIKE '%' || #{sellPage.title} || '%'
-            </if>
-            <if test="product.categoryCode != null and product.categoryCode != ''">
-                AND E.CATEGORY_CODE = #{product.categoryCode}
-            </if>
-            <if test="category.refCategoryCode != null and category.refCategoryCode != ''">
-                AND F.REF_CATEGORY_CODE = #{category.refCategoryCode}
-            </if>
+        COUNT(*)
+        FROM T_SELL_PAGE A
+        LEFT JOIN T_THUMB_IMAGE B ON B.SELL_PAGE_NO = A.SELL_PAGE_NO
+        LEFT JOIN T_SELL_ITEM_PAGE C ON C.SELL_PAGE_NO = A.SELL_PAGE_NO
+        LEFT JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID
+        LEFT JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
+        LEFT JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE
+        WHERE A.SELL_STATUS = 'Y'
+        <if test="sellPage.title != null and sellPage.title != ''">
+            AND A.SELL_PAGE_TITLE LIKE '%' || #{sellPage.title} || '%'
+        </if>
+        <if test="product.categoryCode != null and product.categoryCode != ''">
+            AND E.CATEGORY_CODE = #{product.categoryCode}
+        </if>
+        <if test="category.refCategoryCode != null and category.refCategoryCode != ''">
+            AND F.REF_CATEGORY_CODE = #{category.refCategoryCode}
+        </if>
         <if test="product.productStatus != null and product.productStatus != ''">
             AND E.PRODUCT_STATUS = #{product.productStatus}
         </if>
@@ -80,11 +109,12 @@
         , A.SELL_PAGE_NO /*AS 판매페이지주소*/
         , A.FILE_PATH
         FROM T_SELL_PAGE A
-        JOIN T_THUMB_IMAGE B ON B.SELL_PAGE_NO = A.SELL_PAGE_NO
-        JOIN T_SELL_ITEM_PAGE C ON C.SELL_PAGE_NO = A.SELL_PAGE_NO
-        JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID
-        JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
-        WHERE D.IS_SELL = 'Y'
+        LEFT JOIN T_THUMB_IMAGE B ON B.SELL_PAGE_NO = A.SELL_PAGE_NO
+        LEFT JOIN T_SELL_ITEM_PAGE C ON C.SELL_PAGE_NO = A.SELL_PAGE_NO
+        LEFT JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID
+        LEFT JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
+        LEFT JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE
+        WHERE A.SELL_STATUS = 'Y'
         <if test="sellPage.title != null and sellPage.title != ''">
             AND A.SELL_PAGE_TITLE LIKE '%' || #{sellPage.title} || '%'
         </if>

@@ -20,6 +20,7 @@ public class SearchDTO {
     private int maxPrice;
     private int sellPrice;
     private String sortType;
+    private int pageNo;
 
     private SellPageDTO sellPage;
     private ThumbnailImageDTO thumbnailImage;
