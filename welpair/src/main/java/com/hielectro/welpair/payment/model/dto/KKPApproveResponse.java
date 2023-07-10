@@ -20,7 +20,7 @@ public class KKPApproveResponse {
 
     private String payload;         // 결제 승인 요청에 대해 저장하고 싶은 값, 최대 200자
 
-    private OrderDTO order;
+//    private OrderDTO order;
 
 
 }

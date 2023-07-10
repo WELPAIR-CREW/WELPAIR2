@@ -26,7 +26,7 @@ public class KKPReadyRequest {
     private String cancel_url;  // 결제 취소 시 redirect url, 최대 255자
     private String fail_url;    // 결제 실패 시 redirect url, 최대 255자
 
-    private OrderDTO order;
+//    private String payload;
 
 
 

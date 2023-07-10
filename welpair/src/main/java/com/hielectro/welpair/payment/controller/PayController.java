@@ -9,18 +9,20 @@ import com.hielectro.welpair.payment.model.service.PayService;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLTransactionRollbackException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hielectro.welpair.common.PriceCalculator.empNo;
-
-
 @Slf4j
 @Controller
 @RequestMapping({"/payment"})
@@ -42,16 +44,13 @@ public class PayController {
         System.out.println("========post mapping 들어옴===========");
         System.out.println(orderPrdList);
 
-
         // 1. 선택 상품 조회
         int totalPrice = 0;
 
         // 상품 조회해서 product에 데이터에서 받아온 id, 요청 수량에 따른 orderPrice 수정 못하게 셋팅하기
         for (ProductOrderDTO product : orderPrdList.getOrderPrdList()) {
 
-
             SellProductDTO prd = payService.selectProductById(product.getSellProductId());
-
 
             if (prd.getIsSell().equals('N')) {
                 System.out.println("판매중인 상품이 아닙니다. 다시 주문해주세요.");
@@ -59,7 +58,6 @@ public class PayController {
                 model.addAttribute("suspendProduct", product.getSellproduct());
                 return "/consumer/order/cart";
             }
-
             totalPrice += product.getProductOrderPrice();
             orderPrdList.setTotalPaymentPrice(totalPrice);
 
@@ -69,21 +67,19 @@ public class PayController {
         // 2. 상품 정보 다시 뿌리기
         model.addAttribute("orderPrdList", orderPrdList);
 
-
         // 3. 멤버 조회해오기
         // 3-1. (아이디 -> 배송지 전체테이블, 멤버 포인트 )
-        System.out.println("empNo========`=========" + empNo);
+        System.out.println("empNo=================" + empNo);
         List<MemberDTO> memberAddressList = payService.selectMemberById(empNo);
         System.out.println(memberAddressList);
         model.addAttribute("memberAddressList", memberAddressList);
 
         return "/consumer/payment/payment";
-
     }
 
     // 결제수단에 따른 매핑 나누기
     @PostMapping("/payment.go")
-    public String gotopay(@RequestBody OrderDTO order, RedirectAttributes rttr, Model model
+    public String gotopay(@RequestBody OrderDTO order, RedirectAttributes rttr, ModelAndView model
                     //            , @AuthenticationPrincipal User user
                         ) throws Exception {
 
@@ -110,6 +106,7 @@ public class PayController {
        } else {   // 복지포인트로 전액 결제 완료
            // success 매핑으로 가서 데이터 저장
 
+//           model.setViewName("redirect:/payment/pay-success");
            return "redirect:/payment/pay-success";
        }
     }
@@ -125,7 +122,9 @@ public class PayController {
     }
 
     @GetMapping("/pay-success")
-    public String paySuccess(@ModelAttribute("order") OrderDTO order) throws Exception {
+    public String paySuccess(@ModelAttribute("order") OrderDTO order
+//                , @AuthenticationPrincipal User user
+    ) throws Exception {
 
         log.info("pay-success 매핑들어옴===> " + order);
         // 1. payment insert // paymentNo 가져옴 ---> 2. orderPayment insert 동시진행
@@ -160,13 +159,15 @@ public class PayController {
             product.setOrderNo(order.getOrderNo());
             try {
                 payService.insertProductOrder(product);
+
             } catch (SQLTransactionRollbackException e) {
                 System.out.println("!!!!!!!!!!productorder insert 실패!!!!!!!!!");
                 payService.deleteOrder(order.getOrderNo());
-
-
             }
         });
+
+        cartService.deleteCartProduct((ArrayList<String>) order.getProductOrderList()
+                .stream().map(item -> item.getSellProductId()).collect(Collectors.toList()), empNo);
 
         // 4. 포인트 사용시 포인트파트 팀원 메소드에 토스하기 (paymentNo, empNo, pointAmount, pointType
 
