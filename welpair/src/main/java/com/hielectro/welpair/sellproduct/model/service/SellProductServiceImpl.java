@@ -1,5 +1,6 @@
 package com.hielectro.welpair.sellproduct.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -142,7 +143,23 @@ public class SellProductServiceImpl implements SellProductService {
 
         System.out.println("service : " + request);
         for (int i = 0; i < size; i++) {
+            Map<String, String> map = new HashMap<>();
+            map.put("code", request.get(i));
+            List<SellProductDetailDTO> list = productMapper.selectProductList(map);
+            for(var item : list) {
+                // 1. 썸네일 삭제
+                productMapper.deleteThumbnail(item.getPageNo());
+
+            }
+
+            // 2. 판매상품 삭제 (Cascade 옵션으로 ItemPage는 자동 삭제됨
             result += productMapper.sellProductDelete(request.get(i));
+
+            // 3. 판매 페이지 삭제
+            for(var item : list) {
+                // 2. 판매 페이지 삭제
+                productMapper.deleteSellPage(item.getPageNo());
+            }
         }
 
         if (result != size) {

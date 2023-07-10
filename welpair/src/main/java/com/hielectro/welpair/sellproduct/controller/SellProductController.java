@@ -177,12 +177,6 @@ public class SellProductController {
         }
     }
 
-    @GetMapping("test")
-    public String testMethod(@ModelAttribute Search search) {
-        System.out.println("test : " + search);
-        return "redirect:/sellproduct/review";
-    }
-
     public Map<String, Integer> pagination(int length) {
         Map<String, Integer> response = new HashMap<>();
         int maxPageNo = (int) Math.ceil((double) length / limit);

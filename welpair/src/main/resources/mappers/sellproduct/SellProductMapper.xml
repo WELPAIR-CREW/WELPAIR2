@@ -492,4 +492,10 @@
          WHERE SELL_PAGE_NO = #{ no }
     </delete>
 
+    <delete id="deleteSellPage">
+        DELETE
+          FROM T_SELL_PAGE
+         WHERE SELL_PAGE_NO = #{ no }
+    </delete>
+
 </mapper>
