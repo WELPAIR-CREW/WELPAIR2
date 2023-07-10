@@ -91,7 +91,28 @@
     let queryString = /*[[${queryString}]]*/'queryString'
     createTable(data);
     setPagination(paging);
-    createPaging(queryString)
+    createPaging(queryString);
+
+    const checkList = document.querySelectorAll('tbody input[type="checkbox"]');
+    let list;
+    list = [...checkList].filter(check => check.checked)
+                .map(check => ({ no : check.parentElement.nextElementSibling.textContent}));
+
+    fetch('/sellproduct/review/private', {
+        method: 'post',
+        body: JSON.stringify(list)
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Update Failed!');
+            }
+        })
+        .then(data => {
+            location.href = data.next_redirect_url;
+        })
+        .catch(error => console.log(error));
 </script>
 <div data-include-html="/admin/footer" class="include"></div>
 

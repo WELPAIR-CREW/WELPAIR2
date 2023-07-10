@@ -4,16 +4,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
-import com.hielectro.welpair.inventory.model.dto.ProductDTO;
-import com.hielectro.welpair.sellproduct.model.dto.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
+import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
-import org.springframework.transaction.annotation.Transactional;
+import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -214,5 +220,19 @@ public class SellProductServiceImpl implements SellProductService {
                 throw new IllegalStateException("Thumbnail Insert Failed");
             }
         }
+    }
+
+    @Override
+    public boolean setPrivateBoard(List<BoardDTO> boardList) {
+        int result = 0;
+        for (var board : boardList) {
+            result += productMapper.updateReview(board);
+        }
+
+        if (boardList.size() != result) {
+            throw new IllegalStateException("Review 비공개 실패");
+        }
+
+        return true;
     }
 }
