@@ -6,6 +6,7 @@ import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.search.model.dto.SearchDTO;
 import com.hielectro.welpair.search.model.service.SearchService;
 import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,6 +67,9 @@ public class SearchController {
         System.out.println("search = " + search);
 
         List<SearchDTO> prodSearchList  = searchService.searchResultMain(search);
+//        List<ThumbnailImageDTO> thumbnailImage = searchService.searchResultThumb(search.getSellPage().getNo());
+
+//        System.out.println("thumbnailImage = " + thumbnailImage);
 
 
         int totalItems = searchService.searchCount(search);
@@ -82,7 +86,7 @@ public class SearchController {
 
 
         if(prodSearchList != null && !prodSearchList.isEmpty()){
-            System.out.println("prodSearchList = " + prodSearchList);
+            System.out.println("prodSearchList.size() = " + prodSearchList.size());
             model.addAttribute("prodSearchList", prodSearchList);
         } else{
             model.addAttribute("prodSearchList", Collections.emptyList());

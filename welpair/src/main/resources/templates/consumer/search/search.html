@@ -77,8 +77,9 @@
                     <li class="section-searchResult-product" th:each="search, index : ${prodSearchList}">
                         <a th:href="@{'/products/' + ${search.sellItemPage.no}}">
                             <div name="thumbnailImage"></div>
-                            <img th:src="|${search.sellPage.path}thumbnail/${search.getThumbnailImage().thumbnailImageFileName}|"
-                                 alt="">
+                            <img th:if="${search?.sellPage?.path != null and search.getThumbnailImage().thumbnailImageFileName != null }" th:src="|${search.sellPage.path}thumbnail/${search.getThumbnailImage().thumbnailImageFileName}|">
+                            <img th:unless="${search?.sellPage?.path != null and search.getThumbnailImage().thumbnailImageFileName != null }" src="/common/images/thumbnailbox.png">
+
                         </a>
                         <div class="product-info">
                             <div class="searchProdTitle" name="title">
@@ -100,32 +101,20 @@
 
         <!-- 페이징 -->
         <div class="paging">
-            <form id="paginationForm" th:action="@{/search/search}" method="get">
-                <input type="hidden" name="title" th:value="${title}" />
-                <input type="hidden" name="categoryCode" th:value="${categoryCode}" />
-                <input type="hidden" name="refCategoryCode" th:value="${refCategoryCode}" />
-                <input type="hidden" name="productStatus" th:value="${productStatus}" />
-                <input type="hidden" name="pageSize" th:value="${pageSize}" />
-
-                <a th:if="${currentPage > 1}"
-                   th:href="@{/search/search(pageNo=1, ${#httpServletRequest.queryString})}">
-                    <span id="prevPage">&lt;</span>
+            <a th:if="${currentPage > 1}"
+               th:href="@{/search/search(pageNo=1, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
+                <span id="prevPage">&lt;</span>
+            </a>
+            <th:block th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{/search/search(pageNo=${pageNo}, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
+                    <span class="pageNum" th:text="${pageNo}"></span>
                 </a>
-                <th:block th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
-                    <a th:href="@{/search/search(pageNo=${pageNo}, ${#httpServletRequest.queryString})}">
-                        <span class="pageNum" th:text="${pageNo}"></span>
-                    </a>
-                </th:block>
-                <a th:if="${currentPage < totalPages}"
-                   th:href="@{/search/search(pageNo=${currentPage + 1}, ${#httpServletRequest.queryString})}">
-                    <span id="nextPage">&gt;</span>
-                </a>
-
-            </form>
+            </th:block>
+            <a th:if="${currentPage < totalPages}"
+               th:href="@{/search/search(pageNo=${pageNo}, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
+                <span id="nextPage">&gt;</span>
+            </a>
         </div>
-
-
-
     </div>
 </section>
 

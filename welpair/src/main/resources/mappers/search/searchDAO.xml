@@ -21,7 +21,7 @@
         <result property="path" column="FILE_PATH"/>
     </resultMap>
     <resultMap id="getThumbnailImageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
-        <result property="no" column="SELL_PAGE_NO"/>
+        <id property="no" column="SELL_PAGE_NO"/>
         <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>
     </resultMap>
     <resultMap id="getSellItemPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
@@ -46,48 +46,54 @@
 
     <select id="searchResultMain" resultMap="prodSearchResultMap">
         SELECT * FROM(
-            SELECT
-                   ROWNUM AS RN
-                 , A.SELL_PAGE_TITLE /* AS 판매상품명*/
-                 , E.PRODUCT_PRICE * (1 - D.DISCOUNT) AS SELLPRICE /*AS 판매가격*/
-                 , B.SELL_THUMB_IMAGE_FILE_NAME /*AS 썸네일이미지*/
-                 , A.SELL_PAGE_NO /*AS 판매페이지주소*/
-                 , A.FILE_PATH
-              FROM T_SELL_PAGE A
-              LEFT JOIN T_THUMB_IMAGE B ON B.SELL_PAGE_NO = A.SELL_PAGE_NO
-              LEFT JOIN T_SELL_ITEM_PAGE C ON C.SELL_PAGE_NO = A.SELL_PAGE_NO
-              LEFT JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID
-              LEFT JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
-              LEFT JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE
-             WHERE A.SELL_STATUS = 'Y'
-                <if test="sellPage.title != null and sellPage.title != ''">
-                    AND A.SELL_PAGE_TITLE LIKE '%' || #{sellPage.title} || '%'
-                </if>
-                <if test="product.categoryCode != null and product.categoryCode != ''">
-                    AND E.CATEGORY_CODE = #{product.categoryCode}
-                </if>
-                <if test="category.refCategoryCode != null and category.refCategoryCode != ''">
-                    AND F.REF_CATEGORY_CODE = #{category.refCategoryCode}
-                </if>
-            <if test="product.productStatus != null and product.productStatus != ''">
-                AND E.PRODUCT_STATUS = #{product.productStatus}
-            </if>)
-            <if test="pageNo != '0' and pageNo != null">
-                WHERE 1=1
-                AND RN &gt; ( (TO_NUMBER(#{ pageNo }) - 1) * 10)
-                AND RN &lt;= ( TO_NUMBER(#{ pageNo }) * 10)
-            </if>
-    </select>
-    <select id="searchCount" resultType="_int">
         SELECT
-        COUNT(*)
+        ROWNUM AS RN
+        , A.SELL_PAGE_TITLE /* AS 판매상품명*/
+        , E.PRODUCT_PRICE * (1 - D.DISCOUNT) AS SELLPRICE /*AS 판매가격*/
+        , B.SELL_THUMB_IMAGE_FILE_NAME /*AS 썸네일이미지*/
+        , A.SELL_PAGE_NO /*AS 판매페이지주소*/
+        , A.FILE_PATH
         FROM T_SELL_PAGE A
-        LEFT JOIN T_THUMB_IMAGE B ON B.SELL_PAGE_NO = A.SELL_PAGE_NO
+        LEFT JOIN (SELECT
+        SELL_PAGE_NO, MIN(SELL_THUMB_IMAGE_FILE_NAME) AS SELL_THUMB_IMAGE_FILE_NAME
+        FROM T_THUMB_IMAGE
+        GROUP BY SELL_PAGE_NO) B ON B.SELL_PAGE_NO = A.SELL_PAGE_NO
         LEFT JOIN T_SELL_ITEM_PAGE C ON C.SELL_PAGE_NO = A.SELL_PAGE_NO
         LEFT JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID
         LEFT JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
         LEFT JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE
         WHERE A.SELL_STATUS = 'Y'
+        <if test="sellPage.title != null and sellPage.title != ''">
+        AND A.SELL_PAGE_TITLE LIKE '%' || #{sellPage.title} || '%'
+    </if>
+        <if test="product.categoryCode != null and product.categoryCode != ''">
+            AND E.CATEGORY_CODE = #{product.categoryCode}
+        </if>
+        <if test="category.refCategoryCode != null and category.refCategoryCode != ''">
+            AND F.REF_CATEGORY_CODE = #{category.refCategoryCode}
+        </if>
+        <if test="product.productStatus != null and product.productStatus != ''">
+            AND E.PRODUCT_STATUS = #{product.productStatus}
+        </if>)
+        <if test="pageNo != '0' and pageNo != null">
+            WHERE 1=1
+            AND RN &gt; ( (TO_NUMBER(#{ pageNo }) - 1) * 10)
+            AND RN &lt;= ( TO_NUMBER(#{ pageNo }) * 10)
+        </if>
+    </select>
+    <select id="searchCount" resultType="_int">
+        SELECT
+               COUNT(*)
+          FROM T_SELL_PAGE A
+        LEFT JOIN (SELECT
+        SELL_PAGE_NO, MIN(SELL_THUMB_IMAGE_FILE_NAME) AS SELL_THUMB_IMAGE_FILE_NAME
+        FROM T_THUMB_IMAGE
+        GROUP BY SELL_PAGE_NO) B ON B.SELL_PAGE_NO = A.SELL_PAGE_NO
+          LEFT JOIN T_SELL_ITEM_PAGE C ON C.SELL_PAGE_NO = A.SELL_PAGE_NO
+          LEFT JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID
+          LEFT JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
+          LEFT JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE
+         WHERE A.SELL_STATUS = 'Y'
         <if test="sellPage.title != null and sellPage.title != ''">
             AND A.SELL_PAGE_TITLE LIKE '%' || #{sellPage.title} || '%'
         </if>
@@ -103,7 +109,7 @@
     </select>
     <select id="searchDetailResult" resultMap="prodSearchResultMap">
         SELECT
-          A.SELL_PAGE_TITLE /* AS 판매상품명*/
+        A.SELL_PAGE_TITLE /* AS 판매상품명*/
         , E.PRODUCT_PRICE * (1 - D.DISCOUNT) AS SELLPRICE /*AS 판매가격*/
         , B.SELL_THUMB_IMAGE_FILE_NAME /*AS 썸네일이미지*/
         , A.SELL_PAGE_NO /*AS 판매페이지주소*/
@@ -148,12 +154,21 @@
 
     <select id="searchTermsCategory" parameterType="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
         SELECT CATEGORY_NAME
-          FROM T_CATEGORY
-         WHERE CATEGORY_CODE = #{categoryCode}
+        FROM T_CATEGORY
+        WHERE CATEGORY_CODE = #{categoryCode}
     </select>
     <select id="searchTermsRefCategory" parameterType="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
         SELECT CATEGORY_NAME
-          FROM T_CATEGORY
-         WHERE CATEGORY_CODE = #{refCategoryCode}
+        FROM T_CATEGORY
+        WHERE CATEGORY_CODE = #{refCategoryCode}
     </select>
+
+    <select id="searchResultThumb" parameterType="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
+        SELECT
+               SELL_THUMB_IMAGE_FILE_NAME
+          FROM T_THUMB_IMAGE
+         WHERE SELL_PAGE_NO = #{no}
+    </select>
+
+
 </mapper>
