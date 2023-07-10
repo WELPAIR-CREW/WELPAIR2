@@ -1,5 +1,6 @@
 package com.hielectro.welpair.delivery.model.dao;
 
+import com.hielectro.welpair.delivery.model.dto.DeliveryDTO;
 import com.hielectro.welpair.delivery.model.dto.DriverDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,6 +13,6 @@ public interface deliveryMapper {
     * */
     List<DriverDTO> deliveryDriver();
 
-    List<deliveryMapper> deliveryDelivery();
+    List<DeliveryDTO> deliveryDelivery();
 
 }
