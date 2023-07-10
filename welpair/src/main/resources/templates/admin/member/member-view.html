@@ -11,7 +11,7 @@
     <!-- 아래는 확장자 안붙이고 여기는 확장자 붙이는 이유:
             resources/static 하위 파일을 가리키기 위해서임  -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <link rel="stylesheet" href="/common/css/main.css">
+<!--    <link rel="stylesheet" href="/common/css/main.css">-->
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/member.css">
@@ -40,7 +40,8 @@
         <div class="contents"> <!-- 테이블, 테이블 위, 테이블 아래-->
             <div class="over-table">
 
-                <label class="count-row">전체 : <span th:text="${ totalMemberCount }"
+<!--                <label class="count-row">전체 : <span th:text="${ totalMemberCount }"-->
+                <label class="count-row">전체 : <span th:text="${ totalCnt }"
                                                     class="member-value"></span>명</label>
                 <label class="count-row">상태변경 : <span th:text="${ expiredMemberCount }"
                                                     class="member-value"></span>명</label>
@@ -81,33 +82,20 @@
                     <button class="button-circle">검색</button>
                 </div>
 
-                <div class="paging">
 
-                    <span th:each="page: ${pageNumbList}" th:class="${currentPage == page ? 'active-page' : ''}">
-                        <a th:href="|@{/member/member-view?currentPage=}${page}|" th:text="${page}"></a>
-                    </span>
+                <!-- 새로운 페이징 적용 -->
+                    <div class="paging">
+                        <a th:if="${pageHandler.showPrev}" th:href="@{/member/member-view(page=${pageHandler.beginPage - 1})}">이전</a>
 
-<!--                    <span><a th:href="@{/member/member-view?currentPage=1}"-->
-<!--                             th:class="${currentPage == 1 ? 'active-page' : ''}">1</a></span>-->
-<!--                    &lt;!&ndash; 이 요소를 클릭하면 currentPage 매개변수가 1~5로 설정된 /member-view URL로 요청을 보냄 &ndash;&gt;-->
-<!--                    &lt;!&ndash; true이면 요소에 CSS적용을 위한 'active-page'가 class속성으로 추가됨 false이면 빈문자열이 class속성으로 추가됨 &ndash;&gt;-->
-<!--                    <span><a th:href="@{/member/member-view?currentPage=2}"-->
-<!--                             th:class="${currentPage == 2 ? 'active-page' : ''}">2</a></span>-->
-<!--                    <span><a th:href="@{/member/member-view?currentPage=3}"-->
-<!--                             th:class="${currentPage == 3 ? 'active-page' : ''}">3</a></span>-->
-<!--                    <span><a th:href="@{/member/member-view?currentPage=4}"-->
-<!--                             th:class="${currentPage == 4 ? 'active-page' : ''}">4</a></span>-->
-<!--                    <span><a th:href="@{/member/member-view?currentPage=5}"-->
-<!--                             th:class="${currentPage == 5 ? 'active-page' : ''}">5</a></span>-->
-<!--                    <span><a th:href="@{/member/member-view?currentPage=6}"-->
-<!--                             th:class="${currentPage == 6 ? 'active-page' : ''}">6</a></span>-->
-<!--                    <span><a th:href="@{/member/member-view?currentPage=7}"-->
-<!--                             th:class="${currentPage == 7 ? 'active-page' : ''}">7</a></span>-->
-<!--                    <span>-->
-<!--                        <a th:href="@{/member/member-view?currentPage=${selectCriteria.endPage}}" th:disabled="${selectCriteria.currentPage == selectCriteria.totalPages}">-->
-<!--                            &gt;-->
-<!--                        </a>-->
-<!--                    </span>-->
+                        <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}">
+                            <a th:href="@{/member/member-view(page=${pageNumber})}" th:text="${pageNumber}"
+                               th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
+                        </span>
+
+                        <a th:if="${pageHandler.showNext}" th:href="@{/member/member-view(page=${pageHandler.endPage + 1})}">다음</a>
+                    </div>
+
+
 
                 </div>
             </div>
