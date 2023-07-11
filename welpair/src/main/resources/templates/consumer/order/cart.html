@@ -79,16 +79,13 @@
                                            th:id="${cart.sellProduct.id}" onchange="checkboxTrueList()" data-th-value="${cart.price} + '/' +${cart.cartSellProduct.deliveryPrice} + '/' + ${cart.totalPrice}">
                                 </label>
                                 <!-- 판매페이지 바로가기 링크 -->
-<!--                                    <a th:if="${cart.sellPage.no != null}" th:href="'/consumer/sellproduct/product-detail?' + ${cart.sellPage.no}">-->
-<!--                                <a th:href="'/products/'+ ${cart.sellPage.no}">-->
-                                <a href="/index">
-
+                                    <a th:if="${cart?.sellPage?.no != null}" th:href="'/products/' + ${cart.sellPage.no}">
                                     <!-- 상품썸네일 구역 -->
                                     <div class="cart_thumb_box">
                                         <!-- 상품썸네일 이미지-->
 <!--                                        <span class="cart_thumb_img" name="thumbImage">-->
-                                            <img th:if="${cart?.sellPage?.path != null}" th:src="${cart.sellPage.path} + ${thumbnail[stat.index].thumbnailImageFileName}" class="thumbimg">
-                                            <img th:unless="${cart?.sellPage?.path != null }" src="/common/images/thumbnailbox.png" class="thumbimg" alt="thumbnail">
+                                            <img th:if="${cart?.sellPage?.thumbnailImageList.get(0).thumbnailImageFileName != null }" th:src="${cart.sellPage.path + 'thumbnail/' + cart?.sellPage?.thumbnailImageList.get(0).thumbnailImageFileName}" class="thumbimg">
+                                            <img th:unless="${cart?.sellPage?.thumbnailImageList.get(0).thumbnailImageFileName != null}" src="/common/images/thumbnailbox.png" class="thumbimg" alt="thumbnail">
 <!--                                          </span>-->
                                     </div>
                                     <!-- 상품이름 작성구역  -->
@@ -98,8 +95,7 @@
                                         <div class="prd_pageTitle" name="no-sellPageTitle" th:if="${cart.sellProduct.isSell == 'N'}">판매중인 상품이 아닙니다.</div>
                                         <div class="prd_productName "th:id="'productName' + ${stat.count}" th:name="${cart.product.productName}" th:text="${cart.product.productName}" th:value="${cart.sellProduct.id}">balnk</div>
                                     </div>
-<!--                                </a>-->
-                                </a>
+                                    </a>
                                 <!-- click이벤트 js 작성  -->
                                 <!-- 상품 수량변경 옵션구역 -->
                                 <div class="prd_util">

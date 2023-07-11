@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>복지포인트지급이력2</title>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <link rel="stylesheet" href="/common/css/main.css">
+<!--    <link rel="stylesheet" href="/common/css/main.css">-->
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/member.css">
@@ -59,18 +59,36 @@
                             <td th:text="${detail.deptDTO.deptName}">영업</td>
                             <td th:text="${detail.jobDTO.jobName}">사원</td>
                             <td th:text="${detail.employeeDTO.yearCount}">1</td>
-                            <td th:text="${detail.pointAmount}">1,000,000</td>
+<!--                            <td th:text="${detail.pointAmount}">1,000,000</td>-->
+<!--                            <td th:text="${#numbers.formatDecimal(detail.pointAmount, 0, 'COMMA', 2)}">1,000,000</td>-->
+                            <td th:text="${#numbers.formatInteger(detail.pointAmount, 1, 'COMMA') + '원'}"></td>
                         </tr>
                     </tbody>
                 </table>
 
+
+                <div class="under-table givepoint-history2">
+                    <div class="paging">
+                        <a th:if="${pageHandler.showPrev}" th:href="@{/member/pointHistoryDetail(page=${pageHandler.beginPage - 1})}">이전</a>
+
+                        <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}">
+                            <a th:href="@{/member/pointHistoryDetail(page=${pageNumber})}" th:text="${pageNumber}"
+                               th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
+                        </span>
+
+                        <a th:if="${pageHandler.showNext}" th:href="@{/member/pointHistoryDetail(page=${pageHandler.endPage + 1})}">다음</a>
+                    </div>
+                </div>
+
+
                 <div id="summary-givepointhistory2">
                     <div class="form-group2">
+
                         <span>
                             <label>지급회원 수 : </label>
                         </span>
                         <span class="count">
-                            <span>nn</span><label>명</label>
+                            <span th:text="${ totalCnt }" class="member-value">nn</span><label>명</label>
                         </span>
                     </div>
 
@@ -78,7 +96,7 @@
                         <span>
                             <label>지급액 합계 : </label>
                         </span>
-                        <span class="count">
+                        <span class="count point">
                             <span>10,000,000</span><label>원</label>
                         </span>
                     </div>
@@ -94,6 +112,29 @@
 
     <!-- footer -->
     <div data-include-html="/admin/footer" class="include"></div>
+
+
+    <script>
+        // 페이지가 로드되면 바로 실행되게함
+        window.addEventListener('DOMContentLoaded', function() {
+            calculateTotalAmount();
+        });
+
+        // 지급액 합계 계산하고 표시하기
+        function calculateTotalAmount() {
+            const totalCnt = parseInt(document.querySelector('.member-value').textContent);
+
+            // const pointAmount = parseInt(document.querySelector('#table-givepointhistory2 tbody tr td:nth-child(6)').textContent);
+            const pointAmount = parseInt(document.querySelector('#table-givepointhistory2 tbody tr td:nth-child(6)').textContent.replace(/,/g, ''));
+            //.replace(/,/g, '')함수는 쉼표(",")의 모든 항목을 빈 문자열('')로 바꿈 (텍스트 내용에서 쉼표를 제거하기 위함)
+
+            const totalAmount = totalCnt * pointAmount;
+
+            // 지급액 합계 표시
+            const totalAmountElement = document.querySelector('#summary-givepointhistory2 .count.point span');
+            totalAmountElement.textContent = totalAmount.toLocaleString();
+        }
+    </script>
 
 
     

@@ -162,28 +162,33 @@
                 , G.PRODUCT_STATUS
                 , G.PRODUCT_AMOUNT
                 , G.PRODUCT_PRICE
+                , F.SELL_THUMB_IMAGE_FILE_NAME
           FROM   T_CART A
                , T_CART_SELL_PRODUCT B
                , T_SELL_PRODUCT C
                , T_SELL_ITEM_PAGE D
                , T_SELL_PAGE E
                , T_PRODUCT G
---                  T_THUMB_IMAGE F
+               , (SELECT
+                  SELL_PAGE_NO, MIN(SELL_THUMB_IMAGE_FILE_NAME) AS SELL_THUMB_IMAGE_FILE_NAME
+            FROM T_THUMB_IMAGE
+            GROUP BY SELL_PAGE_NO) F
          WHERE A.EMP_NO = #{empNo}
            AND A.CART_NO = B.CART_NO(+)
            AND B.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID(+)
            AND C.SELL_PRODUCT_ID = D.SELL_PRODUCT_ID(+)
            AND D.SELL_PAGE_NO = E.SELL_PAGE_NO(+)
            AND C.PRODUCT_CODE = G.PRODUCT_CODE(+)
---            AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
+           AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
     </select>
 
-    <select id="selectThumbnailImage" resultMap="ThumbnailImageResultMap">
-        SELECT SELL_PAGE_NO
-             , SELL_THUMB_IMAGE_FILE_NAME
-          FROM T_THUMB_IMAGE
-         WHERE SELL_PAGE_NO = #{no}
-    </select>
+<!--    <select id="selectThumbnailImage" resultMap="ThumbnailImageResultMap">-->
+<!--        SELECT SELL_PAGE_NO-->
+<!--             , SELL_THUMB_IMAGE_FILE_NAME-->
+<!--          FROM T_THUMB_IMAGE-->
+<!--         WHERE SELL_PAGE_NO = #{no}-->
+<!--           AND SELL_THUMB_IMAGE_FILE_NAME NOT NULL-->
+<!--    </select>-->
 
     <update id="cartAmountChange" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
         UPDATE T_CART_SELL_PRODUCT

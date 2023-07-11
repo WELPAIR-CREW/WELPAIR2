@@ -13,7 +13,6 @@
 
   <script src="/common/js/static/include.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<!--  <script src="/common/js/src/inventory.js"></script>-->
 </head>
 
 <body>
@@ -23,7 +22,7 @@
 <!-- 왼쪽 메뉴 베너 -->
   <div class="section-nav">
     <div class="section-nav-category">
-      <a href="/inventory/admin_inventory"><b>재고관리</b></a>
+      <a href="/inventory/admin_inventory"><b>재고현황</b></a>
     </div>
     <div class="section-nav-category">
       <a href="/inventory/admin_inventory_register">입출고등록</a>
@@ -43,7 +42,6 @@
       <span><p id="totalInvenAmount" th:text="${totalInvenAmount}"></p></span>
       <span class="section-invenMain-list"><strong>위험재고 상품수</strong></span>
       <span><p id="alertStock" th:text="${alertStock}"></p></span>
-
     </div>
 
     <!-- 1-2. 상품코드 검색하여 결과 값 출력 -->

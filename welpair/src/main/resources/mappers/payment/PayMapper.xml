@@ -127,6 +127,46 @@
              #{productOrderAmount}, #{productOrderPrice}, #{deliveryDate})
     </insert>
 
+    <!-- 포인트 사용이력 테이블 인서트  -->
+    <insert id="insertPointHistoryForUse" parameterType="com.hielectro.welpair.member.model.dto.PointHistoryDTO"
+            useGeneratedKeys="true" keyColumn="POINT_NO" keyProperty="pointNo">
+        INSERT INTO T_POINT_HISTORY
+        (POINT_NO, EMP_NO, POINT_DATE, POINT_AMOUNT, POINT_TYPE, POINT_REASON, EVENT_ID)
+        VALUES
+            (
+                'PH' || LPAD(SEQ_POINT_NO.NEXTVAL, 10, 0),
+                #{empNo},
+                #{pointDate},
+                #{pointAmount},
+                #{pointType},
+                #{pointReason},
+                #{eventId}
+            )
+    </insert>
+
+    <!-- 회원의 포인트잔액 업데이트  -->
+    <update id="updateUsePointBalance" parameterType="com.hielectro.welpair.member.model.dto.MemberDTO">
+            UPDATE T_MEMBER
+            SET POINT_BALANCE = POINT_BALANCE - #{ pointBalance }
+            WHERE EMP_NO = #{ empNo }
+    </update>
+
+    <insert id="insertPointPay" parameterType="com.hielectro.welpair.payment.model.dto.PointPayDTO">
+        insert into T_POINT_PAY (POINT_NO, PAYMENT_NO)
+        values ( #{pointNo} , #{paymentNo})
+    </insert>
+
+    <select id="selectProductCode" resultMap="SellProductResultMap">
+        select A.PRODUCT_CODE, B.PRODUCT_AMOUNT
+        FROM T_SELL_PRODUCT A JOIN T_PRODUCT B ON(A.PRODUCT_CODE = B.PRODUCT_CODE)
+        WHERE A.SELL_PRODUCT_ID = #{id}
+    </select>
+
+    <select id="selectOrderDate">
+        select ORDER_DATE
+        from T_ORDER
+        where ORDER_NO = #{orderNo}
+    </select>
 
 
 

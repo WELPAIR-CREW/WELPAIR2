@@ -24,7 +24,7 @@
     <!-- 타이틀바디 -->
     <div class="section-content">
         <div class="section-title" th:text="${searchTerms}"></div>
-        <div class="section-count" th:text="'TOTAL :  ' + ${prodSearchList.size()}"></div>
+        <div class="section-count" th:text="'TOTAL :  ' + ${totalItems}"></div>
 
         <div class="section-detailSearch">
             <!--                <form action="/search/detail">-->
@@ -77,8 +77,8 @@
                     <li class="section-searchResult-product" th:each="search, index : ${prodSearchList}">
                         <a th:href="@{'/products/' + ${search.sellItemPage.no}}">
                             <div name="thumbnailImage"></div>
-                            <img th:src="|${search.sellPage.path}thumbnail/${search.getThumbnailImage().thumbnailImageFileName}|"
-                                     alt="">
+                            <img th:if="${search?.sellPage?.path != null and search.getThumbnailImage().thumbnailImageFileName != null }" th:src="|${search.sellPage.path}thumbnail/${search.getThumbnailImage().thumbnailImageFileName}|">
+                            <img th:unless="${search?.sellPage?.path != null and search.getThumbnailImage().thumbnailImageFileName != null }" src="/common/images/thumbnailbox.png">
 
                         </a>
                         <div class="product-info">
@@ -101,13 +101,19 @@
 
         <!-- 페이징 -->
         <div class="paging">
-            <span id="prevPage">&lt;</span>
-            <span class="currentPage">1</span>
-            <span class="pageNum">2</span>
-            <span class="pageNum">3</span>
-            <span class="pageNum">4</span>
-            <span class="pageNum">5</span>
-            <span id="nextPage">&gt;</span>
+            <a th:if="${currentPage > 1}"
+               th:href="@{/search/search(pageNo=1, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
+                <span id="prevPage">&lt;</span>
+            </a>
+            <th:block th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{/search/search(pageNo=${pageNo}, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
+                    <span class="pageNum" th:text="${pageNo}"></span>
+                </a>
+            </th:block>
+            <a th:if="${currentPage < totalPages}"
+               th:href="@{/search/search(pageNo=${pageNo}, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
+                <span id="nextPage">&gt;</span>
+            </a>
         </div>
     </div>
 </section>

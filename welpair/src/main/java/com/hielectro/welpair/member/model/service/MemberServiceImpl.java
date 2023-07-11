@@ -1,5 +1,6 @@
 package com.hielectro.welpair.member.model.service;
 import com.hielectro.welpair.member.controller.DeleteMemberException;
+import com.hielectro.welpair.member.controller.PointException;
 import com.hielectro.welpair.member.controller.RegistMemberException;
 import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dao.MemberDAO;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,25 +36,53 @@ public class MemberServiceImpl implements MemberService {
 
 
     //1. 회원조회 페이지
+//    @Override
+//    public List<MemberDTO> getMemberList(SelectCriteria selectCriteria) {
+//        List<MemberDTO> memberList = memberMapper.getMemberList(selectCriteria);
+//        return memberList;
+//    }
+//
+//
+//    //전체,퇴사회원수 조회
+//    @Override
+//    public int totalMemberCount(Map<String, String> searchMap) {
+//        return memberMapper.totalMemberCount(searchMap);
+//    }
+//
+//    @Override
+//    public int expiredMemberCount(Map<String, String> searchMap) {
+//
+//
+//        return memberMapper.expiredMemberCount(searchMap);
+//    }
+
     @Override
-    public List<MemberDTO> getMemberList(SelectCriteria selectCriteria) {
-        List<MemberDTO> memberList = memberMapper.getMemberList(selectCriteria);
+    public List<MemberDTO> getMemberList(Map<String, Object> map) {
+        List<MemberDTO> memberList = memberMapper.getMemberList(map);
         return memberList;
     }
 
-
-    //전체,퇴사회원수 조회
     @Override
-    public int totalMemberCount(Map<String, String> searchMap) {
-        return memberMapper.totalMemberCount(searchMap);
+    public int totalMemberCount() {
+        return memberMapper.totalMemberCount();
     }
 
     @Override
-    public int expiredMemberCount(Map<String, String> searchMap) {
-
-
-        return memberMapper.expiredMemberCount(searchMap);
+    public int expiredMemberCount() {
+        return memberMapper.expiredMemberCount();
     }
+
+    //검색기능 추가
+    @Override
+    public int searchMemberCount(Map<String, Object> map) {
+        return memberMapper.searchMemberCount(map);
+    }
+
+    @Override
+    public List<MemberDTO> searchMemberList(Map<String, Object> map) {
+        return memberMapper.searchMemberList(map);
+    }
+
 
 
 
@@ -127,14 +157,14 @@ public class MemberServiceImpl implements MemberService {
 
     //2. 회원등록-직원목록 조회
     @Override
-    public List<EmployeeDTO> getEmployeeList(SelectCriteria selectCriteria) {
-        List<EmployeeDTO> employeeList = memberMapper.getEmployeeList(selectCriteria);
+    public List<EmployeeDTO> getEmployeeList(Map<String, Integer> map) {
+        List<EmployeeDTO> employeeList = memberMapper.getEmployeeList(map);
         return employeeList;
     }
 
     @Override
-    public int totalEmployeeCount(Map<String, String> searchMap) {
-        return memberMapper.totalEmployeeCount(searchMap);
+    public int totalEmployeeCount() {
+        return memberMapper.totalEmployeeCount();
     }
 
     //회원등록-등록페이지에서 전송버튼 눌렀을때
@@ -163,9 +193,16 @@ public class MemberServiceImpl implements MemberService {
 
 
     //3. 가입승인 - 가입요청 목록
+//    @Override
+//    public List<MemberDTO> reqList() {
+//        List<MemberDTO> reqList = memberMapper.reqList();
+//        return reqList;
+//    }
+
+    //새로운 페이징 테스트
     @Override
-    public List<MemberDTO> reqList() {
-        List<MemberDTO> reqList = memberMapper.reqList();
+    public List<MemberDTO> reqList(Map<String, Integer> map) {
+        List<MemberDTO> reqList = memberMapper.reqList(map);
         return reqList;
     }
     @Override
@@ -192,28 +229,77 @@ public class MemberServiceImpl implements MemberService {
 
 
     //4. 포인트지급 페이지
+    //지급을 위한 회원 목록 조회
     @Override
-    public List<MemberDTO> getMemberListforPoint(SelectCriteria selectCriteria) {
-        List<MemberDTO> memberList = memberMapper.getMemberListforPoint(selectCriteria);
+    public List<MemberDTO> getMemberListforPoint(Map<String, Integer> map) {
+        List<MemberDTO> memberList = memberMapper.getMemberListforPoint(map);
         return memberList;
+    }
+    //지급(이력테이블 인서트)
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void insertPointHistory(PointHistoryDTO pointHistoryDTO) throws PointException {
+
+        try {
+            //처음 인서트되는 회원
+            int eventId = memberMapper.getNextEventId();
+            System.out.println("getNextEventId()로 설정한 eventId = " + eventId);
+            pointHistoryDTO.setEventId(eventId);
+
+            pointHistoryDTO.setEmpNo(pointHistoryDTO.getEmpNos().get(0));
+            memberMapper.insertPointHistory(pointHistoryDTO);
+
+            //회원테이블의 포인트잔액 업데이트
+            Map<String, Object> map = new HashMap<>();
+            map.put("empNo", pointHistoryDTO.getEmpNo());
+            map.put("selectedAmount", pointHistoryDTO.getSelectedAmount());
+            memberMapper.updatePointBalance(map);
+
+
+            //이후 회원(모든 회원에게 처음 인서트된 것과 같은 eventId가 할당되어야함)
+            eventId = memberMapper.getCurrEventId();
+            System.out.println("getCurrEventId()로 설정한 eventId = " + eventId);
+
+            for (int i = 1; i < pointHistoryDTO.getEmpNos().size(); i++) {
+
+                pointHistoryDTO.setEventId(eventId);
+                pointHistoryDTO.setEmpNo(pointHistoryDTO.getEmpNos().get(i));
+                memberMapper.insertPointHistory(pointHistoryDTO);
+
+                //회원테이블의 포인트잔액 업데이트
+                Map<String, Object> secondMap = new HashMap<>();
+                secondMap.put("empNo", pointHistoryDTO.getEmpNo());
+                secondMap.put("selectedAmount", pointHistoryDTO.getSelectedAmount());
+                memberMapper.updatePointBalance(secondMap);
+
+            }
+        } catch (Exception e) {
+            System.out.println("포인트 이력 insert, 회원 포인트잔액 update 실패");
+            throw new PointException("포인트 이력 insert, 회원 포인트잔액 update 실패");
+        }
     }
 
 
     //5. 포인트지급이력
     //5-1. 요약
     @Override
-    public List<PointHistoryDTO> pointHistorySummary() {
-        List<PointHistoryDTO> pointHistorySummaryList = memberMapper.pointHistorySummary();
+    public List<PointHistoryDTO> pointHistorySummary(Map<String, Integer> map) {
+        List<PointHistoryDTO> pointHistorySummaryList = memberMapper.pointHistorySummary(map);
         return pointHistorySummaryList;
     }
+    //요약페이지 페이징처리를 위한 총 항목수 조회
+    @Override
+    public int pointHistorySummaryCount() { return memberMapper.pointHistorySummaryCount(); }
+
+
     // 5-2. 상세
     @Override
-    public List<PointHistoryDTO> pointHistoryDetail(int eventId) {
-        List<PointHistoryDTO> pointHistoryDetailList = memberMapper.pointHistoryDetail(eventId);
+    public List<PointHistoryDTO> pointHistoryDetail(Map<String, Integer> map) {
+        List<PointHistoryDTO> pointHistoryDetailList = memberMapper.pointHistoryDetail(map);
         return pointHistoryDetailList;
     }
-
-
+    @Override
+    public int pointHistoryDetailCount(int eventId) { return memberMapper.pointHistoryDetailCount(eventId); }
 
 
 }

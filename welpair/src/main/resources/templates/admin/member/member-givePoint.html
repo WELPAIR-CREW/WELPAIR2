@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>복지포인트지급</title>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <link rel="stylesheet" href="/common/css/main.css">
+<!--    <link rel="stylesheet" href="/common/css/main.css">-->
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/member.css">
@@ -70,7 +70,7 @@
                     </thead>
                     <tbody>
                         <tr th:each="member:${memberList}" class="member-row">
-                            <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${member.empNo}"></td>
+                            <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" th:onclick="|chkClicked();|" th:value="${member.empNo}"></td>
                             <td th:text="${member.empNo}"></td>
                             <td th:text="${member.employee.empName}"></td>
                             <td th:text="${member.employee.empEmail}"></td>
@@ -83,15 +83,33 @@
                 </table>
 
                 <div class="under-table">
+
+<!--                    <div class="paging">-->
+<!--                        <span>&lt;</span>-->
+<!--                        <span>1</span>-->
+<!--                        <span>2</span>-->
+<!--                        <span>3</span>-->
+<!--                        <span>4</span>-->
+<!--                        <span>5</span>-->
+<!--                        <span>&gt;</span>-->
+<!--                    </div>-->
+
+                <!-- 페이징 추가   -->
+
+
                     <div class="paging">
-                        <span>&lt;</span>
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                        <span>4</span>
-                        <span>5</span>
-                        <span>&gt;</span>
+                        <a th:if="${pageHandler.showPrev}" th:href="@{/member/memberListForPoint(page=${pageHandler.beginPage - 1})}">이전</a>
+
+                        <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}">
+                            <a th:href="@{/member/memberListForPoint(page=${pageNumber})}" th:text="${pageNumber}"
+                               th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
+                        </span>
+
+                        <a th:if="${pageHandler.showNext}" th:href="@{/member/memberListForPoint(page=${pageHandler.endPage + 1})}">다음</a>
                     </div>
+
+
+
                 </div>
                 <form action="" method="post" id="form-point">
                     <div class="form-group2">
@@ -99,21 +117,21 @@
                             <label>선택 회원 수</label>
                         </span>
                         <span class="count">
-                            <span id="selectedCount" th:text="${selectedElementsCnt ?: 0 }">0</span><label> 명</label>
+                            <span id="selectedCount" th:text="${selectedCount ?: 0 }">0</span><label> 명</label>
                         </span>
                     </div>
 
                     <div class="form-group2">
                         <label for="reason">지급 사유</label>
                         <select name="pointreason" id="reason">
-                            <option value="general">정기지급</option>
-                            <option value="special">특별지급</option>
+                            <option value="정기지급">정기지급</option>
+                            <option value="특별지급">특별지급</option>
                         </select>
                     </div>
 
                     <div class="form-group2">
                         <label for="amount-input">회원당 지급액</label>
-                        <input type="number" id=amount-input step="1000000" min="0" max="9000000">
+                        <input type="number" id="amount-input" name="selectedAmount" step="1000000" min="0" max="9000000"/>
                         <span id="amount-summary"></span>
                     </div>
 
@@ -122,9 +140,9 @@
                             <label>지급액 합계</label>
                         </span>
                         <span class="count">
-                            <span>10,000,000</span><label>원</label>
+                            <span id="totalAmount" th:text="${totalAmount ?: 0 }">10,000,000</span><label>원</label>
                         </span>
-                        <button class="button-square3 point">지급하기</button>
+                        <button type="button" class="button-square3 givePoint" th:onclick="|javascript:givePoint();|">지급하기</button>
                     </div>
                 </form>
 
@@ -153,9 +171,9 @@
 
                 //체크된 체크박스의 수
                 const selectedElements = document.querySelectorAll('input.chk:checked');
-                const selectedElementsCnt = selectedElements.length;
+                const selectedCount = selectedElements.length;
                 //체크된 체크박스의 수를 표시하는 요소의 text를 위의 '체크된 체크박스 수'값으로 업데이트
-                document.getElementById('selectedCount').textContent = selectedElementsCnt;
+                document.getElementById('selectedCount').textContent = selectedCount;
 
             } else {
                 //전체 해제되게
@@ -163,9 +181,9 @@
 
                 //체크된 체크박스의 수
                 const selectedElements = document.querySelectorAll('input.chk:checked');
-                const selectedElementsCnt = selectedElements.length;
+                const selectedCount = selectedElements.length;
                 //체크된 체크박스의 수를 표시하는 요소의 text를 위의 '체크된 체크박스 수'값으로 업데이트
-                document.getElementById('selectedCount').textContent = selectedElementsCnt;
+                document.getElementById('selectedCount').textContent = selectedCount;
 
             }
         }
@@ -184,6 +202,8 @@
             });
         }
 
+
+
         //개별 체크박스
         function chkClicked() {
             //체크박스 수
@@ -191,10 +211,10 @@
             //체크된 체크박스의 수 구하기
             const query = 'input[name="chk"]:checked';
             const selectedElements = document.querySelectorAll(query);
-            const selectedElementsCnt = selectedElements.length;
-            console.log('체크된 체크박스의 수 : ' + selectedElementsCnt);
+            const selectedCount = selectedElements.length;
+            console.log('체크된 체크박스의 수 : ' + selectedCount);
             //두 수가 같으면 전체 체크박스 체크되게함
-            if(allCount == selectedElementsCnt) {
+            if(allCount == selectedCount) {
                 document.getElementById('select-all3').checked = true;
             }
             //다르면 전체 체크박스 해제
@@ -203,12 +223,25 @@
             }
 
             //***체크된 체크박스의 수를 표시하는 요소의 text를 위의 '체크된 체크박스 수'값으로 업데이트
-            document.getElementById('selectedCount').textContent = selectedElementsCnt;
+            document.getElementById('selectedCount').textContent = selectedCount;
+
+            //회원당 지급액
+            // const selectedAmount = document.getElementById('amount-input');
+            //지급총액
+            // const empNos = new Array(selectedCount);
+            // document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
+            //     empNos[i] = v.value; //input태그의 value = ${member.empNo}를 배열에 저장
+            // });
+            // const totalAmount = selectedAmount.value * empNos.length;
+            // //***지급총액 표시하기
+            // document.getElementById('totalAmount').textContent = totalAmount;
+
         }
 
 
 
-        //부서 필터 적용하기
+
+        //@부서 필터 적용하기-미완성
         document.getElementById('filter-dept').addEventListener('change', function() {
            filterTableByDept(this.value);
         });
@@ -237,33 +270,91 @@
 
 
 
+        function givePoint() {
+
+            //체크된항목
+            const query = 'input[name="chk"]:checked';
+            const selectedElements = document.querySelectorAll(query);
+            //체크된 항목 수
+            const selectedCount = selectedElements.length;
+            console.log('포인트지급을 위해 체크된 항목 수 확인 : ' + selectedCount);
+
+            if(selectedCount == 0) {
+                alert("선택된 항목이 없습니다.");
+                return false;
+            } else {
+
+                if(confirm("포인트를 지급하시겠습니까?")) {
+
+                    //----------------------요청시 필요한 정보 : 선택회원수, 선택회원들의아이디, 선택된지급사유, 회원당지급액
+
+                        //선택회원수를 표시하는 #selectedCount태그의 th:text="${selectedCount ?: 0 }" 가져오기
+                        // const selectedCount = parseInt(document.getElementById('selectedCount').textContent);
+
+                        //선택된 회원의 아이디들을 배열에 담는다
+                        const empNos = new Array(selectedCount);
+                        document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
+                            empNos[i] = v.value; //input태그의 value = ${member.empNo}를 배열에 저장
+                        });
+
+                        //지급사유
+                        const reasonSelect = document.getElementById('reason');
+                        const selectedReason = reasonSelect.value;
+
+                        //회원당 지급액
+                        const selectedAmount = document.getElementById('amount-input');
+                        //지급총액
+                        const totalAmount = selectedAmount.value * empNos.length;
+
+                        //ajax로 서버에 지급 요청 보내기
+                        $.ajax({
+
+                            url: '/member/givePoint', //member부터 써야함, button에 type=submit이 기본이므로 POST매핑실패했던것. type=button으로 지정하기
+                            type: 'POST',
+                            contentType: 'application/json',
+                            //요청 처리에 필요한 정보를 담아서 전송해야함 (js개체를 JSON으로 변환)
+                            data: JSON.stringify({
+                                selectedCount: selectedCount,
+                                empNos: empNos,
+                                selectedReason: selectedReason,
+                                selectedAmount: selectedAmount.value
+                            }),
+
+                            //성공했을떄(서버에서 응답을 받았을때 동작할 내용)와 실패했을때(서버 요청 중 오류 발생했을때 동작할 내용)
+                            success: function(response) { //여기서 response는 컨트롤러에서의 반환값인 맵객체
+                                console.log(response);
+
+                                location.href = response.locationroot; //locationroot는 컨트롤러에서 리턴하는 맵객체의 키값임
+
+                                // const amount = response.amount; //지급총액
+
+                                //성공시 수행할 동작
+                                alert("포인트 지급 완료!");
+                            },
+
+                            error: function (error) {
+                                console.error(error);
+
+                                alert("포인트 지급 실패");
+                            }
+                        });
+
+                    //------------------------------이벤트리스너
+
+                }//if문 true
+            }
+
+        } //givePoint()함수 끝
 
 
 
 
 
-        //지급하기 버튼을 눌렀을때 사용될 비동기처리 함수를 작성하기
-        // function currentSelectedCount() {
-        //
-        //     $.ajax({
-        //        url: '/getSelectedCount', //URL 매핑
-        //        type: 'GET',
-        //        success: function(count) {
-        //            $('#selectedCount').text(count);
-        //        }
-        //     });
-        // }
-
-
-
-
-
-
-
-
-        //@회원당지급액 입력시 요약하여 보여주기
+        //회원당지급액 입력시 요약하여 보여주기
         const amountInput = document.getElementById('amount-input');
         const amountSummary = document.getElementById('amount-summary');
+        //@@@추가
+        const totalAmount = document.getElementById('totalAmount');
 
         amountInput.addEventListener('input', updateAmountSummary);
 
@@ -271,6 +362,14 @@
             const amount = amountInput.value;
             const summary = formatAmountSummary(amount);
             amountSummary.textContent = summary;
+
+            //@@@추가
+            // 회원 수 가져오기
+            const selectedCount = document.getElementById('selectedCount').textContent;
+            // 총 지급액 계산
+            const calculatedAmount = amount * selectedCount;
+            // 총 지급액 업데이트
+            totalAmount.textContent = calculatedAmount.toLocaleString();
         }
 
         function formatAmountSummary(amount) {
