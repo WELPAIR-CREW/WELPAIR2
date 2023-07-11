@@ -171,22 +171,10 @@ section {
 
 
 /* myaddress1 추가 */
-
-#addButton {
-    width: 45%;
-    margin-top: 10px;
-    padding: 20px;
-    background-color: lightblue;
-    border: none;
-    cursor: pointer;
-}
-
-
 #shippingList {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    align-items: flex-start;
 }
 
 .shippingCard {
@@ -195,6 +183,16 @@ section {
     padding: 20px;
     background-color: lightgray;
     text-align: center;
+}
+
+
+#addButton {
+    width: 45%;
+    margin-top: 10px;
+    padding: 20px;
+    background-color: lightblue;
+    border: none;
+    cursor: pointer;
 }
 
 

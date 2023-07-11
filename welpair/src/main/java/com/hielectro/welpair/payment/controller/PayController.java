@@ -1,16 +1,18 @@
 package com.hielectro.welpair.payment.controller;
 
+import com.hielectro.welpair.inventory.model.dto.StockDTO;
+import com.hielectro.welpair.inventory.model.service.InventoryService;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
+import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.order.model.dto.OrderDTO;
 import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
 import com.hielectro.welpair.order.model.service.CartService;
 import com.hielectro.welpair.payment.model.dto.OrderPayReqDTO;
+import com.hielectro.welpair.payment.model.dto.PaymentDTO;
+import com.hielectro.welpair.payment.model.dto.PointPayDTO;
 import com.hielectro.welpair.payment.model.service.PayService;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
-import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +33,12 @@ public class PayController {
     private final PayService payService;
     private final CartService cartService;
 
-    private PayController(PayService payService, CartService cartService) {
+    private final InventoryService inventoryService;
+
+    private PayController(PayService payService, CartService cartService, InventoryService inventoryService) {
         this.payService = payService;
         this.cartService = cartService;
+        this.inventoryService = inventoryService;
     }
 
     @PostMapping("/payment.do")
@@ -127,7 +132,7 @@ public class PayController {
     ) throws Exception {
 
         log.info("pay-success 매핑들어옴===> " + order);
-        // 1. payment insert // paymentNo 가져옴 ---> 2. orderPayment insert 동시진행
+        // 1. payment 테이블 insert // paymentNo 가져옴 ---> 2. orderPayment 테이블 insert 동시진행
 
         // orderNo 미리 셋팅
         order.getOrderPayment().setOrderNo(order.getOrderNo());
@@ -137,14 +142,21 @@ public class PayController {
                 .filter(item -> item.getPaymentType().contains("복지"))
                 .forEach(item -> item.setTid("NONE"));
 
+        // pointpay dto (테이블 데이터 삽입용)
+        PointPayDTO pointPay = new PointPayDTO();
+
         order.getOrderPayment().getPaymentList().forEach(item -> {
                     log.info("item : " + item);
                     try {
 
                         payService.insertPayment(item);
                         log.info("paymentNo : " + item.getPaymentNo() + " orderNo : " + order.getOrderNo());
-
                         payService.insertOrderPayment(order.getOrderNo(), item.getPaymentNo());
+
+                        if(item.getPaymentType().contains("복지")){
+                            pointPay.setPaymentNo(item.getPaymentNo());
+                        }
+
 
                     } catch (SQLTransactionRollbackException e) {
                         System.out.println("!!!!!!!!!!pay insert 실패!!!!!!!!!");
@@ -153,12 +165,14 @@ public class PayController {
                 }
         );
 
-        // 3. productorder list insert
+        // 3. productorder list 테이블 insert
         order.getProductOrderList().forEach( product -> {
             log.info("product : " + product);
             product.setOrderNo(order.getOrderNo());
             try {
                 payService.insertProductOrder(product);
+
+
 
             } catch (SQLTransactionRollbackException e) {
                 System.out.println("!!!!!!!!!!productorder insert 실패!!!!!!!!!");
@@ -169,10 +183,62 @@ public class PayController {
         cartService.deleteCartProduct((ArrayList<String>) order.getProductOrderList()
                 .stream().map(item -> item.getSellProductId()).collect(Collectors.toList()), empNo);
 
-        // 4. 포인트 사용시 포인트파트 팀원 메소드에 토스하기 (paymentNo, empNo, pointAmount, pointType
 
 
-        // 5. 시간되면 주문내역 뿌리기
+
+        // 4. 자동 출고 등록
+        List<StockDTO> stockList = new ArrayList<>();
+        StockDTO stock = stockOutManager(order);
+        stockList.add(stock);
+        log.info("stockList", stockList);
+        int resultStock = inventoryService.stockRegist(stockList);
+        if(resultStock != stockList.size()){
+            log.info("결과값 result : " + resultStock + "출고등록 실패");
+            inventoryService.stockRegist(stockList);
+        }
+
+
+
+        // 5. 포인트 사용시
+        PointHistoryDTO pointHistory = pointUserManager(order, stockList);
+
+        MemberDTO member = new MemberDTO();
+        member.setEmpNo(empNo);
+        member.setPointBalance(pointHistory.getPointAmount());
+
+        int resultPoint = payService.insertPointHistoryForUse(pointHistory);
+
+
+        if(resultPoint > 0 ){
+
+            pointPay.setPointNo(pointHistory.getPointNo());
+
+            log.info("포인트 차감 데이터 삽입 성공 후 잔액 업데이트");
+            int resultBalance = payService.updateUsePointBalance(member);
+
+
+            if(resultBalance < 0) {
+                log.warn("포인트잔액 업데이트 실패 재시도 확인");
+                payService.updateUsePointBalance(member);
+            }
+
+        } else {
+
+            log.warn("포인트 차감 데이터 삽입 실패 재시도 확인");
+            payService.insertPointHistoryForUse(pointHistory);
+
+        }
+
+        // 6. insertPointPay 테이블 삽입
+        int resultPointPay = payService.insertPointPay(pointPay);
+
+        if(resultPointPay <= 0 ){
+            log.warn("포인트페이 테이블 데이터 삽입 실패 재시도 확인");
+            payService.insertPointPay(pointPay);
+
+        }
+
+        // 7. 시간되면 주문내역 뿌리기
 
         return "/consumer/payment/pay-success";
     }
@@ -181,6 +247,54 @@ public class PayController {
     @GetMapping("/refund-write")
     public String refund(){
         return "/consumer/payment/refund-write";
+    }
+
+
+    // 출고관리 매니저
+    public StockDTO stockOutManager(OrderDTO order){
+
+        StockDTO stock = new StockDTO();
+        SellProductDTO sellProduct = new SellProductDTO();
+
+        for(ProductOrderDTO product : order.getProductOrderList()){
+
+            sellProduct = payService.selectProductCode(product.getSellProductId());
+            stock.setStockType("출고");
+            stock.setProductCode(sellProduct.getCode());
+            stock.setStockDate(payService.selectOrderDate(product.getOrderNo()));
+            stock.setStockAmount(-product.getProductOrderAmount());
+            stock.setProductAmount(sellProduct.getProduct().getProductAmount());
+            stock.setStockComment("일반주문");
+
+        }
+        log.info("stock 확인 ====> ", stock);
+
+        return stock;
+    }
+
+    // 포인트 사용 관리 매니저
+    public PointHistoryDTO pointUserManager(OrderDTO order, List<StockDTO> stockList){
+
+        PointHistoryDTO pointHistory = new PointHistoryDTO();
+
+        pointHistory.setEmpNo(empNo);
+
+        int usePoint = order.getOrderPayment().getPaymentList()
+                .stream().filter(item -> item.getPaymentType().contains("복지"))
+                .mapToInt(PaymentDTO::getPaymentPrice).sum();
+
+        System.out.println("usePoint 출력 확인= " + usePoint);
+
+        pointHistory.setPointDate(stockList.get(0).getStockDate());
+        pointHistory.setPointAmount(usePoint);
+        System.out.println("복지사용포인트 확인 : " + pointHistory.getPointAmount());
+        pointHistory.setPointType("사용");
+        pointHistory.setPointReason("주문결제");
+        pointHistory.setEventId(0);
+
+        System.out.println("pointHistory 출력 확인= " + pointHistory);
+
+        return pointHistory;
     }
 
 

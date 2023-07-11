@@ -22,11 +22,13 @@ public interface MemberService extends UserDetailsService {
 //    int totalMemberCount(Map<String, String> searchMap);
 //    int expiredMemberCount(Map<String, String> searchMap);
 
-    List<MemberDTO> getMemberList(Map<String, Integer> map);
+    List<MemberDTO> getMemberList(Map<String, Object> map);
     int totalMemberCount();
     int expiredMemberCount();
 
-
+    //검색기능 추가
+    int searchMemberCount(Map<String, Object> map);
+    List<MemberDTO> searchMemberList(Map<String, Object> map);
 
 
 
