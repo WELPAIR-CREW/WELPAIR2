@@ -68,8 +68,6 @@ input[type=checkbox] {
 }
 
 
-
-
 .contents {
     /* main 복붙값*/
     box-sizing: border-box;
@@ -356,6 +354,14 @@ td {
 }
 
 /* member-givePoint */
+
+/* 근속연수 정렬 필터 */
+.sort-button {
+    border: none;
+    outline: none;
+    background: none;
+}
+
 
 .container.long {
     /* height: 656px;

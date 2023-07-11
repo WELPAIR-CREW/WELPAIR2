@@ -1,16 +1,19 @@
 package com.hielectro.welpair.payment.model.service;
 
 import com.hielectro.welpair.member.model.dto.MemberDTO;
+import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.order.model.dto.OrderDTO;
 import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
 import com.hielectro.welpair.payment.model.dao.PayMapper;
 import com.hielectro.welpair.payment.model.dto.PaymentDTO;
+import com.hielectro.welpair.payment.model.dto.PointPayDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.sql.SQLTransactionRollbackException;
 import java.util.List;
 
@@ -75,6 +78,34 @@ public class PayServiceImpl implements PayService {
 
             throw new SQLTransactionRollbackException();
         }
+    }
+
+    @Override
+    public SellProductDTO selectProductCode(String id) {
+        return payMapper.selectProductCode(id);
+    }
+
+    @Override
+    public Date selectOrderDate(String orderNo) {
+        return payMapper.selectOrderDate(orderNo);
+    }
+
+    @Transactional
+    @Override
+    public int insertPointHistoryForUse(PointHistoryDTO pointHistory) {
+        return payMapper.insertPointHistoryForUse(pointHistory);
+    }
+
+    @Transactional
+    @Override
+    public int updateUsePointBalance(MemberDTO member) {
+        return payMapper.updateUsePointBalance(member) ;
+    }
+
+    @Transactional
+    @Override
+    public int insertPointPay(PointPayDTO pointPay) {
+        return payMapper.insertPointPay(pointPay);
     }
 
 

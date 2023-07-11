@@ -56,7 +56,7 @@ public interface MemberMapper {
 
     //4. 포인트지급
     //4-1. 포인트지급을 위한 회원목록
-    List<MemberDTO> getMemberListforPoint(Map<String, Integer> map);
+    List<MemberDTO> getMemberListforPoint(Map<String, Object> map);
     //4-2. 포인트지급(포인트이력테이블 인서트)
     int insertPointHistory(PointHistoryDTO pointHistoryDTO);
     int getNextEventId();

@@ -16,4 +16,5 @@ public interface deliveryMapper {
 
     List<OrderProductDTO> deliveryDelivery();
 
+    List<String> driverSelect();
 }

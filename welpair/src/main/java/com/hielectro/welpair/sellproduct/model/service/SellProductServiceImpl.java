@@ -240,6 +240,7 @@ public class SellProductServiceImpl implements SellProductService {
     }
 
     @Override
+    @Transactional
     public boolean setPrivateBoard(List<BoardDTO> boardList) {
         int result = 0;
         for (var board : boardList) {

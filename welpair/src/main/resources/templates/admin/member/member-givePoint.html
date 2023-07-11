@@ -52,20 +52,33 @@
                             <th>연락처</th>
                             <th>부서
                                 <select id="filter-dept">
-                                    <option value="all">All</option>
-                                    <option value="dept1">영업</option>
-                                    <option value="dept2">구매</option>
-                                    <option value="dept2">인사</option>
-                                    <option value="dept2">재무</option>
-                                    <option value="dept2">품질</option>
-                                    <option value="dept2">생산</option>
-                                    <option value="dept2">고객</option>
-                                    <option value="dept2">개발</option>
-                                    <option value="dept2">법무</option>
+                                    <option value="all" selected>All</option>
+                                    <option value="D1">영업</option>
+                                    <option value="D2">구매</option>
+                                    <option value="D3">인사</option>
+                                    <option value="D4">재무</option>
+                                    <option value="D5">품질</option>
+                                    <option value="D6">생산</option>
+                                    <option value="D7">고객</option>
+                                    <option value="D8">개발</option>
+                                    <option value="D9">법무</option>
                                 </select>
                             </th>
-                            <th>직급</th>
-                            <th>근속연수</th>
+                            <th>직급
+                                <select id="filter-job">
+                                    <option value="all" selected>All</option>
+                                    <option value="J1">사원</option>
+                                    <option value="J2">대리</option>
+                                    <option value="J3">과장</option>
+                                    <option value="J4">차장</option>
+                                    <option value="J5">부장</option>
+                                    <option value="J6">이사</option>
+                                </select>
+                            </th>
+                            <th>
+                                근속연수
+                                <button id="sort-years" class="sort-button" data-sort="asc">▲</button>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,19 +97,8 @@
 
                 <div class="under-table">
 
-<!--                    <div class="paging">-->
-<!--                        <span>&lt;</span>-->
-<!--                        <span>1</span>-->
-<!--                        <span>2</span>-->
-<!--                        <span>3</span>-->
-<!--                        <span>4</span>-->
-<!--                        <span>5</span>-->
-<!--                        <span>&gt;</span>-->
-<!--                    </div>-->
 
                 <!-- 페이징 추가   -->
-
-
                     <div class="paging">
                         <a th:if="${pageHandler.showPrev}" th:href="@{/member/memberListForPoint(page=${pageHandler.beginPage - 1})}">이전</a>
 
@@ -241,30 +243,210 @@
 
 
 
-        //@부서 필터 적용하기-미완성
-        document.getElementById('filter-dept').addEventListener('change', function() {
-           filterTableByDept(this.value);
+    //부서 필터 적용하기(1)
+        // document.getElementById('filter-dept').addEventListener('change', function() {
+        //    filterTableByDept(this.value);
+        // });
+        //
+        // function filterTableByDept(selectedDept) {
+        //
+        //     alert(selectedDept);
+        //     console.log("선택한 부서 옵션 값 : " + selectedDept);
+        //
+        //     //get요청 새로 보내기
+        //     //href 주소 다시 요청
+        //     const url = '/member/memberListForPoint?deptType=' + selectedDept;
+        //     window.location.href = url;
+        // }
+
+
+    //부서필터 적용하기(2) all선택시 변화 없는것 제외하고 정상 작동
+        // document.getElementById('filter-dept').addEventListener('change', function() {
+        //     const selectedDept = this.value;
+        //     console.log("선택한 부서 옵션 값: " + selectedDept);
+        //
+        //     const url = new URL('/member/memberListForPoint', window.location.href);
+        //     const params = new URLSearchParams(url.search);
+        //     params.set('deptType', selectedDept);
+        //     url.search = params.toString();
+        //
+        //     window.location.href = url.toString();
+        // });
+
+
+    //부서필터 적용하기(3) 정상작동 (직급 필터링 추가 전)
+    //     const filterDeptSelect = document.getElementById('filter-dept');
+    //     filterDeptSelect.addEventListener('change', function() {
+    //         const selectedDept = this.value;
+    //         console.log("선택한 부서 옵션 값: " + selectedDept);
+    //
+    //         //새로운 get요청 보내기
+    //         const url = new URL('/member/memberListForPoint', window.location.href);
+    //         const params = new URLSearchParams(url.search);
+    //         params.set('deptType', selectedDept);
+    //         url.search = params.toString();
+    //
+    //         window.location.href = url.toString();
+    //     });
+    //
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const deptType = urlParams.get('deptType');
+    //     if (deptType) {
+    //         filterDeptSelect.value = deptType;
+    //     }
+
+
+    //(4)직급 필터링 추가-----------------------------------
+    //     const filterDeptSelect = document.getElementById('filter-dept');
+    //     const filterJobSelect = document.getElementById('filter-job');
+    //     const sortYearsButton = document.getElementById('sort-years');
+    //
+    //     filterDeptSelect.addEventListener('change', function() {
+    //         const selectedDept = this.value;
+    //         const selectedJob = filterJobSelect.value;
+    //         console.log("부서 선택 옵션 값 : " + selectedDept);
+    //         console.log("직급 선택 옵션 값 : " + selectedJob);
+    //
+    //         const url = new URL('/member/memberListForPoint', window.location.href);
+    //         const params = new URLSearchParams(url.search);
+    //         params.set('deptType', selectedDept);
+    //         params.set('jobType', selectedJob);
+    //         url.search = params.toString();
+    //
+    //         window.location.href = url.toString();
+    //     });
+    //
+    //     filterJobSelect.addEventListener('change', function() {
+    //         const selectedJob = this.value;
+    //         const selectedDept = filterDeptSelect.value;
+    //         console.log("Selected job option value: " + selectedJob);
+    //         console.log("Selected department option value: " + selectedDept);
+    //
+    //         const url = new URL('/member/memberListForPoint', window.location.href);
+    //         const params = new URLSearchParams(url.search);
+    //         params.set('jobType', selectedJob);
+    //         params.set('deptType', selectedDept);
+    //         url.search = params.toString();
+    //
+    //         window.location.href = url.toString();
+    //     });
+    //
+    //
+    //
+    //     //근속연수 정렬 끼워넣기ㅡㅡㅡㅡ
+    //
+    //     //(5) 근속연수 정렬--------------------------------
+    //     function toggleSortDirection(button) {
+    //         if (button.dataset.sort === 'asc') {
+    //             button.dataset.sort = 'desc';
+    //             button.textContent = '▼';
+    //         } else {
+    //             button.dataset.sort = 'asc';
+    //             button.textContent = '▲';
+    //         }
+    //     }
+    //
+    //     document.getElementById('sort-years').addEventListener('click', function() {
+    //         toggleSortDirection(this);
+    //         const sortDirection = this.dataset.sort;
+    //         console.log("선택한 정렬 기준 : " + sortDirection);
+    //
+    //         const url = new URL('/member/memberListForPoint', window.location.href);
+    //         const params = new URLSearchParams(url.search);
+    //         params.set('sortYears', sortDirection);
+    //         url.search = params.toString();
+    //
+    //         window.location.href = url.toString();
+    //     });
+    //
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const sortYears = urlParams.get('sortYears');
+    //     const sortButton = document.getElementById('sort-years');
+    //
+    //     if (sortYears === 'desc') {
+    //         toggleSortDirection(sortButton);
+    //     }
+    //     //---------------------------------------------------
+    //
+    //     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    //
+    //
+    //     // const urlParams = new URLSearchParams(window.location.search);
+    //     // urlParams = new URLSearchParams(window.location.search);
+    //     const deptType = urlParams.get('deptType');
+    //     const jobType = urlParams.get('jobType');
+    //
+    //     if (deptType) {
+    //         filterDeptSelect.value = deptType;
+    //     }
+    //
+    //     if (jobType) {
+    //         filterJobSelect.value = jobType;
+    //     }
+    //--------------------------------------------------
+
+        //***최종
+        const filterDeptSelect = document.getElementById('filter-dept');
+        const filterJobSelect = document.getElementById('filter-job');
+        const sortYearsButton = document.getElementById('sort-years');
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialDeptType = urlParams.get('deptType');
+        const initialJobType = urlParams.get('jobType');
+
+        //쿼리스트링에 선택된 부서와 직급 값을 넣는다
+        if (initialDeptType) {
+            filterDeptSelect.value = initialDeptType;
+        }
+        if (initialJobType) {
+            filterJobSelect.value = initialJobType;
+        }
+
+        //쿼리스트링을 업데이트한다
+        function updateQueryString() {
+            const selectedDept = filterDeptSelect.value;
+            const selectedJob = filterJobSelect.value;
+            const sortDirection = sortYearsButton.dataset.sort;
+
+            //새로 url객체 생성하여 선택된 부서, 직급, 정렬방식을 추가한다
+            const url = new URL('/member/memberListForPoint', window.location.href);
+            const params = new URLSearchParams(url.search);
+            params.set('deptType', selectedDept);
+            params.set('jobType', selectedJob);
+            params.set('sortYears', sortDirection); // Add sortYears to query string
+            url.search = params.toString();
+
+            //새로운 url을 통해 페이지를 리로드
+            window.location.href = url.toString();
+        }
+
+        //부서 선택 변경시 쿼리 문자열도 업데이트한다
+        filterDeptSelect.addEventListener('change', function() {
+            updateQueryString();
         });
 
-        function filterTableByDept(selectedDept) {
-            //tbody에서 모든 행 가져오기
-            // let rows = document.getElementById('table-givepoint').getElementsByTagName('tbody')[0].rows;
-            let rows = document.getElementsByClassName('member-row');
+        //직급 선택 변경시 쿼리 문자열도 업데이트한다
+        filterJobSelect.addEventListener('change', function() {
+            updateQueryString();
+        });
 
-            for(let i=0; i<rows.length; i++) {
-                let row = rows[i];
+        //정렬 방향은 토글로 전환한다
+        function toggleSortDirection() {
+            const currentSortDirection = sortYearsButton.dataset.sort;
+            const newSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            sortYearsButton.dataset.sort = newSortDirection;
+            sortYearsButton.textContent = newSortDirection === 'asc' ? '▲' : '▼';
 
-                //현재 행의 부서 열 값
-                let dept = row.cells[5].textContent.trim();
-
-                //선택된 부서에 따라 행을 보이고 숨기기
-                if(selectedDept === 'All' || dept === selectedDept) {
-                    row.style.display = ''; //행을 보이게함
-                } else {
-                    row.style.display = 'none';
-                }
-            }
+            //정렬 방향 전환시 쿼리스트링도 업데이트한다
+            updateQueryString();
         }
+
+        //정렬 버튼 클릭시 토글 전환 함수를 실행한다
+        sortYearsButton.addEventListener('click', function() {
+            toggleSortDirection();
+        });
+
+
 
 
 
@@ -390,22 +572,6 @@
 
 
 
-        // @테이블 제목행의 6,7,8열에 필터 적용시키기 (일단 6번째 열만) (모든 행이 숨겨지는 문제 발생, 테이블 위치 문제도 해결해야)
-        // const filter = document.getElementById("filter-dept")
-        // filter.addEventListener('change', function() {
-        //     const filterValue = this.value; //<select>에서 선택된 값을 filterValue에 저장
-        //     const rows = document.querySelectorAll('#table-givepoint tbody tr'); //필터링대상 행들을 변수에 저장
-        //
-        //     rows.forEach(row => {
-        //         const columnValue = row.querySelector('td:nth-child(6)').textContent;
-        //         if(columnValue === filterValue || filterValue === 'all') {
-        //             row.style.display = ''; //기본 css설정대로 행이 표시된다
-        //         } else {
-        //             row.style.display = 'none'; //해당 행이 보여지지 않는다
-        //         }
-        //     });
-        // });
-    
     </script>
 </body>
 
