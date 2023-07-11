@@ -1,5 +1,6 @@
 package com.hielectro.welpair.member.model.dto;
 
+import com.hielectro.welpair.payment.model.dto.PointPayDTO;
 import lombok.*;
 
 import java.util.Date;
@@ -34,4 +35,8 @@ public class PointHistoryDTO {
     private List<String> empNos;
     private String selectedReason;
     private int selectedAmount;
+
+
+    //마이페이지 포인트 이력 조회
+    private PointPayDTO pointPayDTO; //pointPayDTO의 paymentNo 필드
 }

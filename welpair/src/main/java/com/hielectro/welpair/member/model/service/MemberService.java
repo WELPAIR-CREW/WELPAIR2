@@ -3,7 +3,6 @@ package com.hielectro.welpair.member.model.service;
 import com.hielectro.welpair.member.controller.DeleteMemberException;
 import com.hielectro.welpair.member.controller.PointException;
 import com.hielectro.welpair.member.controller.RegistMemberException;
-import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
@@ -58,7 +57,7 @@ public interface MemberService extends UserDetailsService {
 
     //4. 포인트지급
     //회원목록 조회
-    List<MemberDTO> getMemberListforPoint(Map<String, Integer> map);
+    List<MemberDTO> getMemberListforPoint(Map<String, Object> map);
     //지급(이력테이블 인서트)
     void insertPointHistory(PointHistoryDTO pointHistoryDTO) throws PointException;
     //지급(회원테이블 업데이트)
