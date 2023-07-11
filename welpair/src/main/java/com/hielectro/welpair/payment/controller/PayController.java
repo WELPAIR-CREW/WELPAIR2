@@ -178,5 +178,11 @@ public class PayController {
     }
 
 
+    @GetMapping("/refund-write")
+    public String refund(){
+        return "/consumer/payment/refund-write";
+    }
+
+
 }
 

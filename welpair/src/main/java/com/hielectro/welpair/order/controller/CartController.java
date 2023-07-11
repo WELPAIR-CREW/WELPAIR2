@@ -127,18 +127,18 @@ public class CartController {
 
         List<ThumbnailImageDTO> thumbnail = new ArrayList<>();
 
-
-
         System.out.println(cartList.size());
         for (CartGeneralDTO cart : cartList) {
             try {
                 priceMaker(cart);
                 System.out.println(cart.getSellPage());
                 model.addAttribute("expt", cartList.get(cartList.size()-1));
-                // 썸네일이미지 1번째 사진만 가져오기
-                thumbnail.add(cartService.selectThumbnailImage(cart.getSellPage().getNo()).get(0));
-                System.out.println(thumbnail);
 
+                // 썸네일이미지 1번째 사진만 가져오기
+                if(! (cart.getSellPage().getThumbnailImageList().get(0).getThumbnailImageFileName() == null)) {
+                    thumbnail.add(cartService.selectThumbnailImage(cart.getSellPage().getNo()).get(0));
+                    System.out.println(thumbnail);
+                }
             } catch (NullPointerException e) {
 
                 return "consumer/order/cart-blank";
