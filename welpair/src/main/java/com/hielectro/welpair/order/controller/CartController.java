@@ -152,6 +152,12 @@ public class CartController {
 
     }
 
+   // {
+    // 장바구니에 담긴 최신거 하나만 결제로 넘기기....???
+    //
+    // return 결제페이지 }
+
+
     // 수량변경
     @ResponseBody
     @PostMapping("/cart/amount-change")
