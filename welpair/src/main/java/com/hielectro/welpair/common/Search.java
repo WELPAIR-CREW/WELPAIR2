@@ -18,6 +18,7 @@ public class Search {
     private String name;
     private String title;
     private String content;
+    private int amount;
     private int price;
 
     private Date startDate;
