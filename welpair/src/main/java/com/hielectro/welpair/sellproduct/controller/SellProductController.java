@@ -1,6 +1,7 @@
 package com.hielectro.welpair.sellproduct.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,8 @@ import java.util.function.Supplier;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -186,5 +189,20 @@ public class SellProductController {
         response.put("endPageNo", 5);
 
         return response;
+    }
+
+    @PostMapping("er2")
+    @ResponseBody
+    public List<ProductOrderDTO> test(@ModelAttribute Search search) {
+        List<ProductOrderDTO> list = new ArrayList<>();
+        list.add(new ProductOrderDTO());
+        System.out.println(search);
+//        System.out.println(id);
+        SellProductDTO sellProduct = productService.selectOneSellProduct(search.getCode());
+        list.get(0).setSellProductId(search.getId());
+        list.get(0).setProductOrderAmount(search.getAmount());
+        list.get(0).setProductOrderPrice((int) (sellProduct.getProduct().getProductPrice() * (1 - sellProduct.getDiscount())));
+        list.get(0).setSellproduct(sellProduct);
+        return list;
     }
 }
