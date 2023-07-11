@@ -1,3 +1,7 @@
+h3 {
+	margin: 0px;
+}
+
 .myorder {
 	display: flex;
 	width: 1280px;
@@ -251,4 +255,24 @@ button.criteria-item {
 
 .paging span:not(:first-child) {
 	margin-left: 20px;
+}
+
+.content-item1 {
+	display: flex;
+	margin-top: 20px;
+	height: 350px;
+	justify-content: space-around;
+}
+
+.item1-item-item {
+	width: 440px;
+	border-radius: 6px;
+	border: 1px solid #000;
+	background: #FFF;
+	padding: 13px 20px;
+}
+
+.content-item1-item .order {
+	box-sizing: border-box;
+	height: 90px;
 }

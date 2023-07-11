@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 상세 내역</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <!-- <link rel="stylesheet" href="../../../static/common/css/mypage.css"> -->
+    <link rel="stylesheet" href="../../../static/common/css/myorder.css">
+    <!--    <link rel="stylesheet" href="/common/css/mypage2.css">-->
+    <script src="/common/js/static/include.js"></script>
+</head>
+
+<body>
+    <!-- header -->
+    <div th:replace="/consumer/header_mypage :: header"></div>
+    <section class="myorder">
+        <div class="section-nav">
+            <div class="section-nav-order">
+                <a>주문 내역</a>
+            </div>
+            <div class="section-nav-order">
+                <b>주문 상세 내역</b>
+            </div>
+        </div>
+        <div class="content">
+            <div class="content-title">주문 상세 내역</div>
+            <div class="content-item1">
+                <div class="content-item1-item">
+                    <div class="order item1-item-item">
+                        <span><b>주문번호 </b></span>
+                        <span></span><br>
+                        <span><b>주문일자 </b></span>
+                        <span></span>
+                    </div>
+                </div>
+                <div class="content-item1-item">
+                    <div class="payment item1-item-item">
+                        <h3>결제 상세</h3><br>
+                        <span><b>총 결제 금액 </b></span>
+                        <span></span><br>
+                        <span><b>결제 수단</b></span>
+                        
+                            <li>복지포인트 </li><span></span>
+                            <li>신용카드 </li><span></span>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="content-item2">
+
+            </div>
+        </div><br>
+
+        <div class="paging">
+
+        </div>
+    </section>
+
+    <!-- footer -->
+    <div data-include-html="/consumer/footer" class="include"></div>
+
+
+    <script>
+
+    </script>
+</body>
+
+</html>
