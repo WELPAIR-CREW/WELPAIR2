@@ -27,7 +27,6 @@ public class DeliveryController {
 //      service의 메소드호출. 반환값 결과값에 따라 보여주는 View를 다르게 한다.
         List<OrderProductDTO> deliverylist = service.deliveryDelivery();
         System.out.println(deliverylist);
-
         model.addAttribute("deliveryList", deliverylist);
         return "admin/delivery/delivery_main";
     }
@@ -41,6 +40,7 @@ public class DeliveryController {
         return "admin/delivery/delivery_prepare";
 
     }
+
 
     /* 배송중 */
     @GetMapping("delivery_transit")

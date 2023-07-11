@@ -57,14 +57,6 @@ input {
     height: 40px;
 }
 
-.main-banner {
-    position: relative;
-    width: 940px;
-    height: 560px;
-    margin: 0 auto;
-    background: #D9D9D9;
-}
-
 .product-list {
     position: relative;
     width: 1280px;
@@ -302,7 +294,7 @@ li {
     list-style-type: none;
 }
 /* 보여줄 구간의 높이와 넓이 설정 */
-#main-banner {
+.main-banner {
     /*전체 컨테이너*/
     width: 940px;
     height: 560px;

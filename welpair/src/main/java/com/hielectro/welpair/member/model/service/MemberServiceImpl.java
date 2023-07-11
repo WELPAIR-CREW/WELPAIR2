@@ -2,7 +2,6 @@ package com.hielectro.welpair.member.model.service;
 import com.hielectro.welpair.member.controller.DeleteMemberException;
 import com.hielectro.welpair.member.controller.PointException;
 import com.hielectro.welpair.member.controller.RegistMemberException;
-import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dao.MemberDAO;
 import com.hielectro.welpair.member.model.dao.MemberMapper;
 import com.hielectro.welpair.member.model.dto.*;
@@ -231,7 +230,7 @@ public class MemberServiceImpl implements MemberService {
     //4. 포인트지급 페이지
     //지급을 위한 회원 목록 조회
     @Override
-    public List<MemberDTO> getMemberListforPoint(Map<String, Integer> map) {
+    public List<MemberDTO> getMemberListforPoint(Map<String, Object> map) {
         List<MemberDTO> memberList = memberMapper.getMemberListforPoint(map);
         return memberList;
     }

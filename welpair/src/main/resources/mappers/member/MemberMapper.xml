@@ -290,25 +290,34 @@
     <!-- 4. 포인트 지급 - 근속연수를 포함한 회원목록 -->
     <select id="getMemberListforPoint" resultMap="memberListResultMap" parameterType="hashmap">
         SELECT * FROM
-            (SELECT row_number() OVER (ORDER BY E.HIRE_DATE DESC) AS rnum
-                  , M.EMP_NO
-                  , E.EMP_NAME
-                  , E.EMP_EMAIL
-                  , E.EMP_PHONE
-                  , D.DEPT_NAME
-                  , J.JOB_NAME
-                  , E.HIRE_DATE
-                  , M.REGIST_DATE
-                  , CEIL(MONTHS_BETWEEN(SYSDATE, HIRE_DATE) / 12) AS "YEAR_COUNT"
-             FROM T_MEMBER M
-             JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
-             JOIN T_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
-             JOIN T_JOB J ON (E.JOB_CODE = J.JOB_CODE)
-             WHERE M.IS_ACTIVATED = 'Y' AND E.IS_EXPIRE = 'N'
-            )
+        (
+            SELECT row_number() OVER (ORDER BY
+                                        <if test="sortYears == 'asc'">YEAR_COUNT ASC</if>
+                                        <if test="sortYears == 'desc'">YEAR_COUNT DESC</if>
+                                      ) AS rnum,
+            TMP.* FROM (
+                            SELECT
+                            M.EMP_NO,
+                            E.EMP_NAME,
+                            E.EMP_EMAIL,
+                            E.EMP_PHONE,
+                            D.DEPT_NAME,
+                            J.JOB_NAME,
+                            E.HIRE_DATE,
+                            M.REGIST_DATE,
+                            CEIL(MONTHS_BETWEEN(SYSDATE, E.HIRE_DATE) / 12) AS YEAR_COUNT
+                            FROM T_MEMBER M
+                            JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
+                            JOIN T_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
+                            JOIN T_JOB J ON (E.JOB_CODE = J.JOB_CODE)
+                            WHERE M.IS_ACTIVATED = 'Y' AND E.IS_EXPIRE = 'N'
+                            <if test="deptType != 'all'">AND E.DEPT_CODE = #{deptType}</if>
+                            <if test="jobType != 'all'">AND E.JOB_CODE = #{jobType}</if>
+                        ) TMP
+        ) RESULT
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
-        ORDER BY REGIST_DATE DESC
     </select>
+
 
     <!-- 포인트 지급이력 테이블 인서트  -->
     <insert id="insertPointHistory" parameterType="com.hielectro.welpair.member.model.dto.PointHistoryDTO">

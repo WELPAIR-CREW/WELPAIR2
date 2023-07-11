@@ -36,12 +36,21 @@
         <div class="padding">
             <form>
 
+<!--                <select name="delivery">-->
+<!--                    <option value="del2">상품준비중</option>-->
+<!--                    <option value="del3">배송중</option>-->
+<!--                    <option value="del4">배송완료</option>-->
+<!--                    <option value="etc" selected>기타</option>-->
+<!--                </select>-->
+
                 <select name="delivery">
-                    <option value="del2">상품준비중</option>
-                    <option value="del3">배송중</option>
-                    <option value="del4">배송완료</option>
                     <option value="etc" selected>기타</option>
+                    <option th:each="delivery : ${deliveryList}"
+                            th:value="${delivery.deliveryStatus}"
+                            th:text="${delivery.deliveryStatus}">
+                    </option>
                 </select>
+
                 <input type="submit" value="변경">
 
                 <input type="submit" value="기간별 조회">
@@ -55,7 +64,7 @@
                         <tr>
                             <th class="checkbox-cell"><input type="checkbox" id="select-all" onclick="allChecked()"></th>
                             <th>주문일자</th>
-                            <th>주문번호</th>
+                            <th>배송번호</th>
                             <th>상품명</th>
                             <th>수량</th>
                             <th>수령인</th>
@@ -64,19 +73,18 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="delivery:${deliveryList}">
+                        <tr th:each="delivery:${deliveryList}" th:if="${delivery.deliveryStatus == '배송완료'}">
                             <td class="checkbox-cell">
                                 <input type="checkbox" name="chk" class="chk" onclick="chkClicked()"></td>
-                            <!--                        <td th:text="${#dates.format(delivery.adminOrder.orderDate , 'yyyy.MM.dd')}"></td>-->
-                            <td></td>
+                            <td th:text="${#dates.format(delivery.orderDate , 'yyyy.MM.dd')}"></td>
                             <td th:text="${delivery.productOrderNo}"></td>
-                            <!--                        <td th:text="${delivery}"></td>-->
+                            <td th:text="${delivery.productName}"></td>
+
+                            <td th:text="${delivery.amount}"></td>
                             <td></td>
-                            <td th:text="${delivery.productByOrder.amount}"></td>
                             <!--                        <td th:text="${delivery.delivery.empEmail}"></td>-->
-                            <td></td>
-                            <td th:text="${delivery.productByOrder.deliveryDate}"></td>
-                            <td></td>
+                            <td th:text="${delivery.deliveryDate}"></td>
+                            <td th:text="${delivery.deliveryStatus}"></td>
                         </tr>
                         </tbody>
                     </table>

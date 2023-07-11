@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
 import java.util.*;
@@ -246,16 +247,35 @@ public class MemberController {
     //4. 포인트지급 페이지
     //4-1. 포인트지급을 위한 회원목록 조회
     @GetMapping("/memberListForPoint")
-    public ModelAndView getMemberListforPoint(@RequestParam(defaultValue="1") int page, ModelAndView model) {
+    public ModelAndView getMemberListforPoint(@RequestParam(defaultValue="1") int page
+                                              ,@RequestParam(defaultValue="all") String deptType
+                                              ,@RequestParam(defaultValue="all") String jobType
+                                              ,@RequestParam(defaultValue = "asc") String sortYears
+                                              ,ModelAndView model) {
 
         int pageSize = 10;
         int totalCnt = memberService.totalMemberCount(); //총 항목 수(검색 조건 적용)
         PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
         model.addObject("totalCnt", totalCnt);
 
-        Map<String, Integer> map = new HashMap<>();
+//        Map<String, Integer> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("startRow", pageHandler.getStartRow());
         map.put("endRow", pageHandler.getEndRow());
+
+
+        //부서 필터
+        System.out.println("컨트롤러에서 필터 deptType값 확인 :  " + deptType);
+        map.put("deptType", deptType);
+
+        //직급 필터
+        System.out.println("컨트롤러에서 필터 jobType값 확인 :  " + jobType);
+        map.put("jobType", jobType);
+
+        //근속연수 정렬
+        System.out.println("컨트롤러에서 선택된 근속연수 정렬기준 확인 : " + sortYears); //asc 또는 desc
+        map.put("sortYears", sortYears);
+
 
         List<MemberDTO> memberList = memberService.getMemberListforPoint(map);
         System.out.println("복지포인트지급을 위한 회원목록 : " + memberList);

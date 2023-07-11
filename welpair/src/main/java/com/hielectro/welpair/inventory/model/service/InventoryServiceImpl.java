@@ -4,6 +4,7 @@ import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.inventory.model.dto.StockDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     /* 2-2 */
+    @Transactional
     @Override
     public int stockRegist(List<StockDTO> stockList) {
 

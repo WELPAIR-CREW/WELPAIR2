@@ -3,6 +3,7 @@ package com.hielectro.welpair.mypage.controller;
 
 import com.hielectro.welpair.member.controller.PointException;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
+import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.mypage.model.dto.AddressDTO;
 import com.hielectro.welpair.mypage.model.service.MypageService;
@@ -43,6 +44,7 @@ public class MypageController {
     @GetMapping("/editMyInfo")
     public String editMyInfo(AuthenticatedPrincipal auth) {
 
+        //로그인 체크 방법
 //        auth.getName() 널값이면(접속중이 아니면) 로그인 페이지로 돌려보낸다
 
         return "consumer/mypage/myinfo2";
@@ -78,9 +80,6 @@ public class MypageController {
         map.put("locationroot", "/mypage/myAddress"); //ajax 성공시 동작하는 리다이렉트주소로 사용
         return map;
     }
-
-
-
 
 
 
@@ -132,12 +131,21 @@ public class MypageController {
     }
 
 
+
+
+
 //4.
     //포인트 css일부수정필요
     @GetMapping("/myPoint")
-    public String myPoint() {
+    public ModelAndView myPoint(ModelAndView model) {
 
-        return "consumer/mypage/mypoint";
+        //로그인하여 현재 접속중인 empNo값을 인자로 넘겨야할것
+        String empNo = "E00026"; //일단 인위적으로 설정
+        List<PointHistoryDTO> mypointList = mypageService.mypointList(empNo);
+        model.addObject("mypointList", mypointList);
+
+        model.setViewName("consumer/mypage/mypoint");
+        return model;
     }
 
 

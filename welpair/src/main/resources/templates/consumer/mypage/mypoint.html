@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/footer.css">
+<!--    <link rel="stylesheet" href="/common/css/mypage2.css">-->
     <link rel="stylesheet" href="/common/css/mypage.css">
     <script src="/common/js/static/include.js"></script>
 </head>
@@ -21,7 +22,7 @@
         <div class="section-title">복지포인트</div>
 
         <div id="pointbox">
-            <img src="../../img/point.png" id="pointicon">
+            <img src="/common/images/point.png" id="pointicon" alt="포인트아이콘">
             <label>사용가능한 포인트 : </label>
             <span>2,000,000</span>
             <label>원</label>
@@ -33,79 +34,87 @@
             <button>사용</button>
         </span>
 
-
-
         <table id="table-mypoint">
-            <tr>
-                <td>2023.06.10</td>
-                <td>사용</td>
-                <td>주문번호123456789</td>
-                <td></td>
-                <td>-500,000 원</td>
+<!--            <tr th:each="mypoint:${mypointList}">-->
+<!--                <td th:text="${mypoint.pointDate}">2023.06.10</td>-->
+<!--                <td th:text="${mypoint.pointType}">사용</td>-->
+<!--                <td th:text="${mypoint.pointPayDTO.paymentNo}">주문번호123456789</td>-->
+<!--                <td></td>-->
+<!--                <td>-500,000 원</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>2023.06.08</td>-->
+<!--                <td>적립</td>-->
+<!--                <td></td>-->
+<!--                <td th:text="${mypoint.pointReason}">지급사유</td>-->
+<!--                <td>1,000,000 원</td>-->
+<!--            </tr>-->
+
+            <tr th:each="mypoint : ${mypointList}">
+                <td th:text="${mypoint.pointDate}">2023.06.08</td>
+                <td th:text="${mypoint.pointType}">사용</td>
+                <td th:if="${mypoint.pointType == '사용'}"></td>
+                <td th:if="${mypoint.pointType == '사용'}" th:text="${mypoint.pointPayDTO.paymentNo}">주문번호 표시</td>
+                <td th:if="${mypoint.pointType == '적립'}" th:text="${mypoint.pointReason}">지급사유 표시</td>
+                <td th:text="${mypoint.pointAmount}">1,000,000 원</td>
             </tr>
-            <tr>
-                <td>2023.06.08</td>
-                <td>적립</td>
-                <td></td>
-                <td>지급사유</td>
-                <td>1,000,000 원</td>
-            </tr>
-            <tr>
-                <td>2023.05.30</td>
-                <td>사용</td>
-                <td>주문번호123456789</td>
-                <td></td>
-                <td>-500,000 원</td>
-            </tr>
-            <tr>
-                <td>2023.05.01</td>
-                <td>사용</td>
-                <td>주문번호123456789</td>
-                <td></td>
-                <td>-500,000 원</td>
-            </tr>
-            <tr>
-                <td>2023.04.15</td>
-                <td>사용</td>
-                <td>주문번호123456789</td>
-                <td></td>
-                <td>-500,000 원</td>
-            </tr>
-            <tr>
-                <td>2023.04.01</td>
-                <td>적립</td>
-                <td></td>
-                <td>지급사유</td>
-                <td>1,000,000 원</td>
-            </tr>
-            <tr>
-                <td>2023.03.01</td>
-                <td>적립</td>
-                <td></td>
-                <td>지급사유</td>
-                <td>1,000,000 원</td>
-            </tr>
-            <tr>
-                <td>2023.02.27</td>
-                <td>사용</td>
-                <td>주문번호123456789</td>
-                <td></td>
-                <td>-500,000 원</td>
-            </tr>
-            <tr>
-                <td>2023.02.11</td>
-                <td>사용</td>
-                <td>주문번호123456789</td>
-                <td></td>
-                <td>-500,000 원</td>
-            </tr>
-            <tr>
-                <td>2023.02.02</td>
-                <td>사용</td>
-                <td>주문번호123456789</td>
-                <td></td>
-                <td>-500,000 원</td>
-            </tr>
+
+<!--            <tr>-->
+<!--                <td>2023.05.30</td>-->
+<!--                <td>사용</td>-->
+<!--                <td>주문번호123456789</td>-->
+<!--                <td></td>-->
+<!--                <td>-500,000 원</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>2023.05.01</td>-->
+<!--                <td>사용</td>-->
+<!--                <td>주문번호123456789</td>-->
+<!--                <td></td>-->
+<!--                <td>-500,000 원</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>2023.04.15</td>-->
+<!--                <td>사용</td>-->
+<!--                <td>주문번호123456789</td>-->
+<!--                <td></td>-->
+<!--                <td>-500,000 원</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>2023.04.01</td>-->
+<!--                <td>적립</td>-->
+<!--                <td></td>-->
+<!--                <td>지급사유</td>-->
+<!--                <td>1,000,000 원</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>2023.03.01</td>-->
+<!--                <td>적립</td>-->
+<!--                <td></td>-->
+<!--                <td>지급사유</td>-->
+<!--                <td>1,000,000 원</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>2023.02.27</td>-->
+<!--                <td>사용</td>-->
+<!--                <td>주문번호123456789</td>-->
+<!--                <td></td>-->
+<!--                <td>-500,000 원</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>2023.02.11</td>-->
+<!--                <td>사용</td>-->
+<!--                <td>주문번호123456789</td>-->
+<!--                <td></td>-->
+<!--                <td>-500,000 원</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>2023.02.02</td>-->
+<!--                <td>사용</td>-->
+<!--                <td>주문번호123456789</td>-->
+<!--                <td></td>-->
+<!--                <td>-500,000 원</td>-->
+<!--            </tr>-->
         </table>
 
 

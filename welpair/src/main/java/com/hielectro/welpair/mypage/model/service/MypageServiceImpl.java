@@ -1,6 +1,7 @@
 package com.hielectro.welpair.mypage.model.service;
 
 import com.hielectro.welpair.member.model.dto.MemberDTO;
+import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.mypage.model.dao.MypageMapper;
 import com.hielectro.welpair.mypage.model.dto.AddressDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +63,12 @@ public class MypageServiceImpl implements MypageService{
         return nextAddressId;
     }
 
+
+    //4. 마이포인트 이력 조회
+    @Override
+    public List<PointHistoryDTO> mypointList(String empNo) {
+        List<PointHistoryDTO> mypointList = mypageMapper.mypointList(empNo);
+        return mypointList;
+    }
 
 }

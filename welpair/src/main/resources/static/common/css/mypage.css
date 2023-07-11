@@ -56,7 +56,7 @@ section {
 
 
 
-
+/* # */
 #identify {
     width: 400px;
     height: 400px;
@@ -168,33 +168,109 @@ section {
     background: #333333;
     cursor: pointer;
 }
+/* # 까지*/
 
 
-/* myaddress1 추가 */
+
+
+
+
+
+
+
+
+
+/* myaddress1 */
+/* 배송지 목록 */
+
+/* 배송지 카드 */
 #shippingList {
+    width: 850px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    margin-left: 30px;
 }
 
 .shippingCard {
-    width: 45%;
+    width: calc(45% - 10px);
     margin-bottom: 20px;
     padding: 20px;
-    background-color: lightgray;
-    text-align: center;
+    background-color: white;
+    /*text-align: center;*/
+
+    height: 160px;
+    border: 1px solid #A9A9A9;
 }
 
 
-#addButton {
-    width: 45%;
-    margin-top: 10px;
-    padding: 20px;
-    background-color: lightblue;
-    border: none;
+/* 배송지 추가하기 */
+.shippingCard.add {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px dashed #A9A9A9;
+}
+/* 클릭되는 이미지 */
+.shippingCard.add > img {
     cursor: pointer;
 }
 
+
+
+.shippingCard-info {
+    display: flex;
+    flex-direction: column;
+    /*justify-content: space-between;*/
+    justify-content: center;
+    height: 100%;
+}
+
+.shippingCard-info *:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.shippingCard-header {
+    display: flex;
+    align-items: center;
+}
+
+.shippingCard-header h3 {
+    margin-right: 8px;
+}
+
+.default-label {
+    color: #4F378B;
+    border: 1.5px solid #4F378B;
+    border-radius: 6px;
+    padding: 2px;
+
+    margin-top: -4px;
+}
+
+.default-address {
+    border: 1px solid #4F378B;
+}
+
+
+/* 기본배송지가 아닐 경우에만 표시되는 배송지 삭제 버튼 */
+.delete-span {
+    display: flex;
+    justify-content: flex-end;
+}
+.delete-button {
+    color: gray;
+    background: none;
+    border: none;
+    font-size: 14px;
+
+    margin-bottom: -10px;
+    cursor: pointer;
+}
 
 
 
