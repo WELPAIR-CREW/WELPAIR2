@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>복지포인트지급이력2</title>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <link rel="stylesheet" href="/common/css/main.css">
+<!--    <link rel="stylesheet" href="/common/css/main.css">-->
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/member.css">
@@ -63,6 +63,21 @@
                         </tr>
                     </tbody>
                 </table>
+
+
+                <div class="under-table givepoint-history2">
+                    <div class="paging">
+                        <a th:if="${pageHandler.showPrev}" th:href="@{/member/pointHistoryDetail(page=${pageHandler.beginPage - 1})}">이전</a>
+
+                        <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}">
+                            <a th:href="@{/member/pointHistoryDetail(page=${pageNumber})}" th:text="${pageNumber}"
+                               th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
+                        </span>
+
+                        <a th:if="${pageHandler.showNext}" th:href="@{/member/pointHistoryDetail(page=${pageHandler.endPage + 1})}">다음</a>
+                    </div>
+                </div>
+
 
                 <div id="summary-givepointhistory2">
                     <div class="form-group2">

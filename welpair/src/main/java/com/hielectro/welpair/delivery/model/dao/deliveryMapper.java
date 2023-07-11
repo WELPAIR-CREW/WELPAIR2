@@ -2,6 +2,7 @@ package com.hielectro.welpair.delivery.model.dao;
 
 import com.hielectro.welpair.delivery.model.dto.DeliveryDTO;
 import com.hielectro.welpair.delivery.model.dto.DriverDTO;
+import com.hielectro.welpair.delivery.model.dto.OrderProductDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -13,6 +14,6 @@ public interface deliveryMapper {
     * */
     List<DriverDTO> deliveryDriver();
 
-    List<DeliveryDTO> deliveryDelivery();
+    List<OrderProductDTO> deliveryDelivery();
 
 }

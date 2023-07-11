@@ -58,20 +58,25 @@
                             <th>주문번호</th>
                             <th>상품명</th>
                             <th>수량</th>
-                            <th>수취인</th>
+                            <th>수령인</th>
                             <th>배송지정일</th>
                             <th>진행상태</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="delivery:${deliveryList}">
-                            <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${delivery.productOrderNo}"></td>
-                            <td th:text="${#dates.format(delivery.orderDate, 'yyyy.MM.dd')}"></td>
-                            <td th:text="${delivery.delivery.productOrderNo}"></td>
-                            <td th:text="${delivery.empNo}"></td>
-                            <td th:text="${delivery.employee.empName}"></td>
-                            <td th:text="${delivery.employee.empEmail}"></td>
-                            <td th:text="${delivery.employee.empPhone}"></td>
+                            <td class="checkbox-cell">
+                                <input type="checkbox" name="chk" class="chk" onclick="chkClicked()"></td>
+                            <!--                        <td th:text="${#dates.format(delivery.adminOrder.orderDate , 'yyyy.MM.dd')}"></td>-->
+                            <td></td>
+                            <td th:text="${delivery.productOrderNo}"></td>
+                            <!--                        <td th:text="${delivery}"></td>-->
+                            <td></td>
+                            <td th:text="${delivery.productByOrder.amount}"></td>
+                            <!--                        <td th:text="${delivery.delivery.empEmail}"></td>-->
+                            <td></td>
+                            <td th:text="${delivery.productByOrder.deliveryDate}"></td>
+                            <td></td>
                         </tr>
                         </tbody>
                     </table>

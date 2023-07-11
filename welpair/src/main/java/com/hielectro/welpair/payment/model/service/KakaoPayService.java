@@ -17,8 +17,9 @@ public class KakaoPayService {
     private final KKPReadyRequest readyRequest = new KKPReadyRequest();
     private final KKPApproveRequest approveRequest = new KKPApproveRequest();
 
-
     public KKPReadyResponse payReady(OrderDTO order) {
+
+        log.info("Service ready : " + readyRequest);
 
         // request 값 담기
         MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
@@ -33,7 +34,7 @@ public class KakaoPayService {
         param.add("approval_url", readyRequest.getApproval_url());
         param.add("cancel_url", readyRequest.getCancel_url());
         param.add("fail_url", readyRequest.getFail_url());
-        param.add("order", String.valueOf(readyRequest.getOrder()));
+//        param.add("payload", String.valueOf(readyRequest.getPayload()));
 
         // 카카오에서 요구하는 요청 파라미터, 헤더 정보들  requestEntity에 전부 담기
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(param, this.getHeaders());
@@ -53,8 +54,10 @@ public class KakaoPayService {
         return readyResponse;
     }
 
-
     public KKPApproveResponse payApprove() {
+
+        log.info("Servcie approve : " + approveRequest);
+
 
         MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
         param.add("cid", approveRequest.getCid());
@@ -62,7 +65,7 @@ public class KakaoPayService {
         param.add("partner_order_id", approveRequest.getPartner_order_id());
         param.add("partner_user_id", approveRequest.getPartner_user_id());
         param.add("pg_token", approveRequest.getPg_token());
-        param.add("order", String.valueOf(approveRequest.getOrder()));
+        param.add("payload", "결제정보 페이로드");
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(param, this.getHeaders());
         RestTemplate template = new RestTemplate();
@@ -106,7 +109,7 @@ public class KakaoPayService {
         readyRequest.setApproval_url("http://localhost:8888/payment/kakaopay/completed");
         readyRequest.setCancel_url("http://localhost:8888/payment/kakaopay/cancel");
         readyRequest.setFail_url("http://localhost:8888/payment/kakaopay/fail");
-        readyRequest.setOrder(order);
+//        readyRequest.setPayload(String.valueOf(order));
 
     }
 
@@ -118,7 +121,7 @@ public class KakaoPayService {
         approveRequest.setPartner_user_id(readyRequest.getPartner_user_id());
         approveRequest.setPg_token(pg_token);
 
-        approveRequest.setOrder(readyRequest.getOrder());
+//        approveRequest.setPayload(String.valueOf(order));
     }
 
 
