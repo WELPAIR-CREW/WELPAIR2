@@ -22,5 +22,8 @@ public class deliveryService {
         return delivery.deliveryDelivery();
     }
 
+    public List<DriverDTO> deliverydriver(){
+        return delivery.deliveryDriver();
+    }
 
 }

@@ -135,10 +135,10 @@ public class CartController {
                 model.addAttribute("expt", cartList.get(cartList.size()-1));
 
                 // 썸네일이미지 1번째 사진만 가져오기
-                if(! (cart.getSellPage().getThumbnailImageList().get(0).getThumbnailImageFileName() == null)) {
-                    thumbnail.add(cartService.selectThumbnailImage(cart.getSellPage().getNo()).get(0));
-                    System.out.println(thumbnail);
-                }
+//                if(! (cart.getSellPage().getThumbnailImageList().get(0).getThumbnailImageFileName() == null)) {
+////                    thumbnail.add(cartService.selectThumbnailImage(cart.getSellPage().getNo()).get(0));
+//                    System.out.println(thumbnail);
+//                }
             } catch (NullPointerException e) {
 
                 return "consumer/order/cart-blank";
@@ -146,11 +146,17 @@ public class CartController {
         }
         // 3. 장바구니 상품정보 모델에 담아 뷰로 전달
         model.addAttribute("cartList", cartList);
-        model.addAttribute("thumbnail", thumbnail);
+//        model.addAttribute("thumbnail", thumbnail);
 
         return "consumer/order/cart";
 
     }
+
+   // {
+    // 장바구니에 담긴 최신거 하나만 결제로 넘기기....???
+    //
+    // return 결제페이지 }
+
 
     // 수량변경
     @ResponseBody

@@ -57,7 +57,6 @@
             COUNT(*) AS 위험재고수량
         FROM T_PRODUCT
         WHERE PRODUCT_AMOUNT &lt; 10
-
     </select>
 
     <!-- 1-2 -->

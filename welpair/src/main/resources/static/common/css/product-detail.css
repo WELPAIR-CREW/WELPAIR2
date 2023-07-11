@@ -83,7 +83,7 @@
     font-size: 16px;
 }
 
-.payment .btn {
+.payment.btn {
     width: 430px;
     height: 36px;
     background-color: #3CC15A;
@@ -337,6 +337,15 @@ label[for='upload'] {
 }
 
 .product-add-header button:hover {
+    filter: invert(1);
+    font-weight: bold;
+}
+
+.payment.btn:hover {
+    background-color: #6fdf89;
+}
+
+.favorite-cart button:hover {
     filter: invert(1);
     font-weight: bold;
 }

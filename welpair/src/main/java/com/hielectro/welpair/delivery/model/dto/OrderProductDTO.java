@@ -17,4 +17,6 @@ public class OrderProductDTO {
     private String recipient;
     private Date deliveryDate;
     private String deliveryStatus;
+    private String driverId;
+    private String driverName;
 }
