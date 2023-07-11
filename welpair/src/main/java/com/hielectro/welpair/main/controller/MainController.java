@@ -23,7 +23,7 @@ public class MainController {
     @RequestMapping({"consumer/header_consumer", "admin/header_admin", "admin/index"})
     public void header() {}
 
-    @GetMapping("/")
+    @GetMapping({"/", "index"})
     public String defaultConsumerPage(Model model) {
         List<SellProductDetailDTO> list = mainService.selectProductList();
         model.addAttribute("list", list);

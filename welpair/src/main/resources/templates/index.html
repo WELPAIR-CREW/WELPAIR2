@@ -20,12 +20,14 @@
     <br><br>
     <div class="product-list">
         <ul>
-            <li th:each="item : ${list}" class="product" th:data-page-no="${item.pageNo}"
-                th:onclick="location.href='/products/' + this.getAttribute('data-page-no')">
-                <img th:src="|/common/images/thumbnail/${item.thumbnailName}|">
-                <div th:text="${item.title}"></div>
-                <div class='price' th:text="${#numbers.formatInteger(item.price * (1 - item.discount), 3, 'COMMA') + '원'}"></div>
-            </li>
+            <th:block th:each="item : ${list}">
+                <li class="product" th:data-page-no="${item.pageNo}">
+                    <img th:if="${item.thumbnailName != null}" th:src="|/common/images/thumbnail/${item.thumbnailName}|">
+                    <img th:unless="${item.thumbnailName != null}" src="/common/images/thumbnail/046f0734d92847d28f10281eccf7b682_360x.png">
+                    <div th:text="${item.title}"></div>
+                    <div class='price' th:text="${#numbers.formatInteger(item.price * (1 - item.discount), 3, 'COMMA') + '원'}"></div>
+                </li>
+            </th:block>
         </ul>
     </div>
     <br><br><br><br><br>
@@ -33,5 +35,13 @@
 
 </main>
 <div data-include-html="/admin/footer" class="include"></div>
+<script>
+    const items = document.querySelectorAll(".product");
+    items.forEach(item => {
+        item.addEventListener('click', () => {
+            location.href = '/products/' + item.dataset.pageNo
+        })
+    })
+</script>
 </body>
 </html>
