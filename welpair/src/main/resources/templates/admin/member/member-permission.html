@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>가입승인</title>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <link rel="stylesheet" href="/common/css/main.css">
+<!--    <link rel="stylesheet" href="/common/css/main.css">-->
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/member.css">
@@ -34,14 +34,14 @@
 
             <div class="contents">
                 <div class="over-table">
-                    <label class="count-row">신규 요청 : <span th:text="${reqJoinCount}" class="member-value">nn</span>건</label>
+                    <label class="count-row">신규 요청 : <span th:text="${totalCnt}" class="member-value">nn</span>건</label>
                     <span class="buttons">
                         <button class="button-square3" th:onclick="|javascript:permissionMember();|">승인</button>
                         <button class="button-square3 second" th:onclick="|javascript:rejectMember();|">거절</button>
                     </span>
                 </div>
 
-                <table>
+                <table id="table-permission">
                     <thead>
                         <tr>
 <!--                            <th class="checkbox-cell"><input type="checkbox" id="select-all2" onclick="allChecked()"></th>-->
@@ -72,14 +72,12 @@
 <!--                    </div>-->
 
                     <div class="paging">
-                        <span>&lt;</span>
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                        <span>4</span>
-                        <span>5</span>
-                        <span>&gt;</span>
-
+                        <a th:if="${pageHandler.showPrev}" th:href="@{/member/reqList(page=${pageHandler.beginPage - 1}, pageSize=${pageSize})}">이전</a>
+                        <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}">
+                             <a th:href="@{/member/reqList(page=${pageNumber}, pageSize=${pageSize})}" th:text="${pageNumber}"
+                                th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
+                        </span>
+                        <a th:if="${pageHandler.showNext}" th:href="@{/member/reqList(page=${pageHandler.endPage + 1}, pageSize=${pageSize})}">다음</a>
                     </div>
 
                 </div>
@@ -201,7 +199,7 @@
                     document.body.appendChild(form);
                     form.submit();
 
-                    alert("선택한 요청을 거절하셨습니다.")
+                    alert("선택한 요청을 거절하셨습니다.");
                 }
             }
         }

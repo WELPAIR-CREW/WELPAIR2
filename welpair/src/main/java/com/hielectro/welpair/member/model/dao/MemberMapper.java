@@ -11,37 +11,65 @@ import java.util.Map;
 public interface MemberMapper {
 
     //1. 회원조회
-    List<MemberDTO> getMemberList(SelectCriteria selectCriteria);
+//    List<MemberDTO> getMemberList(SelectCriteria selectCriteria);
+//
+//    int totalMemberCount(Map<String, String> searchMap); //셀렉트
+//
+//    int expiredMemberCount(Map<String, String> searchMap); //셀렉트
 
-    int totalMemberCount(Map<String, String> searchMap); //셀렉트
 
-    int expiredMemberCount(Map<String, String> searchMap); //셀렉트
+
+    List<MemberDTO> getMemberList(Map<String, Integer> map);
+
+    int totalMemberCount();
+
+    int expiredMemberCount();
+
+
+
 
     int deleteMember(String empNo); //딜리트
 
+
+
+
+
     //2. 회원등록
     // 직원목록
-    List<EmployeeDTO> getEmployeeList(SelectCriteria selectCriteria);
-    int totalEmployeeCount(Map<String, String> searchMap);
+    List<EmployeeDTO> getEmployeeList(Map<String, Integer> map);
+    int totalEmployeeCount();
     int registMember(MemberDTO member); //인서트
     //*회원등록할때 회원별권한도 인서트
     int regisMemberRole(String empNo); //인서트
 
     //3. 가입승인-가입요청 목록
-    List<MemberDTO> reqList();
+//    List<MemberDTO> reqList();
+    //새로운 페이징 테스트
+    List<MemberDTO> reqList(Map<String, Integer> map);
     int reqJoinCount();
     int updateForPermission(String empNo); //업데이트
 
     //4. 포인트지급
-    List<MemberDTO> getMemberListforPoint(SelectCriteria selectCriteria);
+    //4-1. 포인트지급을 위한 회원목록
+    List<MemberDTO> getMemberListforPoint(Map<String, Integer> map);
+    //4-2. 포인트지급(포인트이력테이블 인서트)
+    int insertPointHistory(PointHistoryDTO pointHistoryDTO);
+    int getNextEventId();
+    int getCurrEventId();
 
+
+    //4-3. 포인트지급(회원테이블 업데이트)
+    int updatePointBalance(Map<String, Object> map);
 
 
     //5. 포인트지급이력
     //5-1. 포인트지급이력(요약)
-    List<PointHistoryDTO> pointHistorySummary();
+    List<PointHistoryDTO> pointHistorySummary(Map<String, Integer> map);
+    //페이징처리를 위한 총 항목수 조회
+    int pointHistorySummaryCount();
 
     //5-2. 포인트지급이력(상세)
-    List<PointHistoryDTO> pointHistoryDetail(int eventId);
+    List<PointHistoryDTO> pointHistoryDetail(Map<String, Integer> map);
+    int pointHistoryDetailCount(int eventId);
 
 }
