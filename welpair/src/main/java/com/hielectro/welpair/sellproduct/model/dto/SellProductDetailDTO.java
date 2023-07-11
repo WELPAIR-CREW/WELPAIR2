@@ -18,4 +18,5 @@ public class SellProductDetailDTO {
     private String option;
     private String title;
     private String sellStatus;
+    private String thumbnailName;
 }

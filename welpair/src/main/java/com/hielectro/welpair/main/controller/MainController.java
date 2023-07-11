@@ -2,11 +2,14 @@ package com.hielectro.welpair.main.controller;
 
 import com.hielectro.welpair.main.model.service.MainService;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -17,9 +20,15 @@ public class MainController {
         this.mainService = mainService;
     }
 
-    @RequestMapping({"consumer/header_consumer", "admin/header_admin", "admin/index", "index"})
+    @RequestMapping({"consumer/header_consumer", "admin/header_admin", "admin/index"})
     public void header() {}
 
+    @GetMapping("/")
+    public String defaultConsumerPage(Model model) {
+        List<SellProductDetailDTO> list = mainService.selectProductList();
+        model.addAttribute("list", list);
+        return "index";
+    }
     @RequestMapping({"admin/footer", "consumer/footer"})
     public void footer() {}
 

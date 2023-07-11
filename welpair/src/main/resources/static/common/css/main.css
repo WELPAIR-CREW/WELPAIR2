@@ -79,9 +79,17 @@ input {
     text-align: left;
 }
 
-.product>a>img {
+.product:hover {
+    cursor: pointer;
+}
+
+.product img {
     width: 180px;
     height: 180px;
+}
+
+.price {
+    font-weight: bold;
 }
 
 .section-nav {

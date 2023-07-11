@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/footer.css">
 
-    <script th:src="@{../common/js/static/include.js}"></script>
+    <script th:src="@{/common/js/static/include.js}"></script>
 </head>
 
 <body>
@@ -20,67 +20,15 @@
     <br><br>
     <div class="product-list">
         <ul>
-            <li class="product">
-                <a href="#">
-                    <img src="#" alt="">
-                </a> Product1
-            </li>
-            <li class="product">
-                <a href="#">
-                    <img src="#" alt="">
-                </a> Product2
-            </li>
-            <li class="product">
-                <a href="#">
-                    <img src="#" alt="">
-                </a> Product3
-            </li>
-            <li class="product">
-                <a href="#">
-                    <img src="#" alt="">
-                </a> Product4
-            </li>
-            <li class="product">
-                <a href="#">
-                    <img src="#" alt="">
-                </a> Product5
-            </li>
-        </ul>
-        <ul>
-            <li class="product">
-                <a href="#">
-                    <img src="#" alt="">
-                </a>
-                Product1
-            </li>
-            <li class="product">
-                <a href="#">
-                    <img src="#" alt="">
-                </a>
-                Product2
-            </li>
-            <li class="product">
-                <a href="#">
-                    <img src="#" alt="">
-                </a>
-                Product3
-            </li>
-            <li class="product">
-                <a href="#">
-                    <img src="#" alt="">
-                </a>
-                Product4
-            </li>
-            <li class="product">
-                <a href="#">
-                    <img src="#" alt="">
-                </a>
-                Product5
+            <li th:each="item : ${list}" class="product" th:data-page-no="${item.pageNo}"
+                th:onclick="location.href='/products/' + this.getAttribute('data-page-no')">
+                <img th:src="|/common/images/thumbnail/${item.thumbnailName}|">
+                <div th:text="${item.title}"></div>
+                <div class='price' th:text="${#numbers.formatInteger(item.price * (1 - item.discount), 3, 'COMMA') + '원'}"></div>
             </li>
         </ul>
     </div>
     <br><br><br><br><br>
-
 
 
 </main>
