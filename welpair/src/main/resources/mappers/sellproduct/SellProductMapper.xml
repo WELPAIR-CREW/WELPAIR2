@@ -481,9 +481,20 @@
          WHERE SELL_PRODUCT_ID = #{ id }
     </update>
 
+    <update id="updateBoard">
+        UPDATE T_BOARD
+           SET IS_PRIVATE
+         WHERE BOARD_NO = #{ no }
+    </update>
     <delete id="deleteThumbnail">
         DELETE
           FROM T_THUMB_IMAGE
+         WHERE SELL_PAGE_NO = #{ no }
+    </delete>
+
+    <delete id="deleteSellPage">
+        DELETE
+          FROM T_SELL_PAGE
          WHERE SELL_PAGE_NO = #{ no }
     </delete>
 

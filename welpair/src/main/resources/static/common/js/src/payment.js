@@ -111,7 +111,7 @@ function josnDataSet(){
     };
 
     // --- 복지포인트 사용시
-    if(usepoint.value > 0){
+    // if(usepoint.value > 0){
 
             let payment = {
                 paymentPrice : 0
@@ -127,27 +127,58 @@ function josnDataSet(){
             order.orderPayment = orderPayment;
 
             // 복지포인트 전액 결제시
-        if(totalPrice === usepoint.value  && parseInt(restPriceHidden.value) === 0){
-            $.ajax({
-                type:'post',
-                url:'/payment/payment.go',
-                contentType:"application/json",
-                data: JSON.stringify(order), //  결제요청 데이터 전송
-                success:function(response){
-                    location.href = '/payment/pay-success';
-                },
-                error:function(e){
-                    alert("결제요청 실패 : 응답 없음");
+        if(totalPrice === parseInt(usepoint.value) && parseInt(restPriceHidden.value) === 0){
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/payment/payment.go');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(order));
+            xhr.onreadystatechange = function () {
+                if (this.readyState !== XMLHttpRequest.DONE) return;
+
+                if (this.status === 200) {
+                    alert("결제에 성공하였습니다.")
+                    location.href = '/';
                 }
-            });
+            }
+            // location.href = '/payment/pay-success';
+
+            //
+            // const form = document.createElement('form');
+            // form.method = 'post';
+            // form.action = '/payment/pay-success';
+            //
+            // const input = document.createElement('input');
+            // input.name = 'order';
+            // input.type = 'hidden';
+            // input.value = JSON.stringify(order);
+            // // input.value = order;
+            // form.append(input);
+            //
+            // document.body.append(form);
+            // form.submit()
+
+
+            // $.ajax({
+            //     type:'post',
+            //     url:'/payment/payment.go',
+            //     contentType:"application/json",
+            //     data: JSON.stringify(order), //  결제요청 데이터 전송
+            //     success:function(response){
+            //         location.href = '/payment/pay-success';
+            //     },
+            //     error:function(e){
+            //         alert("결제요청 실패 : 응답 없음");
+            //     }
+            // });
 
         }
-    }
+    // }
 
     // ----- 카카오 -------
-    const KakaoPay_btn = document.getElementById("KakaoPay_btn");
+    // const KakaoPay_btn = document.getElementById("KakaoPay_btn");
 
-    if(restPriceHidden.value > 0 && KakaoPay_btn.checked){
+    else{
 
         let payment = {
             paymentPrice : 0
@@ -164,6 +195,7 @@ function josnDataSet(){
 
         const item_name = document.getElementById("itemName").textContent;
 
+
         $.ajax({
             type:'post',
             // url:'/payment/kakaopay/do',
@@ -179,8 +211,6 @@ function josnDataSet(){
         });
 
         // -----  복지포인트만
-    } else {
-        return alert("결제수단을 다시 한번 확인해주세요.");
     }
 
 }

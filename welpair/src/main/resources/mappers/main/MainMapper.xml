@@ -58,6 +58,19 @@
         <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>
     </resultMap>
 
+    <resultMap id="SellProductDetailDTO" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO">
+        <id property="id" column="SELL_PRODUCT_ID"/>
+        <result property="name" column="PRODUCT_NAME"/>
+        <result property="status" column="PRODUCT_STATUS"/>
+        <result property="price" column="PRODUCT_PRICE"/>
+        <result property="discount" column="DISCOUNT"/>
+        <result property="option" column="PRODUCT_OPTION"/>
+        <result property="pageNo" column="SELL_PAGE_NO"/>
+        <result property="title" column="SELL_PAGE_TITLE"/>
+        <result property="sellStatus" column="SELL_STATUS"/>
+        <result property="thumbnailName" column="SELL_THUMB_IMAGE_FILE_NAME"/>
+    </resultMap>
+
     <select id="selectOneSellProduct" resultMap="SellProductResultMap">
         SELECT
                 SELL_PRODUCT_ID
@@ -93,5 +106,34 @@
         <if test="pageNo != null and pageNo != ''">
             AND SELL_PAGE_NO = #{ pageNo }
         </if>
+    </select>
+
+    <select id='selectProductList' resultMap="SellProductDetailDTO">
+        SELECT
+        *
+        FROM (
+        SELECT ROWNUM AS RN
+            , SELL_PRODUCT_ID
+            , DISCOUNT
+            , PRODUCT_NAME
+            , PRODUCT_STATUS
+            , PRODUCT_PRICE
+            , SELL_PAGE_NO
+            , SELL_PAGE_TITLE
+            , SELL_STATUS
+            , SELL_THUMB_IMAGE_FILE_NAME
+        FROM T_SELL_PRODUCT
+        LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
+        LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
+        LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
+        LEFT JOIN (SELECT SELL_PAGE_NO
+                   , MIN(SELL_THUMB_IMAGE_FILE_NAME) AS SELL_THUMB_IMAGE_FILE_NAME
+                FROM T_THUMB_IMAGE
+               GROUP BY SELL_PAGE_NO) USING (SELL_PAGE_NO)
+        WHERE SELL_STATUS = 'Y'
+        )
+            WHERE 1=1
+            AND RN &gt; 1
+            AND RN &lt;= 30
     </select>
 </mapper>

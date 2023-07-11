@@ -335,3 +335,8 @@ label[for='upload'] {
     border: 1px solid #ededed;
     margin: -1px;
 }
+
+.product-add-header button:hover {
+    filter: invert(1);
+    font-weight: bold;
+}

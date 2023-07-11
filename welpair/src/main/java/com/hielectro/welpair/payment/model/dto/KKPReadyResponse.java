@@ -17,6 +17,6 @@ public class KKPReadyResponse {
 
                                                 // 결제 요청 메시지(TMS)를 보내기 위한 사용자 정보 입력 화면 Redirect URL
 
-    private OrderDTO order;
+//    private OrderDTO order;
 
 }
