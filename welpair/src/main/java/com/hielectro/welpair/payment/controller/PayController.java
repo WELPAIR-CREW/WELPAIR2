@@ -1,3 +1,4 @@
+
 package com.hielectro.welpair.payment.controller;
 
 import com.hielectro.welpair.inventory.model.dto.StockDTO;
@@ -85,8 +86,8 @@ public class PayController {
     // 결제수단에 따른 매핑 나누기
     @PostMapping("/payment.go")
     public String gotopay(@RequestBody OrderDTO order, RedirectAttributes rttr, ModelAndView model
-                    //            , @AuthenticationPrincipal User user
-                        ) throws Exception {
+                          //            , @AuthenticationPrincipal User user
+    ) throws Exception {
 
         log.info("리다이렉트용 매핑 컨트롤러 들어옴");
 
@@ -104,16 +105,16 @@ public class PayController {
 //        model.addAttribute("order", order);
 
         // 카카오페이 결제 포함시
-       if(order.getOrderPayment().getPaymentList().stream()
-               .anyMatch(item -> item.getPaymentType().contains("카카오페이"))){
-           return "redirect:/payment/kakaopay/do";
+        if(order.getOrderPayment().getPaymentList().stream()
+                .anyMatch(item -> item.getPaymentType().contains("카카오페이"))){
+            return "redirect:/payment/kakaopay/do";
 
-       } else {   // 복지포인트로 전액 결제 완료
-           // success 매핑으로 가서 데이터 저장
+        } else {   // 복지포인트로 전액 결제 완료
+            // success 매핑으로 가서 데이터 저장
 
 //           model.setViewName("redirect:/payment/pay-success");
-           return "redirect:/payment/pay-success";
-       }
+            return "redirect:/payment/pay-success";
+        }
     }
 
     @GetMapping("/pay-fail")
@@ -142,21 +143,21 @@ public class PayController {
                 .filter(item -> item.getPaymentType().contains("복지"))
                 .forEach(item -> item.setTid("NONE"));
 
-        // pointpay dto (테이블 데이터 삽입용)
+        // pointpay dto (테이블 데이터 삽입용)  --- 카카오페이는 롤백안되게 다시집어넣어
         PointPayDTO pointPay = new PointPayDTO();
 
         order.getOrderPayment().getPaymentList().forEach(item -> {
                     log.info("item : " + item);
                     try {
 
-                        payService.insertPayment(item);
+
+                        payService.insertPayment(item); // tid
                         log.info("paymentNo : " + item.getPaymentNo() + " orderNo : " + order.getOrderNo());
                         payService.insertOrderPayment(order.getOrderNo(), item.getPaymentNo());
 
                         if(item.getPaymentType().contains("복지")){
                             pointPay.setPaymentNo(item.getPaymentNo());
                         }
-
 
                     } catch (SQLTransactionRollbackException e) {
                         System.out.println("!!!!!!!!!!pay insert 실패!!!!!!!!!");
@@ -299,4 +300,3 @@ public class PayController {
 
 
 }
-
