@@ -52,33 +52,35 @@
 
                 <table border="1px">
                     <br>
-                    <thead>
-                    <div class="table_container">
-                    <tr>
-                        <th><input type="checkbox" name="" id="checkAll" /></th>
-                        <th>주문일자</th>
-                        <th>주문번호</th>
-                        <th>상품명</th>
-                        <th>수량</th>
-                        <th>수취인</th>
-                        <th>배송지정일</th>
-                        <th>배송인</th>
-                    </tr>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="checkbox-cell"><input type="checkbox" id="select-all" onclick="allChecked()"></th>
+                            <th>주문일자</th>
+                            <th>주문번호</th>
+                            <th>상품명</th>
+                            <th>수량</th>
+                            <th>수령인</th>
+                            <th>배송지정일</th>
+                            <th>배송인</th>
+                        </tr>
+                        </thead>
+<!--            여기해야함ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ            <tbody>-->
+<!--                        <tr th:each="adminOrder:${deliveryList}">-->
+<!--                            <td class="checkbox-cell">-->
+<!--                                <input type="checkbox" name="chk" class="chk" onclick="chkClicked()"></td>-->
+<!--                            <td th:text="${#dates.format(adminOrder.orderDate , 'yyyy.MM.dd')}"></td>-->
+<!--                            <td th:text="${adminOrder.productOrderNo}"></td>-->
+<!--                            <td th:text="${adminOrder.productName}"></td>-->
 
-                    <tr>
-                        <td><input type="checkbox" name="chk_box" class="checkSelect"/></td>
-                        <th>주문일자</th>
-                        <th>주문번호</th>
-                        <th>상품명</th>
-                        <th>수량</th>
-                        <th>수취인</th>
-                        <th>배송지정일</th>
-                        <th>배송인</th>
-                    </tr>
-                    </div>
-                    </thead>
-
-
+<!--                            <td th:text="${adminOrder.amount}"></td>-->
+<!--                            <td></td>-->
+<!--                            &lt;!&ndash;                        <td th:text="${delivery.delivery.empEmail}"></td>&ndash;&gt;-->
+<!--                            <td th:text="${adminOrder.deliveryDate}"></td>-->
+<!--                            <td th:text="${adminOrder.deliveryStatus}"></td>-->
+<!--                        </tr>-->
+<!--                        </tbody>-->
+                    </table>
 
                 </table>
 

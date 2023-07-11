@@ -14,49 +14,53 @@
 </head>
 
 <body>
-    <!-- header -->
-    <div th:replace="/consumer/header_mypage :: header"></div>
+<!-- header -->
+<div th:replace="/consumer/header_mypage :: header"></div>
 
-    <!-- @관련소스 찾아보기 -->
+<section>
+    <div class="section-title">배송지 관리</div>
 
-    <section>
-        <div class="section-title">배송지 관리</div>
-        
-        <div class="m_myaddress" id="area_receive_address_list" v-cloak>
-            <a class="btn_register" href="배송지 등록 페이지 연결" data-href="{ '_type': 'modal' }"><i class="ico_plus"></i><b>배송지 추가하기</b></a>
-            <!-- 배송지 목록 -->
-            <ul v-if="paginator !== null && paginator.totalCount > 0" class="mm_address-list">
-
-                
-                <li v-for="(address, index) in paginator.items"
-                    :key="address.seq"
-                    class="mm_address-item"
-                    :class="{ '__address-on': address.isDefault }">
-
-                    <dl>
-                        <dt>
-                            <b v-text="address.receiverName"></b>
-                            <b v-if="address.isDefault" class="mm_tag __tag_secondary__">기본배송지</b>
-                        </dt>
-                        <dd v-text="address.receiverMobile ==  '' ? address.receiverTel : address.receiverMobile"></dd>
-                        <dd><span v-text="address.zipCode.trim()"></span>{{ address.roadAddress }}</dd>
-                    </dl>
-                    <div class="mm_btnbox">
-                        <a class="btn_edit" v-on:click="setUpdateAddr(index)" href="/mypage/receive-address/edit" data-href="{ '_type': 'modal' }"><i class="mco_edit"></i><b>수정</b></a>
-                        <button v-if="!address.isDefault" type="button" class="btn_delete" v-on:click="removeReceiveAddress(address)"><i class="mco_delete"></i><b>삭제</b></button>
-                    </div>
-                </li>
-            </ul>
+    <div id="shippingList">
+        <div class="shippingCard">
+            <h3>배송지 1</h3>
+            <p>이름: John Doe</p>
+            <p>전화번호: 123-456-7890</p>
+            <p>주소: 123 Main Street</p>
         </div>
-        
+        <div class="shippingCard">
+            <h3>배송지 2</h3>
+            <p>이름: Jane Smith</p>
+            <p>전화번호: 987-654-3210</p>
+            <p>주소: 456 Elm Street</p>
+        </div>
+    </div>
+    <button id="addButton">추가하기</button>
 
-    </section>
+</section>
 
 
+<!-- footer -->
+<div data-include-html="/consumer/footer" class="include"></div>
 
-    <!-- footer -->
-    <div data-include-html="/consumer/footer" class="include"></div>
 
+<script>
+    const addButton = document.getElementById("addButton");
+    const shippingList = document.getElementById("shippingList");
+
+    addButton.addEventListener("click", () => {
+
+        const newCard = document.createElement("div");
+        newCard.classList.add("shippingCard");
+        newCard.innerHTML = `
+            <h3>새로운 배송지</h3>
+            <p>이름: </p>
+            <p>전화번호: </p>
+            <p>주소: </p>
+            `;
+        shippingList.appendChild(newCard);
+
+    });
+</script>
 </body>
 
 </html>
