@@ -20,7 +20,6 @@ public interface InventoryService {
     List<ProductDTO> stockRegistSerch(ProductDTO product);
 
     /* 2-2 */
-    @Transactional
     int stockRegist(List<StockDTO> stockList);
 
     /* 3-1 */

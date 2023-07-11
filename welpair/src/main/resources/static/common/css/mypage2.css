@@ -1,0 +1,138 @@
+/* 하이퍼링크 색깔 */
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+a:hover {
+    color: #d9d9d9;
+}
+
+/* 체크박스 체크시 색상 */
+input[type=checkbox] {
+    accent-color: lavender;
+}
+
+section {
+    width: 1280px;
+    height: 656px;
+    /* 수평 중앙 정렬*/
+    margin: 0 auto;
+    margin-top: 20px;
+    /* 자식요소를 중앙정렬시키기 */
+    display: flex;
+    /* 1) 수평 중앙정렬 */
+    justify-content: center;
+    /* 2) 수직 중앙정렬 */
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+}
+
+.section-title {
+    height: 54px;
+    font-size: 26px;
+    font-weight: bold;
+    border-bottom: 4px solid black;
+    margin-left: 30px;
+    margin-bottom: -30px;
+    /* 타이틀 좌표 */
+    position: absolute;
+    top: 30px;
+    left: 200px;
+    /* 길이 */
+    width: 850px;
+}
+
+
+
+/* 배송지 목록 */
+
+/* 배송지 카드 */
+#shippingList {
+    width: 850px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    margin-left: 30px;
+}
+
+.shippingCard {
+    width: calc(45% - 10px);
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: white;
+    /*text-align: center;*/
+
+    height: 160px;
+    border: 1px solid #A9A9A9;
+}
+
+
+/* 배송지 추가하기 */
+.shippingCard.add {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px dashed #A9A9A9;
+}
+/* 클릭되는 이미지 */
+.shippingCard.add > img {
+    cursor: pointer;
+}
+
+
+
+.shippingCard-info {
+    display: flex;
+    flex-direction: column;
+    /*justify-content: space-between;*/
+    justify-content: center;
+    height: 100%;
+}
+
+.shippingCard-info *:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.shippingCard-header {
+    display: flex;
+    align-items: center;
+}
+
+.shippingCard-header h3 {
+    margin-right: 8px;
+}
+
+.default-label {
+    color: #4F378B;
+    border: 1.5px solid #4F378B;
+    border-radius: 6px;
+    padding: 2px;
+
+    margin-top: -4px;
+}
+
+.default-address {
+    border: 1px solid #4F378B;
+}
+
+
+/* 기본배송지가 아닐 경우에만 표시되는 배송지 삭제 버튼 */
+.delete-span {
+    display: flex;
+    justify-content: flex-end;
+}
+.delete-button {
+    color: gray;
+    background: none;
+    border: none;
+    font-size: 14px;
+
+    margin-bottom: -10px;
+    cursor: pointer;
+}

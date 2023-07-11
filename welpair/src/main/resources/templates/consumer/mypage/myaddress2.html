@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배송지 등록</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/mypage.css">
+<!--    <link rel="stylesheet" href="/common/css/mypage2.css">-->
+    <script src="/common/js/static/include.js"></script>
+</head>
+
+<body>
+    <!-- header -->
+    <div th:replace="/consumer/header_mypage :: header"></div>
+
+    <section>
+        <div class="section-title">배송지 등록</div>
+        <form id="form-myaddress">
+
+            <!-- 배송지목록에서 넘어온 empNo값을 숨겨지는 요소에 담기 -->
+            <input type="hidden" id="empNo" th:name="empNo" th:value="${empNo}">
+
+            <div class="form-group3">
+                <div><label>받는 사람</label></div>
+                <div><input type="text" name="addressName" required placeholder="이름을 입력하세요"></div>
+            </div>
+            <div class="form-group3">
+                <div><label>휴대폰 번호</label></div>
+                <div><input type="tel" name="addressPhone" required placeholder="연락 가능한 번호를 입력하세요"></div>
+            </div>
+
+            <div class="form-group3">
+                <div><label>주소</label></div>
+                <span>
+                    <!-- 우편번호 찾기 -->
+                    <input type="number" id="input-zipcode">
+                    <button id="button-zipcode" type="button" onclick="findAddress()">우편번호 찾기</button>
+                </span>
+                <!-- 우편번호 검색시 기본주소 자동 입력, 상세주소 직접 입력 -->
+                <div><input type="text" id="input-addressFirst" name="addressFirst"></div>
+                <div><input type="text" id="input-addressSecond" name="addressSecond" placeholder="상세주소를 입력하세요"></div>
+                <!-- addressFirst와 addressSecond가 합쳐진 addressDetail요소를 숨김 -->
+                <input type="hidden" id="input-addressDetail" name="addressDetail">
+            </div>
+            <input type="checkbox" name="isDefaultAddress">
+            <label id="set-default">기본 배송지로 설정하기</label>
+
+            <div>
+                <span>
+                    <button class="wide-button2">
+                        <a href="">입력취소</a>
+                    </button>
+                </span>
+                <span>
+                    <button class="wide-button2 dark" type="submit">등록하기</button>
+                </span>
+            </div>
+        </form>
+
+    </section>
+
+
+
+    <!-- footer -->
+    <div data-include-html="/consumer/footer" class="include"></div>
+
+
+
+    <!--  다음카카오 우편주소 API  -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <script>
+
+        //우편번호 찾기
+        function findAddress() {
+            new daum.Postcode({
+
+                oncomplete: function (data) {
+
+                    //검색 결과 항목 클릭시 실행할 코드 작성하기
+
+                    document.getElementById('input-zipcode').value = data.zonecode;
+                    // document.getElementById('input-addressFirst').value = data.address;
+
+                    let roadAddress = data.roadAddress; //도로명 주소
+                    let jibunAddress = data.jibunAddress; //지번 주소
+
+                    if(roadAddress !== '') { //도로명 주소 클릭했을 경우 도로명 주소를 input요소에 담아준다
+                        document.getElementById('input-addressFirst').value = roadAddress;
+                    } else if(jibunAddress !== '') { //지번 주소 클릭했을 경우
+                        document.getElementById('input-addressFirst').value = jibunAddress;
+                    }
+                }
+
+            }).open();
+        }
+
+
+
+        //등록하기 버튼 ajax요청
+        $(document).ready(function() {
+            $('#form-myaddress').submit(function(event) {
+                event.preventDefault(); //기본 제출 동작 중단
+
+                //addressFirst와 addressSecond를 구분자와 함께 합쳐서 addressDetail를 만든다
+                let addressFirst = $('#input-addressFirst').val();
+                let addressSecond = $('#input-addressSecond').val();
+                let addressDetail = addressFirst + '/' + addressSecond;
+
+                //숨겨놓은 태그에 그 값을 넣어준다
+                $('#input-addressDetail').val(addressDetail);
+
+                //기본배송지로 설정하기 checkbox input태그 체크됐다면 Y, 아니면 N
+                // let isDefaultAddress = $('input[name="isDefaultAddress"]').is(':checked') ? 'Y' : 'N';
+
+                //form 데이터 가져오기
+                // let formData = new FormData(this); //this : form요소
+                // formData.append('isDefaultAddress', isDefaultAddress);
+
+
+                let formData = {
+                    addressName: $('input[name="addressName"]').val(),
+                    addressPhone: $('input[name="addressPhone"]').val(),
+                    // addressFirst: $('input[name="addressFirst"]').val(),
+                    // addressSecond: $('input[name="addressSecond"]').val(),
+                    addressDetail: $('input[name="addressDetail"]').val(),
+                    isDefaultAddress: $('input[name="isDefaultAddress"]').is(':checked') ? 'Y' : 'N',
+
+                    empNo: $('input[name="empNo"]').val()
+                };
+
+
+                //ajax 요청으로 form 데이터 전송
+                $.ajax({
+                    url: '/mypage/registAddress',
+                    type: 'POST',
+
+                    // data: formData, //자동직렬화되어 JSON.stringify가 필요하지 않음(JSON으로 직렬화 되는 것이 아니라 multipart/form-data로 전송)
+
+                    // processData: false, //제이쿼리가 데이터를 처리하지 않도록 설정
+                    // contentType: false, //서버에서 데이터 타입 처리를 하도록 설정
+
+
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+
+
+                    success: function(response) {
+                        //요청 성공시 실행할 동작
+                        console.log(response);
+                        alert('배송지 등록 완료');
+                        //등록 후 페이지 리디렉션
+                        location.href = response.locationroot;
+                    },
+                    error: function(error) {
+                        //요청 실패시 실행할 동작
+                        console.error(error);
+                        alert('배송지 등록에 실패했습니다.');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

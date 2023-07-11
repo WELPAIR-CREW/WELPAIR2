@@ -1,18 +1,17 @@
 package com.hielectro.welpair.sellproduct.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
-import com.hielectro.welpair.inventory.model.dto.ProductDTO;
-import com.hielectro.welpair.sellproduct.model.dto.*;
-import lombok.extern.slf4j.Slf4j;
-import net.coobird.thumbnailator.Thumbnails;
-import org.springframework.beans.factory.annotation.Value;
+import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +23,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.common.Pagination;
 import com.hielectro.welpair.common.Search;
+import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
-import org.springframework.web.multipart.MultipartFile;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/sellproduct")
@@ -47,30 +51,22 @@ public class SellProductController {
         return "admin/sellproduct/" + url;
     }
 
-    @GetMapping("add")
-    public String addSellProduct() {
-        return "admin/sellproduct/admin-add-product";
-    }
-
-    @GetMapping("modify/{sellPageNo}")
-    public String modifySellProduct(Model model, HttpServletRequest request, @PathVariable String sellPageNo) {
-        Map<String, String> map = new HashMap<>();
-
-        map.put("sellPageNo", sellPageNo);
-        SellProductDTO sellProduct = productService.selectOneSellProduct(sellPageNo);
-        model.addAttribute("productInfo", sellProduct);
-
-        /* 판매 상품 페이지가 수정되었는지 판단하기 위해 Session에 결과값을 저장 */
-        HttpSession session = request.getSession();
-        session.setAttribute("productInfo", sellProduct);
-
-        return "admin/sellproduct/admin-modify-product";
-    }
-
     @PostMapping("optionList")
     @ResponseBody
     public List<ProductDTO> selectOptionList(@RequestBody ProductDTO product) {
         return productService.selectOptionList(product);
+    }
+
+    @PostMapping("categoryList")
+    @ResponseBody
+    public List<CategoryDTO> selectCategoryList() {
+        return productService.selectCategoryList();
+    }
+
+    @PostMapping("statusList")
+    @ResponseBody
+    public List<ProductDTO> selectProductList() {
+        return productService.selectProductStatus();
     }
 
     @PostMapping("productNameList")
@@ -95,6 +91,27 @@ public class SellProductController {
         getSelectList(model, () -> productService.selectReviewList(searchMap));
         return "admin/sellproduct/review";
     }
+
+    @PostMapping({"review/private", "QnA/private"})
+    @ResponseBody
+    private Map<String, String> setPrivateReview(HttpServletRequest request, HttpServletResponse response, List<BoardDTO> boardList) throws IOException {
+        Map<String, String> map = new HashMap<>();
+        String requestURI = request.getRequestURI();
+        boolean result = productService.setPrivateBoard(boardList);
+
+        if(!result) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Update Failed!");
+        }
+
+        if (requestURI.contains("review")) {
+            map.put("next_redirect_url", "/sellproduct/review");
+        } else {
+            map.put("next_redirect_url", "/sellproduct/QnA");
+        }
+
+        return map;
+    }
+
 
     @GetMapping("QnA")
     public String qnaLocation(HttpServletRequest request, Model model,
@@ -134,7 +151,6 @@ public class SellProductController {
         model.addAttribute("list", list);
     }
 
-
     @PostMapping(value = "sellProductListAPI", produces = "application/json;charset=utf-8")
     @ResponseBody
     public List<SellProductDetailDTO> sellProductList(@RequestBody Map<String, String> request) {
@@ -164,12 +180,6 @@ public class SellProductController {
         }
     }
 
-    @GetMapping("test")
-    public String testMethod(@ModelAttribute Search search) {
-        System.out.println("test : " + search);
-        return "redirect:/sellproduct/review";
-    }
-
     public Map<String, Integer> pagination(int length) {
         Map<String, Integer> response = new HashMap<>();
         int maxPageNo = (int) Math.ceil((double) length / limit);
@@ -179,5 +189,20 @@ public class SellProductController {
         response.put("endPageNo", 5);
 
         return response;
+    }
+
+    @PostMapping("er2")
+    @ResponseBody
+    public List<ProductOrderDTO> test(@ModelAttribute Search search) {
+        List<ProductOrderDTO> list = new ArrayList<>();
+        list.add(new ProductOrderDTO());
+        System.out.println(search);
+//        System.out.println(id);
+        SellProductDTO sellProduct = productService.selectOneSellProduct(search.getCode());
+        list.get(0).setSellProductId(search.getId());
+        list.get(0).setProductOrderAmount(search.getAmount());
+        list.get(0).setProductOrderPrice((int) (sellProduct.getProduct().getProductPrice() * (1 - sellProduct.getDiscount())));
+        list.get(0).setSellproduct(sellProduct);
+        return list;
     }
 }

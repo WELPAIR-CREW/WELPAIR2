@@ -5,6 +5,7 @@ import com.hielectro.welpair.order.model.dto.CartDTO;
 import com.hielectro.welpair.order.model.dto.CartGeneralDTO;
 import com.hielectro.welpair.order.model.dto.CartSellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
@@ -29,4 +30,6 @@ public interface CartMapper {
     int cartAmountChange(CartSellProductDTO cartSellProduct);
 
     int deleteCartProduct(String product, String empNo);
+
+    List<ThumbnailImageDTO> selectThumbnailImage(String no);
 }

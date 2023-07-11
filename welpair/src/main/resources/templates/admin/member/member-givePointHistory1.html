@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>회원조회</title>
+    <title>복지포인트 지급이력</title>
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <link rel="stylesheet" href="/common/css/main.css">
+<!--    <link rel="stylesheet" href="/common/css/main.css">-->
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/member.css">
@@ -40,7 +40,7 @@
                     <button class="button-circle">전체</button>
                     <button class=" button-circle">6개월</button>
 
-                    <img id="calendar" src="../../img/calendar.png" alt="달력아이콘">
+                    <img id="calendar" src="/common/images/calendar.png" alt="달력아이콘">
                     <input type="date" class="select-date" name="date">
                     <label>~</label>
                     <input type="date" class="select-date" name="date">
@@ -57,129 +57,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>2023.07.01</td>
-                            <td>정기지급</td>
-                            <td>nn</td>
-                            <td>20,000,000</td>
+                    </tr>
+                        <tr th:each="summary:${pointHistorySummaryList}">
+                            <td th:text="${summary.eventId}" class="hideColumn"></td>
+                            <td th:text="${#dates.format(summary.pointDate2, 'yyyy.MM.dd')}">2023.07.01</td>
+                            <td th:text="${summary.pointReason}">정기지급</td>
+                            <td th:text="${summary.pointCount}">nn</td>
+<!--                            <td th:Text="${summary.pointTotal}">20,000,000</td>-->
+                            <td th:text="${#numbers.formatInteger(summary.pointTotal, 1, 'COMMA') + '원'}"></td>
                             <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-givePointHistory2.html">상세보기</a>
-                                </button>
+                                <button class="button-square2 showDetail">상세보기</button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2023.06.15</td>
-                            <td>특별지급</td>
-                            <td>nn</td>
-                            <td>10,000,000</td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-givePointHistory2.html">상세보기</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.06.01</td>
-                            <td>정기지급</td>
-                            <td>nn</td>
-                            <td>20,000,000</td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-givePointHistory2.html">상세보기</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.05.01</td>
-                            <td>정기지급</td>
-                            <td>nn</td>
-                            <td>20,000,000</td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-givePointHistory2.html">상세보기</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.04.01</td>
-                            <td>정기지급</td>
-                            <td>nn</td>
-                            <td>20,000,000</td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-givePointHistory2.html">상세보기</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.03.15</td>
-                            <td>특별지급</td>
-                            <td>nn</td>
-                            <td>30,000,000</td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-givePointHistory2.html">상세보기</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.03.01</td>
-                            <td>정기지급</td>
-                            <td>nn</td>
-                            <td>20,000,000</td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-givePointHistory2.html">상세보기</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.02.01</td>
-                            <td>정기지급</td>
-                            <td>nn</td>
-                            <td>20,000,000</td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-givePointHistory2.html">상세보기</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2023.01.01</td>
-                            <td>정기지급</td>
-                            <td>nn</td>
-                            <td>20,000,000</td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-givePointHistory2.html">상세보기</a>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2022.12.01</td>
-                            <td>정기지급</td>
-                            <td>nn</td>
-                            <td>20,000,000</td>
-                            <td>
-                                <button class="button-square2">
-                                    <a href="../../HTML/admin/member-givePointHistory2.html">상세보기</a>
-                                </button>
-                            </td>
-                        </tr>
-                        
                     </tbody>
                 </table>
 
                 <div class="under-table givepoint-history1">
+
                     <div class="paging">
-                        <span>&lt;</span>
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                        <span>4</span>
-                        <span>5</span>
-                        <span>&gt;</span>
+                        <a th:if="${pageHandler.showPrev}" th:href="@{/member/pointHistorySummary(page=${pageHandler.beginPage - 1})}">이전</a>
+
+                        <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}">
+                            <a th:href="@{/member/pointHistorySummary(page=${pageNumber})}" th:text="${pageNumber}"
+                               th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
+                        </span>
+
+                        <a th:if="${pageHandler.showNext}" th:href="@{/member/pointHistorySummary(page=${pageHandler.endPage + 1})}">다음</a>
                     </div>
                 </div>
 
@@ -192,6 +95,31 @@
 
     <!-- footer -->
     <div data-include-html="/admin/footer" class="include"></div>
+
+    <script>
+
+        $('.hideColumn').attr('style', "display:none;"); //${summary.eventId}컬럼을 숨긴다
+
+        //상세보기 버튼 클릭시 eventId를 폼에 담아서 컨트롤러로 이동
+        $('.showDetail').click(function() {
+
+            let eventId = $(this).parent().siblings()[0].innerText;
+            let form = document.createElement('form');
+            form.method = 'GET';
+            form.action = '/member/pointHistoryDetail';
+
+            let eventIdInput = document.createElement('input');
+            eventIdInput.type = 'hidden';
+            eventIdInput.name = 'eventId';
+            eventIdInput.value = eventId;
+            console.log("클릭한 eventId 값 확인 : " + eventId);
+
+            form.appendChild(eventIdInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+    </script>
 
 
 </body>

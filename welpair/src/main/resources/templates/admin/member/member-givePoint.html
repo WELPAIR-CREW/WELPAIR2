@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>복지포인트지급</title>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <link rel="stylesheet" href="/common/css/main.css">
+<!--    <link rel="stylesheet" href="/common/css/main.css">-->
     <link rel="stylesheet" href="/common/css/header.css">
     <link rel="stylesheet" href="/common/css/footer.css">
     <link rel="stylesheet" href="/common/css/member.css">
@@ -26,7 +26,7 @@
             <div class="nav-menu"><a href="regist">회원등록</a></div>
             <div class="nav-menu"><a href="reqList">가입승인</a></div>
             <div class="nav-menu"><b>복지포인트지급</b></div>
-            <div class="nav-menu"><a href="givePointHistory">복지포인트지급이력</a></div>
+            <div class="nav-menu"><a href="pointHistorySummary">복지포인트지급이력</a></div>
         </div>
 
         <div class="box">
@@ -52,18 +52,38 @@
                             <th>연락처</th>
                             <th>부서
                                 <select id="filter-dept">
-                                    <option value="all">All</option>
-                                    <option value="dept1">영업</option>
-                                    <option value="dept2">인사</option>
+                                    <option value="all" selected>All</option>
+                                    <option value="D1">영업</option>
+                                    <option value="D2">구매</option>
+                                    <option value="D3">인사</option>
+                                    <option value="D4">재무</option>
+                                    <option value="D5">품질</option>
+                                    <option value="D6">생산</option>
+                                    <option value="D7">고객</option>
+                                    <option value="D8">개발</option>
+                                    <option value="D9">법무</option>
                                 </select>
                             </th>
-                            <th>직급</th>
-                            <th>근속연수</th>
+                            <th>직급
+                                <select id="filter-job">
+                                    <option value="all" selected>All</option>
+                                    <option value="J1">사원</option>
+                                    <option value="J2">대리</option>
+                                    <option value="J3">과장</option>
+                                    <option value="J4">차장</option>
+                                    <option value="J5">부장</option>
+                                    <option value="J6">이사</option>
+                                </select>
+                            </th>
+                            <th>
+                                근속연수
+                                <button id="sort-years" class="sort-button" data-sort="asc">▲</button>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="member:${memberList}">
-                            <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${member.empNo}"></td>
+                        <tr th:each="member:${memberList}" class="member-row">
+                            <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" th:onclick="|chkClicked();|" th:value="${member.empNo}"></td>
                             <td th:text="${member.empNo}"></td>
                             <td th:text="${member.employee.empName}"></td>
                             <td th:text="${member.employee.empEmail}"></td>
@@ -76,15 +96,22 @@
                 </table>
 
                 <div class="under-table">
+
+
+                <!-- 페이징 추가   -->
                     <div class="paging">
-                        <span>&lt;</span>
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                        <span>4</span>
-                        <span>5</span>
-                        <span>&gt;</span>
+                        <a th:if="${pageHandler.showPrev}" th:href="@{/member/memberListForPoint(page=${pageHandler.beginPage - 1})}">이전</a>
+
+                        <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}">
+                            <a th:href="@{/member/memberListForPoint(page=${pageNumber})}" th:text="${pageNumber}"
+                               th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
+                        </span>
+
+                        <a th:if="${pageHandler.showNext}" th:href="@{/member/memberListForPoint(page=${pageHandler.endPage + 1})}">다음</a>
                     </div>
+
+
+
                 </div>
                 <form action="" method="post" id="form-point">
                     <div class="form-group2">
@@ -92,21 +119,21 @@
                             <label>선택 회원 수</label>
                         </span>
                         <span class="count">
-                            <span id="selectedCount" th:text="${selectedElementsCnt ?: 0 }">0</span><label> 명</label>
+                            <span id="selectedCount" th:text="${selectedCount ?: 0 }">0</span><label> 명</label>
                         </span>
                     </div>
 
                     <div class="form-group2">
                         <label for="reason">지급 사유</label>
                         <select name="pointreason" id="reason">
-                            <option value="general">정기지급</option>
-                            <option value="special">특별지급</option>
+                            <option value="정기지급">정기지급</option>
+                            <option value="특별지급">특별지급</option>
                         </select>
                     </div>
 
                     <div class="form-group2">
                         <label for="amount-input">회원당 지급액</label>
-                        <input type="number" id=amount-input step="1000000" min="0" max="9000000">
+                        <input type="number" id="amount-input" name="selectedAmount" step="1000000" min="0" max="9000000"/>
                         <span id="amount-summary"></span>
                     </div>
 
@@ -115,9 +142,9 @@
                             <label>지급액 합계</label>
                         </span>
                         <span class="count">
-                            <span>10,000,000</span><label>원</label>
+                            <span id="totalAmount" th:text="${totalAmount ?: 0 }">10,000,000</span><label>원</label>
                         </span>
-                        <button class="button-square3 point">지급하기</button>
+                        <button type="button" class="button-square3 givePoint" th:onclick="|javascript:givePoint();|">지급하기</button>
                     </div>
                 </form>
 
@@ -146,9 +173,9 @@
 
                 //체크된 체크박스의 수
                 const selectedElements = document.querySelectorAll('input.chk:checked');
-                const selectedElementsCnt = selectedElements.length;
+                const selectedCount = selectedElements.length;
                 //체크된 체크박스의 수를 표시하는 요소의 text를 위의 '체크된 체크박스 수'값으로 업데이트
-                document.getElementById('selectedCount').textContent = selectedElementsCnt;
+                document.getElementById('selectedCount').textContent = selectedCount;
 
             } else {
                 //전체 해제되게
@@ -156,9 +183,9 @@
 
                 //체크된 체크박스의 수
                 const selectedElements = document.querySelectorAll('input.chk:checked');
-                const selectedElementsCnt = selectedElements.length;
+                const selectedCount = selectedElements.length;
                 //체크된 체크박스의 수를 표시하는 요소의 text를 위의 '체크된 체크박스 수'값으로 업데이트
-                document.getElementById('selectedCount').textContent = selectedElementsCnt;
+                document.getElementById('selectedCount').textContent = selectedCount;
 
             }
         }
@@ -177,6 +204,8 @@
             });
         }
 
+
+
         //개별 체크박스
         function chkClicked() {
             //체크박스 수
@@ -184,10 +213,10 @@
             //체크된 체크박스의 수 구하기
             const query = 'input[name="chk"]:checked';
             const selectedElements = document.querySelectorAll(query);
-            const selectedElementsCnt = selectedElements.length;
-            console.log('체크된 체크박스의 수 : ' + selectedElementsCnt);
+            const selectedCount = selectedElements.length;
+            console.log('체크된 체크박스의 수 : ' + selectedCount);
             //두 수가 같으면 전체 체크박스 체크되게함
-            if(allCount == selectedElementsCnt) {
+            if(allCount == selectedCount) {
                 document.getElementById('select-all3').checked = true;
             }
             //다르면 전체 체크박스 해제
@@ -196,23 +225,226 @@
             }
 
             //***체크된 체크박스의 수를 표시하는 요소의 text를 위의 '체크된 체크박스 수'값으로 업데이트
-            document.getElementById('selectedCount').textContent = selectedElementsCnt;
+            document.getElementById('selectedCount').textContent = selectedCount;
+
+            //회원당 지급액
+            // const selectedAmount = document.getElementById('amount-input');
+            //지급총액
+            // const empNos = new Array(selectedCount);
+            // document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
+            //     empNos[i] = v.value; //input태그의 value = ${member.empNo}를 배열에 저장
+            // });
+            // const totalAmount = selectedAmount.value * empNos.length;
+            // //***지급총액 표시하기
+            // document.getElementById('totalAmount').textContent = totalAmount;
+
         }
 
 
 
-        //지급하기 버튼을 눌렀을때 사용될 비동기처리 함수를 작성하기
-        function currentSelectedCount() {
 
-            $.ajax({
-               url: '/getSelectedCount', //URL 매핑
-               type: 'GET',
-               success: function(count) {
-                   $('#selectedCount').text(count);
-               }
-            });
+    //부서 필터 적용하기(1)
+        // document.getElementById('filter-dept').addEventListener('change', function() {
+        //    filterTableByDept(this.value);
+        // });
+        //
+        // function filterTableByDept(selectedDept) {
+        //
+        //     alert(selectedDept);
+        //     console.log("선택한 부서 옵션 값 : " + selectedDept);
+        //
+        //     //get요청 새로 보내기
+        //     //href 주소 다시 요청
+        //     const url = '/member/memberListForPoint?deptType=' + selectedDept;
+        //     window.location.href = url;
+        // }
+
+
+    //부서필터 적용하기(2) all선택시 변화 없는것 제외하고 정상 작동
+        // document.getElementById('filter-dept').addEventListener('change', function() {
+        //     const selectedDept = this.value;
+        //     console.log("선택한 부서 옵션 값: " + selectedDept);
+        //
+        //     const url = new URL('/member/memberListForPoint', window.location.href);
+        //     const params = new URLSearchParams(url.search);
+        //     params.set('deptType', selectedDept);
+        //     url.search = params.toString();
+        //
+        //     window.location.href = url.toString();
+        // });
+
+
+    //부서필터 적용하기(3) 정상작동 (직급 필터링 추가 전)
+    //     const filterDeptSelect = document.getElementById('filter-dept');
+    //     filterDeptSelect.addEventListener('change', function() {
+    //         const selectedDept = this.value;
+    //         console.log("선택한 부서 옵션 값: " + selectedDept);
+    //
+    //         //새로운 get요청 보내기
+    //         const url = new URL('/member/memberListForPoint', window.location.href);
+    //         const params = new URLSearchParams(url.search);
+    //         params.set('deptType', selectedDept);
+    //         url.search = params.toString();
+    //
+    //         window.location.href = url.toString();
+    //     });
+    //
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const deptType = urlParams.get('deptType');
+    //     if (deptType) {
+    //         filterDeptSelect.value = deptType;
+    //     }
+
+
+    //(4)직급 필터링 추가-----------------------------------
+    //     const filterDeptSelect = document.getElementById('filter-dept');
+    //     const filterJobSelect = document.getElementById('filter-job');
+    //     const sortYearsButton = document.getElementById('sort-years');
+    //
+    //     filterDeptSelect.addEventListener('change', function() {
+    //         const selectedDept = this.value;
+    //         const selectedJob = filterJobSelect.value;
+    //         console.log("부서 선택 옵션 값 : " + selectedDept);
+    //         console.log("직급 선택 옵션 값 : " + selectedJob);
+    //
+    //         const url = new URL('/member/memberListForPoint', window.location.href);
+    //         const params = new URLSearchParams(url.search);
+    //         params.set('deptType', selectedDept);
+    //         params.set('jobType', selectedJob);
+    //         url.search = params.toString();
+    //
+    //         window.location.href = url.toString();
+    //     });
+    //
+    //     filterJobSelect.addEventListener('change', function() {
+    //         const selectedJob = this.value;
+    //         const selectedDept = filterDeptSelect.value;
+    //         console.log("Selected job option value: " + selectedJob);
+    //         console.log("Selected department option value: " + selectedDept);
+    //
+    //         const url = new URL('/member/memberListForPoint', window.location.href);
+    //         const params = new URLSearchParams(url.search);
+    //         params.set('jobType', selectedJob);
+    //         params.set('deptType', selectedDept);
+    //         url.search = params.toString();
+    //
+    //         window.location.href = url.toString();
+    //     });
+    //
+    //
+    //
+    //     //근속연수 정렬 끼워넣기ㅡㅡㅡㅡ
+    //
+    //     //(5) 근속연수 정렬--------------------------------
+    //     function toggleSortDirection(button) {
+    //         if (button.dataset.sort === 'asc') {
+    //             button.dataset.sort = 'desc';
+    //             button.textContent = '▼';
+    //         } else {
+    //             button.dataset.sort = 'asc';
+    //             button.textContent = '▲';
+    //         }
+    //     }
+    //
+    //     document.getElementById('sort-years').addEventListener('click', function() {
+    //         toggleSortDirection(this);
+    //         const sortDirection = this.dataset.sort;
+    //         console.log("선택한 정렬 기준 : " + sortDirection);
+    //
+    //         const url = new URL('/member/memberListForPoint', window.location.href);
+    //         const params = new URLSearchParams(url.search);
+    //         params.set('sortYears', sortDirection);
+    //         url.search = params.toString();
+    //
+    //         window.location.href = url.toString();
+    //     });
+    //
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const sortYears = urlParams.get('sortYears');
+    //     const sortButton = document.getElementById('sort-years');
+    //
+    //     if (sortYears === 'desc') {
+    //         toggleSortDirection(sortButton);
+    //     }
+    //     //---------------------------------------------------
+    //
+    //     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    //
+    //
+    //     // const urlParams = new URLSearchParams(window.location.search);
+    //     // urlParams = new URLSearchParams(window.location.search);
+    //     const deptType = urlParams.get('deptType');
+    //     const jobType = urlParams.get('jobType');
+    //
+    //     if (deptType) {
+    //         filterDeptSelect.value = deptType;
+    //     }
+    //
+    //     if (jobType) {
+    //         filterJobSelect.value = jobType;
+    //     }
+    //--------------------------------------------------
+
+        //***최종
+        const filterDeptSelect = document.getElementById('filter-dept');
+        const filterJobSelect = document.getElementById('filter-job');
+        const sortYearsButton = document.getElementById('sort-years');
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialDeptType = urlParams.get('deptType');
+        const initialJobType = urlParams.get('jobType');
+
+        //쿼리스트링에 선택된 부서와 직급 값을 넣는다
+        if (initialDeptType) {
+            filterDeptSelect.value = initialDeptType;
+        }
+        if (initialJobType) {
+            filterJobSelect.value = initialJobType;
         }
 
+        //쿼리스트링을 업데이트한다
+        function updateQueryString() {
+            const selectedDept = filterDeptSelect.value;
+            const selectedJob = filterJobSelect.value;
+            const sortDirection = sortYearsButton.dataset.sort;
+
+            //새로 url객체 생성하여 선택된 부서, 직급, 정렬방식을 추가한다
+            const url = new URL('/member/memberListForPoint', window.location.href);
+            const params = new URLSearchParams(url.search);
+            params.set('deptType', selectedDept);
+            params.set('jobType', selectedJob);
+            params.set('sortYears', sortDirection); // Add sortYears to query string
+            url.search = params.toString();
+
+            //새로운 url을 통해 페이지를 리로드
+            window.location.href = url.toString();
+        }
+
+        //부서 선택 변경시 쿼리 문자열도 업데이트한다
+        filterDeptSelect.addEventListener('change', function() {
+            updateQueryString();
+        });
+
+        //직급 선택 변경시 쿼리 문자열도 업데이트한다
+        filterJobSelect.addEventListener('change', function() {
+            updateQueryString();
+        });
+
+        //정렬 방향은 토글로 전환한다
+        function toggleSortDirection() {
+            const currentSortDirection = sortYearsButton.dataset.sort;
+            const newSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            sortYearsButton.dataset.sort = newSortDirection;
+            sortYearsButton.textContent = newSortDirection === 'asc' ? '▲' : '▼';
+
+            //정렬 방향 전환시 쿼리스트링도 업데이트한다
+            updateQueryString();
+        }
+
+        //정렬 버튼 클릭시 토글 전환 함수를 실행한다
+        sortYearsButton.addEventListener('click', function() {
+            toggleSortDirection();
+        });
 
 
 
@@ -220,9 +452,91 @@
 
 
 
-        //@회원당지급액 입력시 요약하여 보여주기
+        function givePoint() {
+
+            //체크된항목
+            const query = 'input[name="chk"]:checked';
+            const selectedElements = document.querySelectorAll(query);
+            //체크된 항목 수
+            const selectedCount = selectedElements.length;
+            console.log('포인트지급을 위해 체크된 항목 수 확인 : ' + selectedCount);
+
+            if(selectedCount == 0) {
+                alert("선택된 항목이 없습니다.");
+                return false;
+            } else {
+
+                if(confirm("포인트를 지급하시겠습니까?")) {
+
+                    //----------------------요청시 필요한 정보 : 선택회원수, 선택회원들의아이디, 선택된지급사유, 회원당지급액
+
+                        //선택회원수를 표시하는 #selectedCount태그의 th:text="${selectedCount ?: 0 }" 가져오기
+                        // const selectedCount = parseInt(document.getElementById('selectedCount').textContent);
+
+                        //선택된 회원의 아이디들을 배열에 담는다
+                        const empNos = new Array(selectedCount);
+                        document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
+                            empNos[i] = v.value; //input태그의 value = ${member.empNo}를 배열에 저장
+                        });
+
+                        //지급사유
+                        const reasonSelect = document.getElementById('reason');
+                        const selectedReason = reasonSelect.value;
+
+                        //회원당 지급액
+                        const selectedAmount = document.getElementById('amount-input');
+                        //지급총액
+                        const totalAmount = selectedAmount.value * empNos.length;
+
+                        //ajax로 서버에 지급 요청 보내기
+                        $.ajax({
+
+                            url: '/member/givePoint', //member부터 써야함, button에 type=submit이 기본이므로 POST매핑실패했던것. type=button으로 지정하기
+                            type: 'POST',
+                            contentType: 'application/json',
+                            //요청 처리에 필요한 정보를 담아서 전송해야함 (js개체를 JSON으로 변환)
+                            data: JSON.stringify({
+                                selectedCount: selectedCount,
+                                empNos: empNos,
+                                selectedReason: selectedReason,
+                                selectedAmount: selectedAmount.value
+                            }),
+
+                            //성공했을떄(서버에서 응답을 받았을때 동작할 내용)와 실패했을때(서버 요청 중 오류 발생했을때 동작할 내용)
+                            success: function(response) { //여기서 response는 컨트롤러에서의 반환값인 맵객체
+                                console.log(response);
+
+                                location.href = response.locationroot; //locationroot는 컨트롤러에서 리턴하는 맵객체의 키값임
+
+                                // const amount = response.amount; //지급총액
+
+                                //성공시 수행할 동작
+                                alert("포인트 지급 완료!");
+                            },
+
+                            error: function (error) {
+                                console.error(error);
+
+                                alert("포인트 지급 실패");
+                            }
+                        });
+
+                    //------------------------------이벤트리스너
+
+                }//if문 true
+            }
+
+        } //givePoint()함수 끝
+
+
+
+
+
+        //회원당지급액 입력시 요약하여 보여주기
         const amountInput = document.getElementById('amount-input');
         const amountSummary = document.getElementById('amount-summary');
+        //@@@추가
+        const totalAmount = document.getElementById('totalAmount');
 
         amountInput.addEventListener('input', updateAmountSummary);
 
@@ -230,6 +544,14 @@
             const amount = amountInput.value;
             const summary = formatAmountSummary(amount);
             amountSummary.textContent = summary;
+
+            //@@@추가
+            // 회원 수 가져오기
+            const selectedCount = document.getElementById('selectedCount').textContent;
+            // 총 지급액 계산
+            const calculatedAmount = amount * selectedCount;
+            // 총 지급액 업데이트
+            totalAmount.textContent = calculatedAmount.toLocaleString();
         }
 
         function formatAmountSummary(amount) {
@@ -250,22 +572,6 @@
 
 
 
-        // @테이블 제목행의 6,7,8열에 필터 적용시키기 (일단 6번째 열만) (모든 행이 숨겨지는 문제 발생, 테이블 위치 문제도 해결해야)
-        const filter = document.getElementById("filter-dept")
-        filter.addEventListener('change', function() {
-            const filterValue = this.value; //<select>에서 선택된 값을 filterValue에 저장
-            const rows = document.querySelectorAll('#table-givepoint tbody tr'); //필터링대상 행들을 변수에 저장
-
-            rows.forEach(row => {
-                const columnValue = row.querySelector('td:nth-child(6)').textContent;
-                if(columnValue === filterValue || filterValue === 'all') {
-                    row.style.display = ''; //기본 css설정대로 행이 표시된다
-                } else {
-                    row.style.display = 'none'; //해당 행이 보여지지 않는다
-                }
-            });
-        });
-    
     </script>
 </body>
 

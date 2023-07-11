@@ -13,6 +13,11 @@
         <association property="sellItemPage" resultMap="SellItemPageDTO"/>
     </resultMap>
 
+    <resultMap id="CategoryDTO" type="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
+        <id property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="categoryName" column="CATEGORY_NAME"/>
+    </resultMap>
+
     <resultMap id="ProductDTO" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
         <id property="productCode" column="PRODUCT_CODE"/>
         <result property="productName" column="PRODUCT_NAME"/>
@@ -36,6 +41,7 @@
         <result property="detailImageOriginFileName" column="SELL_DETAIL_IMAGE_ORGIN_FILE_NAME"/>
         <result property="path" column="FILE_PATH"/>
         <result property="createDate" column="CREATE_DATE"/>
+        <result property="sellStatus" column="SELL_STATUS"/>
 
         <collection property="thumbnailImageList" resultMap="ThumbnailImageDTO"/>
     </resultMap>
@@ -55,6 +61,7 @@
         <result property="option" column="PRODUCT_OPTION"/>
         <result property="pageNo" column="SELL_PAGE_NO"/>
         <result property="title" column="SELL_PAGE_TITLE"/>
+        <result property="sellStatus" column="SELL_STATUS"/>
     </resultMap>
 
     <resultMap id="ReviewManagerDTO" type="com.hielectro.welpair.board.model.dto.ReviewManagerDTO">
@@ -75,6 +82,20 @@
         <result property="date" column="BOARD_DATE"/>
         <result property="time" column="BOARD_TIME"/>
     </resultMap>
+
+    <select id="selectCategoryList" resultMap="CategoryDTO">
+        SELECT
+               CATEGORY_CODE
+             , CATEGORY_NAME
+          FROM T_CATEGORY
+    </select>
+
+    <select id="selectProductStatus" resultMap="ProductDTO">
+        SELECT
+               DISTINCT PRODUCT_STATUS
+          FROM T_PRODUCT
+    </select>
+
     <select id="sellProductSearchCount" resultType="_int">
         SELECT
         COUNT(*)
@@ -82,22 +103,35 @@
         SELECT ROWNUM AS RN
         , SELL_PRODUCT_ID
         , PRODUCT_NAME
+        , PRODUCT_STATUS
+        , PRODUCT_PRICE
         , DISCOUNT
-        , IS_SELL
+        , PRODUCT_OPTION
         , SELL_PAGE_NO
         , SELL_PAGE_TITLE
+        , SELL_STATUS
         FROM T_SELL_PRODUCT
         LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
         LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
         LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
-        )
         WHERE 1=1
-        <if test="code != '' and code != null">
+        <if test="code != null and code != ''">
             AND SELL_PRODUCT_ID = #{ code }
         </if>
-        <if test="name != '' and name != null">
+        <if test="name != null and name != ''">
             AND PRODUCT_NAME LIKE '%' || #{ name } || '%'
         </if>
+        <if test="productStatus != null and productStatus != ''">
+            AND PRODUCT_STATUS = #{ productStatus }
+        </if>
+        <if test="categoryCode != null and categoryCode != ''">
+            AND CATEGORY_CODE = #{ categoryCode }
+        </if>
+        <if test="sellStatus != null and sellStatus != ''">
+            AND SELL_STATUS = #{ sellStatus }
+        </if>
+        )
+
     </select>
 
     <select id='selectProductList' resultMap="SellProductDetailDTO">
@@ -113,19 +147,26 @@
         , PRODUCT_OPTION
         , SELL_PAGE_NO
         , SELL_PAGE_TITLE
+        , SELL_STATUS
         FROM T_SELL_PRODUCT
         LEFT JOIN T_PRODUCT USING (PRODUCT_CODE)
         LEFT JOIN T_SELL_ITEM_PAGE USING (SELL_PRODUCT_ID)
         LEFT JOIN T_SELL_PAGE USING (SELL_PAGE_NO)
         WHERE 1=1
-        <if test="code != '' and code != null">
+        <if test="code != null and code != ''">
             AND SELL_PRODUCT_ID = #{ code }
         </if>
-        <if test="name != '' and name != null">
+        <if test="name != null and name != ''">
             AND PRODUCT_NAME LIKE '%' || #{ name } || '%'
         </if>
-        <if test="sellPageNo != null and sellPageNo != ''">
-            AND SELL_PAGE_NO = #{ sellPageNo }
+        <if test="productStatus != null and productStatus != ''">
+            AND PRODUCT_STATUS = #{ productStatus }
+        </if>
+        <if test="categoryCode != null and categoryCode != ''">
+            AND CATEGORY_CODE = #{ categoryCode }
+        </if>
+        <if test="sellStatus != null and sellStatus != ''">
+            AND SELL_STATUS = #{ sellStatus }
         </if>
         )
         <if test="pageNo != '0' and pageNo != null">
@@ -330,6 +371,7 @@
         , SELL_PAGE_TITLE
         , SELL_DETAIL_IMAGE_FILE_NAME
         , SELL_DETAIL_IMAGE_ORGIN_FILE_NAME
+        , SELL_STATUS
         , FILE_PATH
         , CREATE_DATE
         , SELL_THUMB_IMAGE_FILE_NAME
@@ -389,6 +431,7 @@
         ,   #{ detailImageOriginFileName , jdbcType=NULL}
         ,   #{ path }
         ,   SYSDATE
+        ,   #{ sellStatus }
         )
         <selectKey keyColumn="SELL_PAGE_NO" keyProperty="no" resultType="string" order="AFTER">
             SELECT 'SN' || LPAD(SEQ_SELL_PAGE_NO.currval, 10, '0')
@@ -424,8 +467,11 @@
     <update id="updateSellPage">
         UPDATE T_SELL_PAGE
            SET SELL_PAGE_TITLE = #{ title }
-             , SELL_DETAIL_IMAGE_FILE_NAME = #{ detailImageFileName }
-             , SELL_DETAIL_IMAGE_ORGIN_FILE_NAME = #{ detailImageOriginFileName }
+             , SELL_STATUS = #{ sellStatus }
+           <if test="detailImageFileName != null and detailImageFileName != ''">
+             , SELL_DETAIL_IMAGE_FILE_NAME = #{ detailImageFileName, jdbcType=NULL}
+             , SELL_DETAIL_IMAGE_ORGIN_FILE_NAME = #{ detailImageOriginFileName, jdbcType=NULL}
+           </if>
          WHERE SELL_PAGE_NO = #{ no }
     </update>
 
@@ -435,9 +481,20 @@
          WHERE SELL_PRODUCT_ID = #{ id }
     </update>
 
+    <update id="updateBoard">
+        UPDATE T_BOARD
+           SET IS_PRIVATE
+         WHERE BOARD_NO = #{ no }
+    </update>
     <delete id="deleteThumbnail">
         DELETE
           FROM T_THUMB_IMAGE
+         WHERE SELL_PAGE_NO = #{ no }
+    </delete>
+
+    <delete id="deleteSellPage">
+        DELETE
+          FROM T_SELL_PAGE
          WHERE SELL_PAGE_NO = #{ no }
     </delete>
 

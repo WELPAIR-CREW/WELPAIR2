@@ -1,17 +1,26 @@
 package com.hielectro.welpair.sellproduct.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import com.hielectro.welpair.inventory.model.dto.ProductDTO;
-import com.hielectro.welpair.sellproduct.model.dto.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
+import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
-import org.springframework.transaction.annotation.Transactional;
+import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -20,6 +29,16 @@ public class SellProductServiceImpl implements SellProductService {
 
     public SellProductServiceImpl(SellProductMapper productMapper) {
         this.productMapper = productMapper;
+    }
+
+    @Override
+    public List<CategoryDTO> selectCategoryList() {
+        return productMapper.selectCategoryList();
+    }
+
+    @Override
+    public List<ProductDTO> selectProductStatus() {
+        return productMapper.selectProductStatus();
     }
 
     @Override
@@ -124,7 +143,23 @@ public class SellProductServiceImpl implements SellProductService {
 
         System.out.println("service : " + request);
         for (int i = 0; i < size; i++) {
+            Map<String, String> map = new HashMap<>();
+            map.put("code", request.get(i));
+            List<SellProductDetailDTO> list = productMapper.selectProductList(map);
+            for(var item : list) {
+                // 1. 썸네일 삭제
+                productMapper.deleteThumbnail(item.getPageNo());
+
+            }
+
+            // 2. 판매상품 삭제 (Cascade 옵션으로 ItemPage는 자동 삭제됨
             result += productMapper.sellProductDelete(request.get(i));
+
+            // 3. 판매 페이지 삭제
+            for(var item : list) {
+                // 2. 판매 페이지 삭제
+                productMapper.deleteSellPage(item.getPageNo());
+            }
         }
 
         if (result != size) {
@@ -134,6 +169,7 @@ public class SellProductServiceImpl implements SellProductService {
         return result;
     }
 
+    @Override
     @Transactional
     public void modifySellProduct(SellProductDTO compareSellProduct, SellProductDTO sellProduct) {
         SellPageDTO compareSellPage = compareSellProduct.getSellItemPage().getSellPage();
@@ -144,12 +180,18 @@ public class SellProductServiceImpl implements SellProductService {
         System.out.println("modifySellProduct : " + sellPage + "-------------------------");
 
         // 1. 판매상품 페이지 수정
-        if (!(compareSellPage.getTitle().equals(sellPage.getTitle())
-            && compareSellPage.getDetailImageFileName().equals(sellPage.getDetailImageFileName()))) {
+        String compareTitle = compareSellPage.getTitle();
+        String sellTitle = sellPage.getTitle();
+        String compareDetailImageFileName = Optional.ofNullable(compareSellPage.getDetailImageFileName()).orElse("");
+        String sellDetailImageFileName = sellPage.getDetailImageFileName();
+
+        boolean isPageModificationNeeded = !compareTitle.equals(sellTitle) || !compareDetailImageFileName.equals(sellDetailImageFileName);
+
+        if (isPageModificationNeeded) {
             log.info("페이지 수정");
             int result = productMapper.updateSellPage(sellPage);
 
-            if (!(result > 0)) {
+            if (result <= 0) {
                 throw new IllegalStateException("SellPage Update Failed");
             }
         }
@@ -163,8 +205,13 @@ public class SellProductServiceImpl implements SellProductService {
             }
         }
 
-        // 2. 페이지의 썸네일 삭제
-        if (compareThumbnailImageList != null) {
+        // 3. 페이지의 썸네일 삭제
+        log.info("compareThumbnailImageList : " + compareThumbnailImageList);
+        Optional<String> thumbnailImageFileNameOptional = Optional.ofNullable(compareThumbnailImageList)
+                .filter(list -> !list.isEmpty())
+                .map(list -> list.get(0).getThumbnailImageFileName());
+
+        if (thumbnailImageFileNameOptional.isPresent()) {
             log.info("썸네일 삭제");
             int result = 0;
             result += productMapper.deleteThumbnail(sellPage.getNo());
@@ -174,7 +221,7 @@ public class SellProductServiceImpl implements SellProductService {
             }
         }
 
-        // 3. 페이지의 썸네일 추가
+        // 4. 페이지의 썸네일 추가
         if (sellPage.getThumbnailImageList() != null) {
             log.info("썸네일 추가");
             int result = 0;
@@ -190,5 +237,20 @@ public class SellProductServiceImpl implements SellProductService {
                 throw new IllegalStateException("Thumbnail Insert Failed");
             }
         }
+    }
+
+    @Override
+    @Transactional
+    public boolean setPrivateBoard(List<BoardDTO> boardList) {
+        int result = 0;
+        for (var board : boardList) {
+            result += productMapper.updateReview(board);
+        }
+
+        if (boardList.size() != result) {
+            throw new IllegalStateException("Review 비공개 실패");
+        }
+
+        return true;
     }
 }

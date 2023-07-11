@@ -24,16 +24,17 @@
     <!-- 타이틀바디 -->
     <div class="section-content">
         <div class="section-title" th:text="${searchTerms}"></div>
-        <div class="section-count" th:text="'TOTAL :  ' + ${prodSearchList.size()}"></div>
+        <div class="section-count" th:text="'TOTAL :  ' + ${totalItems}"></div>
 
         <div class="section-detailSearch">
             <!--                <form action="/search/detail">-->
-            <form>
+            <form id="searchForm">
                 <!-- 상세 검색 옵션 -->
                 <div class="section-detailSearch-line1">
                     <div>
                         <span class="section-detailSearch-span">상품명
-                            <input type="text" name="title" id="title" class="section-detailSearch-input" placeholder="상품명입력">
+                            <input type="text" name="title" id="title" class="section-detailSearch-input"
+                                   placeholder="상품명입력">
                         </span>
                         <span class="section-detailSearch-span">카테고리
                             <select id="categoryCode" class="section-detailSearch-input option1">
@@ -48,23 +49,26 @@
                             </select>
                         </span>
                         <span class="section-detailSearch-input">가격
-                            <input type="number" name="minPrice" id="minPrice" class="section-detailSearch-input price" placeholder="최소 금액" value=0 min="0">
+                            <input type="number" name="minPrice" id="minPrice" class="section-detailSearch-input price"
+                                   placeholder="최소 금액" value=0 min="0">
                             <span>~</span>
-                            <input type="number" name="maxPrice" id="maxPrice" class="section-detailSearch-input price" placeholder="최대 금액" value=0>
-                        </span>
-                        <span>
-                            <input clas="searchCheck" type="checkbox"> 결과 내 검색
+                            <input type="number" name="maxPrice" id="maxPrice" class="section-detailSearch-input price"
+                                   placeholder="최대 금액" value=0>
                         </span>
                         <span>
                             <input class="btn_basic" type="reset" value="다시입력" onclick="resetTable()">
-                            <input id="detailSearch" class="btn_basic" type="button" value="검색">
+                            <input id="detailSearch" class="btn_basic" type="submit" value="검색">
                         </span>
                     </div>
                 </div>
+                <ul class="search-sorting">
+                    <li onclick="sortResults('price_desc')">가격 내림차순</li><p> | </p>
+                    <li onclick="sortResults('price_asc')">가격 오름차순</li><p> | </p>
+                    <li onclick="sortResults('title_desc')">상품명 내림차순</li><p> | </p>
+                    <li onclick="sortResults('title_asc')">상품명 오름차순</li>
+                </ul>
             </form>
         </div>
-
-        <!-- 검색 수량, 정렬 기준 -->
 
         <!-- 검색 결과 리스트 -->
         <div class="section-searchResult">
@@ -72,17 +76,17 @@
                 <ul>
                     <li class="section-searchResult-product" th:each="search, index : ${prodSearchList}">
                         <a th:href="@{'/products/' + ${search.sellItemPage.no}}">
-                            <div name="thumbnailImage">
-                                <span th:text="${search.getThumbnailImage().thumbnailImageFileName}"></span>
-                            </div>
-                            <img th:src="@{'/thumbnail/' + ${search.getThumbnailImage().thumbnailImageFileName}}" alt="">
+                            <div name="thumbnailImage"></div>
+                            <img th:if="${search?.sellPage?.path != null and search.getThumbnailImage().thumbnailImageFileName != null }" th:src="|${search.sellPage.path}thumbnail/${search.getThumbnailImage().thumbnailImageFileName}|">
+                            <img th:unless="${search?.sellPage?.path != null and search.getThumbnailImage().thumbnailImageFileName != null }" src="/common/images/thumbnailbox.png">
+
                         </a>
                         <div class="product-info">
                             <div class="searchProdTitle" name="title">
                                 <span th:text="${search.sellPage.title}"></span>
                             </div>
                             <div class="searchProdPrice" name="sellPrice">
-                                <span th:text="${search.sellPrice} + '원'"></span>
+                                <span th:text="${#numbers.formatDecimal(search.sellPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></span>
                             </div>
                         </div>
                     </li>
@@ -97,13 +101,19 @@
 
         <!-- 페이징 -->
         <div class="paging">
-            <span id="prevPage">&lt;</span>
-            <span class="currentPage">1</span>
-            <span class="pageNum">2</span>
-            <span class="pageNum">3</span>
-            <span class="pageNum">4</span>
-            <span class="pageNum">5</span>
-            <span id="nextPage">&gt;</span>
+            <a th:if="${currentPage > 1}"
+               th:href="@{/search/search(pageNo=1, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
+                <span id="prevPage">&lt;</span>
+            </a>
+            <th:block th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{/search/search(pageNo=${pageNo}, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
+                    <span class="pageNum" th:text="${pageNo}"></span>
+                </a>
+            </th:block>
+            <a th:if="${currentPage < totalPages}"
+               th:href="@{/search/search(pageNo=${pageNo}, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
+                <span id="nextPage">&gt;</span>
+            </a>
         </div>
     </div>
 </section>

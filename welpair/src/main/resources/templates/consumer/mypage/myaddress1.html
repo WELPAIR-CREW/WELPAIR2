@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배송지관리1</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <link rel="stylesheet" href="/common/css/mypage.css">
+<!--    <link rel="stylesheet" href="/common/css/mypage2.css">-->
+    <script src="/common/js/static/include.js"></script>
+</head>
+
+<body>
+<!-- header -->
+<div th:replace="/consumer/header_mypage :: header"></div>
+
+<section>
+    <div class="section-title">배송지 관리</div>
+
+    <div id="shippingList">
+
+        <!--  배송지 추가  -->
+        <div class="shippingCard add">
+            <img id="addButton" src="/common/images/addAddress.png" alt="배송지 추가하기">
+        </div>
+
+        <!-- 배송지 목록 -->
+        <div class="shippingCard" th:each="address:${addressList}" th:classappend="${address.isDefaultAddress eq 'Y'} ? 'default-address' : ''">
+            <input type="hidden" th:value="${address.addressId}" class="address-id">
+            <input type="hidden" th:value="${address.empNo}" class="emp-no">
+
+            <div class="shippingCard-info">
+                <div class="shippingCard-header">
+                    <h3 th:text="${address.addressName}">이름: Jane Smith</h3>
+
+                    <!-- 기본배송지인 경우에만 표시 -->
+                    <span th:if="${address.isDefaultAddress eq 'Y'}" class="default-label">기본배송지</span>
+                </div>
+
+                <p th:text="${address.addressPhone}">전화번호: 987-654-3210</p>
+                <p th:text="${address.addressDetail}">주소: 456 Elm Street</p>
+
+                <!-- 기본배송지가 아닌 경우에만 표시 -->
+                <span class="delete-span">
+                    <button class="delete-button" type=button th:if="${address.isDefaultAddress eq 'N'}">삭제</button>
+                </span>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- footer -->
+<div data-include-html="/consumer/footer" class="include"></div>
+
+
+<script>
+
+    //배송지 추가하기(이미지) 클릭시
+    const addButton = document.getElementById("addButton");
+    const shippingList = document.getElementById("shippingList");
+
+    addButton.addEventListener("click", () => {
+
+        const newCard = document.createElement("div");
+        newCard.classList.add("shippingCard");
+        newCard.innerHTML = `
+            <h3>이름</h3>
+            <p>전화번호</p>
+            <p>주소</p>
+            `;
+        shippingList.appendChild(newCard);
+    });
+
+
+
+    //배송지 등록 버튼
+    $('#addButton').click(function() {
+        let empNo = $('.emp-no').val();
+        console.log("empNo 확인 : " + empNo);
+
+        let form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/mypage/myAddress2';
+
+        let empNoInput = document.createElement('input');
+        empNoInput.type = 'hidden';
+        empNoInput.name = 'empNo';
+        empNoInput.value = empNo;
+
+        form.appendChild(empNoInput);
+        document.body.appendChild(form);
+
+        form.submit();
+    });
+
+
+
+
+
+
+    //배송지 삭제버튼
+    $(document).on('click', '.delete-button', function() {
+        let shippingCard = $(this).closest('.shippingCard');
+        let addressId = shippingCard.find('.address-id').val();
+
+        console.log("배송지 아이디 : " + addressId);
+
+        if(confirm("배송지를 삭제하시겠습니까?")) {
+            deleteAddress(addressId);
+        }
+    });
+
+    //배송지 삭제 ajax요청
+    function deleteAddress(addressId) {
+        $.ajax({
+            url: '/mypage/deleteAddress',
+            type: 'POST',
+            data: {
+                addressId: addressId
+            },
+            success: function(response) {
+                console.log(response);
+                location.href = response.locationroot;
+                alert("배송지 삭제 완료");
+            },
+            error: function(error) {
+                console.error(error);
+                alert("배송지 삭제 실패!!");
+            }
+        });
+    }
+
+
+</script>
+</body>
+
+</html>

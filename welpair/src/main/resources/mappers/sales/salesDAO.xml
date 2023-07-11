@@ -58,11 +58,9 @@
           JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
           JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE
          WHERE TRUNC(PAYMENT_DATE, 'MONTH') >= TRUNC(SYSDATE) - INTERVAL '6' MONTH
-<!--        <if test="payment != null and payment.paymentType != null and payment.paymentType != ''">-->
         <if test="payment.paymentType != null and payment.paymentType != ''">
             AND A.PAYMENT_TYPE = #{payment.paymentType}
         </if>
-<!--        <if test="category != null and category.categoryCode != null and category.categoryCode != ''">-->
         <if test="category.categoryCode != null and category.categoryCode != ''">
             AND E.CATEGORY_CODE = #{category.categoryCode}
         </if>

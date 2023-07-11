@@ -3,12 +3,18 @@ package com.hielectro.welpair.sellproduct.model.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.hielectro.welpair.inventory.model.dto.ProductDTO;
-import com.hielectro.welpair.sellproduct.model.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
+import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 
 @Mapper
 public interface SellProductMapper {
@@ -22,6 +28,8 @@ public interface SellProductMapper {
     List<QnAManagerDTO> selectQnAList(Map<String, Object> searchMap);
     List<ProductDTO> selectOptionList(ProductDTO product);
     List<ProductDTO> selectProductNameList(ProductDTO product);
+    List<CategoryDTO> selectCategoryList();
+    List<ProductDTO> selectProductStatus();
 
 
     // INSERT
@@ -33,10 +41,11 @@ public interface SellProductMapper {
     // DELETE
     int sellProductDelete(String id);
     int deleteThumbnail(String no);
+    int deleteSellPage(String no);
 
     // UPDATE
     int updateSellPage(SellPageDTO sellPage);
-
     int updateSellProduct(SellProductDTO sellProduct);
+    int updateReview(BoardDTO review);
 }
 

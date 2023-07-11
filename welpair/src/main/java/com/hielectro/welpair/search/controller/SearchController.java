@@ -1,21 +1,19 @@
 package com.hielectro.welpair.search.controller;
 
-import com.hielectro.welpair.common.Search;
+import com.hielectro.welpair.common.Pagination;
 import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.search.model.dto.SearchDTO;
 import com.hielectro.welpair.search.model.service.SearchService;
 import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.lang.model.SourceVersion;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.function.Supplier;
 
 @Controller
 @Slf4j
@@ -37,7 +35,9 @@ public class SearchController {
     public String searchResultMain(Model model, @RequestParam(value = "title", required = false) String title
                                             ,@RequestParam(value = "categoryCode", required = false) String categoryCode
                                             ,@RequestParam(value = "refCategoryCode", required = false) String refCategoryCode
-                                            ,@RequestParam(value = "productStatus", required = false) String productStatus){
+                                            ,@RequestParam(value = "productStatus", required = false) String productStatus
+                                            ,@RequestParam(value = "pageNo", defaultValue = "1") int pageNo
+                                            ,@RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         System.out.println("------------- 상품검색 컨트롤러 1-1 in -------------");
 
         SearchDTO search = new SearchDTO();
@@ -49,12 +49,14 @@ public class SearchController {
         System.out.println("categoryCode = " + categoryCode);
         System.out.println("refCategoryCode = " + refCategoryCode);
         System.out.println("productStatus = " + productStatus);
+        System.out.println("pageNo = " + pageNo);
 
         sellPage.setTitle(title);
         product.setCategoryCode(categoryCode);
-        product.setProductOption(productStatus);
+        product.setProductStatus(productStatus);
         category.setRefCategoryCode(refCategoryCode);
 
+        search.setPageNo(pageNo);
         search.setSellPage(sellPage);
         search.setCategory(category);
         search.setProduct(product);
@@ -64,10 +66,27 @@ public class SearchController {
         System.out.println("product = " + product);
         System.out.println("search = " + search);
 
-        List<SearchDTO> prodSearchList = searchService.searchResultMain(search);
+        List<SearchDTO> prodSearchList  = searchService.searchResultMain(search);
+//        List<ThumbnailImageDTO> thumbnailImage = searchService.searchResultThumb(search.getSellPage().getNo());
 
-        if(search != null){
-            System.out.println("prodSearchList = " + prodSearchList);
+//        System.out.println("thumbnailImage = " + thumbnailImage);
+
+
+        int totalItems = searchService.searchCount(search);
+        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+        System.out.println("totalItems = " + totalItems);
+        System.out.println("totalPages = " + totalPages);
+
+        int startIndex = (pageNo - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, totalItems);
+        System.out.println("startIndex = " + startIndex);
+        System.out.println("endIndex = " + endIndex);
+
+
+
+        if(prodSearchList != null && !prodSearchList.isEmpty()){
+            System.out.println("prodSearchList.size() = " + prodSearchList.size());
             model.addAttribute("prodSearchList", prodSearchList);
         } else{
             model.addAttribute("prodSearchList", Collections.emptyList());
@@ -78,6 +97,15 @@ public class SearchController {
         }
 
         model.addAttribute("searchTerms", createSearchTerms(title, categoryCode, refCategoryCode, productStatus));
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("title", title);
+        model.addAttribute("categoryCode", categoryCode);
+        model.addAttribute("refCategoryCode", refCategoryCode);
+        model.addAttribute("productStatus", productStatus);
+
         System.out.println("------------- 상품검색 컨트롤러 1-1 out -------------");
         return "consumer/search/search";
     }
@@ -88,37 +116,21 @@ public class SearchController {
      */
     @PostMapping("detail")
     @ResponseBody
-    public List<SearchDTO> searchDetailResult(Model model, @RequestParam(required = false) String title,
-                                              @RequestParam(required = false) String categoryCode,
-                                              @RequestParam(value = "productStatus", required = false) String productStatus,
-                                              @RequestParam(required = false) Integer minPrice,
-                                              @RequestParam(required = false) Integer maxPrice) {
+    public List<SearchDTO> searchDetailResult(Model model, SearchDTO search) {
         System.out.println("------------- 상품 상세 검색 컨트롤러 2-1 in -------------");
 
-        SearchDTO search = new SearchDTO();
-        SellPageDTO sellPage = new SellPageDTO();
-        ProductDTO product = new ProductDTO();
-        String refCategoryCode = null;
+        System.out.println(search);
 
-        product.setCategoryCode(categoryCode);
-        product.setProductOption(productStatus);
-
-        System.out.println("sellPage = " + sellPage);
-        System.out.println("product = " + product);
-
-        search.setSellPage(sellPage);
-        search.setProduct(product);
-        search.setMinPrice(minPrice);
-        search.setMaxPrice(maxPrice);
-
-        System.out.println("search = " + search);
+        SellPageDTO sellPage = search.getSellPage();
+        ProductDTO product = search.getProduct();
+        CategoryDTO category = search.getCategory();
 
         List<SearchDTO> prodSearchList = null;
-
         if(search != null){
             prodSearchList = searchService.searchDetailResult(search);
             System.out.println("prodSearchList = " + prodSearchList);
             model.addAttribute("prodSearchList", prodSearchList);
+
 
         } else{
             model.addAttribute("prodSearchList", Collections.emptyList());
@@ -128,32 +140,32 @@ public class SearchController {
             model.addAttribute("noResultMessage", "검색한 결과가 없습니다.");
         }
 
-        model.addAttribute("searchTerms", createSearchTerms(title, categoryCode, refCategoryCode, productStatus));
+        model.addAttribute("searchTerms", createSearchTerms(sellPage.getTitle(), product.getCategoryCode(),
+                category.getRefCategoryCode(), product.getProductStatus()));
         System.out.println("------------- 상품 상세 검색 컨트롤러 2-2 out -------------");
         return prodSearchList;
     }
-
 
 
     private String createSearchTerms(String title, String categoryCode, String refCategoryCode, String productStatus) {
         StringBuilder searchTerms = new StringBuilder();
 
         if (title != null && !title.isEmpty()) {
-            searchTerms.append("<검색어> ").append(title).append(", ");
+            searchTerms.append("검색어 : ").append(title).append(", ");
         }
         if (productStatus != null && !productStatus.isEmpty()) {
-            searchTerms.append("<카테고리> ").append(productStatus).append(", ");
+            searchTerms.append("카테고리 | ").append(productStatus).append(", ");
         }
 
         if (categoryCode != null && !categoryCode.isEmpty()){
             String categoryName = null;
             categoryName = searchService.searchTermsCategory(categoryCode);
-            searchTerms.append("<카테고리> ").append(categoryName).append(", ");
+            searchTerms.append("카테고리 | ").append(categoryName).append(", ");
         }
         if (refCategoryCode != null && !refCategoryCode.isEmpty()){
             String categoryName = null;
             categoryName = searchService.searchTermsRefCategory(refCategoryCode);
-            searchTerms.append("<카테고리> ").append(categoryName).append(", ");
+            searchTerms.append("카테고리 | ").append(categoryName).append(", ");
         }
 
 
@@ -163,4 +175,5 @@ public class SearchController {
 
         return searchTerms.toString();
     }
+
 }

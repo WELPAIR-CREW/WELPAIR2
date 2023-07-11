@@ -7,12 +7,12 @@
 
     <!-- OrderDTO resultMap-->
     <resultMap id="orderResultMap" type="com.hielectro.welpair.order.model.dto.OrderDTO" >
-        <id property="orderNo" column="PRODUCT_ORDER_NO"/>
-        <result property="orderDate" column="ORDER_NO"/>
-        <result property="totalPrice" column="SELL_PRODUCT_ID"/>
-        <result property="addressId" column="PRODUCT_ORDER_AMOUNT"/>
-        <result property="deliveryType" column="PRODUCT_ORDER_PRICE"/>
-        <result property="memberNo" column="DELIVERY_DATE"/>
+        <id property="orderNo" column="ORDER_NO"/>
+        <result property="orderDate" column="ORDER_DATE"/>
+        <result property="totalPrice" column="TOTAL_PRICE"/>
+        <result property="orderType" column="ORDER_TYPE"/>
+        <result property="memberNo" column="EMP_NO"/>
+        <result property="addressId" column="ADDRESS_ID"/>
 
         <collection property="productOrderList" resultMap="productOrderResultMap"/>
     </resultMap>
@@ -43,6 +43,13 @@
     <resultMap id="SellPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
         <id property="no" column="SELL_PAGE_NO"/>
         <result property="title" column="SELL_PAGE_TITLE"/>
+        <result property="detailImageFileName" column="SELL_DETAIL_IMAGE_FILE_NAME"/>
+        <result property="detailImageOriginFileName" column="SELL_DETAIL_IMAGE_ORGIN_FILE_NAME"/>
+        <result property="path" column="FILE_PATH"/>
+        <result property="createDate" column="CREATE_DATE"/>
+
+        <collection property="thumbnailImageList" resultMap="ThumbnailImageResultMap"/>
+
     </resultMap>
 
     <resultMap id="ProductResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
@@ -138,22 +145,50 @@
     </select>
 
     <select id="cartAllInfoSelect" resultMap="cartGeneralResultMap">
-        SELECT *
+        SELECT  A.CART_NO
+                , A.EMP_NO
+                , B.SELL_PRODUCT_ID
+                , B.CART_AMOUNT
+                , B.DELIVERY_PRICE
+                , C.PRODUCT_CODE
+                , C.DISCOUNT
+                , C.IS_SELL
+                , D.SELL_PAGE_NO
+                , E.SELL_PAGE_TITLE
+                , E.SELL_DETAIL_IMAGE_FILE_NAME
+                , E.SELL_DETAIL_IMAGE_ORGIN_FILE_NAME
+                , E.FILE_PATH
+                , G.PRODUCT_NAME
+                , G.PRODUCT_STATUS
+                , G.PRODUCT_AMOUNT
+                , G.PRODUCT_PRICE
+                , F.SELL_THUMB_IMAGE_FILE_NAME
           FROM   T_CART A
                , T_CART_SELL_PRODUCT B
                , T_SELL_PRODUCT C
                , T_SELL_ITEM_PAGE D
                , T_SELL_PAGE E
                , T_PRODUCT G
---                  T_THUMB_IMAGE F
+               , (SELECT
+                  SELL_PAGE_NO, MIN(SELL_THUMB_IMAGE_FILE_NAME) AS SELL_THUMB_IMAGE_FILE_NAME
+            FROM T_THUMB_IMAGE
+            GROUP BY SELL_PAGE_NO) F
          WHERE A.EMP_NO = #{empNo}
            AND A.CART_NO = B.CART_NO(+)
            AND B.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID(+)
            AND C.SELL_PRODUCT_ID = D.SELL_PRODUCT_ID(+)
            AND D.SELL_PAGE_NO = E.SELL_PAGE_NO(+)
            AND C.PRODUCT_CODE = G.PRODUCT_CODE(+)
---            AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
+           AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
     </select>
+
+<!--    <select id="selectThumbnailImage" resultMap="ThumbnailImageResultMap">-->
+<!--        SELECT SELL_PAGE_NO-->
+<!--             , SELL_THUMB_IMAGE_FILE_NAME-->
+<!--          FROM T_THUMB_IMAGE-->
+<!--         WHERE SELL_PAGE_NO = #{no}-->
+<!--           AND SELL_THUMB_IMAGE_FILE_NAME NOT NULL-->
+<!--    </select>-->
 
     <update id="cartAmountChange" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
         UPDATE T_CART_SELL_PRODUCT

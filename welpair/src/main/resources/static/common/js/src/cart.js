@@ -172,8 +172,8 @@ function(){
         // 동적으로 폼 생성
         const formData = document.createElement('form');
 
-        formData.method = 'get';
-        formData.action = '/payment/pay'; // 폼을 제출할 엔드포인트 URL
+        formData.method = 'post';
+        formData.action = '/payment/payment.do'; // 폼을 제출할 엔드포인트 URL
 
         let count = 0;
         for (let i = 0; i < checkboxes.length; i++) {
@@ -182,7 +182,8 @@ function(){
                 {
                     sellProductId:  "",
                     productOrderAmount: 0,
-                    productOrderPrice: 0,
+                    productName: ""
+                    // productOrderPrice: 0,
                 };
 
             if (checkboxes[i].checked) {
@@ -227,16 +228,10 @@ function(){
             ++count;
             }
         }
-        console.log(checkTotalPrice);
-        // let expttotal =  parseInt(exptTotalPrice.replace(/,/g, ''));
-        if(checkTotalPrice == parseInt(exptTotalPrice.replace(/,/g, ''))){
 
             document.body.append(formData);
             formData.submit()
 
-        } else {
-            alert("주문 합계 금액이 상이합니다. 오류발생")
-        }
 
     }
 

@@ -30,6 +30,25 @@ a:active {
 
 }
 
+/* 썸네일이미지박스 */
+.cart_thumb_box {
+	width: 100px;
+	height: 100px;
+	border: solid 1px;
+	border-radius: 6px;
+}
+
+.thumbimg {
+	/*background-repeat: no-repeat;*/
+	display: block;
+	width: inherit;
+	height: inherit;
+	object-fit: contain;
+	margin: auto;
+}
+
+
+
 /* li 공통  */
 li {
 	list-style-type: none;
@@ -201,13 +220,7 @@ li[id*=cart_basic_case] div {
 	vertical-align: middle;
 }
 
-/* 썸네일이미지박스 */
-.cart_thumb_box {
-	width: 103px;
-	height: 96px;
-	border: solid 1px;
-	border-radius: 6px;
-}
+
 
 .prd_name {
 	width: 300px;
@@ -408,14 +421,4 @@ input[type='number']::-webkit-inner-spin-button {
 	color: white;
 	border-radius: 6px;
 
-}
-
-
-.thumbimg {
-	background-repeat: no-repeat;
-	display: block;
-	max-width: 100%;
-	height: auto;
-	object-fit: cover;
-	margin: auto;
 }

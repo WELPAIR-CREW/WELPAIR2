@@ -156,7 +156,6 @@ public class InventoryController {
         System.out.println("-------------컨트롤러 2-2 out -------------");
 
         return mv;
-
     }
 
     @GetMapping("admin_inventory_search")
