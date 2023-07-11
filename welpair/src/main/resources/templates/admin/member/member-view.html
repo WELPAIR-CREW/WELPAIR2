@@ -40,13 +40,11 @@
         <div class="contents"> <!-- 테이블, 테이블 위, 테이블 아래-->
             <div class="over-table">
 
-<!--                <label class="count-row">전체 : <span th:text="${ totalMemberCount }"-->
-                <label class="count-row">전체 : <span th:text="${ totalCnt }"
-                                                    class="member-value"></span>명</label>
-                <label class="count-row">상태변경 : <span th:text="${ expiredMemberCount }"
-                                                    class="member-value"></span>명</label>
+                <label class="count-row">전체 : <span th:text="${totalCnt}" class="member-value"></span>명</label>
+                <label class="count-row">상태변경 : <span th:text="${expiredMemberCount}" class="member-value"></span>명</label>
 
-                <button id="toggleButton" class="toggle" onclick="location.href='/member/member-view?type=Y'">퇴사/계약만료만 조회</button>
+<!--                <button id="toggleButton" class="toggle" onclick="location.href='/member/member-view?type=Y'">퇴사/계약만료만 조회</button>-->
+                <button id="toggleButton" class="toggle" onclick="toggleButton()">퇴사/계약만료만 조회</button>
 
                 <button class="button-square1 delete-member" th:onclick="|javascript:deleteMember();|">계정삭제</button>
             </div>
@@ -77,9 +75,13 @@
             </table>
 
             <div class="under-table">
+<!--                <div class="search-list">-->
+<!--                    <input type="text" class="search-input">-->
+<!--                    <button class="button-circle">검색</button>-->
+<!--                </div>-->
                 <div class="search-list">
-                    <input type="text" class="search-input">
-                    <button class="button-circle">검색</button>
+                    <input type="text" class="search-input" id="searchInput">
+                    <button class="button-circle" onclick="searchMembers()">검색</button>
                 </div>
 
 
@@ -207,16 +209,122 @@
 
 
     // @토글버튼 스크립트
-    let tButton = document.getElementById('toggleButton');
+    // let tButton = document.getElementById('toggleButton');
+    // let isClicked = false;
+    //
+    // function toggleButton() {
+    //     isClicked = !isClicked;
+    //     //classList의 toggle메소드:
+    //     //isClicked가 true면 clicked 클래스(CSS적용을 위한 클래스) 추가
+    //     //isClicked가 false면 clicked 클래스 제거
+    //     tButton.classList.toggle('clicked', isClicked);
+    // }
+
+    //토글버튼
     let isClicked = false;
 
     function toggleButton() {
         isClicked = !isClicked;
-        //classList의 toggle메소드:
-        //isClicked가 true면 clicked 클래스(CSS적용을 위한 클래스) 추가
-        //isClicked가 false면 clicked 클래스 제거
-        tButton.classList.toggle('clicked', isClicked);
+
+        // 현재 URL 가져오기
+        let currentUrl = window.location.href;
+
+        // URL에 이미 ?type=Y가 포함되어 있는지 확인
+        const hasQueryParameter = currentUrl.includes('?type=Y');
+
+        if (isClicked) {
+            // 버튼을 클릭했을 때 ?type=Y가 없는 경우에만 추가
+            if (!hasQueryParameter) {
+                // URL에 ?type=Y 추가
+                currentUrl += '?type=Y';
+            }
+        } else {
+            // 버튼을 클릭했을 때 ?type=Y가 있는 경우에만 제거
+            if (hasQueryParameter) {
+                // URL에서 ?type=Y 제거
+                currentUrl = currentUrl.replace('?type=Y', '');
+            }
+        }
+
+        // 변경된 URL로 페이지 이동
+        window.location.href = currentUrl;
     }
+
+
+
+
+    //검색기능 (button에 onclick으로 건 함수)
+    function searchMembers() {
+        const searchInput = document.getElementById('searchInput'); //input태그
+        const keyword = searchInput.value; //입력된 값 (검색어)
+
+        const searchTerms = { keyword }; //검색어를 객체로 만듦
+
+        //ajax요청(검색어 보내기)을 보내고 새로운 조회결과를 받아서 테이블에 업데이트해야함
+        $.ajax({
+            url: '/member/searchMembers',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(searchTerms),
+
+            success: function(data) {
+                //검색 결과로 테이블을 새로 업데이트하는 함수
+                updateTable(data.memberList);
+
+                //검색 결과로 새롭게 페이징 처리하는 함수
+                calculatePagination(data.pageHandler);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    //검색 결과로 테이블을 새로 업데이트하는 함수
+    function updateTable(memberList) {
+        const tableBody = $('table tbody');
+        tableBody.empty(); //tbody의 값을 초기화
+
+        $.each(memberList, function(index, member) {
+            const row = $('<tr>');
+            row.html(`
+            <td class="checkbox-cell"><input type="checkbox" name="chk" class="chk" onclick="chkClicked()" value="${member.empNo}"></td>
+            <td>${member.registDate}</td>
+            <td>${member.employee.isExpire}</td>
+            <td>${member.empNo}</td>
+            <td>${member.employee.empName}</td>
+            <td>${member.employee.empEmail}</td>
+            <td>${member.employee.empPhone}</td>
+        `);
+
+            tableBody.append(row);
+        });
+    }
+
+    //검색 결과로 새롭게 페이징 처리하는 함수
+    function calculatePagination(pageHandler) {
+        const pagingElement = $('.paging');
+        pagingElement.empty(); //기존 페이지번호의 링크를 초기화
+
+        if (pageHandler.showPrev) {
+            const prevLink = $('<a>').attr('href', `/member/member-view?page=${pageHandler.beginPage - 1}`).text('이전');
+            pagingElement.append(prevLink);
+        }
+
+        for (let pageNumber = pageHandler.beginPage; pageNumber <= pageHandler.endPage; pageNumber++) {
+            const pageLink = $('<a>').attr('href', `/member/member-view?page=${pageNumber}`).text(pageNumber);
+            pageLink.addClass(pageNumber === pageHandler.page ? 'active-page' : '');
+            pagingElement.append(pageLink);
+        }
+
+        if (pageHandler.showNext) {
+            const nextLink = $('<a>').attr('href', `/member/member-view?page=${pageHandler.endPage + 1}`).text('다음');
+            pagingElement.append(nextLink);
+        }
+    }
+
+
+
 
 </script>
 

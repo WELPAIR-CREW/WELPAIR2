@@ -3,13 +3,12 @@ package com.hielectro.welpair.sellproduct.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
+import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
+import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
 import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
-import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 
 public interface SellProductService {
@@ -34,4 +33,6 @@ public interface SellProductService {
 
     // UPDATE
     void modifySellProduct(SellProductDTO compareSellProduct, SellProductDTO sellProduct);
+
+    boolean setPrivateBoard(List<BoardDTO> reviewList);
 }

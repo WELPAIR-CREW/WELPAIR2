@@ -1,5 +1,4 @@
 package com.hielectro.welpair.member.model.dao;
-import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
@@ -19,11 +18,17 @@ public interface MemberMapper {
 
 
 
-    List<MemberDTO> getMemberList(Map<String, Integer> map);
+    List<MemberDTO> getMemberList(Map<String, Object> map);
 
     int totalMemberCount();
 
     int expiredMemberCount();
+
+    //검색기능 추가
+    int searchMemberCount(Map<String, Object> map);
+    List<MemberDTO> searchMemberList(Map<String, Object> map);
+
+
 
 
 

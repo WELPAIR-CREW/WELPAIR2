@@ -1,19 +1,14 @@
 package com.hielectro.welpair.sellproduct.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
-import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
-import com.hielectro.welpair.inventory.model.dto.ProductDTO;
-import com.hielectro.welpair.sellproduct.model.dto.*;
-import lombok.extern.slf4j.Slf4j;
-import net.coobird.thumbnailator.Thumbnails;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,10 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.common.Pagination;
 import com.hielectro.welpair.common.Search;
+import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
-import org.springframework.web.multipart.MultipartFile;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/sellproduct")
@@ -89,6 +89,27 @@ public class SellProductController {
         return "admin/sellproduct/review";
     }
 
+    @PostMapping({"review/private", "QnA/private"})
+    @ResponseBody
+    private Map<String, String> setPrivateReview(HttpServletRequest request, HttpServletResponse response, List<BoardDTO> boardList) throws IOException {
+        Map<String, String> map = new HashMap<>();
+        String requestURI = request.getRequestURI();
+        boolean result = productService.setPrivateBoard(boardList);
+
+        if(!result) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Update Failed!");
+        }
+
+        if (requestURI.contains("review")) {
+            map.put("next_redirect_url", "/sellproduct/review");
+        } else {
+            map.put("next_redirect_url", "/sellproduct/QnA");
+        }
+
+        return map;
+    }
+
+
     @GetMapping("QnA")
     public String qnaLocation(HttpServletRequest request, Model model,
                               @ModelAttribute Search search,
@@ -127,7 +148,6 @@ public class SellProductController {
         model.addAttribute("list", list);
     }
 
-
     @PostMapping(value = "sellProductListAPI", produces = "application/json;charset=utf-8")
     @ResponseBody
     public List<SellProductDetailDTO> sellProductList(@RequestBody Map<String, String> request) {
@@ -155,12 +175,6 @@ public class SellProductController {
         } catch (Exception e) {
             throw new IllegalStateException("error");
         }
-    }
-
-    @GetMapping("test")
-    public String testMethod(@ModelAttribute Search search) {
-        System.out.println("test : " + search);
-        return "redirect:/sellproduct/review";
     }
 
     public Map<String, Integer> pagination(int length) {

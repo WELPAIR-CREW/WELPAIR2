@@ -33,25 +33,62 @@ public class MemberController {
     }
 
 
-
-
-
     //1. 회원조회 - 회원목록
 
     //새로운 페이징 적용하기
     @GetMapping("/member-view")
     public ModelAndView getMemberList(@RequestParam(defaultValue="1") int page, ModelAndView model
-                                    , @RequestParam(value="type", required = false) String isExpired) {
+                                    , @RequestParam(value="type", required = false) String isExpired
+                                    , @RequestParam(value="keyword", required = false) String keyword) {
         //int page: URL로 전달되는 현재 페이지 번호로 URL에 제공되지 않으면 1로 설정됨)
         //String isExpired: URL로 전달되는 값...버튼을 눌렀을때 추가됨되도록 타임리프의 속성으로 추가돼있음
 
+
+        //검색어 추가
+//        int pageSize = 10;
+//        int totalCnt;
+//        List<MemberDTO> memberList;
+        Map<String, Object> map = new HashMap<>();
+//        if(keyword != null && !keyword.isEmpty()) {
+//            //검색어가 있을때
+//            map.put("keyword", keyword);
+//            totalCnt = memberService.searchMemberCount(map);
+//            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
+//            map.put("startRow", pageHandler.getStartRow());
+//            map.put("endRow", pageHandler.getEndRow());
+//
+//            memberList = memberService.searchMemberList(map);
+//
+//        } else {
+//            //검색어가 없을때
+//            totalCnt = memberService.totalMemberCount();
+//            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
+//
+//            map.put("startRow", pageHandler.getStartRow());
+//            map.put("endRow", pageHandler.getEndRow());
+//
+//            //쿼리스트링으로 type을 받았다면 그 값을 맵에 추가로 담는다
+//            if (isExpired != null && isExpired.equals("Y")) {
+//                map.put("isExpired", 1);
+//            } else {
+//                map.put("isExpired", 2);
+//            }
+//
+//            memberList = memberService.getMemberList(map);
+//        }
+//        model.addObject("totalCnt", totalCnt);
+//        model.addObject("memberList", memberList);
+
+
+
+        //검색기능 추가하기 전(페이징까지만 적용했을때의 코드)
         int pageSize = 10;
         int totalCnt = memberService.totalMemberCount();
         System.out.println("db에서 조회한 총 회원항목수 : " + totalCnt);
         PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
         model.addObject("totalCnt", totalCnt);
 
-        Map<String, Integer> map = new HashMap<>();
+//        Map<String, Integer> map = new HashMap<>();
         map.put("startRow", pageHandler.getStartRow());
         map.put("endRow", pageHandler.getEndRow());
 
@@ -72,8 +109,8 @@ public class MemberController {
         System.out.println(memberList);
 
         //전체 회원수와 퇴사한 회원수
-//        int totalMemberCount = memberService.totalMemberCount();
-//        model.addObject("totalMemberCount", totalMemberCount);
+        int totalMemberCount = memberService.totalMemberCount();
+        model.addObject("totalMemberCount", totalMemberCount);
 
         int expiredMemberCount = memberService.expiredMemberCount();
         model.addObject("expiredMemberCount", expiredMemberCount);
@@ -83,66 +120,6 @@ public class MemberController {
         return model;
     }
 
-
-
-    //기존 페이징
-//    @GetMapping("/member-view")
-//    public ModelAndView getMemberList(@RequestParam(required = false) String searchCondition, @RequestParam(required = false) String searchValue
-//            , @RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView model
-//            , @RequestParam(value="type", required = false) String isExpired) {
-//        //int currentPage: URL로 전달되는 현재 페이지 번호로 URL에 제공되지 않으면 1로 설정됨)
-//        //String isExpired: URL로 전달되는 값...버튼을 눌렀을때 추가됨되도록 타임리프의 속성으로 추가돼있음
-//
-//        Map<String, String> searchMap = new HashMap<>();
-//        searchMap.put("searchCondition", searchCondition);
-//        searchMap.put("searchValue", searchValue);
-//        System.out.println(isExpired);
-////        int totalMemberCount = memberService.totalMemberCount(searchMap); //총 항목 수(검색 조건 적용)
-//        int listLength = memberService.totalMemberCount(searchMap); //총 항목 수(검색 조건 적용)
-//        int expiredMemberCount = memberService.expiredMemberCount(searchMap); //퇴사한 직원 수
-//        int itemsPerPage = 10; //페이지당 항목 수
-//        int displayPageCount = 5; //표시할 페이지 번호 수
-//
-//        int totalPages = 0;
-////        totalPages = (int) Math.ceil((double) totalMemberCount / itemsPerPage);
-//        totalPages = (int) Math.ceil((double) listLength / itemsPerPage);
-//
-//
-//        SelectCriteria selectCriteria = null;
-//
-//        if(searchCondition != null && !"".equals(searchCondition)) { //검색어 있을때
-////            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, searchCondition, searchValue, isExpired);
-//            selectCriteria = Pagenation.getSelectCriteria(currentPage, listLength, itemsPerPage, displayPageCount, searchCondition, searchValue, isExpired);
-//        } else { //검색어 없을때
-////            selectCriteria = Pagenation.getSelectCriteria(currentPage, totalMemberCount, itemsPerPage, displayPageCount, isExpired);
-//            selectCriteria = Pagenation.getSelectCriteria(currentPage, listLength, itemsPerPage, displayPageCount, isExpired);
-//        }
-//
-//        List<MemberDTO> memberList = memberService.getMemberList(selectCriteria);
-//
-//        //쿼리결과를 받아 DTO리스트에 담고 모델에 추가
-//        model.addObject("memberList", memberList);
-//        model.addObject("selectCriteria", selectCriteria);
-//
-//        //전체 회원 수, 퇴사한 회원 수
-////        model.addObject("totalMemberCount", totalMemberCount);
-//        model.addObject("totalMemberCount", listLength);
-//        model.addObject("expiredMemberCount", expiredMemberCount);
-//
-//        //퇴사한 회원만 가져오는지 확인
-//        System.out.println(memberList);
-//
-//        //@페이지묶음 - 지금은 전체 페이지를 다 가져오도록하는 코드임
-//        List<Integer> pageNumList = new ArrayList<>();
-//        for (int i=1; i<=totalPages; i++) {
-//            pageNumList.add(i);
-//        }
-//        model.addObject("pageNumbList", pageNumList);
-//
-//        model.setViewName("admin/member/member-view");
-//
-//        return model;
-//    }
 
     @PostMapping("/deleteMember")
     public String deleteMember(@RequestParam ArrayList<String> empNos, HttpServletRequest request) throws DeleteMemberException {
@@ -224,27 +201,6 @@ public class MemberController {
 
         return "redirect:/member/regist"; //등록 후 회원등록(목록) 페이지로 리다이렉트
     }
-
-
-    //3. 가입승인
-    //3-1. 가입요청 목록(회원가입한 계약직 목록 - 승인대기 항목들)
-//    @GetMapping("/reqList")
-//    public ModelAndView getReqList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, ModelAndView model) {
-//
-//        System.out.println("-------------가입요청리스트");
-//
-//        //신규 가입요청 수
-//        int reqJoinCount = memberService.reqJoinCount();
-//        System.out.println("가입요청 수 : " + reqJoinCount);
-//        model.addObject("reqJoinCount", reqJoinCount);
-//
-//        //신규 가입요청 목록
-//        List<MemberDTO> reqList = memberService.reqList();
-//        model.addObject("reqList", reqList);
-//
-//        model.setViewName("admin/member/member-permission");
-//        return model;
-//    }
 
 
     //가입승인 - 새로운 페이징 클래스 적용
@@ -366,20 +322,6 @@ public class MemberController {
         return model;
     }
 
-
-    //포인트지급이력(상세) - 페이징 처리 전
-//    @GetMapping("/pointHistoryDetail")
-//    public ModelAndView pointHistoryDetail(@RequestParam int eventId, ModelAndView model) {
-//
-//        System.out.println("컨트롤러에 eventId가 들어오는지 확인 : " + eventId);
-//
-//        List<PointHistoryDTO> pointHistoryDetailList = memberService.pointHistoryDetail(eventId);
-//        System.out.println("컨트롤러에 지급이력상세목록 들어오는지 확인 : " + pointHistoryDetailList);
-//
-//        model.addObject("pointHistoryDetailList", pointHistoryDetailList);
-//        model.setViewName("admin/member/member-givePointHistory2");
-//        return model;
-//    }
 
 
     //포인트지급이력(상세) - 페이징 처리 적용
