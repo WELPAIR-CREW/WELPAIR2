@@ -21,11 +21,15 @@ public class Search {
     private int amount;
     private int price;
 
+
     private Date startDate;
     private Date endDate;
 
 
 
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
     public void setPrice(int price) {
         this.price = price;
     }
@@ -95,6 +99,10 @@ public class Search {
 
         if (price != 0) {
             builder.queryParam("price", price);
+        }
+
+        if (amount != 0) {
+            builder.queryParam("amount", amount);
         }
 
         if (startDate != null) {
