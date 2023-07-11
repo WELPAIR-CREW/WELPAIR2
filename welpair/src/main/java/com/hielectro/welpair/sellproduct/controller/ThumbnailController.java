@@ -124,19 +124,6 @@ public class ThumbnailController {
             return "redirect:/products/" + sellPage.getNo();
         }
 
-        // 기존에 등록되어 있던 이미지 파일들 삭제
-        // 1. 썸네일 이미지가 업로드 되었을 시 기존 썸네일 삭제
-        if (!uploadFiles.get(0).isEmpty()) {
-            int cnt = deleteImageFiles(compareSellPage.getThumbnailImageList());
-            log.info("[ThumbnailController] " + cnt + "개의 Thumbnail 삭제 완료!");
-        }
-
-        // 2. 상세 이미지가 업로드 되었을 시 기존 상세 이미지 삭제
-        if (!uploadDetailFile.isEmpty()) {
-            int cnt = deleteImageFile(compareSellPage.getDetailImageFileName()) ? 1 : 0;
-            log.info("[ThumbnailController] DetailImage 삭제 완료!");
-        }
-
         System.out.println("uploadFilesSize : " + uploadFiles.size() + "--------------------------------");
 
         try {
@@ -146,6 +133,19 @@ public class ThumbnailController {
             makeDetailImage(uploadDetailFile, sellPage);
             sellPage.setPath("/common/images/");
             productService.modifySellProduct(compareSellProduct, sellProduct);
+
+            // 기존에 등록되어 있던 이미지 파일들 삭제
+            // 1. 썸네일 이미지가 업로드 되었을 시 기존 썸네일 삭제
+            if (!uploadFiles.get(0).isEmpty()) {
+                int cnt = deleteImageFiles(compareSellPage.getThumbnailImageList());
+                log.info("[ThumbnailController] " + cnt + "개의 Thumbnail 삭제 완료!");
+            }
+
+            // 2. 상세 이미지가 업로드 되었을 시 기존 상세 이미지 삭제
+            if (!uploadDetailFile.isEmpty()) {
+                int cnt = deleteImageFile(compareSellPage.getDetailImageFileName()) ? 1 : 0;
+                log.info("[ThumbnailController] DetailImage 삭제 완료!");
+            }
 
         } catch (IllegalStateException | IOException e) {
             handleImageUploadFailure(e, sellPage);

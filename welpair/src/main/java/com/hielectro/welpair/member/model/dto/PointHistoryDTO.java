@@ -3,6 +3,7 @@ package com.hielectro.welpair.member.model.dto;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,4 +27,11 @@ public class PointHistoryDTO {
     private EmployeeDTO employeeDTO;
     private DeptDTO deptDTO;
     private JobDTO jobDTO;
+
+
+    //지급하기(ajax요청할때 보내는 서버로 보내는 데이터들)
+    private int selectedCount;
+    private List<String> empNos;
+    private String selectedReason;
+    private int selectedAmount;
 }

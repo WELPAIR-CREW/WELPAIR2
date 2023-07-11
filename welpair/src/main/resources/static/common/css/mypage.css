@@ -169,6 +169,36 @@ section {
     cursor: pointer;
 }
 
+
+/* myaddress1 추가 */
+#shippingList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.shippingCard {
+    width: 45%;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: lightgray;
+    text-align: center;
+}
+
+
+#addButton {
+    width: 45%;
+    margin-top: 10px;
+    padding: 20px;
+    background-color: lightblue;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+
+
 /* myaddress2 */
 #form-myaddress {
     font-size: 18px;

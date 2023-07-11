@@ -1,19 +1,26 @@
 package com.hielectro.welpair.sellproduct.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
-import com.hielectro.welpair.inventory.model.dto.ProductDTO;
-import com.hielectro.welpair.sellproduct.model.dto.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.board.model.dto.QnAManagerDTO;
 import com.hielectro.welpair.board.model.dto.ReviewManagerDTO;
+import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
-import org.springframework.transaction.annotation.Transactional;
+import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
+import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -136,7 +143,23 @@ public class SellProductServiceImpl implements SellProductService {
 
         System.out.println("service : " + request);
         for (int i = 0; i < size; i++) {
+            Map<String, String> map = new HashMap<>();
+            map.put("code", request.get(i));
+            List<SellProductDetailDTO> list = productMapper.selectProductList(map);
+            for(var item : list) {
+                // 1. 썸네일 삭제
+                productMapper.deleteThumbnail(item.getPageNo());
+
+            }
+
+            // 2. 판매상품 삭제 (Cascade 옵션으로 ItemPage는 자동 삭제됨
             result += productMapper.sellProductDelete(request.get(i));
+
+            // 3. 판매 페이지 삭제
+            for(var item : list) {
+                // 2. 판매 페이지 삭제
+                productMapper.deleteSellPage(item.getPageNo());
+            }
         }
 
         if (result != size) {
@@ -214,5 +237,19 @@ public class SellProductServiceImpl implements SellProductService {
                 throw new IllegalStateException("Thumbnail Insert Failed");
             }
         }
+    }
+
+    @Override
+    public boolean setPrivateBoard(List<BoardDTO> boardList) {
+        int result = 0;
+        for (var board : boardList) {
+            result += productMapper.updateReview(board);
+        }
+
+        if (boardList.size() != result) {
+            throw new IllegalStateException("Review 비공개 실패");
+        }
+
+        return true;
     }
 }

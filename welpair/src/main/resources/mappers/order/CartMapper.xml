@@ -183,6 +183,7 @@
              , SELL_THUMB_IMAGE_FILE_NAME
           FROM T_THUMB_IMAGE
          WHERE SELL_PAGE_NO = #{no}
+           AND SELL_THUMB_IMAGE_FILE_NAME NOT NULL
     </select>
 
     <update id="cartAmountChange" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
