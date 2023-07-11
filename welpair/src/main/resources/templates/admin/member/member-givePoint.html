@@ -226,16 +226,18 @@
             document.getElementById('selectedCount').textContent = selectedCount;
 
             //회원당 지급액
-            const selectedAmount = document.getElementById('amount-input');
+            // const selectedAmount = document.getElementById('amount-input');
             //지급총액
-            const empNos = new Array(selectedCount);
-            document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
-                empNos[i] = v.value; //input태그의 value = ${member.empNo}를 배열에 저장
-            });
-            const totalAmount = selectedAmount.value * empNos.length;
-            //***지급총액 표시하기
-            document.getElementById('totalAmount').textContent = totalAmount;
+            // const empNos = new Array(selectedCount);
+            // document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
+            //     empNos[i] = v.value; //input태그의 value = ${member.empNo}를 배열에 저장
+            // });
+            // const totalAmount = selectedAmount.value * empNos.length;
+            // //***지급총액 표시하기
+            // document.getElementById('totalAmount').textContent = totalAmount;
+
         }
+
 
 
 
@@ -348,35 +350,11 @@
 
 
 
-
-
-
-
-
-
-
-        //지급하기 버튼을 눌렀을때 사용될 비동기처리 함수를 작성하기
-        // function currentSelectedCount() {
-        //
-        //     $.ajax({
-        //        url: '/getSelectedCount', //URL 매핑
-        //        type: 'GET',
-        //        success: function(count) {
-        //            $('#selectedCount').text(count);
-        //        }
-        //     });
-        // }
-
-
-
-
-
-
-
-
-        //@회원당지급액 입력시 요약하여 보여주기
+        //회원당지급액 입력시 요약하여 보여주기
         const amountInput = document.getElementById('amount-input');
         const amountSummary = document.getElementById('amount-summary');
+        //@@@추가
+        const totalAmount = document.getElementById('totalAmount');
 
         amountInput.addEventListener('input', updateAmountSummary);
 
@@ -385,6 +363,13 @@
             const summary = formatAmountSummary(amount);
             amountSummary.textContent = summary;
 
+            //@@@추가
+            // 회원 수 가져오기
+            const selectedCount = document.getElementById('selectedCount').textContent;
+            // 총 지급액 계산
+            const calculatedAmount = amount * selectedCount;
+            // 총 지급액 업데이트
+            totalAmount.textContent = calculatedAmount.toLocaleString();
         }
 
         function formatAmountSummary(amount) {

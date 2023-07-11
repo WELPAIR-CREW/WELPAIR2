@@ -57,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
 //    }
 
     @Override
-    public List<MemberDTO> getMemberList(Map<String, Integer> map) {
+    public List<MemberDTO> getMemberList(Map<String, Object> map) {
         List<MemberDTO> memberList = memberMapper.getMemberList(map);
         return memberList;
     }
@@ -71,6 +71,18 @@ public class MemberServiceImpl implements MemberService {
     public int expiredMemberCount() {
         return memberMapper.expiredMemberCount();
     }
+
+    //검색기능 추가
+    @Override
+    public int searchMemberCount(Map<String, Object> map) {
+        return memberMapper.searchMemberCount(map);
+    }
+
+    @Override
+    public List<MemberDTO> searchMemberList(Map<String, Object> map) {
+        return memberMapper.searchMemberList(map);
+    }
+
 
 
 
