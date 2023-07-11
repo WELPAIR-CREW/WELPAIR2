@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문내역</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <!-- <link rel="stylesheet" href="../../../static/common/css/mypage.css"> -->
+    <link rel="stylesheet" href="/common/css/myorder.css">
+    <!--    <link rel="stylesheet" href="/common/css/mypage2.css">-->
+    <script src="/common/js/static/include.js"></script>
+</head>
+
+<body>
+    <!-- header -->
+    <div th:replace="/consumer/header_mypage :: header"></div>
+    <section class="myorder">
+        <div class="section-nav">
+            <div class="section-nav-order"><b>주문 내역</b></div>
+            <div class="section-nav-order">
+                <a href="#">주문 상세 내역</a>
+            </div>
+        </div>
+        <div class="content">
+            <div class="content-title">주문 내역</div>
+
+            <div class="etc">
+                <span>최근 5년간 주문내역을 조회하실 수 있습니다.</span>
+                <button type="button">주문/배송관련 FAQ</button>
+            </div>
+            <div class="content-search-container">
+                <div class="search-container-item">
+                    <div class="search-item search-date">
+                        <button type="button">
+                            최근 1주일
+                        </button>
+                        <button type="button">
+                            1개월
+                        </button>
+                        <button type="button">
+                            3개월
+                        </button>
+                        <button type="button">
+                            6개월
+                        </button>
+                    </div>
+    
+                    <div class="search-item select-date">
+                        <input type="date" name="startDate" id="startDate" class="select-date-item" placeholder="시작">
+                        <span class="select-date-item">~</span>
+                        <input type="date" name="endDate" id="endDate" class="select-date-item">
+                    </div>
+                </div>
+                <div class="search-container-item">
+                    <form action="">
+                        <div class="search-item search-criteria">
+                            <select name="criteria" id="criteria" class="criteria-item">
+                               <option value="">주문전체</option> 
+                            </select>
+                            <input type="text" name="content" id="search-content" class="criteria-item">
+                            <button type="submit" class="criteria-item">조회</button>
+                        </div>
+                    </form>
+                </div>
+                
+                
+            </div>
+            <div class="content-sort">
+                <span class="sort-item">정렬기준</span>
+                <select name="" id="" class="sort-item">
+                    <option value="">최근순</option>
+                </select>
+                <span class="sort-item">주문상태</span>
+                <select name="" id="" class="sort-item">
+                    <option value="">전체</option>
+                </select>
+            </div>
+            <div class="content-table-container">
+                <table class="table-item">
+                    <thead>
+                        <tr>
+                            <th>주문일자</th>
+                            <th>주문번호</th>
+                            <th>상품명</th>
+                            <th>수량</th>
+                            <th>주문금액</th>
+                            <th>배송상태</th>
+                            <th>주문상태</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div><br>
+
+        <div class="paging">
+
+        </div>
+    </section>
+
+    <!-- footer -->
+    <div data-include-html="/consumer/footer" class="include"></div>
+
+
+    <script>
+
+    </script>
+</body>
+
+</html>

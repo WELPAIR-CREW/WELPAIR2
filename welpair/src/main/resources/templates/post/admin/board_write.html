@@ -20,7 +20,7 @@
 <div data-include-html="/consumer/header_consumer" class="include"></div>
 
 <div class="wrap">
-    <form action="/post/board-write" method="post" id="boardWrite">
+    <form action="/post/board-write" method="post">
         <div class="content_wrap">
             <div class="title_wrap">
                 <div class="board_title"><h2>게시글 작성</h2></div>
@@ -81,15 +81,18 @@
 
 $(function(){
     $("#boardWrite").submit(function(){
+
+        let postCate = $("#postCate").val();
+        let postPrviate = $("#postPrivate").val();
         if($("#postTitle").val().trim()== ""){
             alert("제목을 입력해주세요.");
             return false;
         }
-        if($("#postCate").val()== 0 ){
+        if(!postCate){
             alert("카테고리를 선택해주세요.");
             return false;
         }
-        if($("#postPrivate").val()== 0){
+        if(!postPrviate){
             alert("글 공개여부를 선택해주세요.");
             return false;
         }

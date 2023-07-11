@@ -14,4 +14,6 @@ public interface RegistService {
 
 
     void registSave(RegistDTO regist) throws MemberRegistException;
+
+
 }
