@@ -13,6 +13,8 @@
         <result property="amount" column="PRODUCT_ORDER_AMOUNT"/>
         <result property="deliveryDate" column="DELIVERY_DATE"/>
         <result property="deliveryStatus" column="DELIVERY_STATUS"/>
+        <result property="driverId" column="DRIVER_ID"/>
+        <result property="driverName" column="DRIVER_NAME"/>
     </resultMap>
 
     <resultMap id="deliveryDTO" type="com.hielectro.welpair.delivery.model.dto.DeliveryDTO">
@@ -75,13 +77,7 @@
         <result property="empNo" column="EMP_NO"/>
     </resultMap>
 
-
-
-
-
-
-
-    <!-- 배송조회에서 주문번호로조회 할 수 있게 DELIVERY + PRODUCT_ORDER JOIN -->
+        <!-- 배송조회에서 주문번호로조회 할 수 있게 DELIVERY + PRODUCT_ORDER JOIN -->
     <select id="deliveryDelivery" resultMap="orderProductDTO">
         SELECT TE.PRODUCT_ORDER_NO
              , TE.DRIVER_ID
@@ -94,6 +90,7 @@
              , PO.DELIVERY_DATE
              , P.PRODUCT_NAME
              , T.ORDER_DATE
+             , DR.DRIVER_NAME
         FROM T_DELIVERY TE
         JOIN T_PRODUCT_ORDER PO
           ON TE.PRODUCT_ORDER_NO = PO.PRODUCT_ORDER_NO
@@ -101,8 +98,13 @@
           ON PO.SELL_PRODUCT_ID = TSP.SELL_PRODUCT_ID
         JOIN T_PRODUCT P
           ON P.PRODUCT_CODE = TSP.PRODUCT_CODE
-        JOIN T_ORDER T on PO.ORDER_NO = T.ORDER_NO
+        JOIN T_ORDER T
+          ON PO.ORDER_NO = T.ORDER_NO
+        JOIN T_DRIVER DR
+          ON TE.DRIVER_ID = DR.DRIVER_ID
     </select>
+
+
 
     <!-- DRIVER + DELIVERY JOIN -->
     <select id="deliveryDriver" resultMap="driverDTO">
@@ -117,7 +119,7 @@
           ON TR.DRIVER_ID = TE.DRIVER_ID
     </select>
 
-    <!-- 3조인 ORDER + PRODUCT_ORDER JOIN + DELIVERY __1 -->
+    <!-- 3조인 ORDER + PRODUCT_ORDER JOIN + DELIVERY -->
     <select id="orderProduct" resultMap="deliveryDTO">
         SELECT TR.ORDER_NO
              , TR.ORDER_DATE
@@ -130,63 +132,53 @@
              , PO.PRODUCT_ORDER_AMOUNT
              , PO.PRODUCT_ORDER_PRICE
              , PO.DELIVERY_DATE
+             , TD.PRODUCT_ORDER_NO
+             , TD.DRIVER_ID
+             , TD.DELIVERY_STATUS
           FROM T_ORDER TR
           JOIN T_PRODUCT_ORDER PO
             ON TR.ORDER_NO = PO.ORDER_NO
-    </select>
-
-    <!-- 3조인 ORDER + PRODUCT_ORDER JOIN + DELIVERY __2 -->
-    <select id="orderProductDelivery" resultMap="deliveryDTO">
-        SELECT    PO.ORDER_NO
-                , PO.PRODUCT_ORDER_NO
-                , PO.SELL_PRODUCT_ID
-                , PO.PRODUCT_ORDER_AMOUNT
-                , PO.PRODUCT_ORDER_PRICE
-                , PO.DELIVERY_DATE
-                , TD.PRODUCT_ORDER_NO
-                , TD.DRIVER_ID
-                , TD.DELIVERY_STATUS
-          FROM T_PRODUCT_ORDER PO
           JOIN T_DELIVERY TD
             ON PO.PRODUCT_ORDER_NO = TD.PRODUCT_ORDER_NO
     </select>
 
-    <!-- 상품명을 찾기위한 T_PRODUCT + T_SELL_PRODUCT + T_PRODUCT_ORDER __1 -->
-    <select id="orderProductName" resultMap="deliveryDTO">
-        SELECT SP.SELL_PRODUCT_ID
-             , SP.PRODUCT_CODE
-             , SP.DISCOUNT
-             , SP.IS_SELL
-             , TR.PRODUCT_ORDER_NO
-             , TR.ORDER_NO
-             , TR.SELL_PRODUCT_ID
-             , TR.PRODUCT_ORDER_AMOUNT
-             , TR.PRODUCT_ORDER_PRICE
-             , TR.DELIVERY_DATE
-          FROM T_SELL_PRODUCT SP
-          JOIN T_PRODUCT_ORDER TR
-            ON SP.SELL_PRODUCT_ID = TR.SELL_PRODUCT_ID
 
-    </select>
+<!--    &lt;!&ndash; 상품명을 찾기위한 T_PRODUCT + T_SELL_PRODUCT + T_PRODUCT_ORDER __1 &ndash;&gt;-->
+<!--    <select id="orderProductName" resultMap="deliveryDTO">-->
+<!--        SELECT SP.SELL_PRODUCT_ID-->
+<!--             , SP.PRODUCT_CODE-->
+<!--             , SP.DISCOUNT-->
+<!--             , SP.IS_SELL-->
+<!--             , TR.PRODUCT_ORDER_NO-->
+<!--             , TR.ORDER_NO-->
+<!--             , TR.SELL_PRODUCT_ID-->
+<!--             , TR.PRODUCT_ORDER_AMOUNT-->
+<!--             , TR.PRODUCT_ORDER_PRICE-->
+<!--             , TR.DELIVERY_DATE-->
+<!--          FROM T_SELL_PRODUCT SP-->
+<!--          JOIN T_PRODUCT_ORDER TR-->
+<!--            ON SP.SELL_PRODUCT_ID = TR.SELL_PRODUCT_ID-->
 
-    <!-- 상품명을 찾기위한 T_PRODUCT + T_SELL_PRODUCT + T_PRODUCT_ORDER __1 -->
-    <select id="orderProductNames" resultMap="deliveryDTO">
-        SELECT TP.PRODUCT_CODE
-             , TP.PRODUCT_NAME
-             , TP.PRODUCT_STATUS
-             , TP.PRODUCT_AMOUNT
-             , TP.PRODUCT_PRICE
-             , TP.PRODUCT_OPTION
-             , TP.PRODUCT_NATION
-             , TP.CATEGORY_CODE
-             , SP.SELL_PRODUCT_ID
-             , SP.PRODUCT_CODE
-             , SP.DISCOUNT
-             , SP.IS_SELL
-          FROM T_PRODUCT TP
-          JOIN T_SELL_PRODUCT SP
-            ON TP.PRODUCT_CODE = SP.PRODUCT_CODE
-    </select>
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 상품명을 찾기위한 T_PRODUCT + T_SELL_PRODUCT + T_PRODUCT_ORDER __1 &ndash;&gt;-->
+<!--    <select id="orderProductNames" resultMap="deliveryDTO">-->
+<!--        SELECT TP.PRODUCT_CODE-->
+<!--             , TP.PRODUCT_NAME-->
+<!--             , TP.PRODUCT_STATUS-->
+<!--             , TP.PRODUCT_AMOUNT-->
+<!--             , TP.PRODUCT_PRICE-->
+<!--             , TP.PRODUCT_OPTION-->
+<!--             , TP.PRODUCT_NATION-->
+<!--             , TP.CATEGORY_CODE-->
+<!--             , SP.SELL_PRODUCT_ID-->
+<!--             , SP.PRODUCT_CODE-->
+<!--             , SP.DISCOUNT-->
+<!--             , SP.IS_SELL-->
+<!--          FROM T_PRODUCT TP-->
+<!--          JOIN T_SELL_PRODUCT SP-->
+<!--            ON TP.PRODUCT_CODE = SP.PRODUCT_CODE-->
+<!--    </select>-->
 
 
 
