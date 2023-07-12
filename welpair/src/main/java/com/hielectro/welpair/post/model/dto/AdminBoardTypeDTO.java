@@ -1,5 +1,13 @@
-package com.hielectro.welpair.post.admin.model.dto;
+package com.hielectro.welpair.post.model.dto;
 
+
+import lombok.*;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class AdminBoardTypeDTO {
 
     private String boardCate;       // 글 유형넘버

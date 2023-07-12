@@ -61,29 +61,6 @@ $("#sendInvenSearch").click(function (){
     });
 });
 
-// 일괄반영 버튼
-$("#allOption").click(function () {
-
-
-    let stockType = $("#inventypeOption option:selected").val();
-    let stockDate = $("#stockDate").val();
-    let stockComment = $("#stockComment").val();
-    let stockAmount = $("#stockAmount").val();
-
-    if (stockAmount <= 0) {
-        alert("수량 확인 필요");
-        return false
-    }
-
-    $("#searchResultTable tbody tr").each(function() {
-        let row = $(this);
-
-        row.find("td:eq(5)").text(stockType);
-        row.find("td:eq(6)").text(stockDate);
-        row.find("td:eq(7)").text(stockComment);
-        row.find("td:eq(8)").text(stockAmount);
-    });
-});
 
 // 다시입력 버튼
 $(document).ready(function() {
@@ -186,6 +163,30 @@ $(document).ready(function() {
                 }
             });
         }
+    });
+});
+
+// 일괄반영 버튼
+$("#allOption").click(function () {
+
+
+    let stockType = $("#inventypeOption option:selected").val();
+    let stockDate = $("#stockDate").val();
+    let stockComment = $("#stockComment").val();
+    let stockAmount = $("#stockAmount").val();
+
+    if (stockAmount <= 0) {
+        alert("수량 확인 필요");
+        return false
+    }
+
+    $("#searchResultTable tbody tr").each(function() {
+        let row = $(this);
+
+        row.find("td:eq(5)").text(stockType);
+        row.find("td:eq(6)").text(stockDate);
+        row.find("td:eq(7)").text(stockComment);
+        row.find("td:eq(8)").text(stockAmount);
     });
 });
 

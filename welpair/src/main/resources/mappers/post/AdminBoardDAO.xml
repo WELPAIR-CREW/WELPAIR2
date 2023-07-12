@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hielectro.welpair.post.admin.model.dao.AdminBoardDAO">
+<mapper namespace="com.hielectro.welpair.post.model.dao.AdminBoardDAO">
 
-    <resultMap id="adminBoardResult" type="com.hielectro.welpair.post.admin.model.dto.AdminBoardDTO">
+    <resultMap id="adminBoardResult" type="com.hielectro.welpair.post.model.dto.AdminBoardDTO">
         <id property="boardNo" column="BOARD_NO"/>
         <result property="boardCategory" column="BOARD_CATEGORY"/>
         <result property="boardTitle" column="BOARD_TITLE"/>
@@ -14,17 +14,31 @@
         <result property="isPrivate" column="IS_PRIVATE"/>
     </resultMap>
 
+    <resultMap id="findByMemberId" type="com.hielectro.welpair.post.model.dto.MemberDTO">
+        <id property="empNo" column="EMP_NO"/>
+        <result property="memPwd" column="MEM_PWD"/>
+        <result property="registDate" column="REGIST_DATE"/>
+        <result property="pointBalance" column="POINT_BALACE"/>
+        <result property="memAuth" column="AUTH_AUTH"/>
 
-    <insert id="boardSave" parameterType="com.hielectro.welpair.post.admin.model.dto.AdminBoardDTO">
+        <collection property="memberList" resultMap="memberRoleResultMap"/>
+    </resultMap>
+
+
+
+
+
+
+    <insert id="insertPost" parameterType="com.hielectro.welpair.post.model.dto.AdminBoardDTO">
         INSERT
-        INTO T_BOARD A (
-            A.BOARD_NO
-        ,   A.BOARD_CATEGORY
-        ,   A.BOARD_TITLE
-        ,   A.BOARD_CONTENT
-        ,   A.BOARD_DATE
-        ,   A.EMP_NO
-        ,   A.IS_PRIVATE
+        INTO T_BOARD (
+            BOARD_NO
+        ,   BOARD_CATEGORY
+        ,   BOARD_TITLE
+        ,   BOARD_CONTENT
+        ,   BOARD_DATE
+        ,   EMP_NO
+        ,   IS_PRIVATE
         )
         VALUES
         (
@@ -37,5 +51,16 @@
         ,   #{ isPrivate }
         )
     </insert>
+
+    <select id="findByMemberId" resultType="com.hielectro.welpair.post.model.dto.MemberDTO">
+        SELECT
+                EMP_NO
+            ,   MEM_PWD
+            ,   REGIST_DATE
+            ,   POINT_BALANCE
+            ,   IS_ACTIVATED
+        FROM    T_MEMBER
+        WHERE   EMP_NO = #{ empNo }
+    </select>
 
 </mapper>

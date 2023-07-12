@@ -1,4 +1,4 @@
-package com.hielectro.welpair.post.admin.model.dto;
+package com.hielectro.welpair.post.model.dto;
 
 
 import lombok.*;

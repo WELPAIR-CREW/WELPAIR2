@@ -156,20 +156,7 @@ public class InventoryController {
         System.out.println("-------------컨트롤러 2-2 out -------------");
 
         return mv;
-
     }
-
-    @GetMapping("admin_inventory_register2")
-    public String stockRegistSerch2() {
-        System.out.println("-------------컨트롤러 2-1-2 in -------------");
-        System.out.println("-------------컨트롤러 2-1-2 out-------------");
-        return "admin/inventory/admin_inventory_register2";
-    }
-
-
-
-
-
 
     @GetMapping("admin_inventory_search")
     public String StockhistorySearch() {
