@@ -317,6 +317,7 @@ a.select {
 
 .product-item {
 	display: flex;
+	flex-direction: column;
 	width: 380px;
 }
 
@@ -324,13 +325,12 @@ a.select {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin-left: 10px;
+	margin-top: 10px;
 }
 
 .content-item1-item .payment {
 	height: 150px;
 }
-
 
 .content-item1-item .order-status {
 	margin-top: 10px;
