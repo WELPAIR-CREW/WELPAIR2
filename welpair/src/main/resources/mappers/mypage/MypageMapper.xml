@@ -171,6 +171,17 @@
         </association>
     </resultMap>
 
+<!-- 내가쓴글 - 문의글 목록 조회 -->
+
+    <resultMap id="myBoardListResultMap" type="com.hielectro.welpair.board.model.dto.BoardDTO">
+        <id property="no" column="BOARD_NO"></id>
+        <result property="category" column="BOARD_CATEGORY"></result>
+        <result property="title" column="BOARD_TITLE"></result>
+        <result property="content" column="BOARD_CONTENT"></result>
+        <result property="date" column="BOARD_DATE"></result>
+        <result property="empNo" column="EMP_NO"></result>
+        <result property="isPrivate" column="IS_PRIVATE"></result>
+    </resultMap>
 
 
 
@@ -264,6 +275,13 @@
           AND TI.SELL_THUMB_IMAGE_FILE_NAME IS NOT NULL
     </select>
 
+
+<!-- 내가쓴글 - 문의글목록 -->
+    <select id="myQnaList" resultMap="myBoardListResultMap">
+        SELECT * FROM T_BOARD
+        WHERE EMP_NO = #{empNo}
+        AND BOARD_CATEGORY = 'BORD_1'
+    </select>
 
 
 

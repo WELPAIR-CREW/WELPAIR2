@@ -27,86 +27,110 @@
 
 
         <div class="section-box qna">
-            <ul id="qna-list">
+
+            <ul id="qna-list" th:each="qna:${myQnaList}">
+
                 <li class="each-qna1">
                     <input type="checkbox">
                     <span class="each-qna2">
                         <a href="각 문의로 이동하는 링크">
                             <span class="qna-info">
-                                <span class="qna-title">문의제목문의제목문의제목</span>
+                                <span hidden="hidden" th:value="${qna.no}">글번호숨김</span>
+                                <span class="qna-title" th:text="${qna.title}">문의제목문의제목문의제목</span>
                                 <span class="qna-right">
                                     <span class="qna-status">처리중</span>
-                                    <span class="qna-date">2023.05.12</span>
+                                    <span class="qna-date" th:text="${#dates.format(qna.date, 'yyyy.MM.dd')}">2023.05.12</span>
                                     <span class="mark">&gt;</span>
                                 </span>
                             </span>
                         </a>
                     </span>
                 </li>
-                <li class="each-qna1">
-                    <input type="checkbox">
-                    <span class="each-qna2">
-                        <a href="각 문의로 이동하는 링크">
-                            <span class="qna-info">
-                                <span class="qna-title">문의제목문의제목문의제목</span>
-                                <span class="qna-right">
-                                    <span class="qna-status">처리중</span>
-                                    <span class="qna-date">2023.05.12</span>
-                                    <span class="mark">&gt;</span>
-                                </span>
-                            </span>
-                        </a>
-                    </span>
-                </li>
-                <li class="each-qna1">
-                    <input type="checkbox">
-                    <span class="each-qna2">
-                        <a href="각 문의로 이동하는 링크">
-                            <span class="qna-info">
-                                <span class="qna-title">문의제목문의제목문의제목</span>
-                                <span class="qna-right">
-                                    <span class="qna-status">처리중</span>
-                                    <span class="qna-date">2023.05.12</span>
-                                    <span class="mark">&gt;</span>
-                                </span>
-                            </span>
-                        </a>
-                    </span>
-                </li>
-                <li class="each-qna1">
-                    <input type="checkbox">
-                    <span class="each-qna2">
-                        <a href="각 문의로 이동하는 링크">
-                            <span class="qna-info">
-                                <span class="qna-title">문의제목문의제목문의제목</span>
-                                <span class="qna-right">
-                                    <span class="qna-status">읽음</span>
-                                    <span class="qna-date">2023.05.12</span>
-                                    <span class="mark">&gt;</span>
-                                </span>
-                            </span>
-                        </a>
-                    </span>
-                </li>
-                <li class="each-qna1">
-                    <input type="checkbox">
-                    <span class="each-qna2">
-                        <a href="각 문의로 이동하는 링크">
-                            <span class="qna-info">
-                                <span class="qna-title">문의제목문의제목문의제목</span>
-                                <span class="qna-right">
-                                    <span class="qna-status">읽음</span>
-                                    <span class="qna-date">2023.05.12</span>
-                                    <span class="mark">&gt;</span>
-                                </span>
-                            </span>
-                        </a>
-                    </span>
-                </li>
+
+
+
+<!--                <li class="each-qna1">-->
+<!--                    <input type="checkbox">-->
+<!--                    <span class="each-qna2">-->
+<!--                        <a href="각 문의로 이동하는 링크">-->
+<!--                            <span class="qna-info">-->
+<!--                                <span class="qna-title">문의제목문의제목문의제목</span>-->
+<!--                                <span class="qna-right">-->
+<!--                                    <span class="qna-status">처리중</span>-->
+<!--                                    <span class="qna-date">2023.05.12</span>-->
+<!--                                    <span class="mark">&gt;</span>-->
+<!--                                </span>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </span>-->
+<!--                </li>-->
+<!--                <li class="each-qna1">-->
+<!--                    <input type="checkbox">-->
+<!--                    <span class="each-qna2">-->
+<!--                        <a href="각 문의로 이동하는 링크">-->
+<!--                            <span class="qna-info">-->
+<!--                                <span class="qna-title">문의제목문의제목문의제목</span>-->
+<!--                                <span class="qna-right">-->
+<!--                                    <span class="qna-status">처리중</span>-->
+<!--                                    <span class="qna-date">2023.05.12</span>-->
+<!--                                    <span class="mark">&gt;</span>-->
+<!--                                </span>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </span>-->
+<!--                </li>-->
+<!--                <li class="each-qna1">-->
+<!--                    <input type="checkbox">-->
+<!--                    <span class="each-qna2">-->
+<!--                        <a href="각 문의로 이동하는 링크">-->
+<!--                            <span class="qna-info">-->
+<!--                                <span class="qna-title">문의제목문의제목문의제목</span>-->
+<!--                                <span class="qna-right">-->
+<!--                                    <span class="qna-status">처리중</span>-->
+<!--                                    <span class="qna-date">2023.05.12</span>-->
+<!--                                    <span class="mark">&gt;</span>-->
+<!--                                </span>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </span>-->
+<!--                </li>-->
+<!--                <li class="each-qna1">-->
+<!--                    <input type="checkbox">-->
+<!--                    <span class="each-qna2">-->
+<!--                        <a href="각 문의로 이동하는 링크">-->
+<!--                            <span class="qna-info">-->
+<!--                                <span class="qna-title">문의제목문의제목문의제목</span>-->
+<!--                                <span class="qna-right">-->
+<!--                                    <span class="qna-status">읽음</span>-->
+<!--                                    <span class="qna-date">2023.05.12</span>-->
+<!--                                    <span class="mark">&gt;</span>-->
+<!--                                </span>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </span>-->
+<!--                </li>-->
+<!--                <li class="each-qna1">-->
+<!--                    <input type="checkbox">-->
+<!--                    <span class="each-qna2">-->
+<!--                        <a href="각 문의로 이동하는 링크">-->
+<!--                            <span class="qna-info">-->
+<!--                                <span class="qna-title">문의제목문의제목문의제목</span>-->
+<!--                                <span class="qna-right">-->
+<!--                                    <span class="qna-status">읽음</span>-->
+<!--                                    <span class="qna-date">2023.05.12</span>-->
+<!--                                    <span class="mark">&gt;</span>-->
+<!--                                </span>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </span>-->
+<!--                </li>-->
+
+
             </ul>
 
 
             <button class="button-qna">문의하기</button>
+            <button class="button-qna">삭제</button>
 
             <div class="under-table">
                 <div class="search-list">

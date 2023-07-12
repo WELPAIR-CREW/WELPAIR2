@@ -1,5 +1,6 @@
 package com.hielectro.welpair.mypage.model.service;
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.mypage.model.dto.AddressDTO;
 import com.hielectro.welpair.mypage.model.dto.WishlistSellProductDTO;
@@ -29,7 +30,15 @@ public interface MypageService {
     int getPointBalance(String empNo);
 
 
-    //위시리스트 목록 조회
+    //3. 위시리스트 목록 조회
     String getWishId(String empNo);
     List<WishlistSellProductDTO> getWishlistList(String wishId);
+
+
+    //5. 내가쓴글
+    //문의글목록
+    List<BoardDTO> myQnaList(String empNo);
+
+
+
 }

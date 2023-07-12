@@ -1,5 +1,6 @@
 package com.hielectro.welpair.mypage.model.service;
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.mypage.model.dao.MypageMapper;
@@ -85,7 +86,7 @@ public class MypageServiceImpl implements MypageService{
     }
 
 
-    //위시리스트 목록
+    //3. 위시리스트 목록
     @Override
     public String getWishId(String empNo) {
         return mypageMapper.getWishId(empNo);
@@ -94,6 +95,17 @@ public class MypageServiceImpl implements MypageService{
     public List<WishlistSellProductDTO> getWishlistList(String wishId) {
         return mypageMapper.getWishlistList(wishId);
     }
+
+
+
+    //5. 내가쓴글
+    //문의글목록
+    @Override
+    public List<BoardDTO> myQnaList(String empNo) {
+        return mypageMapper.myQnaList(empNo);
+    }
+
+
 
 
 }

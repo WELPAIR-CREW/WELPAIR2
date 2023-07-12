@@ -1,6 +1,7 @@
 package com.hielectro.welpair.mypage.controller;
 
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.member.controller.PageHandler;
 import com.hielectro.welpair.member.controller.PointException;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
@@ -256,11 +257,24 @@ public class MypageController {
     //5.
     //내가쓴글-문의목록
     //*****리뷰 페이지 html 재작성해야함
+//    @GetMapping("/myPost")
+//    public String myPost() {
+//
+//        return "consumer/mypage/myqna";
+//    }
     @GetMapping("/myPost")
-    public String myPost() {
+    public ModelAndView myPost(ModelAndView model) {
 
-        return "consumer/mypage/myqna";
+        String empNo = "T00015";
+        List<BoardDTO> myQnaList = mypageService.myQnaList(empNo);
+        System.out.println("myQnaList 출력 : " + myQnaList);
+        model.addObject("myQnaList", myQnaList);
+        model.setViewName("consumer/mypage/myqna");
+
+        return model;
     }
+
+
 
 
     //6. 주문내역
@@ -268,6 +282,15 @@ public class MypageController {
     public String myorder() {
 
         return "consumer/mypage/myorder";
+    }
+
+
+
+    //7.마이페이지 메인화면 (우측 상단 MY 클릭시 진입)
+    @GetMapping("/mypageMain")
+    public String mypageMain() {
+
+        return "consumer/mypage/mypage-main";
     }
 
 
