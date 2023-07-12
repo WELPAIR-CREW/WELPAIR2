@@ -7,21 +7,23 @@ import com.hielectro.welpair.post.model.service.AdminBoardServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/post")
+@RequestMapping("/post/*")
 public class PostManagerController {
 
     private final AdminBoardService adminBoardService;
 
-    private final AdminBoardServiceImpl Service;
+    private final AdminBoardServiceImpl adminBoardServiceImpl;
 
 
 
-    public PostManagerController(AdminBoardService adminBoardService, AdminBoardServiceImpl service) {
+    public PostManagerController(AdminBoardService adminBoardService, AdminBoardServiceImpl adminBoardServiceImpl) {
         this.adminBoardService = adminBoardService;
 
-        Service = service;
+
+        this.adminBoardServiceImpl = adminBoardServiceImpl;
     }
 
 
@@ -31,10 +33,11 @@ public class PostManagerController {
     }
 
     @PostMapping("/admin/board_write")
-    public String PostSave(@ModelAttribute AdminBoardDTO adminBoard){
-        System.out.println(adminBoard);
-        Service.PostSave(adminBoard);
-        System.out.println(adminBoard);
+    public String PostSave(@ModelAttribute AdminBoardDTO adminBoardDTO, RedirectAttributes rttr) throws BoardException {
+
+        System.out.println("===========================================CHECK==========================="+adminBoardDTO);
+        adminBoardServiceImpl.PostSave(adminBoardDTO);
+        rttr.addFlashAttribute("message","게시글등록성공");
 
         return "redirect:/post/admin/board_write";
     }
