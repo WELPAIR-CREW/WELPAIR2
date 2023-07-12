@@ -74,32 +74,24 @@
             </table>
 
             <div class="under-table">
-<!--                <div class="search-list">-->
-<!--                    <input type="text" class="search-input">-->
-<!--                    <button class="button-circle">검색</button>-->
-<!--                </div>-->
                 <div class="search-list">
                     <input type="text" class="search-input" id="searchInput">
                     <button class="button-circle" onclick="searchMembers()">검색</button>
                 </div>
 
+                <div class="paging">
+                    <a th:if="${pageHandler.showPrev}" th:href="@{/member/member-view(page=${pageHandler.beginPage - 1})}">이전</a>
 
-                <!-- 새로운 페이징 적용 -->
-                    <div class="paging">
-                        <a th:if="${pageHandler.showPrev}" th:href="@{/member/member-view(page=${pageHandler.beginPage - 1})}">이전</a>
+                    <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}" >
+                        <a th:href="@{/member/member-view(page=${pageNumber})}"
+                           th:text="${pageNumber == 0 ? 1 : pageNumber}"
+                           th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
+                    </span>
 
-                        <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}" >
-                            <a th:href="@{/member/member-view(page=${pageNumber})}"
-                               th:text="${pageNumber == 0 ? 1 : pageNumber}"
-                               th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
-                        </span>
-
-                        <a th:if="${pageHandler.showNext}" th:href="@{/member/member-view(page=${pageHandler.endPage + 1})}">다음</a>
-                    </div>
-
-
-
+                    <a th:if="${pageHandler.showNext}" th:href="@{/member/member-view(page=${pageHandler.endPage + 1})}">다음</a>
                 </div>
+
+            </div>
             </div>
         </div>
 

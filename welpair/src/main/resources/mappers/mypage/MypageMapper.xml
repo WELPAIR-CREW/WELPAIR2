@@ -27,6 +27,28 @@
         </association>
     </resultMap>
 
+<!-- 로그인한 회원의 위시리스트 번호 조회용  -->
+    <resultMap id="mywishlistId" type="com.hielectro.welpair.mypage.model.dto.WishlistDTO">
+        <id property="wishId" column="WISH_ID"/>
+        <result property="empNo" column="EMP_NO"/>
+    </resultMap>
+
+<!--  위시리스트에 담긴 상품 조회용  -->
+    <resultMap id="mywishlistResultMap" type="com.hielectro.welpair.mypage.model.dto.WishlistDTO">
+        <id property="wishId" column="WISH_ID"/>
+        <result property="empNo" column="EMP_NO"/>
+        <result property="wishDate" column="WISH_DATE"/>
+        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+
+        <collection property="wishlistSellProductList" resultMap="wishSellProductResultMap"/>
+
+    </resultMap>
+
+    <resultMap id="wishSellProductResultMap" type="com.hielectro.welpair.mypage.model.dto.WishlistDTO">
+
+    </resultMap>
+
+
 
 <!-- 배송지 목록 조회   -->
     <select id="getAddressList" resultMap="addressListResultMap">
@@ -81,5 +103,13 @@
         FROM T_MEMBER M
         WHERE EMP_NO = #{empNo}
     </select>
+
+
+
+
+<!-- 회원의 위시리스트에 담긴 판매상품아이디별아이템 목록 조회 -->
+
+
+
 
 </mapper>

@@ -106,7 +106,7 @@
 <!--            <a th:if="${pageHandler.showPrev}" th:href="@{/mypage/wishlist(page=${pageHandler.beginPage - 1})}">이전</a>-->
 
 <!--            <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}">-->
-<!--                            <a th:href="@{/mypage/wishlist(page=${pageNumber})}" th:text="${pageNumber}"-->
+<!--                            <a th:href="@{/mypage/wishlist(page=${pageNumber})}" th:text="${pageNumber == 0 ? 1 : pageNumber}"-->
 <!--                               th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>-->
 <!--                        </span>-->
 
