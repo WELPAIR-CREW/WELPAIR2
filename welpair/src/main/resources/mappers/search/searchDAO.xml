@@ -169,6 +169,4 @@
           FROM T_THUMB_IMAGE
          WHERE SELL_PAGE_NO = #{no}
     </select>
-
-
 </mapper>
