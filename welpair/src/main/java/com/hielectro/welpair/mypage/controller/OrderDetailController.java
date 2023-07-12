@@ -52,23 +52,40 @@ public class OrderDetailController {
         // 결제유형, 결제유형별 금액 셋팅
         Map<String, PaymentDTO> paymap = new HashMap<>();
 
-
-
         for(OrderDetailDTO order : orderList){
+
             ProductDTO product = new ProductDTO();
-            product.setProductName(order.getProductName());
-            product.setProductAmount(order.getProductOrderAmount());
-            product.setProductPrice(order.getPrice());
+            if(Optional.ofNullable(order.getProductName()).isEmpty()){
+                System.out.println("null1");
+                product.setProductName("판매중지상품");
+                product.setProductAmount(0);
+                product.setProductPrice(0);
+            } else{
+                product.setProductName(order.getProductName());
+                product.setProductAmount(order.getProductOrderAmount());
+                product.setProductPrice(order.getPrice());
+
+            }
 
             // product name으로 key를 주기 때문에 name이 중복이면 덮어써질 것
             prdmap.put(product.getProductName(), product);
 
             PaymentDTO payment = new PaymentDTO();
-            payment.setPaymentType(order.getPaymentType());
-            payment.setPaymentPrice(order.getPaymentPrice());
-            // payment Type으로 key를 주기 때문에 중복이면 덮어써질 것
-            paymap.put(payment.getPaymentType(), payment);
+
+            if(Optional.ofNullable(order.getPaymentType()).isEmpty()){
+                System.out.println("null2");
+
+                payment.setPaymentType(" ");
+                payment.setPaymentPrice(0);
+
+            } else {
+                payment.setPaymentType(order.getPaymentType());
+                payment.setPaymentPrice(order.getPaymentPrice());
+            }
+                // payment Type으로 key를 주기 때문에 중복이면 덮어써질 것
+                paymap.put(payment.getPaymentType(), payment);
         }
+
 
         System.out.println("상품 맵 출력=============>>>>>> " + prdmap.values());
         // 배송상태
@@ -88,7 +105,13 @@ public class OrderDetailController {
         orderDetail.setAddressName(orderList.get(0).getAddressName());
         orderDetail.setAddressPhone(orderList.get(0).getAddressPhone());
         orderDetail.setAddressDetail(orderList.get(0).getAddressDetail().replace("/", "  "));
-        orderDetail.setDeliveryDate(orderList.get(0).getDeliveryDate());
+
+        if(Optional.ofNullable(orderList.get(0).getDeliveryDate()).isEmpty()){
+
+        } else {
+            orderDetail.setDeliveryDate(orderList.get(0).getDeliveryDate());
+        }
+
 
         // 확인
         System.out.println("orderDetail 그외 주문 총 정보 = " + orderDetail);
