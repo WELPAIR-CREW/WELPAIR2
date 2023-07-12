@@ -15,21 +15,15 @@ import java.util.Map;
 public interface MemberService extends UserDetailsService {
 
     //1-1. 회원조회 - 회원목록
-//    List<MemberDTO> getMemberList(SelectCriteria selectCriteria);
-//
-//    //1-2. 회원조회 - 전체, 퇴사 회원수
-//    int totalMemberCount(Map<String, String> searchMap);
-//    int expiredMemberCount(Map<String, String> searchMap);
 
-    List<MemberDTO> getMemberList(Map<String, Object> map);
+//    List<MemberDTO> getMemberList(Map<String, Object> map);
+
     int totalMemberCount();
     int expiredMemberCount();
 
     //검색기능 추가
     int searchMemberCount(Map<String, Object> map);
     List<MemberDTO> searchMemberList(Map<String, Object> map);
-
-
 
 
 

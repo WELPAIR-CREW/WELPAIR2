@@ -10,28 +10,14 @@ import java.util.Map;
 public interface MemberMapper {
 
     //1. 회원조회
-//    List<MemberDTO> getMemberList(SelectCriteria selectCriteria);
-//
-//    int totalMemberCount(Map<String, String> searchMap); //셀렉트
-//
-//    int expiredMemberCount(Map<String, String> searchMap); //셀렉트
-
-
-
-    List<MemberDTO> getMemberList(Map<String, Object> map);
+//    List<MemberDTO> getMemberList(Map<String, Object> map);
 
     int totalMemberCount();
-
     int expiredMemberCount();
 
     //검색기능 추가
     int searchMemberCount(Map<String, Object> map);
     List<MemberDTO> searchMemberList(Map<String, Object> map);
-
-
-
-
-
 
     int deleteMember(String empNo); //딜리트
 
