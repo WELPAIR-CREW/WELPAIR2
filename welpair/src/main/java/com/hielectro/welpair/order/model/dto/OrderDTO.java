@@ -23,6 +23,7 @@ public class OrderDTO {
     private String addressId;       // 배송지 아이디
 
     private List<ProductOrderDTO> productOrderList;
+
     private OrderPaymentDTO orderPayment; // 판매상품별주문 리스트
 
 }
