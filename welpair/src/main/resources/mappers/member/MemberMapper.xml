@@ -95,7 +95,8 @@
     </resultMap>
 
 
-    <!-- 1. 페이징처리하여 보여줄 회원목록-->
+    <!-- 1. 회원목록-->
+<!-- 아래 검색 적용 전 select문 삭제시 오류  -->
     <select id="getMemberList" resultMap="memberListResultMap">
         SELECT *
         FROM (SELECT rownum AS rnum
@@ -120,19 +121,7 @@
     </select>
 
 
-    <!-- 전체회원수, 퇴사회원수 조회 -->
-<!--    <select id="totalMemberCount" resultType="_int" parameterType="hashmap">-->
-<!--        SELECT COUNT(*)-->
-<!--        FROM T_MEMBER M-->
-<!--        WHERE M.IS_ACTIVATED = 'Y'-->
-<!--    </select>-->
-<!--    <select id="expiredMemberCount" resultType="_int" parameterType="hashmap">-->
-<!--        SELECT COUNT(*)-->
-<!--        FROM T_MEMBER M-->
-<!--                 JOIN T_EMPLOYEE E on M.EMP_NO = E.EMP_NO-->
-<!--        WHERE E.IS_EXPIRE = 'Y' AND M.IS_ACTIVATED = 'Y'-->
-<!--    </select>-->
-
+    <!-- 전체회원수(다른 핸들러메소드에서도 사용중), 퇴사회원수 조회 -->
     <select id="totalMemberCount" resultType="_int">
         SELECT COUNT(*)
         FROM T_MEMBER M
@@ -153,10 +142,10 @@
         WHERE M.IS_ACTIVATED = 'Y'
         <if test="keyword != null and !keyword.isEmpty()">
             AND (
-            E.EMP_NO LIKE CONCAT('%', #{keyword}, '%')
-            OR E.EMP_NAME LIKE CONCAT('%', #{keyword}, '%')
-            OR E.EMP_EMAIL LIKE CONCAT('%', #{keyword}, '%')
-            OR E.EMP_PHONE LIKE CONCAT('%', #{keyword}, '%')
+            M.EMP_NO LIKE '%' || #{keyword} || '%'
+            OR E.EMP_NAME LIKE '%' || #{keyword} || '%'
+            OR E.EMP_EMAIL LIKE '%' || #{keyword} || '%'
+            OR E.EMP_PHONE LIKE '%' || #{keyword} || '%'
             )
         </if>
     </select>
@@ -177,17 +166,19 @@
                 WHERE M.IS_ACTIVATED = 'Y'
                 <if test="keyword != null and !keyword.isEmpty()">
                     AND (
-                    E.EMP_NO LIKE CONCAT('%', #{keyword}, '%')
-                    OR E.EMP_NAME LIKE CONCAT('%', #{keyword}, '%')
-                    OR E.EMP_EMAIL LIKE CONCAT('%', #{keyword}, '%')
-                    OR E.EMP_PHONE LIKE CONCAT('%', #{keyword}, '%')
+                    M.EMP_NO LIKE '%' || #{keyword} || '%'
+                    OR E.EMP_NAME LIKE '%' || #{keyword} || '%'
+                    OR E.EMP_EMAIL LIKE '%' || #{keyword} || '%'
+                    OR E.EMP_PHONE LIKE '%' || #{keyword} || '%'
                     )
+                </if>
+                <if test='isExpired != null and isExpired.equals(1)'>
+                    AND E.IS_EXPIRE = 'Y'
                 </if>
             )
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
         ORDER BY REGIST_DATE DESC
     </select>
-
 
 
 

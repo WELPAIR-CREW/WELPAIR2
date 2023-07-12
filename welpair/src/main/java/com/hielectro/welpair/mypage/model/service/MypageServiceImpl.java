@@ -66,9 +66,22 @@ public class MypageServiceImpl implements MypageService{
 
     //4. 마이포인트 이력 조회
     @Override
-    public List<PointHistoryDTO> mypointList(String empNo) {
-        List<PointHistoryDTO> mypointList = mypageMapper.mypointList(empNo);
+    public List<PointHistoryDTO> mypointList(Map<String, Object> map) {
+        List<PointHistoryDTO> mypointList = mypageMapper.mypointList(map);
         return mypointList;
     }
+
+    //페이징처리를 위한 마이포인트 총항목수
+    @Override
+    public int myPointListCount(String empNo) {
+        return mypageMapper.myPointListCount(empNo);
+    }
+
+    //포인트 잔액 조회
+    @Override
+    public int getPointBalance(String empNo) {
+        return mypageMapper.getPointBalance(empNo);
+    }
+
 
 }

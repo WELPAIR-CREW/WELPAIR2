@@ -35,8 +35,6 @@ public class MemberController {
 
 
     //1. 회원조회 - 회원목록
-
-    //새로운 페이징 적용하기
     @GetMapping("/member-view")
     public ModelAndView getMemberList(@RequestParam(defaultValue="1") int page, ModelAndView model
                                     , @RequestParam(value="type", required = false) String isExpired
@@ -46,50 +44,23 @@ public class MemberController {
 
 
         //검색어 추가
-//        int pageSize = 10;
-//        int totalCnt;
-//        List<MemberDTO> memberList;
-        Map<String, Object> map = new HashMap<>();
-//        if(keyword != null && !keyword.isEmpty()) {
-//            //검색어가 있을때
-//            map.put("keyword", keyword);
-//            totalCnt = memberService.searchMemberCount(map);
-//            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
-//            map.put("startRow", pageHandler.getStartRow());
-//            map.put("endRow", pageHandler.getEndRow());
-//
-//            memberList = memberService.searchMemberList(map);
-//
-//        } else {
-//            //검색어가 없을때
-//            totalCnt = memberService.totalMemberCount();
-//            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
-//
-//            map.put("startRow", pageHandler.getStartRow());
-//            map.put("endRow", pageHandler.getEndRow());
-//
-//            //쿼리스트링으로 type을 받았다면 그 값을 맵에 추가로 담는다
-//            if (isExpired != null && isExpired.equals("Y")) {
-//                map.put("isExpired", 1);
-//            } else {
-//                map.put("isExpired", 2);
-//            }
-//
-//            memberList = memberService.getMemberList(map);
-//        }
-//        model.addObject("totalCnt", totalCnt);
-//        model.addObject("memberList", memberList);
-
-
-
-        //검색기능 추가하기 전(페이징까지만 적용했을때의 코드)
         int pageSize = 10;
-        int totalCnt = memberService.totalMemberCount();
-        System.out.println("db에서 조회한 총 회원항목수 : " + totalCnt);
-        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
-        model.addObject("totalCnt", totalCnt);
+        int totalCnt;
+        List<MemberDTO> memberList;
+        Map<String, Object> map = new HashMap<>(); //쿼리 파라미터
 
-//        Map<String, Integer> map = new HashMap<>();
+
+        if(keyword != null && !keyword.isEmpty()) { //검색어가 있을때
+            map.put("keyword", keyword);
+            totalCnt = memberService.searchMemberCount(map);
+
+        } else { //검색어가 없을때
+            totalCnt = memberService.searchMemberCount(map);
+        }
+
+
+        //페이징 값 맵에 담기
+        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
         map.put("startRow", pageHandler.getStartRow());
         map.put("endRow", pageHandler.getEndRow());
 
@@ -99,22 +70,18 @@ public class MemberController {
         } else {
             map.put("isExpired", 2);
         }
-        System.out.println(isExpired);
 
-        //회원목록 받아오기
-        List<MemberDTO> memberList = memberService.getMemberList(map);
+        memberList = memberService.searchMemberList(map);
+
+        model.addObject("totalCnt", totalCnt);
         model.addObject("memberList", memberList);
         model.addObject("pageHandler", pageHandler);
 
 
         System.out.println(memberList);
-
-        //전체 회원수와 퇴사한 회원수
-        int totalMemberCount = memberService.totalMemberCount();
-        model.addObject("totalMemberCount", totalMemberCount);
-
         int expiredMemberCount = memberService.expiredMemberCount();
         model.addObject("expiredMemberCount", expiredMemberCount);
+
 
         model.setViewName("admin/member/member-view");
 
