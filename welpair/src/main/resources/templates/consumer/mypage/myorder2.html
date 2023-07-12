@@ -34,7 +34,7 @@
                 <div class="content-item1-item">
                     <div class="order item1-item-item">
                         <span th:utext="'<b>주문번호 </b>' + ${orderDetail.orderNo}"></span>
-                        <span th:utext="'<b>주문일자 </b>' + ${orderDetail.orderDate}"></span>
+                        <span th:utext="'<b>주문일시 </b>' + ${#dates.format(orderDetail.orderDate, 'yyyy/MM/dd HH:mm')}"></span>
                     </div>
                     <div class="product item1-item-item">
                         <div class="product-item">
@@ -68,7 +68,7 @@
                 <h3>배송지 정보</h3>
                 <div th:utext="'<b>수취인 </b>' + ${orderDetail.addressName}"></div>
                 <div th:utext="'<b>연락처 </b>' + ${orderDetail.addressPhone}"></div>
-                <div th:utext="'<b>주  소 </b>' + ${orderDetail.addressDetail}"></div>
+                <div th:utext="'<b>주&nbsp;&nbsp;&nbsp;소 </b>' + ${orderDetail.addressDetail}"></div>
                 <div th:utext="'<b>배송지정일 </b>' + ${#dates.format(orderDetail.deliveryDate, 'yyyy/MM/dd')}"></div>
                 <div th:utext="'<b>배송메모 </b>'"></div>
             </div>
