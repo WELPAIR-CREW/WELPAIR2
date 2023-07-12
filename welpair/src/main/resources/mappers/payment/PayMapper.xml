@@ -58,8 +58,6 @@
         <result property="addressName" column="ADDRESS_NAME"/>
         <result property="addressPhone" column="ADDRESS_PHONE"/>
         <result property="empNo" column="EMP_NO"/>
-
-
     </resultMap>
 
     <!-- 멤버 정보, 배송지주소, 포인트 잔액 조회 -->
