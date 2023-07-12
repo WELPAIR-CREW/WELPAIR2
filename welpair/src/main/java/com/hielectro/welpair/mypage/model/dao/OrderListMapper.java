@@ -5,9 +5,11 @@ import com.hielectro.welpair.order.model.dto.OrderDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderListMapper {
 
-    List<OrderListDTO> selectOrderList(String empNo);
+    List<OrderListDTO> selectOrderList(Map<String, Object> search);
+    int orderListCount(Map<String, Object> search);
 }

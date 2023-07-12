@@ -140,9 +140,6 @@ input[type=checkbox] {
 
 .paging {
     font-size: 16px;
-    /* 색 미적용됨 */
-    color: red;
-
     margin-top: 10px;
 }
 

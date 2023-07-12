@@ -1,8 +1,12 @@
 package com.hielectro.welpair.mypage.model.dto;
 
-import lombok.*;
-
 import java.sql.Timestamp;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 
 @AllArgsConstructor
@@ -26,4 +30,5 @@ public class OrderListDTO {
         }
         this.deliveryStatus = deliveryStatus;
     }
+
 }

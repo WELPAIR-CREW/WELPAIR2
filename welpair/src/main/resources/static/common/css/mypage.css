@@ -19,6 +19,7 @@ input[type=checkbox] {
 section {
     width: 1280px;
     height: 656px;
+
     /* 수평 중앙 정렬*/
     margin: 0 auto;
 
@@ -55,8 +56,6 @@ section {
 }
 
 
-
-/* # */
 #identify {
     width: 400px;
     height: 400px;
@@ -168,16 +167,6 @@ section {
     background: #333333;
     cursor: pointer;
 }
-/* # 까지*/
-
-
-
-
-
-
-
-
-
 
 
 /* myaddress1 */
@@ -401,7 +390,48 @@ section {
     margin-top: 10px;
 }
 
+
+
+
 /* mypoint */
+
+/* 긴 섹션 (마이포인트 목록, 리뷰 목록) */
+.section-long {
+    width: 1280px;
+    height: 880px;
+
+    /* 수평 중앙 정렬*/
+    margin: 0 auto;
+
+    margin-top: 20px;
+
+    /* 자식요소를 중앙정렬시키기 */
+    display: flex;
+    /* 1) 수평 중앙정렬 */
+    justify-content: center;
+    /* 2) 수직 중앙정렬은 */
+    align-items: center;
+
+    flex-direction: column;
+    position: relative;
+}
+
+.section-box {
+    position: absolute;
+    top: 130px;
+    left: 200px;
+}
+/*-----section 길이를 늘리기 위해 추가 */
+
+
+.section-box.qna {
+    position: absolute;
+    top: 130px;
+    left: 280px;
+}
+
+
+
 #pointbox {
     /* background: pink; */
     border: 1px solid #d9d9d9;
@@ -416,6 +446,7 @@ section {
     font-size: 20px;
     font-weight: bold;
 
+    margin-bottom: 30px;
 }
 
 #pointbox>span {
@@ -451,7 +482,7 @@ section {
 
 #table-mypoint tr td {
     text-align: center;
-    padding: 6px;
+    padding: 14px;
 }
 
 #table-mypoint tr td:last-child {
@@ -460,9 +491,42 @@ section {
 }
 
 #mypoint-buttons {
-    background: white;
+    margin-left: 31px;
 }
 
+/* 전체, 적립, 사용 버튼 */
+#mypoint-buttons > button {
+
+    font-size: 13px;
+    background: white;
+    padding: 3px;
+    padding-inline: 12px;
+    margin-inline: -1px;
+    border: solid 0.7px #333333;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom: none;
+    cursor: pointer;
+}
+
+#mypoint-buttons > button:first-child {
+    background: #333333;
+    color: white;
+    border: solid 0.7px #333333;
+}
+
+/* 페이징넘버 수평 가운데 정렬 */
+.paging.mypage {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 50px;
+}
+
+/* 적립된 포인트금액은 색 지정 */
+.five.earnPointAmount {
+    color: #4F378B;
+}
 
 
 
@@ -479,6 +543,7 @@ section {
 
 #qna-list {
     margin-top: 50px;
+
 }
 
 .each-qna1 {
@@ -554,8 +619,20 @@ section {
     font-size: 14px;
 }
 
+
+/* 페이징 */
 .paging {
     font-size: 16px;
+    margin-top: 10px;
+}
+
+.paging > :not(:first-child) {
+    margin-left: 20px;
+}
+
+/* 선택한 페이징 넘버는 굵게 */
+.active-page {
+    font-weight: bold;
 }
 
 .under-table {

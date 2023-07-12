@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/common/css/myorder.css">
     <!--    <link rel="stylesheet" href="/common/css/mypage2.css">-->
     <script src="/common/js/static/include.js"></script>
+    <script src="/common/js/static/myorder.js"></script>
 </head>
 
 <body>
@@ -34,54 +35,54 @@
                 <button type="button">주문/배송관련 FAQ</button>
             </div>
             <div class="content-search-container">
-                <div class="search-container-item">
-                    <div class="search-item search-date">
-                        <button type="button">
-                            최근 1주일
-                        </button>
-                        <button type="button">
-                            1개월
-                        </button>
-                        <button type="button">
-                            3개월
-                        </button>
-                        <button type="button">
-                            6개월
-                        </button>
+                <form action="/mypage/myorder/list">
+                    <div class="search-container-item">
+                        <div class="search-item search-date">
+                            <button type="button" value="7">
+                                최근 1주일
+                            </button>
+                            <button type="button" value="1">
+                                1개월
+                            </button>
+                            <button type="button" value="3">
+                                3개월
+                            </button>
+                            <button type="button" value="6">
+                                6개월
+                            </button>
+                        </div>
+
+                        <div class="search-item select-date">
+                            <input type="date" name="startDate" id="startDate" class="select-date-item">
+                            <span class="select-date-item">~</span>
+                            <input type="date" name="endDate" id="endDate" class="select-date-item">
+                        </div>
                     </div>
-    
-                    <div class="search-item select-date">
-                        <input type="date" name="startDate" id="startDate" class="select-date-item" placeholder="시작">
-                        <span class="select-date-item">~</span>
-                        <input type="date" name="endDate" id="endDate" class="select-date-item">
-                    </div>
-                </div>
-                <div class="search-container-item">
-                    <form action="">
+                    <div class="search-container-item">
                         <div class="search-item search-criteria">
                             <select name="criteria" id="criteria" class="criteria-item">
-                               <option value="">주문전체</option> 
+                                <option value="">주문전체</option>
+                                <option value="delivery">배송상태</option>
+                                <option value="order">주문상태</option>
                             </select>
                             <input type="text" name="content" id="search-content" class="criteria-item">
                             <button type="submit" class="criteria-item">조회</button>
                         </div>
-                    </form>
-                </div>
-                
-                
+                    </div>
+                </form>
             </div>
             <div class="content-sort">
                 <span class="sort-item">정렬기준</span>
-                <select name="" id="" class="sort-item">
+                <select name="" id="test1" class="sort-item">
                     <option value="">최근순</option>
                 </select>
                 <span class="sort-item">주문상태</span>
-                <select name="" id="" class="sort-item">
+                <select name="" id="test2" class="sort-item">
                     <option value="">전체</option>
                 </select>
             </div>
             <div class="content-table-container">
-                <table class="table-item">
+                <table class="section-product-table">
                     <thead>
                         <tr>
                             <th>주문일자</th>
@@ -94,22 +95,55 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr th:each="order : ${orderList}">
+                            <td th:text="${#dates.format(order.getOrderDate(), 'yy/MM/dd')}"></td>
+                            <td th:text="${order.getOrderNo()}"></td>
+                            <td th:text="${order.getOrderName()}"></td>
+                            <td th:text="${order.getAmount()}"></td>
+                            <td th:text="${order.getTotalPrice()}"></td>
+                            <td th:text="${order.getDeliveryStatus()}"></td>
+                            <td th:text="${order.getOrderType()}"></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-        </div><br>
 
-        <div class="paging">
+            <div class="paging">
 
+            </div>
         </div>
     </section>
 
     <!-- footer -->
     <div data-include-html="/consumer/footer" class="include"></div>
+    <script th:inline="javascript">
+        let data = /*[[${orderList}]]*/'list'
+        let paging = /*[[${paging}]]*/'paging'
+        let queryString = /*[[${queryString}]]*/'queryString'
 
+        // createTable(data);
+        setPagination(paging);
+        createPaging(queryString);
 
-    <script>
+        const buttons = document.querySelectorAll(".search-date button");
+        const startDate = document.querySelector("#startDate");
 
+        [...buttons].forEach(button => {
+            button.addEventListener('click', function () {
+                const num = this.value;
+                let date = new Date();
+
+                if (num === '7') {
+                    date.setUTCDate(date.getUTCDate() - num);
+                    date.setUTCHours(0, 0, 0, 0);
+                    startDate.valueAsNumber = date;
+                } else {
+                    date.setUTCMonth(date.getUTCMonth() - num);
+                    date.setHours(0, 0, 0, 0);
+                    startDate.valueAsNumber = date;
+                }
+            })
+        })
     </script>
 </body>
 

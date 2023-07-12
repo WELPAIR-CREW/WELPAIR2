@@ -35,41 +35,22 @@ public class MemberServiceImpl implements MemberService {
 
 
     //1. 회원조회 페이지
+
 //    @Override
-//    public List<MemberDTO> getMemberList(SelectCriteria selectCriteria) {
-//        List<MemberDTO> memberList = memberMapper.getMemberList(selectCriteria);
+//    public List<MemberDTO> getMemberList(Map<String, Object> map) {
+//        List<MemberDTO> memberList = memberMapper.getMemberList(map);
 //        return memberList;
 //    }
 //
-//
-//    //전체,퇴사회원수 조회
-//    @Override
-//    public int totalMemberCount(Map<String, String> searchMap) {
-//        return memberMapper.totalMemberCount(searchMap);
-//    }
-//
-//    @Override
-//    public int expiredMemberCount(Map<String, String> searchMap) {
-//
-//
-//        return memberMapper.expiredMemberCount(searchMap);
-//    }
-
-    @Override
-    public List<MemberDTO> getMemberList(Map<String, Object> map) {
-        List<MemberDTO> memberList = memberMapper.getMemberList(map);
-        return memberList;
-    }
-
     @Override
     public int totalMemberCount() {
         return memberMapper.totalMemberCount();
     }
-
     @Override
     public int expiredMemberCount() {
         return memberMapper.expiredMemberCount();
     }
+
 
     //검색기능 추가
     @Override
@@ -81,8 +62,6 @@ public class MemberServiceImpl implements MemberService {
     public List<MemberDTO> searchMemberList(Map<String, Object> map) {
         return memberMapper.searchMemberList(map);
     }
-
-
 
 
 
