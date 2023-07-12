@@ -27,7 +27,6 @@
         <div class="section-count" th:text="'TOTAL :  ' + ${totalItems}"></div>
 
         <div class="section-detailSearch">
-            <!--                <form action="/search/detail">-->
             <form id="searchForm">
                 <!-- 상세 검색 옵션 -->
                 <div class="section-detailSearch-line1">
@@ -61,13 +60,13 @@
                         </span>
                     </div>
                 </div>
+            </form>
                 <ul class="search-sorting">
                     <li onclick="sortResults('price_desc')">가격 내림차순</li><p> | </p>
                     <li onclick="sortResults('price_asc')">가격 오름차순</li><p> | </p>
                     <li onclick="sortResults('title_desc')">상품명 내림차순</li><p> | </p>
                     <li onclick="sortResults('title_asc')">상품명 오름차순</li>
                 </ul>
-            </form>
         </div>
 
         <!-- 검색 결과 리스트 -->

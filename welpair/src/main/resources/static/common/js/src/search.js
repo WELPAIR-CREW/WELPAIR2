@@ -17,6 +17,7 @@ $('#searchForm').on('submit', function (event) {
     let categoryCode = $("#categoryCode").val();
     let minPrice = $("#minPrice").val();
     let maxPrice = $("#maxPrice").val();
+    let sortType = null;
     const search = window.location.search;
     const params = new URLSearchParams(search);
     let data = {
@@ -24,6 +25,7 @@ $('#searchForm').on('submit', function (event) {
         'product.categoryCode': categoryCode,
         'category.refCategoryCode': params.get('refCategoryCode'),
         'product.productStatus': params.get('productStatus'),
+        sortType: sortType,
         minPrice: minPrice,
         maxPrice: maxPrice
 
@@ -89,19 +91,14 @@ $('#searchForm').on('submit', function (event) {
 
 $(document).ready(function () {
 
-
-
-
 // 페이징
-
-
-    $(".paging").on("click", ".pageNum", function () {
+    $(document).on("click", ".paging .pageNum", function () {
         currentPage = parseInt($(this).text());
         showPage(currentPage);
         updatePaginationButtons();
     });
 
-    $(".paging").on("click", "#prevPage", function () {
+    $(document).on("click", ".paging #prevPage", function () {
         if (currentPage > 1) {
             currentPage--;
             showPage(currentPage);
@@ -109,20 +106,13 @@ $(document).ready(function () {
         }
     });
 
-    $(".paging").on("click", "#nextPage", function () {
+    $(document).on("click", ".paging #nextPage", function () {
         if (currentPage < totalPages) {
             currentPage++;
             showPage(currentPage);
             updatePaginationButtons();
         }
     });
-
-    $(".search-sorting li").on("click", function() {
-        const sortType = $(this).attr("th:value");
-        sortResults(sortType);
-    });
-
-    // $('#searchForm').submit();
 });
 
 // 정렬 기준
@@ -204,6 +194,7 @@ function updatePaginationButtons() {
     $(".paging").empty();
 
     if (totalPages <= 1) {
+        $(".paging").append("<span id='prevPage'>&lt;</span><span class='pageNum'>1</span><span id='nextPage'>></span>");
         return;
     }
 
@@ -223,6 +214,6 @@ function updatePaginationButtons() {
     }
 
     if (endPage < totalPages) {
-        $(".paging").append("<span id='nextPage'>></span>");
+        $(".paging").append("<span id='nextPage'>&gt;</span>");
     }
 }
