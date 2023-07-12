@@ -223,7 +223,7 @@ button.criteria-item {
 	overflow-x: auto;
 }
 
-.table-item {
+.section-product-table {
 	width: 100%;
 	border: 1px solid #D9D9D9;
 	border-collapse: collapse;
@@ -231,12 +231,12 @@ button.criteria-item {
 	table-layout: fixed;
 }
 
-.table-item th {
+.section-product-table th {
 	background-color: #e2e2e2;
 }
 
-.table-item th,
-.table-item td {
+.section-product-table th,
+.section-product-table td {
 	height: 36px;
 	border: 1px solid #D9D9D9;
 	padding: 0 4px;
@@ -256,6 +256,20 @@ button.criteria-item {
 
 .paging span:not(:first-child) {
 	margin-left: 20px;
+}
+
+.paging a {
+    text-decoration: none;
+    color: #A9A9A9;
+    cursor: pointer;
+}
+
+.paging .select {
+    color: #4D4D4D;
+}
+
+a.select {
+    cursor: default;
 }
 
 .content-item1 {

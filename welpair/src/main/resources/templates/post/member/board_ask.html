@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/boardAsk.css">
+    <link rel="stylesheet" href="/css/fontstyle.css">
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <title>자주묻는질문</title>
+
+    <script src="http://code.jquery.com/jquery-3.7.0.min.js" ></script>
+</head>
+<body>
+<div class="header1"></div>
+<div data-include-html="/consumer/header_consumer" class="include"></div>
+
+<div class="content-wrap">
+    <div>
+        <div class="nav-wrap">
+            <div class="notice nav-top"><a href="../member/board_Notice">공지사항</a></div>
+            <div class="ask on"><a href="../member/board_ask">자주묻는질문</a></div>
+            <div class="qna"><a href="../member/board_Qna">Q&A</a></div>
+        </div>
+        <div class="list-wrap">
+            <div class="list-ask-top">
+                <div class="ask-title-top">자주묻는 질문</div>
+            </div>
+            <div class="list-ask" th:each="board : ${ adminBoardList }">
+                <div class="ask-title" th:text="${board.boardTitle}"></div>
+                <div class="ask-aswer" th:text="${board.boardContent}"></div>
+            </div>
+
+<!--            <div class="list-ask">-->
+<!--                <div class="ask-title">자주묻는질문 글 제목입니다.</div>-->
+<!--                <div class="ask-aswer">자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                    자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="list-ask">-->
+<!--                <div class="ask-title">자주묻는질문 글 제목입니다.</div>-->
+<!--                <div class="ask-aswer">자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                    자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="list-ask">-->
+<!--                <div class="ask-title">자주묻는질문 글 제목입니다.</div>-->
+<!--                <div class="ask-aswer">자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                    자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="list-ask">-->
+<!--                <div class="ask-title">자주묻는질문 글 제목입니다.</div>-->
+<!--                <div class="ask-aswer">자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                    자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="list-ask">-->
+<!--                <div class="ask-title">자주묻는질문 글 제목입니다.</div>-->
+<!--                <div class="ask-aswer">자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                    자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="list-ask">-->
+<!--                <div class="ask-title">자주묻는질문 글 제목입니다.</div>-->
+<!--                <div class="ask-aswer">자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                    자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="list-ask">-->
+<!--                <div class="ask-title">자주묻는질문 글 제목입니다.</div>-->
+<!--                <div class="ask-aswer">자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                    자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="list-ask">-->
+<!--                <div class="ask-title">자주묻는질문 글 제목입니다.</div>-->
+<!--                <div class="ask-aswer">자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                    자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="list-ask">-->
+<!--                <div class="ask-title">자주묻는질문 글 제목입니다.</div>-->
+<!--                <div class="ask-aswer">자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                    자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.자주묻는질문에 답변입니다. 이부분은 관리자가 직접 등록합니다.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="paging1">-->
+<!--            </div>-->
+
+            <!-- 페이지 처리 -->
+            <div class="pagingArea">
+                <!-- 이전 페이지 버튼 -->
+                <button th:onclick="'location.href=\'/membar/board_ask?currentPage='+@{${selectCriteria.pageNo -1} + '\''"
+                        th:disabled="${selectCriteria.pageNo == 1}" class="bt first"><</button>
+                <!-- 숫자버튼 -->
+                <th:block th:each="page : ${#numbers.sequence(selectCriteria.starPage, selectCriteria.endPage)}">
+                    <button th:text="${page}"
+                            th:onclick="'location.href=\'/membar/board_ask?cureentPage='+@{${page}} + '\''"
+                            th:disabled="${ selectCriteria.pageNo eq page}" class="page-num go"></button>
+                </th:block>
+                <!-- 다음 페이지 -->
+                <button th:onclick="'location.href=\'/board/board_ask?currentPage='+@{${selectCriteria.pageNo +1} + '\''"
+                        th:disabled="${selectCriteria.maxPage}"></button>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="footer1"></div>
+</body>
+<script>
+    $('.header1').load('/consumer/header_consumer');
+    $('.footer1').load('/consumer/footer');
+
+    $('.ask-title').click(function(){
+
+        $(this).next('.ask-aswer').slideToggle(350);
+    });
+
+</script>
+</html>

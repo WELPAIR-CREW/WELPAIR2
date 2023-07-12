@@ -24,6 +24,16 @@
         <collection property="memberList" resultMap="memberRoleResultMap"/>
     </resultMap>
 
+    <resultMap id="askBoardResultMap" type="com.hielectro.welpair.post.model.dto.AdminBoardDTO">
+        <id property="boardNo" column="BOARD_NO"/>
+        <result property="boardCategory" column="BOARD_CATEGORY"/>
+        <result property="boardTitle" column="BOARD_TITLE"/>
+        <result property="boardContent" column="BOARD_CONTENT"/>
+        <result property="boardDate" column="BOARD_DATE"/>
+        <result property="empNo" column="EMP_NO"/>
+        <result property="isPrivate" column="IS_PARIVATE"/>
+    </resultMap>
+
 
 
 
@@ -61,6 +71,53 @@
             ,   IS_ACTIVATED
         FROM    T_MEMBER
         WHERE   EMP_NO = #{ empNo }
+    </select>
+
+    <select id="selectTotalCount" resultType="_int">
+        SELECT  COUNT(*)
+        FROM    T_BOARD
+        WHERE   IS_PRIVATE = 'Y'
+    </select>
+
+    <select id="selectBoardList" resultMap="askBoardResultMap">
+        SELECT
+                BOARD_NO
+            ,   BOARD_CATEGORY
+            ,   BOARD_TITLE
+            ,   BOARD_CONTENT
+            ,   BOARD_DATE
+            ,   EMP_NO
+            ,   IS_PRIVATE
+        FROM    T_BOARD
+        WHERE   BOARD_CATEGORY = 'BORD_2'
+    </select>
+
+    <select id="selectQnaList" resultMap="askBoardResultMap">
+        SELECT
+                BOARD_NO
+            ,   BOARD_CATEGORY
+            ,   BOARD_TITLE
+            ,   BOARD_CONTENT
+            ,   BOARD_DATE
+            ,   EMP_NO
+            ,   IS_PRIVATE
+        FROM    T_BOARD
+        WHERE   BOARD_CATEGORY = 'BORD_1'
+        AND     IS_PRIVATE = 'Y'
+    </select>
+
+    <select id="selectNoticeList" resultMap="askBoardResultMap">
+        SELECT
+            BOARD_NO
+             ,   BOARD_CATEGORY
+             ,   BOARD_TITLE
+             ,   BOARD_CONTENT
+             ,   BOARD_DATE
+             ,   EMP_NO
+             ,   IS_PRIVATE
+        FROM    T_BOARD
+        WHERE   BOARD_CATEGORY = 'BORD_3'
+          AND     IS_PRIVATE = 'Y'
     </select>
 
 </mapper>

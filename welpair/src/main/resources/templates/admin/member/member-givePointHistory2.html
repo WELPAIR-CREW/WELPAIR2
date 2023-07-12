@@ -36,9 +36,8 @@
                 <span class="small-title">&#8251 상세조회</span>
 
                 <span class="small-title2">
-                    <!-- 상세보기를 선택한 행의 지급일, 지급사유가 동적으로 표시되는곳 -->
-                    <span>2023.07.01</span>
-                    <span>정기지급</span>
+                    <span th:text="${#dates.format(pointHistoryDetailList[0].pointDate, 'yyyy.MM.dd')}">2023.07.01</span>
+                    <span th:text="${pointHistoryDetailList[0].pointReason}">정기지급</span>
                 </span>
         
                 <table id="table-givepointhistory2">
@@ -59,8 +58,6 @@
                             <td th:text="${detail.deptDTO.deptName}">영업</td>
                             <td th:text="${detail.jobDTO.jobName}">사원</td>
                             <td th:text="${detail.employeeDTO.yearCount}">1</td>
-<!--                            <td th:text="${detail.pointAmount}">1,000,000</td>-->
-<!--                            <td th:text="${#numbers.formatDecimal(detail.pointAmount, 0, 'COMMA', 2)}">1,000,000</td>-->
                             <td th:text="${#numbers.formatInteger(detail.pointAmount, 1, 'COMMA') + '원'}"></td>
                         </tr>
                     </tbody>
@@ -72,7 +69,8 @@
                         <a th:if="${pageHandler.showPrev}" th:href="@{/member/pointHistoryDetail(page=${pageHandler.beginPage - 1})}">이전</a>
 
                         <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}">
-                            <a th:href="@{/member/pointHistoryDetail(page=${pageNumber})}" th:text="${pageNumber}"
+                            <a th:href="@{/member/pointHistoryDetail(page=${pageNumber})}"
+                               th:text="${pageNumber == 0 ? 1 : pageNumber}"
                                th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
                         </span>
 

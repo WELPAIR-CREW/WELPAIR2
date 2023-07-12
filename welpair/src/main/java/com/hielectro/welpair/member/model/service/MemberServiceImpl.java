@@ -36,21 +36,14 @@ public class MemberServiceImpl implements MemberService {
 
     //1. 회원조회 페이지
 
-//    @Override
-//    public List<MemberDTO> getMemberList(Map<String, Object> map) {
-//        List<MemberDTO> memberList = memberMapper.getMemberList(map);
-//        return memberList;
-//    }
-//
     @Override
     public int totalMemberCount() {
         return memberMapper.totalMemberCount();
     }
     @Override
-    public int expiredMemberCount() {
-        return memberMapper.expiredMemberCount();
+    public int expiredMemberCount(Map<String, Object> map) {
+        return memberMapper.expiredMemberCount(map);
     }
-
 
     //검색기능 추가
     @Override
@@ -62,6 +55,8 @@ public class MemberServiceImpl implements MemberService {
     public List<MemberDTO> searchMemberList(Map<String, Object> map) {
         return memberMapper.searchMemberList(map);
     }
+
+
 
 
 
@@ -135,14 +130,13 @@ public class MemberServiceImpl implements MemberService {
 
     //2. 회원등록-직원목록 조회
     @Override
-    public List<EmployeeDTO> getEmployeeList(Map<String, Integer> map) {
+    public List<EmployeeDTO> getEmployeeList(Map<String,Object> map) {
         List<EmployeeDTO> employeeList = memberMapper.getEmployeeList(map);
         return employeeList;
     }
-
     @Override
-    public int totalEmployeeCount() {
-        return memberMapper.totalEmployeeCount();
+    public int totalEmployeeCount(Map<String,Object> map) {
+        return memberMapper.totalEmployeeCount(map);
     }
 
     //회원등록-등록페이지에서 전송버튼 눌렀을때
@@ -261,7 +255,7 @@ public class MemberServiceImpl implements MemberService {
     //5. 포인트지급이력
     //5-1. 요약
     @Override
-    public List<PointHistoryDTO> pointHistorySummary(Map<String, Integer> map) {
+    public List<PointHistoryDTO> pointHistorySummary(Map<String, Object> map) {
         List<PointHistoryDTO> pointHistorySummaryList = memberMapper.pointHistorySummary(map);
         return pointHistorySummaryList;
     }

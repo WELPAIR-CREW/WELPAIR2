@@ -10,10 +10,9 @@ import java.util.Map;
 public interface MemberMapper {
 
     //1. 회원조회
-//    List<MemberDTO> getMemberList(Map<String, Object> map);
 
     int totalMemberCount();
-    int expiredMemberCount();
+    int expiredMemberCount(Map<String, Object> map);
 
     //검색기능 추가
     int searchMemberCount(Map<String, Object> map);
@@ -27,8 +26,8 @@ public interface MemberMapper {
 
     //2. 회원등록
     // 직원목록
-    List<EmployeeDTO> getEmployeeList(Map<String, Integer> map);
-    int totalEmployeeCount();
+    List<EmployeeDTO> getEmployeeList(Map<String, Object> map);
+    int totalEmployeeCount(Map<String, Object> map);
     int registMember(MemberDTO member); //인서트
     //*회원등록할때 회원별권한도 인서트
     int regisMemberRole(String empNo); //인서트
@@ -55,7 +54,7 @@ public interface MemberMapper {
 
     //5. 포인트지급이력
     //5-1. 포인트지급이력(요약)
-    List<PointHistoryDTO> pointHistorySummary(Map<String, Integer> map);
+    List<PointHistoryDTO> pointHistorySummary(Map<String, Object> map);
     //페이징처리를 위한 총 항목수 조회
     int pointHistorySummaryCount();
 
