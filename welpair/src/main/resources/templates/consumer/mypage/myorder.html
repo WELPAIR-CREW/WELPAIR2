@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/common/css/myorder.css">
     <!--    <link rel="stylesheet" href="/common/css/mypage2.css">-->
     <script src="/common/js/static/include.js"></script>
+    <script src="/common/js/static/myorder.js"></script>
 </head>
 
 <body>
@@ -49,7 +50,7 @@
                             6개월
                         </button>
                     </div>
-    
+
                     <div class="search-item select-date">
                         <input type="date" name="startDate" id="startDate" class="select-date-item" placeholder="시작">
                         <span class="select-date-item">~</span>
@@ -60,15 +61,13 @@
                     <form action="">
                         <div class="search-item search-criteria">
                             <select name="criteria" id="criteria" class="criteria-item">
-                               <option value="">주문전체</option> 
+                                <option value="">주문전체</option>
                             </select>
                             <input type="text" name="content" id="search-content" class="criteria-item">
                             <button type="submit" class="criteria-item">조회</button>
                         </div>
                     </form>
                 </div>
-                
-                
             </div>
             <div class="content-sort">
                 <span class="sort-item">정렬기준</span>
@@ -81,7 +80,7 @@
                 </select>
             </div>
             <div class="content-table-container">
-                <table class="table-item">
+                <table class="section-product-table">
                     <thead>
                         <tr>
                             <th>주문일자</th>
@@ -94,22 +93,35 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr th:each="order : ${orderList}">
+                            <td th:text="${#dates.format(order.getOrderDate(), 'MM/dd')}"></td>
+                            <td th:text="${order.getOrderNo()}"></td>
+                            <td th:text="${order.getOrderName()}"></td>
+                            <td th:text="${order.getAmount()}"></td>
+                            <td th:text="${order.getTotalPrice()}"></td>
+                            <td th:text="${order.getDeliveryStatus()}"></td>
+                            <td th:text="${order.getOrderType()}"></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-        </div><br>
 
-        <div class="paging">
+            <div class="paging">
 
+            </div>
         </div>
     </section>
 
     <!-- footer -->
     <div data-include-html="/consumer/footer" class="include"></div>
+    <script th:inline="javascript">
+        let data = /*[[${orderList}]]*/'list'
+        let paging = /*[[${paging}]]*/'paging'
+        let queryString = /*[[${queryString}]]*/'queryString'
 
-
-    <script>
-
+        createTable(data);
+        setPagination(paging);
+        createPaging(queryString);
     </script>
 </body>
 

@@ -79,25 +79,49 @@
     </resultMap>
 
     <select id="selectOrderList" resultMap="orderListMap">
-        SELECT
-            A.ORDER_DATE AS "주문일시",
-            A.ORDER_NO AS "주문번호",
-            C.PRODUCT_NAME AS "주문명",
-            B.PRODUCT_ORDER_AMOUNT AS "수량",
-            A.TOTAL_PRICE AS "주문금액",
-            D.DELIVERY_STATUS AS "배송상태",
-            A.ORDER_TYPE AS "주문유형"
-        FROM T_ORDER A
-                 LEFT JOIN T_PRODUCT_ORDER B ON B.ORDER_NO = A.ORDER_NO
-                 LEFT JOIN T_SELL_PRODUCT E ON E.SELL_PRODUCT_ID = B.SELL_PRODUCT_ID
-                 LEFT JOIN T_PRODUCT C ON C.PRODUCT_CODE = E.PRODUCT_CODE
-                 LEFT JOIN T_DELIVERY D ON D.PRODUCT_ORDER_NO = B.ORDER_NO
-        WHERE A.EMP_NO = #{empNo}
-        GROUP BY A.ORDER_NO, A.ORDER_DATE, A.TOTAL_PRICE, C.PRODUCT_NAME, B.PRODUCT_ORDER_AMOUNT, D.DELIVERY_STATUS, A.ORDER_TYPE
-        ORDER BY A.ORDER_DATE DESC
+        SELECT *
+          FROM (
+                SELECT
+                    ROWNUM AS RN,
+                    A.ORDER_DATE AS "주문일시",
+                    A.ORDER_NO AS "주문번호",
+                    C.PRODUCT_NAME AS "주문명",
+                    B.PRODUCT_ORDER_AMOUNT AS "수량",
+                    A.TOTAL_PRICE AS "주문금액",
+                    D.DELIVERY_STATUS AS "배송상태",
+                    A.ORDER_TYPE AS "주문유형"
+                FROM T_ORDER A
+                         LEFT JOIN T_PRODUCT_ORDER B ON B.ORDER_NO = A.ORDER_NO
+                         LEFT JOIN T_SELL_PRODUCT E ON E.SELL_PRODUCT_ID = B.SELL_PRODUCT_ID
+                         LEFT JOIN T_PRODUCT C ON C.PRODUCT_CODE = E.PRODUCT_CODE
+                         LEFT JOIN T_DELIVERY D ON D.PRODUCT_ORDER_NO = B.ORDER_NO
+                WHERE A.EMP_NO = #{empNo}
+                ORDER BY A.ORDER_NO DESC)
+        WHERE 1=1
+        <if test="pageNo != null and pageNo != ''">
+          AND RN > ((${pageNo} - 1) * 10)
+          AND RN &lt;= (${pageNo} * 10)
+        </if>
     </select>
 
 
+    <select id="orderListCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM (SELECT ROWNUM                 AS RN,
+                     A.ORDER_DATE           AS "주문일시",
+                     A.ORDER_NO             AS "주문번호",
+                     C.PRODUCT_NAME         AS "주문명",
+                     B.PRODUCT_ORDER_AMOUNT AS "수량",
+                     A.TOTAL_PRICE          AS "주문금액",
+                     D.DELIVERY_STATUS      AS "배송상태",
+                     A.ORDER_TYPE           AS "주문유형"
+              FROM T_ORDER A
+                       LEFT JOIN T_PRODUCT_ORDER B ON B.ORDER_NO = A.ORDER_NO
+                       LEFT JOIN T_SELL_PRODUCT E ON E.SELL_PRODUCT_ID = B.SELL_PRODUCT_ID
+                       LEFT JOIN T_PRODUCT C ON C.PRODUCT_CODE = E.PRODUCT_CODE
+                       LEFT JOIN T_DELIVERY D ON D.PRODUCT_ORDER_NO = B.ORDER_NO
+              WHERE A.EMP_NO = #{empNo})
+    </select>
 
 
 </mapper>
