@@ -60,9 +60,25 @@
     </select>
 
 <!-- 마이포인트 이력 조회  -->
-    <select id="mypointList" resultMap="mypointListResultMap" parameterType="string">
+    <select id="mypointList" resultMap="mypointListResultMap">
         SELECT *
+        FROM T_POINT_HISTORY PH
+        WHERE PH.EMP_NO = #{empNo}
+        <if test='pointType != null and pointType.equals("earn")'>
+            AND PH.POINT_TYPE = '적립'
+        </if>
+        <if test='pointType != null and pointType.equals("used")'>
+            AND PH.POINT_TYPE = '사용'
+        </if>
+    </select>
+    <select id="myPointListCount" resultType="_int" parameterType="string">
+        SELECT COUNT(*)
         FROM T_POINT_HISTORY
+        WHERE EMP_NO = #{empNo}
+    </select>
+    <select id="getPointBalance" resultType="_int" parameterType="string">
+        SELECT M.POINT_BALANCE
+        FROM T_MEMBER M
         WHERE EMP_NO = #{empNo}
     </select>
 

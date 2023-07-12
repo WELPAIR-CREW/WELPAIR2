@@ -1,6 +1,7 @@
 package com.hielectro.welpair.mypage.controller;
 
 
+import com.hielectro.welpair.member.controller.PageHandler;
 import com.hielectro.welpair.member.controller.PointException;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
@@ -134,15 +135,44 @@ public class MypageController {
 
 
 
-//4.
-    //포인트 css일부수정필요
+//4. 마이포인트
     @GetMapping("/myPoint")
-    public ModelAndView myPoint(ModelAndView model) {
+    public ModelAndView myPoint(@RequestParam(defaultValue="1") int page, ModelAndView model
+                               ,@RequestParam(value="type", required = false)String pointType) {
 
-        //로그인하여 현재 접속중인 empNo값을 인자로 넘겨야할것
-        String empNo = "E00026"; //일단 인위적으로 설정
-        List<PointHistoryDTO> mypointList = mypageService.mypointList(empNo);
+        //@@@로그인하여 현재 접속중인 empNo값을 인자로 넘겨야할것
+        //일단 인위적으로 설정
+        String empNo = "E00026";
+
+
+        //페이징-------------------------------------------------------------
+        int pageSize = 10; //페이지당 항목 수
+        int totalCnt = mypageService.myPointListCount(empNo);
+        System.out.println("db에서 조회한 총 마이포인트 목록 항목수 : " + totalCnt);
+        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
+        model.addObject("totalCnt", totalCnt);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("startRow", pageHandler.getStartRow());
+        map.put("endRow", pageHandler.getEndRow());
+        model.addObject("pageHandler", pageHandler);
+        //------------------------------------------------------------------
+
+        map.put("empNo", empNo);
+
+        if (pointType != null && (pointType.equals("earn") || pointType.equals("used"))) {
+            map.put("pointType", pointType);
+        }
+
+        System.out.println("pointType값 확인 : " + pointType);
+
+
+        List<PointHistoryDTO> mypointList = mypageService.mypointList(map);
         model.addObject("mypointList", mypointList);
+
+        //포인트 잔액 조회
+        int pointBalance = mypageService.getPointBalance(empNo);
+        model.addObject("pointBalance", pointBalance);
 
         model.setViewName("consumer/mypage/mypoint");
         return model;

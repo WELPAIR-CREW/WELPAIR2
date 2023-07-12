@@ -80,6 +80,16 @@
         <association property="product" resultMap="ProductResultMap"/>
     </resultMap>
 
+    <resultMap id="productOrderResultMap" type="com.hielectro.welpair.order.model.dto.ProductOrderDTO">
+        <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="orderNo" column="ORDER_NO"/>
+        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="productOrderAmount" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="productOrderPrice" column="PRODUCT_ORDER_PRICE"/>
+        <result property="deliveryDate" column="DELIVERY_DATE"/>
+        <association property="Sellproduct" resultMap="SellProductResultMap"/>
+    </resultMap>
+
 
     <!-- cartSellProduct 카트에 담긴 기존 상품 조회 -->
     <select id="checkoutCartProductById" resultType="_int" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
@@ -146,58 +156,59 @@
 
     <select id="cartAllInfoSelect" resultMap="cartGeneralResultMap">
         SELECT  A.CART_NO
-                , A.EMP_NO
-                , B.SELL_PRODUCT_ID
-                , B.CART_AMOUNT
-                , B.DELIVERY_PRICE
-                , C.PRODUCT_CODE
-                , C.DISCOUNT
-                , C.IS_SELL
-                , D.SELL_PAGE_NO
-                , E.SELL_PAGE_TITLE
-                , E.SELL_DETAIL_IMAGE_FILE_NAME
-                , E.SELL_DETAIL_IMAGE_ORGIN_FILE_NAME
-                , E.FILE_PATH
-                , G.PRODUCT_NAME
-                , G.PRODUCT_STATUS
-                , G.PRODUCT_AMOUNT
-                , G.PRODUCT_PRICE
-                , F.SELL_THUMB_IMAGE_FILE_NAME
-          FROM   T_CART A
-               , T_CART_SELL_PRODUCT B
-               , T_SELL_PRODUCT C
-               , T_SELL_ITEM_PAGE D
-               , T_SELL_PAGE E
-               , T_PRODUCT G
-               , (SELECT
+             , A.EMP_NO
+             , B.SELL_PRODUCT_ID
+             , B.CART_AMOUNT
+             , B.DELIVERY_PRICE
+             , C.PRODUCT_CODE
+             , C.DISCOUNT
+             , C.IS_SELL
+             , D.SELL_PAGE_NO
+             , E.SELL_PAGE_TITLE
+             , E.SELL_DETAIL_IMAGE_FILE_NAME
+             , E.SELL_DETAIL_IMAGE_ORGIN_FILE_NAME
+             , E.FILE_PATH
+             , G.PRODUCT_NAME
+             , G.PRODUCT_STATUS
+             , G.PRODUCT_AMOUNT
+             , G.PRODUCT_PRICE
+             , F.SELL_THUMB_IMAGE_FILE_NAME
+        FROM   T_CART A
+           , T_CART_SELL_PRODUCT B
+           , T_SELL_PRODUCT C
+           , T_SELL_ITEM_PAGE D
+           , T_SELL_PAGE E
+           , T_PRODUCT G
+           , (SELECT
                   SELL_PAGE_NO, MIN(SELL_THUMB_IMAGE_FILE_NAME) AS SELL_THUMB_IMAGE_FILE_NAME
-            FROM T_THUMB_IMAGE
-            GROUP BY SELL_PAGE_NO) F
-         WHERE A.EMP_NO = #{empNo}
-           AND A.CART_NO = B.CART_NO(+)
-           AND B.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID(+)
-           AND C.SELL_PRODUCT_ID = D.SELL_PRODUCT_ID(+)
-           AND D.SELL_PAGE_NO = E.SELL_PAGE_NO(+)
-           AND C.PRODUCT_CODE = G.PRODUCT_CODE(+)
-           AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
+              FROM T_THUMB_IMAGE
+              GROUP BY SELL_PAGE_NO) F
+        WHERE A.EMP_NO = #{empNo}
+          AND A.CART_NO = B.CART_NO(+)
+          AND B.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID(+)
+          AND C.SELL_PRODUCT_ID = D.SELL_PRODUCT_ID(+)
+          AND D.SELL_PAGE_NO = E.SELL_PAGE_NO(+)
+          AND C.PRODUCT_CODE = G.PRODUCT_CODE(+)
+          AND E.SELL_PAGE_NO = F.SELL_PAGE_NO(+)
+        ORDER BY B.SELL_PRODUCT_ID ASC
     </select>
 
-<!--    <select id="selectThumbnailImage" resultMap="ThumbnailImageResultMap">-->
-<!--        SELECT SELL_PAGE_NO-->
-<!--             , SELL_THUMB_IMAGE_FILE_NAME-->
-<!--          FROM T_THUMB_IMAGE-->
-<!--         WHERE SELL_PAGE_NO = #{no}-->
-<!--           AND SELL_THUMB_IMAGE_FILE_NAME NOT NULL-->
-<!--    </select>-->
+    <!--    <select id="selectThumbnailImage" resultMap="ThumbnailImageResultMap">-->
+    <!--        SELECT SELL_PAGE_NO-->
+    <!--             , SELL_THUMB_IMAGE_FILE_NAME-->
+    <!--          FROM T_THUMB_IMAGE-->
+    <!--         WHERE SELL_PAGE_NO = #{no}-->
+    <!--           AND SELL_THUMB_IMAGE_FILE_NAME NOT NULL-->
+    <!--    </select>-->
 
     <update id="cartAmountChange" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
         UPDATE T_CART_SELL_PRODUCT
-           SET CART_AMOUNT = #{cartAmount}
-         WHERE CART_NO = (
-                            SELECT B.CART_NO
-                            FROM T_CART B
-                            WHERE B.EMP_NO = #{cart.empNo}
-                         )
+        SET CART_AMOUNT = #{cartAmount}
+        WHERE CART_NO = (
+            SELECT B.CART_NO
+            FROM T_CART B
+            WHERE B.EMP_NO = #{cart.empNo}
+        )
           AND SELL_PRODUCT_ID = #{sellProductId}
     </update>
 

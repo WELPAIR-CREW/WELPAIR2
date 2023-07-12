@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -37,7 +37,7 @@
         <div id="wishlist">
             <div class="wishlist-item">
                 <input type="checkbox">
-                <img src="../../img/thumbnailbox.png" alt="썸네일">
+                <img src="/common/images/thumbnailbox.png" alt="썸네일">
                 <span>
                     <div>상품명상품명상품명상품명1</div>
                     <div>옵션명옵션명옵션명1</div>
@@ -50,7 +50,7 @@
             </div>
             <div class="wishlist-item">
                 <input type="checkbox">
-                <img src="../../img/thumbnailbox.png" alt="썸네일">
+                <img src="/common/images/thumbnailbox.png" alt="썸네일">
                 <span>
                     <div>상품명상품명상품명상품명1</div>
                     <div>옵션명옵션명옵션명1</div>
@@ -63,7 +63,7 @@
             </div>
             <div class="wishlist-item">
                 <input type="checkbox">
-                <img src="../../img/thumbnailbox.png" alt="썸네일">
+                <img src="/common/images/thumbnailbox.png" alt="썸네일">
                 <span>
                     <div>상품명상품명상품명상품명1</div>
                     <div>옵션명옵션명옵션명1</div>
@@ -76,7 +76,7 @@
             </div>
             <div class="wishlist-item">
                 <input type="checkbox">
-                <img src="../../img/thumbnailbox.png" alt="썸네일">
+                <img src="/common/images/thumbnailbox.png" alt="썸네일">
                 <span>
                     <div>상품명상품명상품명상품명1</div>
                     <div>옵션명옵션명옵션명1</div>
@@ -89,7 +89,7 @@
             </div>
             <div class="wishlist-item">
                 <input type="checkbox">
-                <img src="../../img/thumbnailbox.png" alt="썸네일">
+                <img src="/common/images/thumbnailbox.png" alt="썸네일">
                 <span>
                     <div>상품명상품명상품명상품명1</div>
                     <div>옵션명옵션명옵션명1</div>
@@ -102,15 +102,16 @@
             </div>
         </div>
 
-        <div class="paging">
-            <span>&lt;</span>
-            <span>1</span>
-            <span>2</span>
-            <span>3</span>
-            <span>4</span>
-            <span>5</span>
-            <span>&gt;</span>
-        </div>
+<!--        <div class="paging">-->
+<!--            <a th:if="${pageHandler.showPrev}" th:href="@{/mypage/wishlist(page=${pageHandler.beginPage - 1})}">이전</a>-->
+
+<!--            <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}">-->
+<!--                            <a th:href="@{/mypage/wishlist(page=${pageNumber})}" th:text="${pageNumber}"-->
+<!--                               th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>-->
+<!--                        </span>-->
+
+<!--            <a th:if="${pageHandler.showNext}" th:href="@{/mypage/wishlist(page=${pageHandler.endPage + 1})}">다음</a>-->
+<!--        </div>-->
 
 
     </section>
