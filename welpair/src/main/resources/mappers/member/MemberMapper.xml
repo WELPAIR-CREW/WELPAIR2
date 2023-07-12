@@ -95,7 +95,8 @@
     </resultMap>
 
 
-    <!-- 1. 페이징처리하여 보여줄 회원목록-->
+    <!-- 1. 회원목록-->
+    <!-- 아래 검색 적용 전 select문 삭제시 오류  -->
     <select id="getMemberList" resultMap="memberListResultMap">
         SELECT *
         FROM (SELECT rownum AS rnum
@@ -120,19 +121,7 @@
     </select>
 
 
-    <!-- 전체회원수, 퇴사회원수 조회 -->
-<!--    <select id="totalMemberCount" resultType="_int" parameterType="hashmap">-->
-<!--        SELECT COUNT(*)-->
-<!--        FROM T_MEMBER M-->
-<!--        WHERE M.IS_ACTIVATED = 'Y'-->
-<!--    </select>-->
-<!--    <select id="expiredMemberCount" resultType="_int" parameterType="hashmap">-->
-<!--        SELECT COUNT(*)-->
-<!--        FROM T_MEMBER M-->
-<!--                 JOIN T_EMPLOYEE E on M.EMP_NO = E.EMP_NO-->
-<!--        WHERE E.IS_EXPIRE = 'Y' AND M.IS_ACTIVATED = 'Y'-->
-<!--    </select>-->
-
+    <!-- 전체회원수(다른 핸들러메소드에서도 사용중), 퇴사회원수 조회 -->
     <select id="totalMemberCount" resultType="_int">
         SELECT COUNT(*)
         FROM T_MEMBER M
@@ -143,9 +132,21 @@
         FROM T_MEMBER M
                  JOIN T_EMPLOYEE E on M.EMP_NO = E.EMP_NO
         WHERE E.IS_EXPIRE = 'Y' AND M.IS_ACTIVATED = 'Y'
+
+        <if test="keyword != null and !keyword.isEmpty()">
+            AND (
+            M.EMP_NO LIKE '%' || #{keyword} || '%'
+            OR E.EMP_NAME LIKE '%' || #{keyword} || '%'
+            OR E.EMP_EMAIL LIKE '%' || #{keyword} || '%'
+            OR E.EMP_PHONE LIKE '%' || #{keyword} || '%'
+            )
+        </if>
+        <if test="isExpired != null and !isExpired.isEmpty()">
+            AND E.IS_EXPIRE = 'Y'
+        </if>
     </select>
 
-<!-- 검색 기능 추가  -->
+    <!-- 검색 기능 추가  -->
     <select id="searchMemberCount" resultType="_int">
         SELECT COUNT(*)
         FROM T_MEMBER M
@@ -153,41 +154,46 @@
         WHERE M.IS_ACTIVATED = 'Y'
         <if test="keyword != null and !keyword.isEmpty()">
             AND (
-            E.EMP_NO LIKE CONCAT('%', #{keyword}, '%')
-            OR E.EMP_NAME LIKE CONCAT('%', #{keyword}, '%')
-            OR E.EMP_EMAIL LIKE CONCAT('%', #{keyword}, '%')
-            OR E.EMP_PHONE LIKE CONCAT('%', #{keyword}, '%')
+            M.EMP_NO LIKE '%' || #{keyword} || '%'
+            OR E.EMP_NAME LIKE '%' || #{keyword} || '%'
+            OR E.EMP_EMAIL LIKE '%' || #{keyword} || '%'
+            OR E.EMP_PHONE LIKE '%' || #{keyword} || '%'
             )
+        </if>
+        <if test="isExpired != null and !isExpired.isEmpty()">
+            AND E.IS_EXPIRE = 'Y'
         </if>
     </select>
     <select id="searchMemberList" resultMap="memberListResultMap">
         SELECT *
         FROM ( SELECT rownum AS rnum
-                , M.EMP_NO
-                , M.MEM_PWD
-                , M.REGIST_DATE
-                , M.POINT_BALANCE
-                , E.EMP_NAME
-                , E.EMP_EMAIL
-                , E.EMP_PHONE
-                , E.IS_EXPIRE
-                , M.IS_ACTIVATED
-                FROM T_MEMBER M
-                JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
-                WHERE M.IS_ACTIVATED = 'Y'
-                <if test="keyword != null and !keyword.isEmpty()">
-                    AND (
-                    E.EMP_NO LIKE CONCAT('%', #{keyword}, '%')
-                    OR E.EMP_NAME LIKE CONCAT('%', #{keyword}, '%')
-                    OR E.EMP_EMAIL LIKE CONCAT('%', #{keyword}, '%')
-                    OR E.EMP_PHONE LIKE CONCAT('%', #{keyword}, '%')
-                    )
-                </if>
+        , M.EMP_NO
+        , M.MEM_PWD
+        , M.REGIST_DATE
+        , M.POINT_BALANCE
+        , E.EMP_NAME
+        , E.EMP_EMAIL
+        , E.EMP_PHONE
+        , E.IS_EXPIRE
+        , M.IS_ACTIVATED
+        FROM T_MEMBER M
+        JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
+        WHERE M.IS_ACTIVATED = 'Y'
+        <if test="keyword != null and !keyword.isEmpty()">
+            AND (
+            M.EMP_NO LIKE '%' || #{keyword} || '%'
+            OR E.EMP_NAME LIKE '%' || #{keyword} || '%'
+            OR E.EMP_EMAIL LIKE '%' || #{keyword} || '%'
+            OR E.EMP_PHONE LIKE '%' || #{keyword} || '%'
             )
+        </if>
+        <if test="isExpired != null and !isExpired.isEmpty()">
+            AND E.IS_EXPIRE = 'Y'
+        </if>
+        )
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
         ORDER BY REGIST_DATE DESC
     </select>
-
 
 
 
@@ -215,11 +221,26 @@
                   ,E.HIRE_DATE
                   ,M.REGIST_DATE
              FROM T_EMPLOYEE E
-                      LEFT JOIN T_MEMBER M ON (E.EMP_NO = M.EMP_NO)
-                      JOIN T_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
-                      JOIN T_JOB J ON (E.JOB_CODE = J.JOB_CODE)
-             WHERE E.IS_EXPIRE = 'N' AND E.EMP_NO LIKE 'E%')
---              AND M.REGIST_DATE IS NULL)
+              LEFT JOIN T_MEMBER M ON (E.EMP_NO = M.EMP_NO)
+              JOIN T_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
+              JOIN T_JOB J ON (E.JOB_CODE = J.JOB_CODE)
+             WHERE E.IS_EXPIRE = 'N' AND E.EMP_NO LIKE 'E%'
+            <if test="keyword != null and !keyword.isEmpty()">
+                AND (
+                E.EMP_NO LIKE '%' || #{keyword} || '%'
+                OR E.EMP_NAME LIKE '%' || #{keyword} || '%'
+                OR E.EMP_EMAIL LIKE '%' || #{keyword} || '%'
+                OR E.EMP_PHONE LIKE '%' || #{keyword} || '%'
+                OR D.DEPT_NAME LIKE '%' || #{keyword} || '%'
+                OR J.JOB_NAME LIKE '%' || #{keyword} || '%'
+                OR E.HIRE_DATE LIKE '%' || #{keyword} || '%'
+                OR M.REGIST_DATE LIKE '%' || #{keyword} || '%'
+                )
+            </if>
+            <if test="oneMonthAgo != null and !oneMonthAgo.isEmpty()">
+                AND E.HIRE_DATE BETWEEN (select add_months(sysdate,-1) from dual) AND sysdate
+            </if>
+             )
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
     </select>
 
@@ -228,6 +249,18 @@
             COUNT(*)
         FROM T_EMPLOYEE E
         WHERE E.IS_EXPIRE = 'N' AND E.EMP_NO LIKE 'E%'
+        <if test="keyword != null and !keyword.isEmpty()">
+            AND (
+            EMP_NO LIKE '%' || #{keyword} || '%'
+            OR EMP_NAME LIKE '%' || #{keyword} || '%'
+            OR EMP_EMAIL LIKE '%' || #{keyword} || '%'
+            OR EMP_PHONE LIKE '%' || #{keyword} || '%'
+            OR DEPT_NAME LIKE '%' || #{keyword} || '%'
+            OR JOB_NAME LIKE '%' || #{keyword} || '%'
+            OR HIRE_DATE LIKE '%' || #{keyword} || '%'
+            OR REGIST_DATE LIKE '%' || #{keyword} || '%'
+            )
+        </if>
     </select>
 
     <insert id="registMember" parameterType="com.hielectro.welpair.member.model.dto.MemberDTO">
@@ -251,15 +284,6 @@
 
 
     <!-- 3. 가입승인 - 가입요청 목록 -->
-    <!--    <select id="reqList" resultMap="reqListResultMap">-->
-    <!--        SELECT M.REGIST_DATE, M.EMP_NO, E.EMP_NAME, E.EMP_EMAIL-->
-    <!--        FROM T_MEMBER M-->
-    <!--        JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)-->
-    <!--        WHERE M.IS_ACTIVATED = 'N'-->
-    <!--        ORDER BY M.REGIST_DATE DESC-->
-    <!--        LIMIT #{ offset }, #{ pageSize }-->
-    <!--    </select>-->
-    <!-- 새로운 페이징 처리 테스트  -->
     <select id="reqList" resultMap="reqListResultMap" parameterType="hashmap">-->
     SELECT REGIST_DATE, EMP_NO, EMP_NAME, EMP_EMAIL
     FROM (
@@ -290,25 +314,42 @@
     <!-- 4. 포인트 지급 - 근속연수를 포함한 회원목록 -->
     <select id="getMemberListforPoint" resultMap="memberListResultMap" parameterType="hashmap">
         SELECT * FROM
-            (SELECT row_number() OVER (ORDER BY E.HIRE_DATE DESC) AS rnum
-                  , M.EMP_NO
-                  , E.EMP_NAME
-                  , E.EMP_EMAIL
-                  , E.EMP_PHONE
-                  , D.DEPT_NAME
-                  , J.JOB_NAME
-                  , E.HIRE_DATE
-                  , M.REGIST_DATE
-                  , CEIL(MONTHS_BETWEEN(SYSDATE, HIRE_DATE) / 12) AS "YEAR_COUNT"
-             FROM T_MEMBER M
-             JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
-             JOIN T_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
-             JOIN T_JOB J ON (E.JOB_CODE = J.JOB_CODE)
-             WHERE M.IS_ACTIVATED = 'Y' AND E.IS_EXPIRE = 'N'
+        (
+        SELECT row_number() OVER (ORDER BY
+        <if test="sortYears == 'asc'">YEAR_COUNT ASC</if>
+        <if test="sortYears == 'desc'">YEAR_COUNT DESC</if>
+        ) AS rnum,
+        TMP.* FROM (
+        SELECT
+        M.EMP_NO,
+        E.EMP_NAME,
+        E.EMP_EMAIL,
+        E.EMP_PHONE,
+        D.DEPT_NAME,
+        J.JOB_NAME,
+        E.HIRE_DATE,
+        M.REGIST_DATE,
+        CEIL(MONTHS_BETWEEN(SYSDATE, E.HIRE_DATE) / 12) AS YEAR_COUNT
+        FROM T_MEMBER M
+        JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
+        JOIN T_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
+        JOIN T_JOB J ON (E.JOB_CODE = J.JOB_CODE)
+        WHERE M.IS_ACTIVATED = 'Y' AND E.IS_EXPIRE = 'N'
+        <if test="deptType != 'all'">AND E.DEPT_CODE = #{deptType}</if>
+        <if test="jobType != 'all'">AND E.JOB_CODE = #{jobType}</if>
+        <if test="keyword != null and !keyword.isEmpty()">
+            AND (
+            M.EMP_NO LIKE '%' || #{keyword} || '%'
+            OR E.EMP_NAME LIKE '%' || #{keyword} || '%'
+            OR E.EMP_EMAIL LIKE '%' || #{keyword} || '%'
+            OR E.EMP_PHONE LIKE '%' || #{keyword} || '%'
             )
+        </if>
+        ) TMP
+        ) RESULT
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
-        ORDER BY REGIST_DATE DESC
     </select>
+
 
     <!-- 포인트 지급이력 테이블 인서트  -->
     <insert id="insertPointHistory" parameterType="com.hielectro.welpair.member.model.dto.PointHistoryDTO">
@@ -352,61 +393,41 @@
                 COUNT(DISTINCT P.EMP_NO) AS "POINT_COUNT",
                 SUM(P.POINT_AMOUNT) AS "POINT_TOTAL"
               FROM T_POINT_HISTORY P
+                <if test="lastSixMonthAgo != null and !lastSixMonthAgo.isEmpty()">
+                    WHERE P.POINT_DATE BETWEEN (select add_months(sysdate,-6) from dual) AND sysdate
+                </if>
               GROUP BY P.EVENT_ID, P.POINT_REASON
 --               ORDER BY P.EVENT_ID DESC
-              )
+             )
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
     </select>
 
-<!--  페이징처리를 위해 지급이력(요약) 총 항목수 조회  -->
+    <!--  페이징처리를 위해 지급이력(요약) 총 항목수 조회  -->
     <select id="pointHistorySummaryCount" resultType="_int">
         SELECT
             COUNT(DISTINCT P.EVENT_ID)
         FROM T_POINT_HISTORY P
     </select>
 
-
-
-    <!-- 포인트지급이력(상세) -->
-<!--    <select id="pointHistoryDetail" resultMap="pointHistoryResultMap">-->
-<!--        SELECT-->
-<!--            P.POINT_NO-->
-<!--             ,P.EMP_NO-->
-<!--             ,P.POINT_DATE-->
-<!--             ,P.POINT_AMOUNT-->
-<!--             ,P.POINT_TYPE-->
-<!--             ,P.POINT_REASON-->
-<!--             ,P.EVENT_ID-->
-<!--             ,E.EMP_NAME, D.DEPT_NAME, J.JOB_NAME-->
-<!--             ,CEIL(MONTHS_BETWEEN(SYSDATE, E.HIRE_DATE) / 12) AS "YEAR_COUNT"-->
-<!--        FROM T_POINT_HISTORY P-->
-<!--            JOIN T_MEMBER M ON (P.EMP_NO = M.EMP_NO)-->
-<!--            JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)-->
-<!--            JOIN T_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)-->
-<!--            JOIN T_JOB J ON (E.JOB_CODE = J.JOB_CODE)-->
-<!--        WHERE P.EVENT_ID = #{ eventId }-->
-<!--        ORDER BY P.EMP_NO-->
-<!--    </select>-->
-
     <select id="pointHistoryDetail" resultMap="pointHistoryResultMap" parameterType="hashmap">
         SELECT *
         FROM (SELECT row_number() OVER (ORDER BY P.EMP_NO) AS rnum,
-                P.POINT_NO
-                 ,P.EMP_NO
-                 ,P.POINT_DATE
-                 ,P.POINT_AMOUNT
-                 ,P.POINT_TYPE
-                 ,P.POINT_REASON
-                 ,P.EVENT_ID
-                 ,E.EMP_NAME, D.DEPT_NAME, J.JOB_NAME
-                 ,CEIL(MONTHS_BETWEEN(SYSDATE, E.HIRE_DATE) / 12) AS "YEAR_COUNT"
-            FROM T_POINT_HISTORY P
-                JOIN T_MEMBER M ON (P.EMP_NO = M.EMP_NO)
-                JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
-                JOIN T_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
-                JOIN T_JOB J ON (E.JOB_CODE = J.JOB_CODE)
-            WHERE P.EVENT_ID = #{ eventId }
-            )
+                  P.POINT_NO
+                   ,P.EMP_NO
+                   ,P.POINT_DATE
+                   ,P.POINT_AMOUNT
+                   ,P.POINT_TYPE
+                   ,P.POINT_REASON
+                   ,P.EVENT_ID
+                   ,E.EMP_NAME, D.DEPT_NAME, J.JOB_NAME
+                   ,CEIL(MONTHS_BETWEEN(SYSDATE, E.HIRE_DATE) / 12) AS "YEAR_COUNT"
+              FROM T_POINT_HISTORY P
+                  JOIN T_MEMBER M ON (P.EMP_NO = M.EMP_NO)
+                  JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
+                  JOIN T_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
+                  JOIN T_JOB J ON (E.JOB_CODE = J.JOB_CODE)
+              WHERE P.EVENT_ID = #{ eventId }
+             )
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
     </select>
 

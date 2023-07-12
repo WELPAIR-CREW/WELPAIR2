@@ -1,0 +1,129 @@
+
+/* 공통부분 */
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+
+a{
+    color: inherit;
+    text-decoration: none;
+}
+
+.content-wrap{
+    text-align: center;
+}
+.content-wrap > div{
+    margin-top: 50px;
+    margin-bottom: 200px;
+}
+
+
+/* 네비게이션 바 */
+.nav-wrap{
+    width: 240px;
+    height: 350px;
+    background-color: #F8F7F7;
+    display: inline-block;
+    border-radius: 6px;
+    vertical-align: top;
+}
+
+.nav-wrap > div {
+    text-align: right;
+    margin: 20px;
+}
+
+.notice {
+    font-weight: 700;
+}
+
+
+
+/* 리스트 */
+
+.list-wrap{
+    width: 940px;
+    height: 600px;
+    margin-left: 30px;
+    display: inline-block;
+}
+
+/* 리스트 나열 */
+
+
+.list-qna-top {
+    border-bottom: 3px solid black;
+    text-align: left;
+}
+
+.list-qna-top > div{
+    display: inline-block;
+}
+
+.qna-title-top{
+    margin: 12px 10px;
+}
+
+
+/* 리스트 상단 버튼 */
+
+.qna-bnt > div{
+    display: inline-block;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+
+}
+
+.qna-bnt{
+    text-align: right;
+}
+
+
+
+/* 하단 리스트 내용 */
+.qna-top{
+    padding: 14px 0;
+}
+
+.qna-list > div > div{
+    display: inline-block;
+}
+
+.qna-list > div {
+    border-bottom: 1px solid #d9d9d9;
+    padding: 12px 0;
+
+}
+.qna-num{
+    width: 15%;
+
+}
+
+.qna-title{
+    width: 70%;
+}
+
+.qna-date{
+    width: 10%;
+}
+
+.top > .on {
+    text-align: left;
+}
+
+
+
+.qna-title {
+    text-align: left;
+}
+
+.qna-list > div:last-child{
+    border-bottom: 2px solid #333;
+}
+
+

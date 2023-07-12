@@ -85,10 +85,6 @@ $("#historySearch").click(function (){
     }
 });
 
-// 테이블 정렬
-$(document).ready(function() {
-    $('#searchResultTable').DataTable();
-});
 
 // 페이징
 

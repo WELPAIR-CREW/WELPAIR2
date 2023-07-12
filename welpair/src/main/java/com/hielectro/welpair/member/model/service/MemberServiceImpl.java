@@ -2,7 +2,6 @@ package com.hielectro.welpair.member.model.service;
 import com.hielectro.welpair.member.controller.DeleteMemberException;
 import com.hielectro.welpair.member.controller.PointException;
 import com.hielectro.welpair.member.controller.RegistMemberException;
-import com.hielectro.welpair.member.controller.SelectCriteria;
 import com.hielectro.welpair.member.model.dao.MemberDAO;
 import com.hielectro.welpair.member.model.dao.MemberMapper;
 import com.hielectro.welpair.member.model.dto.*;
@@ -36,40 +35,14 @@ public class MemberServiceImpl implements MemberService {
 
 
     //1. 회원조회 페이지
-//    @Override
-//    public List<MemberDTO> getMemberList(SelectCriteria selectCriteria) {
-//        List<MemberDTO> memberList = memberMapper.getMemberList(selectCriteria);
-//        return memberList;
-//    }
-//
-//
-//    //전체,퇴사회원수 조회
-//    @Override
-//    public int totalMemberCount(Map<String, String> searchMap) {
-//        return memberMapper.totalMemberCount(searchMap);
-//    }
-//
-//    @Override
-//    public int expiredMemberCount(Map<String, String> searchMap) {
-//
-//
-//        return memberMapper.expiredMemberCount(searchMap);
-//    }
-
-    @Override
-    public List<MemberDTO> getMemberList(Map<String, Object> map) {
-        List<MemberDTO> memberList = memberMapper.getMemberList(map);
-        return memberList;
-    }
 
     @Override
     public int totalMemberCount() {
         return memberMapper.totalMemberCount();
     }
-
     @Override
-    public int expiredMemberCount() {
-        return memberMapper.expiredMemberCount();
+    public int expiredMemberCount(Map<String, Object> map) {
+        return memberMapper.expiredMemberCount(map);
     }
 
     //검색기능 추가
@@ -157,14 +130,13 @@ public class MemberServiceImpl implements MemberService {
 
     //2. 회원등록-직원목록 조회
     @Override
-    public List<EmployeeDTO> getEmployeeList(Map<String, Integer> map) {
+    public List<EmployeeDTO> getEmployeeList(Map<String,Object> map) {
         List<EmployeeDTO> employeeList = memberMapper.getEmployeeList(map);
         return employeeList;
     }
-
     @Override
-    public int totalEmployeeCount() {
-        return memberMapper.totalEmployeeCount();
+    public int totalEmployeeCount(Map<String,Object> map) {
+        return memberMapper.totalEmployeeCount(map);
     }
 
     //회원등록-등록페이지에서 전송버튼 눌렀을때
@@ -231,7 +203,7 @@ public class MemberServiceImpl implements MemberService {
     //4. 포인트지급 페이지
     //지급을 위한 회원 목록 조회
     @Override
-    public List<MemberDTO> getMemberListforPoint(Map<String, Integer> map) {
+    public List<MemberDTO> getMemberListforPoint(Map<String, Object> map) {
         List<MemberDTO> memberList = memberMapper.getMemberListforPoint(map);
         return memberList;
     }
@@ -283,7 +255,7 @@ public class MemberServiceImpl implements MemberService {
     //5. 포인트지급이력
     //5-1. 요약
     @Override
-    public List<PointHistoryDTO> pointHistorySummary(Map<String, Integer> map) {
+    public List<PointHistoryDTO> pointHistorySummary(Map<String, Object> map) {
         List<PointHistoryDTO> pointHistorySummaryList = memberMapper.pointHistorySummary(map);
         return pointHistorySummaryList;
     }

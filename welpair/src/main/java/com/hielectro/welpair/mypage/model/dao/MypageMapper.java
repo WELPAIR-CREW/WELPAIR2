@@ -1,5 +1,6 @@
 package com.hielectro.welpair.mypage.model.dao;
 
+import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.mypage.model.dto.AddressDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,4 +20,12 @@ public interface MypageMapper {
     int insertAddress(AddressDTO addressDTO);
     //배송지 아이디
     String nextAddressId();
+
+
+    //4. 마이포인트 이력 조회
+    List<PointHistoryDTO> mypointList(Map<String, Object> map);
+    //페이징처리를 위한 마이포인트 총 항목 수
+    int myPointListCount(String empNo);
+    //포인트 잔액 조회
+    int getPointBalance(String empNo);
 }

@@ -68,8 +68,6 @@ input[type=checkbox] {
 }
 
 
-
-
 .contents {
     /* main 복붙값*/
     box-sizing: border-box;
@@ -142,9 +140,6 @@ input[type=checkbox] {
 
 .paging {
     font-size: 16px;
-    /* 색 미적용됨 */
-    color: red;
-
     margin-top: 10px;
 }
 
@@ -357,6 +352,14 @@ td {
 
 /* member-givePoint */
 
+/* 근속연수 정렬 필터 */
+.sort-button {
+    border: none;
+    outline: none;
+    background: none;
+}
+
+
 .container.long {
     /* height: 656px;
     +244만큼 페이지 길이 추가 */
@@ -484,3 +487,4 @@ td {
     margin-top: -100px;
     margin-bottom: auto;
 }
+

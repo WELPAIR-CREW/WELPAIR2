@@ -1,0 +1,86 @@
+
+/* 공통부분 */
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+
+a{
+    color: inherit;
+    text-decoration: none;
+}
+
+.content-wrap{
+    text-align: center;
+}
+.content-wrap > div{
+    margin-top: 50px;
+}
+
+
+/* 네비게이션 바 */
+.nav-wrap{
+    width: 240px;
+    height: 350px;
+    background-color: #F8F7F7;
+    display: inline-block;
+    border-radius: 6px;
+    vertical-align: top;
+}
+
+.nav-wrap > div {
+    text-align: right;
+    margin: 20px;
+}
+
+.ask {
+    font-weight: 700;
+}
+
+
+/* 리스트 */
+.content-wrap{
+    margin-bottom: 200px;
+}
+
+.list-wrap{
+    width: 940px;
+    height: 600px;
+    margin-left: 30px;
+    display: inline-block;
+
+}
+
+.list-ask-top {
+    border-bottom: 2px solid black;
+    text-align: left;
+}
+
+.ask-title-top{
+    margin: 12px 10px;
+
+}
+.list-ask {
+    margin: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.list-ask > div{
+    margin: 0 0 14px ;
+
+}
+
+.ask-title{
+    cursor: pointer;
+}
+.ask-aswer {
+    padding: 12px;
+    border-radius: 6px;
+    background-color: #F8F7F7;
+    display: none;
+}
+
+

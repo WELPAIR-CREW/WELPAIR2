@@ -49,20 +49,18 @@
     <!--검색 조건 추가  -->
     <select id="getMonthSales" resultMap="salesResultMap">
         SELECT
-               TO_CHAR(TRUNC(A.PAYMENT_DATE, 'MONTH'), 'MM') AS MONTH
-             , SUM(A.PAYMENT_PRICE) AS SALES
-          FROM T_PAYMENT A
-          JOIN T_ORDER_PAYMENT B ON B.PAYMENT_NO = A.PAYMENT_NO
-          JOIN T_PRODUCT_ORDER C ON C.ORDER_NO = B.ORDER_NO
-          JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID
-          JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
-          JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE
-         WHERE TRUNC(PAYMENT_DATE, 'MONTH') >= TRUNC(SYSDATE) - INTERVAL '6' MONTH
-<!--        <if test="payment != null and payment.paymentType != null and payment.paymentType != ''">-->
+        TO_CHAR(TRUNC(A.PAYMENT_DATE, 'MONTH'), 'MM') AS MONTH
+        , SUM(A.PAYMENT_PRICE) AS SALES
+        FROM T_PAYMENT A
+        JOIN T_ORDER_PAYMENT B ON B.PAYMENT_NO = A.PAYMENT_NO
+        JOIN T_PRODUCT_ORDER C ON C.ORDER_NO = B.ORDER_NO
+        JOIN T_SELL_PRODUCT D ON D.SELL_PRODUCT_ID = C.SELL_PRODUCT_ID
+        JOIN T_PRODUCT E ON E.PRODUCT_CODE = D.PRODUCT_CODE
+        JOIN T_CATEGORY F ON F.CATEGORY_CODE = E.CATEGORY_CODE
+        WHERE TRUNC(PAYMENT_DATE, 'MONTH') >= TRUNC(SYSDATE) - INTERVAL '6' MONTH
         <if test="payment.paymentType != null and payment.paymentType != ''">
             AND A.PAYMENT_TYPE = #{payment.paymentType}
         </if>
-<!--        <if test="category != null and category.categoryCode != null and category.categoryCode != ''">-->
         <if test="category.categoryCode != null and category.categoryCode != ''">
             AND E.CATEGORY_CODE = #{category.categoryCode}
         </if>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
 import java.util.*;
@@ -34,88 +35,39 @@ public class MemberController {
 
 
     //1. 회원조회 - 회원목록
-
-    //새로운 페이징 적용하기
     @GetMapping("/member-view")
     public ModelAndView getMemberList(@RequestParam(defaultValue="1") int page, ModelAndView model
-                                    , @RequestParam(value="type", required = false) String isExpired
-                                    , @RequestParam(value="keyword", required = false) String keyword) {
-        //int page: URL로 전달되는 현재 페이지 번호로 URL에 제공되지 않으면 1로 설정됨)
-        //String isExpired: URL로 전달되는 값...버튼을 눌렀을때 추가됨되도록 타임리프의 속성으로 추가돼있음
+            , @RequestParam(value="type", required = false) String isExpired
+            , @RequestParam(value="keyword", required = false) String keyword) {
 
-
-        //검색어 추가
-//        int pageSize = 10;
-//        int totalCnt;
-//        List<MemberDTO> memberList;
-        Map<String, Object> map = new HashMap<>();
-//        if(keyword != null && !keyword.isEmpty()) {
-//            //검색어가 있을때
-//            map.put("keyword", keyword);
-//            totalCnt = memberService.searchMemberCount(map);
-//            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
-//            map.put("startRow", pageHandler.getStartRow());
-//            map.put("endRow", pageHandler.getEndRow());
-//
-//            memberList = memberService.searchMemberList(map);
-//
-//        } else {
-//            //검색어가 없을때
-//            totalCnt = memberService.totalMemberCount();
-//            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
-//
-//            map.put("startRow", pageHandler.getStartRow());
-//            map.put("endRow", pageHandler.getEndRow());
-//
-//            //쿼리스트링으로 type을 받았다면 그 값을 맵에 추가로 담는다
-//            if (isExpired != null && isExpired.equals("Y")) {
-//                map.put("isExpired", 1);
-//            } else {
-//                map.put("isExpired", 2);
-//            }
-//
-//            memberList = memberService.getMemberList(map);
-//        }
-//        model.addObject("totalCnt", totalCnt);
-//        model.addObject("memberList", memberList);
-
-
-
-        //검색기능 추가하기 전(페이징까지만 적용했을때의 코드)
         int pageSize = 10;
-        int totalCnt = memberService.totalMemberCount();
-        System.out.println("db에서 조회한 총 회원항목수 : " + totalCnt);
-        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
-        model.addObject("totalCnt", totalCnt);
+        int totalCnt;
+        List<MemberDTO> memberList;
+        Map<String, Object> map = new HashMap<>(); //쿼리 파라미터
 
-//        Map<String, Integer> map = new HashMap<>();
+
+        map.put("isExpired", isExpired); //퇴사 버튼
+        map.put("keyword", keyword);    //검색어
+        totalCnt = memberService.searchMemberCount(map);
+        System.out.println("totalCnt 조회 : " + totalCnt);
+
+
+        //페이징에 필요한 값 맵에 담기
+        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
         map.put("startRow", pageHandler.getStartRow());
         map.put("endRow", pageHandler.getEndRow());
 
-        //쿼리스트링으로 type을 받았다면 그 값을 맵에 추가로 담는다
-        if (isExpired != null && isExpired.equals("Y")) {
-            map.put("isExpired", 1);
-        } else {
-            map.put("isExpired", 2);
-        }
-        System.out.println(isExpired);
+        //DB에서 목록 받아옴
+        memberList = memberService.searchMemberList(map);
+        int expiredMemberCount = memberService.expiredMemberCount(map);
 
-        //회원목록 받아오기
-        List<MemberDTO> memberList = memberService.getMemberList(map);
-        model.addObject("memberList", memberList);
         model.addObject("pageHandler", pageHandler);
-
+        model.addObject("totalCnt", totalCnt);
+        model.addObject("expiredMemberCount", expiredMemberCount);
+        model.addObject("memberList", memberList);
+        model.setViewName("admin/member/member-view");
 
         System.out.println(memberList);
-
-        //전체 회원수와 퇴사한 회원수
-        int totalMemberCount = memberService.totalMemberCount();
-        model.addObject("totalMemberCount", totalMemberCount);
-
-        int expiredMemberCount = memberService.expiredMemberCount();
-        model.addObject("expiredMemberCount", expiredMemberCount);
-
-        model.setViewName("admin/member/member-view");
 
         return model;
     }
@@ -151,23 +103,40 @@ public class MemberController {
     //2. 회원등록
     //2-1.직원목록 - 새로운 페이징 클래스 적용
     @GetMapping("/regist")
-    public ModelAndView getEmployeeList(@RequestParam(defaultValue="1") int page, ModelAndView model) {
+    public ModelAndView getEmployeeList(@RequestParam(defaultValue="1") int page, ModelAndView model
+                                      , @RequestParam(value="keyword", required = false) String keyword
+                                      , @RequestParam(required = false) String oneMonthAgo) {
 
-        int pageSize = 10; //페이지당 항목 수
 
-        int totalCnt = memberService.totalEmployeeCount();
+        int pageSize = 10;
+        int totalCnt;
+        List<EmployeeDTO> employeeList;
+        Map<String, Object> map = new HashMap<>();
+
+
+        //최근한달 버튼 클릭시
+        System.out.println("oneMonthAgo가 붙어서 들어온 경우인지 확인 : " + oneMonthAgo);
+        map.put("oneMonthAgo", oneMonthAgo);
+
+
+        map.put("keyword", keyword);    //검색어
+        totalCnt = memberService.searchMemberCount(map);
         System.out.println("db에서 조회한 총 직원목록 항목수 : " + totalCnt);
-        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
-        model.addObject("totalCnt", totalCnt);
 
-        Map<String, Integer> map = new HashMap<>();
+        //페이징에 필요한 값 맵에 담기
+        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
         map.put("startRow", pageHandler.getStartRow());
         map.put("endRow", pageHandler.getEndRow());
 
-        List<EmployeeDTO> employeeList = memberService.getEmployeeList(map);
-        model.addObject("employeeList", employeeList);
+        //DB에서 목록 받아옴
+        employeeList = memberService.getEmployeeList(map);
+
         model.addObject("pageHandler", pageHandler);
+        model.addObject("totalCnt", totalCnt);
+        model.addObject("employeeList", employeeList);
         model.setViewName("admin/member/member-regist1");
+
+        System.out.println(employeeList);
         return model;
     }
 
@@ -246,28 +215,52 @@ public class MemberController {
     //4. 포인트지급 페이지
     //4-1. 포인트지급을 위한 회원목록 조회
     @GetMapping("/memberListForPoint")
-    public ModelAndView getMemberListforPoint(@RequestParam(defaultValue="1") int page, ModelAndView model) {
+    public ModelAndView getMemberListforPoint(@RequestParam(defaultValue="1") int page
+                                              ,@RequestParam(defaultValue="all") String deptType
+                                              ,@RequestParam(defaultValue="all") String jobType
+                                              ,@RequestParam(defaultValue = "asc") String sortYears
+                                              , @RequestParam(value="keyword", required = false) String keyword
+                                              ,ModelAndView model) {
 
         int pageSize = 10;
-        int totalCnt = memberService.totalMemberCount(); //총 항목 수(검색 조건 적용)
-        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
-        model.addObject("totalCnt", totalCnt);
+        int totalCnt;
+        List<MemberDTO> memberList;
+        Map<String, Object> map = new HashMap<>();
 
-        Map<String, Integer> map = new HashMap<>();
+        //부서 필터
+        System.out.println("컨트롤러에서 필터 deptType값 확인 :  " + deptType);
+        map.put("deptType", deptType);
+        //직급 필터
+        System.out.println("컨트롤러에서 필터 jobType값 확인 :  " + jobType);
+        map.put("jobType", jobType);
+        //근속연수 정렬
+        System.out.println("컨트롤러에서 선택된 근속연수 정렬기준 확인 : " + sortYears); //asc 또는 desc
+        map.put("sortYears", sortYears);
+
+        //검색어
+        map.put("keyword", keyword);
+        totalCnt = memberService.searchMemberCount(map);
+        System.out.println("totalCnt 조회 : " + totalCnt);
+
+        //페이징에 필요한 값 맵에 담기
+        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
         map.put("startRow", pageHandler.getStartRow());
         map.put("endRow", pageHandler.getEndRow());
 
-        List<MemberDTO> memberList = memberService.getMemberListforPoint(map);
+        //DB에서 목록 받아옴
+        memberList = memberService.getMemberListforPoint(map);
         System.out.println("복지포인트지급을 위한 회원목록 : " + memberList);
         model.addObject("memberList", memberList);
         model.addObject("pageHandler", pageHandler);
-
-        //선택된 체크박스의 수
-        int selectedElementsCnt = 0;
-        System.out.println("선택된 체크박스의 수 : " + selectedElementsCnt);
-       // model.addObject("selectedElementsCnt", selectedElementsCnt);
-
+        model.addObject("totalCnt", totalCnt);
         model.setViewName("admin/member/member-givePoint");
+
+//        //선택된 체크박스의 수
+//        int selectedElementsCnt = 0;
+//        System.out.println("선택된 체크박스의 수 : " + selectedElementsCnt);
+//       // model.addObject("selectedElementsCnt", selectedElementsCnt);
+
+        System.out.println(memberList);
         return model;
     }
 
@@ -299,7 +292,8 @@ public class MemberController {
 
     //포인트지급이력(요약)
     @GetMapping("/pointHistorySummary")
-    public ModelAndView pointHistorySummary(@RequestParam(defaultValue="1") int page, ModelAndView model) {
+    public ModelAndView pointHistorySummary(@RequestParam(defaultValue="1") int page, ModelAndView model
+                                          , @RequestParam(required = false) String lastSixMonthAgo) {
 
         int pageSize = 10;
 
@@ -308,9 +302,13 @@ public class MemberController {
         PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
         model.addObject("totalCnt", totalCnt);
 
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("startRow", pageHandler.getStartRow());
         map.put("endRow", pageHandler.getEndRow());
+
+        //6개월 버튼 클릭시
+        System.out.println("lastSixMonthAgo 붙어서 들어온 경우인지 확인 : " + lastSixMonthAgo);
+        map.put("lastSixMonthAgo", lastSixMonthAgo);
 
 
         List<PointHistoryDTO> pointHistorySummaryList = memberService.pointHistorySummary(map);
@@ -327,7 +325,8 @@ public class MemberController {
     //포인트지급이력(상세) - 페이징 처리 적용
     @GetMapping("/pointHistoryDetail")
     public ModelAndView pointHistoryDetail(@RequestParam int eventId
-                                    , @RequestParam(defaultValue="1") int page, ModelAndView model) {
+                                    , @RequestParam(defaultValue="1") int page, ModelAndView model
+                                    , @ModelAttribute PointHistoryDTO pointHistoryDTO) {
 
         System.out.println("컨트롤러에 eventId가 들어오는지 확인 : " + eventId);
 
@@ -349,6 +348,14 @@ public class MemberController {
         model.addObject("pointHistoryDetailList", pointHistoryDetailList);
         model.addObject("pageHandler", pageHandler);
         model.setViewName("admin/member/member-givePointHistory2");
+
+
+        //지급일, 지급사유
+//        Date pointDate = pointHistoryDTO.getPointDate2();
+//        String pointReason = pointHistoryDTO.getPointReason();
+//        model.addObject("pointDate", pointDate);
+//        model.addObject("pointReason",pointReason);
+
         return model;
     }
 
