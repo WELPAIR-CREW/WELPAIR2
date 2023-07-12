@@ -18,115 +18,56 @@
     <!-- header -->
     <div th:replace="/consumer/header_mypage :: header"></div>
 
-    <section id="section-long">
+    <section class="section-long">
         <div class="section-title">복지포인트</div>
 
-        <div id="pointbox">
-            <img src="/common/images/point.png" id="pointicon" alt="포인트아이콘">
-            <label>사용가능한 포인트 : </label>
-            <span>2,000,000</span>
-            <label>원</label>
-        </div>
+        <div class="section-box">
+            <div id="pointbox">
+                <img src="/common/images/point.png" id="pointicon" alt="포인트아이콘">
+                <label>사용가능한 포인트 : </label>
+                <span th:text="${pointBalance}">2,000,000</span>
+                <label>원</label>
+            </div>
 
-        <span id="mypoint-buttons">
-            <button>전체</button>
-            <button>적립</button>
-            <button>사용</button>
-        </span>
+            <span id="mypoint-buttons">
+                <button type="button" onclick="resetPoint()">전체</button>
+                <button type="button" onclick="onlyEarnPoint()">적립</button>
+                <button type="button" onclick="onlyUsedPoint()">사용</button>
+            </span>
 
-        <table id="table-mypoint">
-<!--            <tr th:each="mypoint:${mypointList}">-->
-<!--                <td th:text="${mypoint.pointDate}">2023.06.10</td>-->
-<!--                <td th:text="${mypoint.pointType}">사용</td>-->
-<!--                <td th:text="${mypoint.pointPayDTO.paymentNo}">주문번호123456789</td>-->
-<!--                <td></td>-->
-<!--                <td>-500,000 원</td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>2023.06.08</td>-->
-<!--                <td>적립</td>-->
-<!--                <td></td>-->
-<!--                <td th:text="${mypoint.pointReason}">지급사유</td>-->
-<!--                <td>1,000,000 원</td>-->
-<!--            </tr>-->
+            <table id="table-mypoint">
+                <!-- 5개 열 : 변동일, 사용or적립, (사용일때만빈값아니고)주문번호, (적립일때만빈값아니고)지급사유, 변동금액 -->
+                <tr th:each="mypoint : ${mypointList}">
+                    <td class="one" th:text="${#dates.format(mypoint.pointDate, 'yyyy.MM.dd')}">2023.06.08</td>
+                    <td class="two" th:text="${mypoint.pointType}">사용 or 적립</td>
 
-            <tr th:each="mypoint : ${mypointList}">
-                <td th:text="${mypoint.pointDate}">2023.06.08</td>
-                <td th:text="${mypoint.pointType}">사용</td>
-                <td th:if="${mypoint.pointType == '사용'}"></td>
-                <td th:if="${mypoint.pointType == '사용'}" th:text="${mypoint.pointPayDTO.paymentNo}">주문번호 표시</td>
-                <td th:if="${mypoint.pointType == '적립'}" th:text="${mypoint.pointReason}">지급사유 표시</td>
-                <td th:text="${mypoint.pointAmount}">1,000,000 원</td>
-            </tr>
+                    <td class="three" th:if="${mypoint.pointType == '사용'}" th:text="${mypoint.pointReason}"></td>
+                    <td class="three" th:unless="${mypoint.pointType == '사용'}"></td>
 
-<!--            <tr>-->
-<!--                <td>2023.05.30</td>-->
-<!--                <td>사용</td>-->
-<!--                <td>주문번호123456789</td>-->
-<!--                <td></td>-->
-<!--                <td>-500,000 원</td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>2023.05.01</td>-->
-<!--                <td>사용</td>-->
-<!--                <td>주문번호123456789</td>-->
-<!--                <td></td>-->
-<!--                <td>-500,000 원</td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>2023.04.15</td>-->
-<!--                <td>사용</td>-->
-<!--                <td>주문번호123456789</td>-->
-<!--                <td></td>-->
-<!--                <td>-500,000 원</td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>2023.04.01</td>-->
-<!--                <td>적립</td>-->
-<!--                <td></td>-->
-<!--                <td>지급사유</td>-->
-<!--                <td>1,000,000 원</td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>2023.03.01</td>-->
-<!--                <td>적립</td>-->
-<!--                <td></td>-->
-<!--                <td>지급사유</td>-->
-<!--                <td>1,000,000 원</td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>2023.02.27</td>-->
-<!--                <td>사용</td>-->
-<!--                <td>주문번호123456789</td>-->
-<!--                <td></td>-->
-<!--                <td>-500,000 원</td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>2023.02.11</td>-->
-<!--                <td>사용</td>-->
-<!--                <td>주문번호123456789</td>-->
-<!--                <td></td>-->
-<!--                <td>-500,000 원</td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>2023.02.02</td>-->
-<!--                <td>사용</td>-->
-<!--                <td>주문번호123456789</td>-->
-<!--                <td></td>-->
-<!--                <td>-500,000 원</td>-->
-<!--            </tr>-->
-        </table>
+                    <td class="four" th:if="${mypoint.pointType == '적립'}" th:text="${mypoint.pointReason}"></td>
+                    <td class="four" th:unless="${mypoint.pointType == '적립'}"></td>
+
+                    <td class="five" th:if="${mypoint.pointType == '사용'}" th:text="${'-' + #numbers.formatInteger(mypoint.pointAmount, 1, 'COMMA') + ' 원'}">1,000,000 won</td>
+                    <td class="five" th:if="${mypoint.pointType == '적립'}" th:text="${#numbers.formatInteger(mypoint.pointAmount, 1, 'COMMA') + ' 원'}" th:classappend="earnPointAmount">1,000,000 won</td>
+                </tr>
+            </table>
 
 
-        <div class="paging">
-            <span>&lt;</span>
-            <span>1</span>
-            <span>2</span>
-            <span>3</span>
-            <span>4</span>
-            <span>5</span>
-            <span>&gt;</span>
-        </div>
+            <div class="paging mypage">
+                <a th:if="${pageHandler.showPrev}" th:href="@{/mypage/myPoint(page=${pageHandler.beginPage - 1})}">이전</a>
+
+                <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}">
+                            <a th:href="@{/mypage/myPoint(page=${pageNumber})}" th:text="${pageNumber}"
+                               th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
+                        </span>
+
+                <a th:if="${pageHandler.showNext}" th:href="@{/mypage/myPoint(page=${pageHandler.endPage + 1})}">다음</a>
+            </div>
+
+        </div>  <!-- section-box -->
+
+
+
 
 
     </section>
@@ -138,7 +79,49 @@
 
 
     <script>
-        
+
+        function onlyEarnPoint() {
+            //현재 URL 가져오기
+            let currentUrl = window.location.href;
+
+            //URL에 ?가 포함돼있다면 잘라내기
+            if (currentUrl.includes('?')) {
+                currentUrl = currentUrl.split('?')[0];
+            }
+
+            //URL에 type추가
+            currentUrl += '?type=earn';
+            //변경된 URL로 페이지 이동
+            window.location.href = currentUrl;
+        }
+
+        function onlyUsedPoint() {
+            //현재 URL 가져오기
+            let currentUrl = window.location.href;
+
+            //URL에 ?가 포함돼있다면 잘라내기
+            if (currentUrl.includes('?')) {
+                currentUrl = currentUrl.split('?')[0];
+            }
+
+            //URL에 type추가
+            currentUrl += '?type=used';
+            //변경된 URL로 페이지 이동
+            window.location.href = currentUrl;
+        }
+
+        function resetPoint() {
+            //현재 URL 가져오기
+            let currentUrl = window.location.href;
+
+            //URL에 ?가 포함돼있다면 잘라내기
+            if (currentUrl.includes('?')) {
+                currentUrl = currentUrl.split('?')[0];
+            }
+
+            //변경된 URL로 페이지 이동
+            window.location.href = currentUrl;
+        }
 
     </script>
 </body>

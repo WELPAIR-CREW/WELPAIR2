@@ -38,8 +38,8 @@
         <label for="paymentType">결제 유형:</label>
         <select id="paymentType" name="paymentType" class="section-salesSearch-option">
           <option value="">전체</option>
-          <option value="카드">카드</option>
-          <option value="포인트">포인트</option>
+          <option value="카카오페이">카카오페이</option>
+          <option value="복지포인트">복지포인트</option>
         </select>
         <label for="categoryCode">상품 카테고리:</label>
         <select id="categoryCode" name="categoryCode" class="section-salesSearch-option">
@@ -62,7 +62,7 @@
       <tbody>
         <tr>
           <th>월</th>
-          <td th:each="sales : ${monthlyList}" th:text="${sales.month}"></td>
+          <td th:each="sales : ${monthlyList}" th:text="${sales.month} + '월'"></td>
         </tr>
         <tr>
           <th>매출액</th>

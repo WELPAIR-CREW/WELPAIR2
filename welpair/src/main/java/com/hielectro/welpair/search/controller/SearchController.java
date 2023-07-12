@@ -67,10 +67,6 @@ public class SearchController {
         System.out.println("search = " + search);
 
         List<SearchDTO> prodSearchList  = searchService.searchResultMain(search);
-//        List<ThumbnailImageDTO> thumbnailImage = searchService.searchResultThumb(search.getSellPage().getNo());
-
-//        System.out.println("thumbnailImage = " + thumbnailImage);
-
 
         int totalItems = searchService.searchCount(search);
         int totalPages = (int) Math.ceil((double) totalItems / pageSize);
@@ -82,8 +78,6 @@ public class SearchController {
         int endIndex = Math.min(startIndex + pageSize, totalItems);
         System.out.println("startIndex = " + startIndex);
         System.out.println("endIndex = " + endIndex);
-
-
 
         if(prodSearchList != null && !prodSearchList.isEmpty()){
             System.out.println("prodSearchList.size() = " + prodSearchList.size());
@@ -130,7 +124,6 @@ public class SearchController {
             prodSearchList = searchService.searchDetailResult(search);
             System.out.println("prodSearchList = " + prodSearchList);
             model.addAttribute("prodSearchList", prodSearchList);
-
 
         } else{
             model.addAttribute("prodSearchList", Collections.emptyList());

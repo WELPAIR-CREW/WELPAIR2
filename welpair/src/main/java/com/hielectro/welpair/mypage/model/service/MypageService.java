@@ -21,5 +21,9 @@ public interface MypageService {
 
 
     //4. 마이포인트 이력 조회
-    List<PointHistoryDTO> mypointList(String empNo);
+    List<PointHistoryDTO> mypointList(Map<String, Object> map);
+    //페이징처리를 위한 총 항목 수
+    int myPointListCount(String empNo);
+    //포인트 잔액 조회
+    int getPointBalance(String empNo);
 }
