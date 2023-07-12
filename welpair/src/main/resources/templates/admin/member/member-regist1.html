@@ -36,8 +36,9 @@
 
                 <!-- 2)테이블 위-->
                 <div class="over-table2">
-                    <button class="button-circle">전체</button>
-                    <button class=" button-circle">최근한달</button>
+                    <button class="button-circle" onclick="reset()">전체</button>
+<!--                    <button class=" button-circle">최근한달</button>-->
+                    <button class=" button-circle" onclick="lastMonth()">최근한달</button>
                     <img id="calendar" src="/common/images/calendar.png" alt="달력아이콘">
                     <input type="date" class="select-date" name="date">
                     <label>~</label>
@@ -81,8 +82,8 @@
                 <div class="under-table">
                     <!-- 4)검색 -->
                     <div class="search-list">
-                        <input type="text" class="search-input">
-                        <button class="button-circle">검색</button>
+                        <input type="text" class="search-input" id="searchInput">
+                        <button class="button-circle" onclick="search()">검색</button>
                     </div>
 
                     <!-- 5)페이징 -->
@@ -90,7 +91,8 @@
                         <a th:if="${pageHandler.showPrev}" th:href="@{/member/regist(page=${pageHandler.beginPage - 1})}">이전</a>
 
                         <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}">
-                            <a th:href="@{/member/regist(page=${pageNumber})}" th:text="${pageNumber}"
+                            <a th:href="@{/member/regist(page=${pageNumber})}"
+                               th:text="${pageNumber == 0 ? 1 : pageNumber}"
                                th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
                         </span>
 
@@ -169,6 +171,65 @@
                 form.submit();
             }
         });
+
+
+        //검색버튼
+        function search() {
+            const searchInput = document.getElementById('searchInput'); //input태그
+            const keyword = searchInput.value; //입력된 값 (검색어)
+
+            window.location.href = '/member/regist?keyword=' + encodeURIComponent(keyword);
+        }
+
+
+        //최근한달 버튼
+        function lastMonth() {
+            //현재 날짜 조회하기
+            // const today = new Date();
+            // console.log("현재 시점의 날짜 가져오기 : " + today);
+
+            //현재 날짜로부터 한달전 날짜 계산
+            // const oneMonthAgo = new Date(today);
+            // oneMonthAgo.setMonth(today.getMonth() - 1);
+            // console.log("한달 전 날짜 계산하기 : " + oneMonthAgo);
+
+            //url값 가져오기
+            const currentUrl = window.location.href;
+
+            const oneMonthAgo = 'Y';
+
+            if(currentUrl.includes('?')) {
+                window.location.href = currentUrl + '&oneMonthAgo=' + encodeURIComponent(oneMonthAgo);
+
+            } else if(!currentUrl.includes('?')) {
+                window.location.href = currentUrl + '?oneMonthAgo=' + encodeURIComponent(oneMonthAgo);
+            }
+        }
+
+        function reset() {
+
+            //url값 가져오기
+            let currentUrl = window.location.href;
+            console.log("확인 : " + currentUrl);
+
+            // URL에서 ?oneMonthAgo 또는 &oneMonthAgo 제거
+            if(currentUrl.includes('?oneMonthAgo&')) {
+                window.location.href = currentUrl = currentUrl.replace('?oneMonthAgo=Y&', '?');
+            }
+            else if(currentUrl.includes('?oneMonthAgo')) {
+                window.location.href = currentUrl = currentUrl.replace('?oneMonthAgo=Y', '');
+
+            } else if(currentUrl.includes('&oneMonthAgo')) {
+                window.location.href = currentUrl = currentUrl.replace('&oneMonthAgo=Y', '');
+            }
+        }
+
+
+
+
+
+
+
     </script>
 
 </body>
