@@ -104,6 +104,7 @@
                             <td th:text="${order.getDeliveryStatus()}"></td>
                             <td th:text="${order.getOrderType()}"></td>
                         </tr>
+                    </a>
                     </tbody>
                 </table>
             </div>
@@ -127,6 +128,7 @@
 
         const buttons = document.querySelectorAll(".search-date button");
         const startDate = document.querySelector("#startDate");
+        const trList = document.querySelectorAll('tr');
 
         [...buttons].forEach(button => {
             button.addEventListener('click', function () {
@@ -142,6 +144,13 @@
                     date.setHours(0, 0, 0, 0);
                     startDate.valueAsNumber = date;
                 }
+            })
+        });
+
+        [...trList].forEach(tr => {
+            tr.addEventListener('click', function() {
+                const orderNo = this.querySelector('td:nth-child(2)').textContent;
+                location.href = '/mypage/myorder/detail/' + orderNo;
             })
         })
     </script>

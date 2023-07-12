@@ -158,13 +158,13 @@ button.criteria-item {
 	font-size: 18px;
 	font-style: normal;
 	font-weight: 700;
-	letter-spacing: 0.9px;
+	letter-spacing: 1px;
 }
 
 #criteria {
 	width: 118px;
 	height: 35px;
-	text-align: center;
+	padding-left: 10px;
 }
 
 #search-content {
@@ -244,6 +244,11 @@ button.criteria-item {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+
+.section-product-table tr:hover {
+	background: #6fdf89;
+	cursor: pointer;
 }
 
 .paging {
