@@ -68,7 +68,7 @@
                 <h3>배송지 정보</h3>
                 <div th:utext="'<b>수취인 </b>' + ${orderDetail.addressName}"></div>
                 <div th:utext="'<b>연락처 </b>' + ${orderDetail.addressPhone}"></div>
-                <div th:utext="'<b>주   소 </b>' + ${orderDetail.addressDetail}"></div>
+                <div th:utext="'<b>주  소 </b>' + ${orderDetail.addressDetail}"></div>
                 <div th:utext="'<b>배송지정일 </b>' + ${#dates.format(orderDetail.deliveryDate, 'yyyy/MM/dd')}"></div>
                 <div th:utext="'<b>배송메모 </b>'"></div>
             </div>
