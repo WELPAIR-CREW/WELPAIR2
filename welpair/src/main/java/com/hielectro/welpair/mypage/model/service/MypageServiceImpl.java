@@ -4,6 +4,7 @@ import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.mypage.model.dao.MypageMapper;
 import com.hielectro.welpair.mypage.model.dto.AddressDTO;
+import com.hielectro.welpair.mypage.model.dto.WishlistSellProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,6 +82,17 @@ public class MypageServiceImpl implements MypageService{
     @Override
     public int getPointBalance(String empNo) {
         return mypageMapper.getPointBalance(empNo);
+    }
+
+
+    //위시리스트 목록
+    @Override
+    public String getWishId(String empNo) {
+        return mypageMapper.getWishId(empNo);
+    }
+    @Override
+    public List<WishlistSellProductDTO> getWishlistList(String wishId) {
+        return mypageMapper.getWishlistList(wishId);
     }
 
 
