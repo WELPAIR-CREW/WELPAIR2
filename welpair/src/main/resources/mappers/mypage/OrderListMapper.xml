@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hielectro.welpair.mypage.model.dao.OrderListMapper">
+
+
+    <!-- OrderDTO resultMap-->
+    <resultMap id="orderResultMap" type="com.hielectro.welpair.order.model.dto.OrderDTO" >
+        <id property="orderNo" column="ORDER_NO"/>
+        <result property="orderDate" column="ORDER_DATE"/>
+        <result property="totalPrice" column="TOTAL_PRICE"/>
+        <result property="orderType" column="ORDER_TYPE"/>
+        <result property="memberNo" column="EMP_NO"/>
+        <result property="addressId" column="ADDRESS_ID"/>
+
+        <collection property="productOrderList" resultMap="productOrderResultMap"/>
+    </resultMap>
+
+    <resultMap id="productOrderResultMap" type="com.hielectro.welpair.order.model.dto.ProductOrderDTO">
+        <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="orderNo" column="ORDER_NO"/>
+        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="productOrderAmount" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="productOrderPrice" column="PRODUCT_ORDER_PRICE"/>
+        <result property="deliveryDate" column="DELIVERY_DATE"/>
+        <association property="Sellproduct" resultMap="SellProductResultMap"/>
+    </resultMap>
+
+
+    <resultMap id="SellProductResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
+        <id property="id" column="SELL_PRODUCT_ID"/>
+        <result property="code" column="PRODUCT_CODE"/>
+        <result property="discount" column="DISCOUNT"/>
+        <result property="isSell" column="IS_SELL"/>
+    </resultMap>
+
+    <resultMap id="SellItemPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
+        <id property="no" column="SELL_PAGE_NO"/>
+        <id property="id" column="SELL_PRODUCT_ID"/>
+    </resultMap>
+
+    <resultMap id="SellPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
+        <id property="no" column="SELL_PAGE_NO"/>
+        <result property="title" column="SELL_PAGE_TITLE"/>
+        <result property="detailImageFileName" column="SELL_DETAIL_IMAGE_FILE_NAME"/>
+        <result property="detailImageOriginFileName" column="SELL_DETAIL_IMAGE_ORGIN_FILE_NAME"/>
+        <result property="path" column="FILE_PATH"/>
+        <result property="createDate" column="CREATE_DATE"/>
+
+        <collection property="thumbnailImageList" resultMap="ThumbnailImageResultMap"/>
+    </resultMap>
+
+    <resultMap id="ProductResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
+        <id property="productCode" column="PRODUCT_CODE"/>
+        <result property="productName" column="PRODUCT_NAME"/>
+        <result property="productStatus" column="PRODUCT_STATUS"/>
+        <result property="productAmount" column="PRODUCT_AMOUNT"/>
+        <result property="productPrice" column="PRODUCT_PRICE"/>
+        <result property="productOption" column="PRODUCT_OPTION"/>
+        <result property="productNation" column="PRODUCT_NATION"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+    </resultMap>
+
+    <resultMap id="ThumbnailImageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
+        <id property="no" column="SELL_PAGE_NO"/>
+        <result property="thumbnailImageFileName" column="SELL_THUMB_IMAGE_FILE_NAME"/>
+        <result property="thumbnailImageOriginFileName" column="SELL_THUMB_IMAGE_ORGIN_FILE_NAME"/>
+    </resultMap>
+
+    <resultMap id="orderListMap" type="com.hielectro.welpair.mypage.model.dto.OrderListDTO">
+        <result property="orderNo" column="주문번호" />
+        <result property="orderDate" column="주문일시" javaType="java.sql.Timestamp" />
+        <result property="orderName" column="주문명" />
+        <result property="amount" column="수량" javaType="int" />
+        <result property="totalPrice" column="주문금액" javaType="int" />
+        <result property="deliveryStatus" column="배송상태" />
+        <result property="orderType" column="주문유형" />
+    </resultMap>
+
+    <select id="selectOrderList" resultMap="orderListMap">
+        SELECT
+            A.ORDER_DATE AS "주문일시",
+            A.ORDER_NO AS "주문번호",
+            C.PRODUCT_NAME AS "주문명",
+            B.PRODUCT_ORDER_AMOUNT AS "수량",
+            A.TOTAL_PRICE AS "주문금액",
+            D.DELIVERY_STATUS AS "배송상태",
+            A.ORDER_TYPE AS "주문유형"
+        FROM T_ORDER A
+                 LEFT JOIN T_PRODUCT_ORDER B ON B.ORDER_NO = A.ORDER_NO
+                 LEFT JOIN T_SELL_PRODUCT E ON E.SELL_PRODUCT_ID = B.SELL_PRODUCT_ID
+                 LEFT JOIN T_PRODUCT C ON C.PRODUCT_CODE = E.PRODUCT_CODE
+                 LEFT JOIN T_DELIVERY D ON D.PRODUCT_ORDER_NO = B.ORDER_NO
+        WHERE A.EMP_NO = #{empNo}
+        GROUP BY A.ORDER_NO, A.ORDER_DATE, A.TOTAL_PRICE, C.PRODUCT_NAME, B.PRODUCT_ORDER_AMOUNT, D.DELIVERY_STATUS, A.ORDER_TYPE
+        ORDER BY A.ORDER_DATE DESC
+    </select>
+
+
+
+
+</mapper>

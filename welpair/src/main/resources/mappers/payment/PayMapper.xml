@@ -123,7 +123,7 @@
             (PRODUCT_ORDER_NO, ORDER_NO, SELL_PRODUCT_ID,
              PRODUCT_ORDER_AMOUNT, PRODUCT_ORDER_PRICE, DELIVERY_DATE)
         VALUES
-            ( 'O' || LPAD(SEQ_PRODUCT_ORDER_NO.NEXTVAL, 6, '0'), #{orderNo}, #{sellProductId},
+            ( 'PO' || LPAD(SEQ_PRODUCT_ORDER_NO.NEXTVAL, 6, '0'), #{orderNo}, #{sellProductId},
              #{productOrderAmount}, #{productOrderPrice}, #{deliveryDate})
     </insert>
 

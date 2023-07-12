@@ -80,6 +80,16 @@
         <association property="product" resultMap="ProductResultMap"/>
     </resultMap>
 
+    <resultMap id="productOrderResultMap" type="com.hielectro.welpair.order.model.dto.ProductOrderDTO">
+        <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="orderNo" column="ORDER_NO"/>
+        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="productOrderAmount" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="productOrderPrice" column="PRODUCT_ORDER_PRICE"/>
+        <result property="deliveryDate" column="DELIVERY_DATE"/>
+        <association property="Sellproduct" resultMap="SellProductResultMap"/>
+    </resultMap>
+
 
     <!-- cartSellProduct 카트에 담긴 기존 상품 조회 -->
     <select id="checkoutCartProductById" resultType="_int" parameterType="com.hielectro.welpair.order.model.dto.CartSellProductDTO">
