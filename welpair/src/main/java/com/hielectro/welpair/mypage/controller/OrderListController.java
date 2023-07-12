@@ -35,6 +35,9 @@ public class OrderListController {
         orderList.stream().filter(item -> Optional.<String>ofNullable(item.getDeliveryStatus()).isEmpty())
                 .forEach(item -> item.setDeliveryStatus("배송준비중"));
 
+        orderList.stream().filter(item -> Optional.<String>ofNullable(item.getOrderName()).isEmpty())
+                .forEach(item -> item.setOrderName("판매가 중지된 상품입니다."));
+
         System.out.println("orderList = " + orderList);
 
 
