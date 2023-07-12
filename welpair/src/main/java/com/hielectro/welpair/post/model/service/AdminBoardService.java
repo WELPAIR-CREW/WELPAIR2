@@ -8,4 +8,8 @@ public interface AdminBoardService {
 
 
     public void PostSave(AdminBoardDTO adminBoardDTO) throws BoardException;
+
+    int selectTotalCount();
+
+
 }

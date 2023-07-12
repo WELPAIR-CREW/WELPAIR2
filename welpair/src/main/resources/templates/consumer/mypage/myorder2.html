@@ -33,15 +33,16 @@
             <div class="content-item1">
                 <div class="content-item1-item">
                     <div class="order item1-item-item">
-                        <span><b th:text="${orderDetailList[0].orderNo}">주문번호</b> </span>
-                        <span><b th:text="${orderDetailList[0].getOrderDate()}">주문일자</b> </span>
+                        <span th:utext="'<b>주문번호 </b>' + ${orderDetail.orderNo}"></span>
+                        <span th:utext="'<b>주문일시 </b>' + ${#dates.format(orderDetail.orderDate, 'yyyy/MM/dd HH:mm')}"></span>
                     </div>
                     <div class="product item1-item-item">
                         <div class="product-item">
-                            <th:block th:each="order, stat, ${orderDetailList}"}>
-                                <div>
-                                    <span><b th:text="${orderDetailList[stat.index].productOrderList.get(stat.index).sellproduct.product.productName}">상품명</b></span>
-                                    <span><b>주문수량</b> : 0개</span>
+                            <th:block>
+                                <div th:each="entry, stat : ${prdmap}">
+                                    <span><b th:utext="'<b>상품명 : </b>' +  ${entry.key}"></b></span>
+                                    <span><b th:utext="'<b>주문수량 : </b>' + ${entry.value.productAmount}"></b></span>
+                                    <span><b th:utext="'<b>상품금액 : </b>' + ${#numbers.formatDecimal(entry.value.productPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></b></span>
                                 </div>
                             </th:block>
                         </div>
@@ -50,26 +51,26 @@
                 <div class="content-item1-item">
                     <div class="payment item1-item-item">
                         <h3>결제 상세</h3>
-                        <span><b>총 결제 금액</b> : 0원</span><br>
+                        <span><b th:utext="'<b>총 결제 금액 : </b>' + ${#numbers.formatDecimal(orderDetail.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></b></span><br>
                         <span><b>결제 수단</b></span>
-                        <li>복지포인트 </li><span></span>
-                        <li>카카오페이 </li><span></span>
+                        <li th:utext="'복지포인트 : ' + ${#numbers.formatDecimal(paymap.get('복지포인트').paymentPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"> </li><span></span>
+                        <li th:utext="'카카오페이 : ' + ${#numbers.formatDecimal(paymap.get('카카오페이').paymentPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"> </li><span></span>
                     </div>
                     <div class="order-status item1-item-item">
-                        <h3>주문 상태</h3>
-                        <p>결제 완료</p>
+                        <h3>주문 유형</h3>
+                        <p th:utext="${orderDetail.getOrderType()}"></p>
                         <h3>배송 상태</h3>
-                        <p>상품 준비중</p>
+                        <p th:utext="${orderDetail.getDeliveryStatus()}"></p>
                     </div>
                 </div>
             </div>
             <div class="content-item2">
                 <h3>배송지 정보</h3>
-                <div><b>수취인</b></div>
-                <div><b>연락처</b></div>
-                <div><b>주소</b></div>
-                <div><b>배송지정일</b></div>
-                <div><b>배송메모</b></div>
+                <div th:utext="'<b>수취인 </b>' + ${orderDetail.addressName}"></div>
+                <div th:utext="'<b>연락처 </b>' + ${orderDetail.addressPhone}"></div>
+                <div th:utext="'<b>주&nbsp;&nbsp;&nbsp;소 </b>' + ${orderDetail.addressDetail}"></div>
+                <div th:utext="'<b>배송지정일 </b>' + ${#dates.format(orderDetail.deliveryDate, 'yyyy/MM/dd')}"></div>
+                <div th:utext="'<b>배송메모 </b>'"></div>
             </div>
         </div><br>
 

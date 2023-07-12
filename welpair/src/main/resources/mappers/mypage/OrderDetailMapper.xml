@@ -4,19 +4,70 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hielectro.welpair.mypage.model.dao.OrderDetailMapper">
 
-
     <resultMap id="orderDetailMap" type="com.hielectro.welpair.mypage.model.dto.OrderDetailDTO">
-        <id property="orderNo" column="ORDER_NO" />
+        <result property="orderNo" column="ORDER_NO" />
         <result property="orderDate" column="ORDER_DATE" />
         <result property="totalPrice" column="TOTAL_PRICE" />
         <result property="productName" column="PRODUCT_NAME" />
         <result property="productOrderAmount" column="PRODUCT_ORDER_AMOUNT" />
         <result property="orderType" column="ORDER_TYPE" />
+        <result property="price" column="PRODUCT_ORDER_PRICE" />
+        <result property="paymentType" column="PAYMENT_TYPE" />
+        <result property="paymentPrice" column="PAYMENT_PRICE" />
         <result property="deliveryStatus" column="DELIVERY_STATUS" />
+        <result property="deliveryDate" column="DELIVERY_DATE" />
+
         <result property="addressDetail" column="ADDRESS_DETAIL" />
         <result property="addressName" column="ADDRESS_NAME" />
         <result property="addressPhone" column="ADDRESS_PHONE" />
+
+<!--        <result property="productName" column="PRODUCT_NAME" />-->
+<!--        <result property="productOrderAmount" column="PRODUCT_ORDER_AMOUNT" />-->
+<!--        <result property="price" column="PRODUCT_ORDER_PRICE" />-->
+<!--&lt;!&ndash;        &ndash;&gt;-->
+<!--        <association property="payment" resultMap="paymentResultMap"/>-->
+<!--        <association property="productOrder" resultMap="productOrderResultMap"/>-->
+<!--&lt;!&ndash;        <collection property="product" resultMap="ProductResultMap"/>&ndash;&gt;-->
+<!--        <collection property="sellProduct" resultMap="SellProductResultMap"/>-->
     </resultMap>
+
+    <resultMap id="productOrderResultMap" type="com.hielectro.welpair.order.model.dto.ProductOrderDTO">
+        <result property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="orderNo" column="ORDER_NO"/>
+        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="productOrderAmount" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="productOrderPrice" column="PRODUCT_ORDER_PRICE"/>
+        <result property="deliveryDate" column="DELIVERY_DATE"/>
+        <association property="Sellproduct" resultMap="SellProductResultMap"/>
+    </resultMap>
+
+    <resultMap id="paymentResultMap" type="com.hielectro.welpair.payment.model.dto.PaymentDTO">
+        <id property="paymentNo" column="PAYMENT_NO"/>
+        <result property="paymentPrice" column="PAYMENT_PRICE"/>
+        <result property="paymentType" column="PAYMENT_TYPE"/>
+    </resultMap>
+
+    <resultMap id="SellProductResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
+        <id property="id" column="SELL_PRODUCT_ID"/>
+        <result property="code" column="PRODUCT_CODE"/>
+        <result property="discount" column="DISCOUNT"/>
+        <result property="isSell" column="IS_SELL"/>
+
+        <association property="product" resultMap="ProductResultMap"/>
+    </resultMap>
+
+    <resultMap id="ProductResultMap" type="com.hielectro.welpair.inventory.model.dto.ProductDTO">
+        <result property="productCode" column="PRODUCT_CODE"/>
+        <result property="productName" column="PRODUCT_NAME"/>
+        <result property="productStatus" column="PRODUCT_STATUS"/>
+        <result property="productAmount" column="PRODUCT_AMOUNT"/>
+        <result property="productPrice" column="PRODUCT_PRICE"/>
+        <result property="productOption" column="PRODUCT_OPTION"/>
+        <result property="productNation" column="PRODUCT_NATION"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+    </resultMap>
+
+
 
     <select id="selectOrderDetail" resultMap="orderDetailMap">
         SELECT O.ORDER_NO
@@ -24,6 +75,7 @@
              , O.TOTAL_PRICE
              , P.PRODUCT_NAME
              , PO.PRODUCT_ORDER_AMOUNT
+             , po.DELIVERY_DATE
              , O.ORDER_TYPE
              , PO.PRODUCT_ORDER_PRICE
              , PY.PAYMENT_TYPE
