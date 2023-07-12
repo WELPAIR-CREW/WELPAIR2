@@ -2,6 +2,7 @@ package com.hielectro.welpair.delivery.controller;
 
 import com.hielectro.welpair.delivery.model.dto.DeliveryDTO;
 import com.hielectro.welpair.delivery.model.dto.DriverDTO;
+import com.hielectro.welpair.delivery.model.dto.NotDeliveryDTO;
 import com.hielectro.welpair.delivery.model.dto.OrderProductDTO;
 import com.hielectro.welpair.delivery.model.service.deliveryService;
 import org.springframework.stereotype.Controller;
@@ -32,11 +33,23 @@ public class DeliveryController {
     }
 
     /* 상품준비중 */
+//    @GetMapping("delivery_prepare")
+//
+//    public String deliveryprepare(Model model) {
+//        List<OrderProductDTO> deliverylist = service.deliveryDelivery();
+//        System.out.println(deliverylist);
+//        model.addAttribute("deliveryList", deliverylist);
+//        return "admin/delivery/delivery_prepare";
+//
+//    }
+
+    /* 상품준비중 2*/
     @GetMapping("delivery_prepare")
-    public String deliveryprepare(Model model) {
-        List<OrderProductDTO> deliverylist = service.deliveryDelivery();
-        System.out.println(deliverylist);
-        model.addAttribute("deliveryList", deliverylist);
+
+    public String notdelivery(Model model) {
+        List<NotDeliveryDTO> notDeliverylist = service.notDelivery();
+        System.out.println(notDeliverylist);
+        model.addAttribute("notDeliveryList", notDeliverylist);
         return "admin/delivery/delivery_prepare";
 
     }
@@ -60,4 +73,5 @@ public class DeliveryController {
         model.addAttribute("deliveryList", deliverylist);
         return "admin/delivery/delivery_complete";
     }
+
 }

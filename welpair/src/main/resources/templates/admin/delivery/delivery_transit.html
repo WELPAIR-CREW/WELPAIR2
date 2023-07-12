@@ -66,7 +66,7 @@
                         <th>진행상태</th>
                     </tr>
                     <tbody>
-                    <tr th:each="delivery:${deliveryList}" th:if="${delivery.deliveryStatus == '상품준비중'}">
+                    <tr th:each="delivery:${deliveryList}" th:if="${delivery.deliveryStatus == '배송중'}">
                         <td class="checkbox-cell">
                             <input type="checkbox" name="chk" class="chk" onclick="chkClicked()"></td>
                         <!--                        <td th:text="${delivery.deliveryStatus}"></td>-->

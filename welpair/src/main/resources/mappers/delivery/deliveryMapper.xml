@@ -77,6 +77,40 @@
         <result property="empNo" column="EMP_NO"/>
     </resultMap>
 
+    <resultMap id="notDeliveryDTO" type="com.hielectro.welpair.delivery.model.dto.NotDeliveryDTO">
+        <id property="productOrderNo" column="PRODUCT_ORDER_NO"/>
+        <result property="sellProductId" column="SELL_PRODUCT_ID"/>
+        <result property="productOrderAmount" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="deliveryDate" column="DELIVERY_DATE"/>
+        <result property="orderDate" column="ORDER_DATE"/>
+        <result property="addressName" column="ADDRESS_NAME"/>
+        <result property="productName" column="PRODUCT_NAME"/>
+        <result property="productOrderAmount" column="PRODUCT_ORDER_AMOUNT"/>
+        <result property="deliveryStatus" column="DELIVERY_STATUS"/>
+
+
+
+    </resultMap>
+
+
+    <select id="notDeliveryDelivery" resultMap="orderProductDTO">
+        SELECT PO.PRODUCT_ORDER_NO
+             , PO.SELL_PRODUCT_ID
+             , PO.PRODUCT_ORDER_AMOUNT
+             , PO.DELIVERY_DATE
+             , T.ORDER_DATE
+             , AD.ADDRESS_NAME
+        FROM T_PRODUCT_ORDER PO
+                 LEFT  JOIN T_DELIVERY TE ON TE.PRODUCT_ORDER_NO = PO.PRODUCT_ORDER_NO
+                 JOIN T_ORDER T ON T.ORDER_NO = PO.ORDER_NO
+                 JOIN T_ADDRESS AD ON T.ADDRESS_ID = AD.ADDRESS_ID
+        WHERE PO.PRODUCT_ORDER_NO NOT IN (
+            SELECT TE.PRODUCT_ORDER_NO
+            FROM T_DELIVERY TE
+        )
+        ORDER BY PRODUCT_ORDER_NO ASC
+    </select>
+
         <!-- 배송조회에서 주문번호로조회 할 수 있게 DELIVERY + PRODUCT_ORDER JOIN -->
     <select id="deliveryDelivery" resultMap="orderProductDTO">
         SELECT TE.PRODUCT_ORDER_NO
@@ -141,6 +175,49 @@
           JOIN T_DELIVERY TD
             ON PO.PRODUCT_ORDER_NO = TD.PRODUCT_ORDER_NO
     </select>
+
+
+    <insert id="insertDelivery" parameterType="com.hielectro.welpair.delivery.model.dto.NotDeliveryDTO">
+        INSERT INTO T_DELIVERY ( PRODUCT_ORDER_NO, DRIVER_ID, DELIVERY_STATUS )
+             VALUES ( #{productOrderNo,}, #{driverId}, #{deliveryStatus})
+    </insert>
+
+    <select id="notDelivery" resultMap="notDeliveryDTO">
+        SELECT PO.PRODUCT_ORDER_NO
+             , PO.SELL_PRODUCT_ID
+             , PO.PRODUCT_ORDER_AMOUNT
+             , PO.DELIVERY_DATE
+             , T.ORDER_DATE
+             , TA.ADDRESS_NAME
+             , TP.PRODUCT_NAME
+             , TE.DELIVERY_STATUS
+        FROM T_PRODUCT_ORDER PO
+                 LEFT  JOIN T_DELIVERY TE
+                            ON TE.PRODUCT_ORDER_NO = PO.PRODUCT_ORDER_NO
+                 JOIN T_ORDER T
+                      ON T.ORDER_NO = PO.ORDER_NO
+                 JOIN T_SELL_PRODUCT TSP on PO.SELL_PRODUCT_ID = TSP.SELL_PRODUCT_ID
+                 JOIN T_PRODUCT TP on TSP.PRODUCT_CODE = TP.PRODUCT_CODE
+                 JOIN T_ADDRESS TA on T.ADDRESS_ID = TA.ADDRESS_ID
+        WHERE PO.PRODUCT_ORDER_NO NOT IN (
+            SELECT TE.PRODUCT_ORDER_NO
+            FROM T_DELIVERY TE
+        )
+        ORDER BY PRODUCT_ORDER_NO ASC
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <!--    &lt;!&ndash; 상품명을 찾기위한 T_PRODUCT + T_SELL_PRODUCT + T_PRODUCT_ORDER __1 &ndash;&gt;-->
