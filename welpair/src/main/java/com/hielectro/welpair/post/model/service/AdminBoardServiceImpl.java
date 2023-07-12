@@ -40,6 +40,17 @@ public class AdminBoardServiceImpl implements AdminBoardService{
         return adminBoardDAO.selectTotalCount();
     }
 
+    @Override
+    @Transactional
+    public void MemberWriteSave(AdminBoardDTO adminBoardDTO) throws BoardException {
+
+        int result = adminBoardDAO.insertPost(adminBoardDTO);
+
+        if(!(result > 0)){
+            throw new BoardException("게시글등록에 실패");
+        }
+    }
+
 
     public List<AdminBoardDTO> selectBoardList(SelectCriteria selectCriteria){
 
@@ -49,11 +60,19 @@ public class AdminBoardServiceImpl implements AdminBoardService{
     }
 
 
+    //////////////////  문의  ///////////////////////////
+    public List<AdminBoardDTO> selectQnaList(SelectCriteria selectCriteria){
+
+        List<AdminBoardDTO> adminQnaList = adminBoardDAO.selectQnaList(selectCriteria);
+
+        return  adminQnaList;
+    }
 
 
+    public List<AdminBoardDTO> selectNoticeList(SelectCriteria selectCriteria) {
 
+        List<AdminBoardDTO> adminNoticeList = adminBoardDAO.selectNoticeList(selectCriteria);
 
-
-
-
+        return  adminNoticeList;
+    }
 }

@@ -1,10 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A</title>
+    <link rel="stylesheet" href="/css/boardQna.css">
+    <link rel="stylesheet" href="/css/fontstyle.css">
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+    <script src="http://code.jquery.com/jquery-3.7.0.min.js"></script>
+
 </head>
 <body>
-    <p>질문</p>
+<div class="header1"></div>
+<div class="content-wrap">
+    <div>
+        <div class="nav-wrap">
+            <div class="notice nav-top"><a href="../member/board_Notice">공지사항</a></div>
+            <div class="ask"><a href="../member/board_ask">자주묻는질문</a></div>
+            <div class="qna"><a href="../member/board_Qna"></a>Q&A</div>
+        </div>
+        <div class="list-wrap">
+            <div class="list-qna-top">
+                <div class="qna-title-top">Q&A</div>
+                <div class="qna-bnt">
+<!--                    <div class="qna-select">선택</div>-->
+                    <div class="qna-write"><a href="../member/board_memberWrite"></a>글쓰기</div>
+                </div>
+            </div>
+            <div class="qna-list">
+                <div class="qna-top">
+                    <div class="qna-num">글번호</div>
+                    <div class="qna-title">제목</div>
+                    <div class="qna-date">날짜</div>
+                </div>
+                <div th:each="postQna : ${ adminQnaList }">
+                    <div class="qna-num" th:text="${ postQna.boardNo }"></div>
+                    <div class="qna-title" th:text="${ postQna.boardTitle }"><a href="#"></a></div>
+                    <div class="qna-date" th:text="${ postQna.boardDate }">2023-10-10</div>
+                </div>
+<!--                <div>-->
+<!--                    <div class="qna-num">9</div>-->
+<!--                    <div class="qna-title"><a href="../HTML/notice-view.html"> 사용자가 질문하는 게시판입니다.</a></div>-->
+<!--                    <div class="qna-date">2023-10-10</div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <div class="qna-num">8</div>-->
+<!--                    <div class="qna-title"><a href="../HTML/notice-view.html"> 사용자가 질문하는 게시판입니다.</a></div>-->
+<!--                    <div class="qna-date">2023-10-10</div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <div class="qna-num">7</div>-->
+<!--                    <div class="qna-title"><a href="../HTML/notice-view.html"> 사용자가 질문하는 게시판입니다.</a></div>-->
+<!--                    <div class="qna-date">2023-10-10</div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <div class="qna-num">6</div>-->
+<!--                    <div class="qna-title"><a href="../HTML/notice-view.html"> 사용자가 질문하는 게시판입니다.</a></div>-->
+<!--                    <div class="qna-date">2023-10-10</div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <div class="qna-num">5</div>-->
+<!--                    <div class="qna-title"><a href="../HTML/notice-view.html"> 사용자가 질문하는 게시판입니다.</a></div>-->
+<!--                    <div class="qna-date">2023-10-10</div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <div class="qna-num">4</div>-->
+<!--                    <div class="qna-title"><a href="../HTML/notice-view.html"> 사용자가 질문하는 게시판입니다.</a></div>-->
+<!--                    <div class="qna-date">2023-10-10</div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <div class="qna-num">3</div>-->
+<!--                    <div class="qna-title"><a href="../HTML/notice-view.html"> 사용자가 질문하는 게시판입니다.</a></div>-->
+<!--                    <div class="qna-date">2023-10-10</div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <div class="qna-num">2</div>-->
+<!--                    <div class="qna-title"><a href="../HTML/notice-view.html"> 사용자가 질문하는 게시판입니다.</a></div>-->
+<!--                    <div class="qna-date">2023-10-10</div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <div class="qna-num">10</div>-->
+<!--                    <div class="qna-title"><a href="../HTML/notice-view.html"> 사용자가 질문하는 게시판입니다.</a></div>-->
+<!--                    <div class="qna-date">2023-10-10</div>-->
+<!--                </div>-->
+            </div>
+<!--            <div class="paging1"></div>-->
+            <!-- ㅠㅔ이지처리 -->
+            <div class="pagingArea">
+                <!-- 이전 페이지 버튼 -->
+                <button th:onclick="'location.href=\'/membar/board_Qna?currentPage='+@{${selectCriteria.pageNo -1} + '\''"
+                        th:disabled="${selectCriteria.pageNo == 1}" class="bt first"><</button>
+                <!-- 숫자버튼 -->
+                <th:block th:each="page : ${#numbers.sequence(selectCriteria.starPage, selectCriteria.endPage)}">
+                    <button th:text="${page}"
+                            th:onclick="'location.href=\'/membar/board_Qna?cureentPage='+@{${page}} + '\''"
+                            th:disabled="${ selectCriteria.pageNo eq page}" class="page-num go"></button>
+                </th:block>
+                <!-- 다음 페이지 -->
+                <button th:onclick="'location.href=\'/board/board_Qna?currentPage='+@{${selectCriteria.pageNo +1} + '\''"
+                        th:disabled="${selectCriteria.maxPage}"></button>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="footer1"></div>
+
 </body>
+
+<script>
+    $('.header1').load('/consumer/header_consumer');
+    $('.footer1').load('/consumer/footer');
+</script>
 </html>

@@ -92,4 +92,32 @@
         WHERE   BOARD_CATEGORY = 'BORD_2'
     </select>
 
+    <select id="selectQnaList" resultMap="askBoardResultMap">
+        SELECT
+                BOARD_NO
+            ,   BOARD_CATEGORY
+            ,   BOARD_TITLE
+            ,   BOARD_CONTENT
+            ,   BOARD_DATE
+            ,   EMP_NO
+            ,   IS_PRIVATE
+        FROM    T_BOARD
+        WHERE   BOARD_CATEGORY = 'BORD_1'
+        AND     IS_PRIVATE = 'Y'
+    </select>
+
+    <select id="selectNoticeList" resultMap="askBoardResultMap">
+        SELECT
+            BOARD_NO
+             ,   BOARD_CATEGORY
+             ,   BOARD_TITLE
+             ,   BOARD_CONTENT
+             ,   BOARD_DATE
+             ,   EMP_NO
+             ,   IS_PRIVATE
+        FROM    T_BOARD
+        WHERE   BOARD_CATEGORY = 'BORD_3'
+          AND     IS_PRIVATE = 'Y'
+    </select>
+
 </mapper>

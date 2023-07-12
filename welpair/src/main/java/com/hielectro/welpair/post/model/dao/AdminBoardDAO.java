@@ -19,4 +19,9 @@ public interface AdminBoardDAO {
     int selectTotalCount();
 
     List<AdminBoardDTO> selectBoardList(SelectCriteria selectCriteria);
+
+
+    List<AdminBoardDTO> selectQnaList(SelectCriteria selectCriteria);
+
+    List<AdminBoardDTO> selectNoticeList(SelectCriteria selectCriteria);
 }

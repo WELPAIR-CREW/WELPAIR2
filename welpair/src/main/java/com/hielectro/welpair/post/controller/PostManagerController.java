@@ -79,26 +79,93 @@ public class PostManagerController {
     }
 
 
-
-
-//    @GetMapping("/member/board_ask")
-//    public String PostAsk(Model model){
-//        return "/post/member/board_ask";
-//    }
-//
-
-
-
-
     /* *********************공지사항********************* */
     @GetMapping("/member/board_Notice")
-    public String PostNotice(Model model){ return "/post/member/board_Notice"; }
+    public ModelAndView PostNotice(HttpServletRequest request,
+                                   @RequestParam(value = "currentPage", defaultValue = "1") int pageNo
+                            , ModelAndView model){
+
+        int limit = 10;
+        int buttonAmount = 5;
+
+        int totalCount = adminBoardServiceImpl.selectTotalCount();
+
+        model.addObject("totalCount", totalCount);
+
+        SelectCriteria selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+
+        List<AdminBoardDTO> adminNoticeList = adminBoardServiceImpl.selectNoticeList(selectCriteria);
+
+        model.addObject("adminNoticeList", adminNoticeList);
+        model.addObject("selectCriteria", selectCriteria);
+        model.setViewName("post/member/board_Notice");
 
 
+        return model;
+
+    }
 
     /* ************************** 문의 *************************** */
     @GetMapping("/member/board_Qna")
-    public String PostQna(Model model){ return "/post/member/board_Qna"; }
+    public ModelAndView BoardQnaList(HttpServletRequest request,
+                                     @RequestParam(value = "currentPage", defaultValue = "1") int pageNo
+                                    , ModelAndView model){
+
+        int limit = 10;
+        int buttonAmount = 5;
+
+        int totalCount = adminBoardServiceImpl.selectTotalCount();
+
+        model.addObject("totalCount", totalCount);
+
+
+        // 리스트 조회
+        SelectCriteria selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+
+        List<AdminBoardDTO> adminQnaList = adminBoardServiceImpl.selectQnaList(selectCriteria);
+
+        model.addObject("adminQnaList", adminQnaList);
+        model.addObject("selectCriteria", selectCriteria);
+        model.setViewName("post/member/board_Qna");
+
+
+
+        return model;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* ******************** 유저 글쓰기 ******************* */
+    @GetMapping("/member/board_memberWrite")
+    public String MemberWrite(Model model){
+
+        return "/post/member/board_memberWrite";
+    }
+
+    @PostMapping("/member/board_memberWrite")
+    public String MemberWriteSave(@ModelAttribute AdminBoardDTO adminBoardDTO, RedirectAttributes rttr) throws BoardException {
+
+        System.out.println("===========================================CHECK==========================="+adminBoardDTO);
+        adminBoardServiceImpl.MemberWriteSave(adminBoardDTO);
+        rttr.addFlashAttribute("message","게시글등록성공");
+
+        return "redirect:/post/member/board_memberWrite";
+    }
 
 
 

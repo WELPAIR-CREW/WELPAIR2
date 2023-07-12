@@ -22,8 +22,8 @@
     <div>
         <div class="nav-wrap">
             <div class="notice nav-top"><a href="../member/board_Notice">공지사항</a></div>
-            <div class="ask on">자주묻는질문</div>
-            <div class="qna"><a href="../member/board_Qna"></a>Q&A</div>
+            <div class="ask on"><a href="../member/board_ask">자주묻는질문</a></div>
+            <div class="qna"><a href="../member/board_Qna">Q&A</a></div>
         </div>
         <div class="list-wrap">
             <div class="list-ask-top">
@@ -103,7 +103,7 @@
                             th:disabled="${ selectCriteria.pageNo eq page}" class="page-num go"></button>
                 </th:block>
                 <!-- 다음 페이지 -->
-                <button th:onclick="'location.href=\'/board/list?currentPage='+@{${selectCriteria.pageNo +1} + '\''"
+                <button th:onclick="'location.href=\'/board/board_ask?currentPage='+@{${selectCriteria.pageNo +1} + '\''"
                         th:disabled="${selectCriteria.maxPage}"></button>
 
             </div>
