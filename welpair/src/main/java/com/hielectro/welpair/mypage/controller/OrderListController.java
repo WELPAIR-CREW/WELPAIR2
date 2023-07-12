@@ -1,10 +1,15 @@
 package com.hielectro.welpair.mypage.controller;
 
-import com.hielectro.welpair.common.Pagination;
-import com.hielectro.welpair.common.Search;
-import com.hielectro.welpair.mypage.model.dto.OrderListDTO;
-import com.hielectro.welpair.mypage.model.service.OrderListService;
-import com.hielectro.welpair.order.model.dto.OrderDTO;
+import static com.hielectro.welpair.common.PriceCalculator.empNo;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,15 +17,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Supplier;
-
-import static com.hielectro.welpair.common.PriceCalculator.empNo;
-import static java.util.Optional.*;
+import com.hielectro.welpair.common.Pagination;
+import com.hielectro.welpair.common.Search;
+import com.hielectro.welpair.mypage.model.dto.OrderListDTO;
+import com.hielectro.welpair.mypage.model.service.OrderListService;
 
 
 @Controller
@@ -38,12 +38,15 @@ public class OrderListController {
     @GetMapping("/list")
     public String myOrderList(HttpServletRequest request, Model model,
                               @ModelAttribute Search search,
-                              @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
+                              @RequestParam(required = false, defaultValue = "1") int currentPageNo,
+                              @RequestParam(required = false) String criteria) {
         String queryString = search.toString();
         String url = String.valueOf(request.getRequestURL()) + queryString;
         Map<String, Object> map = new HashMap<>();
         map.put("pageNo", currentPageNo);
         map.put("empNo", empNo);
+        map.put("search", search);
+        map.put("criteria", criteria);
 
         getPaging(model, currentPageNo, url, () -> orderListService.orderListCount(map));
         List<OrderListDTO> list = orderListService.selectOrderList(map);
@@ -54,6 +57,7 @@ public class OrderListController {
         list.stream().filter(item -> Optional.<String>ofNullable(item.getOrderName()).isEmpty())
                 .forEach(item -> item.setOrderName("판매중지상품"));
 
+        model.addAttribute("queryString", queryString);
         model.addAttribute("orderList", list);
         return "consumer/mypage/myorder";
 

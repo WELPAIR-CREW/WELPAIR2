@@ -1,12 +1,15 @@
 package com.hielectro.welpair.common;
 
-import lombok.*;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Optional;
+import java.util.Calendar;
+import java.util.Date;
+
+import org.springframework.web.util.UriComponentsBuilder;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -21,11 +24,8 @@ public class Search {
     private int amount;
     private int price;
 
-
     private Date startDate;
     private Date endDate;
-
-
 
     public void setAmount(int amount) {
         this.amount = amount;
@@ -58,7 +58,11 @@ public class Search {
     public void setStartDate(String startDate) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
+            Calendar cal = Calendar.getInstance();
             this.startDate = format.parse(startDate);
+            cal.setTime(this.startDate);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            this.startDate = cal.getTime();
         } catch (ParseException e) {
             this.startDate = null;
         }
@@ -67,7 +71,11 @@ public class Search {
     public void setEndDate(String endDate) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
+            Calendar cal = Calendar.getInstance();
             this.endDate = format.parse(endDate);
+            cal.setTime(this.endDate);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            this.endDate = cal.getTime();
         } catch (ParseException e) {
             this.endDate = null;
         }
