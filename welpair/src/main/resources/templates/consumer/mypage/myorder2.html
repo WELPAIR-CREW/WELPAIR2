@@ -33,37 +33,17 @@
             <div class="content-item1">
                 <div class="content-item1-item">
                     <div class="order item1-item-item">
-                        <span><b>주문번호</b> </span>
-                        <span><b>주문일자</b> </span>
+                        <span><b th:text="${orderDetailList[0].orderNo}">주문번호</b> </span>
+                        <span><b th:text="${orderDetailList[0].getOrderDate()}">주문일자</b> </span>
                     </div>
                     <div class="product item1-item-item">
                         <div class="product-item">
-                            <img src="#" alt="">
-                            <div>
-                                <span><b>상품명</b></span>
-                                <span><b>주문수량</b> : 0개</span>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <img src="#" alt="">
-                            <div>
-                                <span><b>상품명</b></span>
-                                <span><b>주문수량</b> : 0개</span>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <img src="#" alt="">
-                            <div>
-                                <span><b>상품명</b></span>
-                                <span><b>주문수량</b> : 0개</span>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <img src="#" alt="">
-                            <div>
-                                <span><b>상품명</b></span>
-                                <span><b>주문수량</b> : 0개</span>
-                            </div>
+                            <th:block th:each="order, stat, ${orderDetailList}"}>
+                                <div>
+                                    <span><b th:text="${orderDetailList[stat.index].productOrderList.get(stat.index).sellproduct.product.productName}">상품명</b></span>
+                                    <span><b>주문수량</b> : 0개</span>
+                                </div>
+                            </th:block>
                         </div>
                     </div>
                 </div>
@@ -73,7 +53,7 @@
                         <span><b>총 결제 금액</b> : 0원</span><br>
                         <span><b>결제 수단</b></span>
                         <li>복지포인트 </li><span></span>
-                        <li>신용카드 </li><span></span>
+                        <li>카카오페이 </li><span></span>
                     </div>
                     <div class="order-status item1-item-item">
                         <h3>주문 상태</h3>
