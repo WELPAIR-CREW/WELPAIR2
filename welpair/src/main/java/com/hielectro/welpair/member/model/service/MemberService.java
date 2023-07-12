@@ -16,10 +16,8 @@ public interface MemberService extends UserDetailsService {
 
     //1-1. 회원조회 - 회원목록
 
-//    List<MemberDTO> getMemberList(Map<String, Object> map);
-
     int totalMemberCount();
-    int expiredMemberCount();
+    int expiredMemberCount(Map<String, Object> map);
 
     //검색기능 추가
     int searchMemberCount(Map<String, Object> map);
@@ -32,8 +30,8 @@ public interface MemberService extends UserDetailsService {
     void deleteMember(List<String> empNos) throws DeleteMemberException;
 
     //2-1. 회원등록 - 직원목록
-    List<EmployeeDTO> getEmployeeList(Map<String, Integer> map);
-    int totalEmployeeCount();
+    List<EmployeeDTO> getEmployeeList(Map<String, Object> map);
+    int totalEmployeeCount(Map<String, Object> map);
     //2-2. 회원등록 - 등록페이지에서 전송버튼 눌렀을때
     void registMember(MemberDTO member) throws RegistMemberException;
 
@@ -61,7 +59,7 @@ public interface MemberService extends UserDetailsService {
 
     //5. 포인트지급이력
     //5-1. 요약
-    List<PointHistoryDTO> pointHistorySummary(Map<String, Integer> map);
+    List<PointHistoryDTO> pointHistorySummary(Map<String, Object> map);
 
     int pointHistorySummaryCount(); //페이징 처리를 위한 총 항목 수 조회
 

@@ -125,6 +125,13 @@ public class MypageController {
 
 //3.
     //위시리스트 css수정필요
+//    @GetMapping("/wishlist")
+//    public String wishlist() {
+//
+//        return "consumer/mypage/wishlist";
+//    }
+
+
     @GetMapping("/wishlist")
     public String wishlist() {
 
@@ -187,6 +194,17 @@ public class MypageController {
 
         return "consumer/mypage/myqna";
     }
+
+
+
+
+//6. 주문내역
+    @GetMapping("/myorder")
+    public String myorder() {
+
+        return "consumer/mypage/myorder";
+    }
+
 
 
 

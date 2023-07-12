@@ -29,7 +29,7 @@ public class PageHandler {
         this.page = page;
         this.pageSize = pageSize;
 
-        //총 항목수를 기반으로 계산한 총 페이지 수 ----> 계산오류
+        //총 항목수를 기반으로 계산한 총 페이지 수
         totalPage = (int) Math.ceil(totalCnt / (double) pageSize);
         System.out.println("총 항목 수를 토대로 계산된 총 페이지 수 : " + totalPage);
 

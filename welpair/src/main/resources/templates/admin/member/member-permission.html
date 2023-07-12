@@ -74,7 +74,8 @@
                     <div class="paging">
                         <a th:if="${pageHandler.showPrev}" th:href="@{/member/reqList(page=${pageHandler.beginPage - 1}, pageSize=${pageSize})}">이전</a>
                         <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}">
-                             <a th:href="@{/member/reqList(page=${pageNumber}, pageSize=${pageSize})}" th:text="${pageNumber}"
+                             <a th:href="@{/member/reqList(page=${pageNumber}, pageSize=${pageSize})}"
+                                th:text="${pageNumber == 0 ? 1 : pageNumber}"
                                 th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
                         </span>
                         <a th:if="${pageHandler.showNext}" th:href="@{/member/reqList(page=${pageHandler.endPage + 1}, pageSize=${pageSize})}">다음</a>
