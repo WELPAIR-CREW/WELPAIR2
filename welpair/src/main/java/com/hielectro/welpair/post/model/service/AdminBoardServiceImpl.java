@@ -1,9 +1,11 @@
 package com.hielectro.welpair.post.model.service;
 
+import com.hielectro.welpair.post.controller.BoardException;
 import com.hielectro.welpair.post.model.dao.AdminBoardDAO;
 import com.hielectro.welpair.post.model.dto.AdminBoardDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AdminBoardServiceImpl implements AdminBoardService{
@@ -18,17 +20,19 @@ public class AdminBoardServiceImpl implements AdminBoardService{
     }
 
     @Override
-    public int PostSave(AdminBoardDTO adminBoardDTO) {
+    @Transactional
+    public void PostSave(AdminBoardDTO adminBoardDTO) throws BoardException {
 
-        System.out.println(adminBoardDTO);
+        int result = adminBoardDAO.insertPost(adminBoardDTO);
 
-        return 0;
+        if(!(result > 0)){
+            throw new BoardException("게시글등록에 실패");
+        }
 
     }
 
-//    public List<AdminBoardDTO> BoardSave(AdminBoardDTO adminBoard){
-//        System.out.println(adminBoard.getBoardTitle());
-//
-//        return null;
-//    }
+
+
+
+
 }
