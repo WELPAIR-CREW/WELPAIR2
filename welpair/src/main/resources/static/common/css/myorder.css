@@ -1,5 +1,6 @@
 h3 {
 	margin: 0px;
+	margin-bottom: 10px;
 }
 
 .myorder {
@@ -258,14 +259,19 @@ button.criteria-item {
 }
 
 .content-item1 {
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
 	display: flex;
 	margin-top: 20px;
+	width: 1000px;
 	height: 350px;
 	justify-content: space-around;
 }
 
 .item1-item-item {
-	width: 440px;
+	box-sizing: border-box;
+	width: 450px;
 	border-radius: 6px;
 	border: 1px solid #000;
 	background: #FFF;
@@ -273,6 +279,62 @@ button.criteria-item {
 }
 
 .content-item1-item .order {
-	box-sizing: border-box;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
 	height: 90px;
+}
+
+.content-item1-item .product {
+	margin-top: 10px;
+	height: 250px;
+	overflow-y: auto;
+}
+
+.product img {
+	width: 70px;
+	height: 70px;
+}
+
+.product-item {
+	display: flex;
+	width: 380px;
+}
+
+.product-item > div {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-left: 10px;
+}
+
+.content-item1-item .payment {
+	height: 150px;
+}
+
+
+.content-item1-item .order-status {
+	margin-top: 10px;
+	height: 190px;
+}
+
+.content-item2 {
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-top: 20px;
+	width: 950px;
+	height: 220px;
+	border-radius: 6px;
+	border: 1px solid #000;
+	background: #FFF;
+	padding: 13px 20px;
+	box-sizing: border-box;
+}
+
+.content-item2 div {
+	margin-top: 5px;	
 }
