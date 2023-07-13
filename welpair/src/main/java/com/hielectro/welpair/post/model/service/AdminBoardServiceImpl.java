@@ -4,12 +4,12 @@ import com.hielectro.welpair.post.controller.BoardException;
 import com.hielectro.welpair.post.controller.SelectCriteria;
 import com.hielectro.welpair.post.model.dao.AdminBoardDAO;
 import com.hielectro.welpair.post.model.dto.AdminBoardDTO;
+import com.hielectro.welpair.post.model.dto.AdminBoardTypeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AdminBoardServiceImpl implements AdminBoardService{
@@ -52,6 +52,8 @@ public class AdminBoardServiceImpl implements AdminBoardService{
     }
 
 
+
+
     public List<AdminBoardDTO> selectBoardList(SelectCriteria selectCriteria){
 
         List<AdminBoardDTO> adminBoardList = adminBoardDAO.selectBoardList(selectCriteria);
@@ -75,4 +77,46 @@ public class AdminBoardServiceImpl implements AdminBoardService{
 
         return  adminNoticeList;
     }
+
+    public List<AdminBoardDTO> selectNoticeManagerList(SelectCriteria selectCriteria) {
+
+        List<AdminBoardDTO> adminNoticeList = adminBoardDAO.selectNoticeManagerList(selectCriteria);
+
+        return  adminNoticeList;
+    }
+
+    @Override
+    @Transactional
+    public AdminBoardDTO selectBoardDetail(String boardNo){
+
+        AdminBoardDTO boardDetail = null;
+
+        int result = adminBoardDAO.incrementBoardCount(boardNo);
+
+        if(result > 0){
+            boardDetail = adminBoardDAO.selectBoardDetail(boardNo);
+        }
+
+        return boardDetail;
+    }
+
+    public AdminBoardTypeDTO selectBoardType(String boardCate) {
+
+        AdminBoardTypeDTO boardType = null;
+
+        int result = adminBoardDAO.incrementBoardCount(boardCate);
+
+        if(result > 0){
+            boardType = adminBoardDAO.selectBoardType(boardCate);
+
+        }
+        return boardType;
+
+    }
+
+
+
+
+
+
 }

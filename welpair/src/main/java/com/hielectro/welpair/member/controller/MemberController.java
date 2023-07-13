@@ -401,6 +401,11 @@ public class MemberController {
 
         return "member/test";
     }
+    @GetMapping("test")
+    public String test(Model model){
+
+        return "member/test";
+    }
 
     @GetMapping("error")
     public String error(Model model){

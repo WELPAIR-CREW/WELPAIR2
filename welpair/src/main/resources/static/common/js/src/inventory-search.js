@@ -87,16 +87,13 @@ $("#historySearch").click(function (){
 
 
 // 페이징
-
 function updatePaginationButtons() {
     $(".paging1").empty();
 
     const startPage = Math.floor((currentPage - 1) / 5) * 5 + 1;
     const endPage = Math.min(startPage + 4, totalPages);
 
-    // if (startPage > 1) {
     $(".paging1").append("<span id='prevPage'>&lt;</span>");
-    // }
 
     for (let i = startPage; i <= endPage; i++) {
         if (i === currentPage) {
@@ -105,10 +102,7 @@ function updatePaginationButtons() {
             $(".paging1").append("<span class='pageNum'>" + i + "</span>");
         }
     }
-
-    // if (endPage < totalPages) {
     $(".paging1").append("<span id='nextPage'>&gt;</span>");
-    // }
 }
 
 $(".paging1").on("click", ".pageNum", function() {

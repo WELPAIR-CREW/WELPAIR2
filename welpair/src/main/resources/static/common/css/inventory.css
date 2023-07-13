@@ -258,12 +258,12 @@ input {border: 1px solid black;}
 
 }
 .section-historySearch-span {
-    width: 300px;
+    /*width: 300px;*/
     height: 33px;
     justify-content: space-between;
     align-items: center;
     margin-right: 10px;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
 }
 
 .section-historySearch-input {

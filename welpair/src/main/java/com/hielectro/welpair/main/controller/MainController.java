@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -29,6 +30,14 @@ public class MainController {
         model.addAttribute("list", list);
         return "index";
     }
+
+    @PostMapping({"/", "index"})
+    public String postTest(Model model) {
+        List<SellProductDetailDTO> list = mainService.selectProductList();
+        model.addAttribute("list", list);
+        return "index";
+    }
+
     @RequestMapping({"admin/footer", "consumer/footer"})
     public void footer() {}
 

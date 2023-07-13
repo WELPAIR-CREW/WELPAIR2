@@ -141,7 +141,6 @@ public class SellProductServiceImpl implements SellProductService {
         int size = request.size();
         int result = 0;
 
-        System.out.println("service : " + request);
         for (int i = 0; i < size; i++) {
             Map<String, String> map = new HashMap<>();
             map.put("code", request.get(i));
@@ -252,5 +251,21 @@ public class SellProductServiceImpl implements SellProductService {
         }
 
         return true;
+    }
+
+    @Override
+    @Transactional
+    public int updatePrivate(List<String> request) {
+        int result = 0;
+
+        for (var item : request) {
+            result += productMapper.updatePrivate(item);
+        }
+
+        if (request.size() != result) {
+            throw new IllegalStateException("updatePrivate Failed!");
+        }
+
+        return result;
     }
 }

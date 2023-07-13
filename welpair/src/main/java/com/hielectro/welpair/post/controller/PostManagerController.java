@@ -2,6 +2,7 @@ package com.hielectro.welpair.post.controller;
 
 
 import com.hielectro.welpair.post.model.dto.AdminBoardDTO;
+import com.hielectro.welpair.post.model.dto.AdminBoardTypeDTO;
 import com.hielectro.welpair.post.model.service.AdminBoardService;
 import com.hielectro.welpair.post.model.service.AdminBoardServiceImpl;
 import org.springframework.stereotype.Controller;
@@ -135,26 +136,11 @@ public class PostManagerController {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /* ******************** 유저 글쓰기 ******************* */
     @GetMapping("/member/board_memberWrite")
     public String MemberWrite(Model model){
 
-        return "/post/member/board_memberWrite";
+        return "post/member/board_memberWrite";
     }
 
     @PostMapping("/member/board_memberWrite")
@@ -164,10 +150,65 @@ public class PostManagerController {
         adminBoardServiceImpl.MemberWriteSave(adminBoardDTO);
         rttr.addFlashAttribute("message","게시글등록성공");
 
-        return "redirect:/post/member/board_memberWrite";
+        return "redirect:/post/member/board_Notice";
     }
 
 
+
+
+
+
+
+
+    /* *************************** 게시판 읽기 *********************** */
+    @GetMapping("/member/board_read")
+    public String selectBoardDetail(HttpServletRequest request, Model model){
+
+        String boardNo = String.valueOf(request.getParameter("boardNo"));
+        String boardCate = String.valueOf(request.getParameter("boardCate"));
+
+        AdminBoardDTO boardDetail = adminBoardServiceImpl.selectBoardDetail(boardNo);
+//        AdminBoardTypeDTO boardType = adminBoardServiceImpl.selectBoardType(boardCate);
+        model.addAttribute("board", boardDetail);
+//        model.addAttribute("boardType", boardType);
+
+        return "post/member/board_read";
+
+    }
+
+
+
+    /* ***************** 어드민 게시판 *************** */
+    @GetMapping("/admin/board_manager")
+    public String AdminBoardManager(Model model){
+
+        return "post/admin/board_manager";
+    }
+
+    @PostMapping("/admin/board_manager")
+    public ModelAndView PostManager(HttpServletRequest request,
+                                   @RequestParam(value = "currentPage", defaultValue = "1") int pageNo
+            , ModelAndView model){
+
+        int limit = 10;
+        int buttonAmount = 5;
+
+        int totalCount = adminBoardServiceImpl.selectTotalCount();
+
+        model.addObject("totalCount", totalCount);
+
+        SelectCriteria selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+
+        List<AdminBoardDTO> adminNoticeManagerList = adminBoardServiceImpl.selectNoticeManagerList(selectCriteria);
+
+        model.addObject("adminNoticeManagerList", adminNoticeManagerList);
+        model.addObject("selectCriteria", selectCriteria);
+        model.setViewName("post/admin/board_manager");
+
+
+        return model;
+
+    }
 
 
 }

@@ -58,8 +58,6 @@
         <result property="addressName" column="ADDRESS_NAME"/>
         <result property="addressPhone" column="ADDRESS_PHONE"/>
         <result property="empNo" column="EMP_NO"/>
-
-
     </resultMap>
 
     <!-- 멤버 정보, 배송지주소, 포인트 잔액 조회 -->
@@ -125,6 +123,12 @@
         VALUES
             ( 'PO' || LPAD(SEQ_PRODUCT_ORDER_NO.NEXTVAL, 6, '0'), #{orderNo}, #{sellProductId},
              #{productOrderAmount}, #{productOrderPrice}, #{deliveryDate})
+
+        <selectKey keyProperty="productOrderNo" keyColumn="CURRVAL" resultType="string" order="AFTER">
+            SELECT
+                ( 'PO' || LPAD(SEQ_PRODUCT_ORDER_NO.CURRVAL, 6, '0') CURRVAL
+            FROM DUAL
+        </selectKey>
     </insert>
 
     <!-- 포인트 사용이력 테이블 인서트  -->

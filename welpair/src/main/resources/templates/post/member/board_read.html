@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/board_write.css">
+    <link rel="stylesheet" href="/common/css/header.css">
+    <link rel="stylesheet" href="/common/css/footer.css">
+
+
+
+    <title>게시판 글 읽기</title>
+
+    <script src="http://code.jquery.com/jquery-3.7.0.min.js" ></script>
+
+</head>
+<body>
+<div class="header1"></div>
+<div data-include-html="/consumer/header_consumer" class="include"></div>
+
+<div class="wrap">
+        <div class="content_wrap" >
+            <div class="title_wrap" >
+                <div class="board_title" th:text="${ board.typeList[0].boardType }"></div>
+<!--                <input-->
+<!--                        type="hidden"-->
+<!--                        id="empNo"-->
+<!--                        name="empNo"-->
+<!--                        th:value="${ #authentication.getPrincipal().getEmpNo() }"-->
+<!--                >-->
+            </div>
+            <div class="write_wrap">
+                <div class="write_first">
+                    <div class="write_title"
+                              name="boardTitle" id="postTitle" th:text="${ board.boardTitle }"></div>
+                </div>
+
+                <div class="write_third">
+                    <div name="boardCategory" id="postCate" th:text="${ board.empNo }">
+
+                    </div>
+<!--                    <select name="isPrivate" id="postPrivate" class="boardPrivate">-->
+<!--                        <option value="0" selected disabled>글 공개 여부 선택</option>-->
+<!--                        <option value="Y">공개</option>-->
+<!--                        <option value="N">비공개</option>-->
+<!--                    </select>-->
+                </div>
+                <div class="write_second">
+                    <div class="write_content"
+                              name="boardContent" id="postContent" th:text="${ board.boardContent }"></div>
+                </div>
+            </div>
+            <div class="button">
+                <div class="bnt_go_list">
+                    <input type="button" value="목록으로"><a href="#"></a>
+                    <input class="update" type="submit" value="삭제하기"></a>
+                </div>
+            </div>
+        </div>
+
+</div>
+<div class="footer1"></div>
+
+
+</body>
+
+
+
+<script>
+    $('.header1').load('/consumer/header_consumer');
+    $('.footer1').load('/consumer/footer');
+
+    // $(function(){
+    //     $("#boardWrite").submit(function(){
+    //
+    //         let postCate = $("#postCate").val();
+    //         let postPrviate = $("#postPrivate").val();
+    //         if($("#postTitle").val().trim()== ""){
+    //             alert("제목을 입력해주세요.");
+    //             return false;
+    //         }
+    //         if(!postCate){
+    //             alert("카테고리를 선택해주세요.");
+    //             return false;
+    //         }
+    //         if(!postPrviate){
+    //             alert("글 공개여부를 선택해주세요.");
+    //             return false;
+    //         }
+    //         if($("#postContent").val().trim() == ""){
+    //             alert("내용을 입력해주세요.");
+    //             return false;
+    //         } else {
+    //             alert("글이 등록되었습니다.");
+    //             return true;
+    //         }
+    //
+    //     });
+    // });
+
+
+
+</script>
+
+</html>
