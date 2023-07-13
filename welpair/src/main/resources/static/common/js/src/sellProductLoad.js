@@ -7,6 +7,9 @@ searchBtn.addEventListener('click', fetchSellProductListData);
 const deleteBtn = document.querySelectorAll(".first-button")[1];
 deleteBtn.addEventListener('click', deleteSellProduct);
 
+const privateBtn = document.querySelector(".private");
+privateBtn.addEventListener('click', updatePrivateSellPage);
+
 const headerCheckBox = document.querySelector("thead input");
 headerCheckBox.addEventListener('click', function () {
     const items = document.querySelectorAll("tbody input");
@@ -87,11 +90,10 @@ async function selectSellProduct(pageNo = 1) {
         })
 }
 
-async function deleteSellProduct() {
+function deleteSellProduct() {
     const items = document.querySelectorAll("tbody input");
     const request = [...items].filter(item => item.checked)
         .map(item => item.parentElement.nextElementSibling.textContent);
-    console.log(request);
 
     if (!confirm("삭제하시겠습니까?")) {
         return;
@@ -108,6 +110,21 @@ async function deleteSellProduct() {
         })
 }
 
+function updatePrivateSellPage() {
+    const items = document.querySelectorAll("tbody input");
+    const request = [...items].filter(item => item.checked)
+        .map(item => item.parentElement.parentElement.children[2].textContent);
+
+    call("/sellproduct/updateSellPageByPrivate", "post", request)
+        .then(data => {
+            if (data > 0) {
+                alert("공개 성공하였습니다.");
+                fetchSellProductListData();
+            } else {
+                alert("삭제에 실패하였습니다.");
+            }
+        })
+}
 function createSellPageLink() {
     let selectCells = document.querySelectorAll(".section-product-table tr td:nth-child(3)");
     selectCells.forEach(cell => {

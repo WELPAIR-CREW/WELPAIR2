@@ -158,13 +158,13 @@ button.criteria-item {
 	font-size: 18px;
 	font-style: normal;
 	font-weight: 700;
-	letter-spacing: 0.9px;
+	letter-spacing: 1px;
 }
 
 #criteria {
 	width: 118px;
 	height: 35px;
-	text-align: center;
+	padding-left: 10px;
 }
 
 #search-content {
@@ -246,6 +246,11 @@ button.criteria-item {
 	white-space: nowrap;
 }
 
+.section-product-table tr:hover {
+	background: #6fdf89;
+	cursor: pointer;
+}
+
 .paging {
 	display: flex;
 	margin-top: 30px;
@@ -312,6 +317,7 @@ a.select {
 
 .product-item {
 	display: flex;
+	flex-direction: column;
 	width: 380px;
 }
 
@@ -319,13 +325,12 @@ a.select {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin-left: 10px;
+	margin-top: 10px;
 }
 
 .content-item1-item .payment {
 	height: 150px;
 }
-
 
 .content-item1-item .order-status {
 	margin-top: 10px;

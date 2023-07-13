@@ -81,6 +81,7 @@ export function createPaging(callbackFn) {
 
     const leftArrow = document.createElement('span');
     const leftLink = appendLink('<', leftArrow);
+    leftLink.removeAttribute('href');
     paging.append(leftArrow);
 
     const pageLinks = [];
@@ -100,10 +101,11 @@ export function createPaging(callbackFn) {
 
     const rightArrow = document.createElement('span');
     const rightLink = appendLink('>', rightArrow);
+    rightLink.removeAttribute('href');
     paging.append(rightArrow);
 
     const updatePage = async (pageNumber) => {
-        if (pageNumber === pagination.currentPageNo) return;
+        if (pageNumber === pagination.currentPageNo) return;    
         pagination.currentPageNo = pageNumber;
 
         if (pagination.currentPageNo > pagination.endPageNo || pagination.currentPageNo < pagination.startPageNo) {
