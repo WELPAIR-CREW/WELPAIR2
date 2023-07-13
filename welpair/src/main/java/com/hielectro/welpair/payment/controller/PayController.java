@@ -244,7 +244,7 @@ public class PayController {
         return "redirect:/payment/point-use-redirect";
     }
 
-    // 카카오 리다이렉트
+    // 복지포인트 리다이렉트
     @GetMapping("point-use-redirect")
     @ResponseBody
     public String pointUseRedirect(@ModelAttribute("order") OrderDTO order, @ModelAttribute("orderNo") String orderNo){
