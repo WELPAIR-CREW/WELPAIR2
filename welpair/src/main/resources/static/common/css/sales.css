@@ -1,36 +1,6 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-/*section {*/
-/*    display: flex;*/
-/*    width: 1280px;*/
-/*    height: 656px;*/
-/*    !* margin: 0 auto; *!*/
-/*    margin-top: 50px;*/
-/*}*/
 
-/*input {border: 1px solid black;}*/
-
-/*.sales-list {*/
-/*    position: relative;*/
-/*    width: 1280px;*/
-/*    margin: 0 auto;*/
-/*    text-align: center;*/
-/*}*/
-
-/*!* left navi *!*/
-/*.section-nav {*/
-/*    box-sizing: border-box;*/
-/*    width: 200px;*/
-/*    height: 588px;*/
-/*    background-color: #f8f7f7;*/
-/*    text-align: right;*/
-/*    padding: 60px 0px;*/
-/*    padding-right: 26px;*/
-/*}*/
-
-/*.section-nav>.section-nav-category:not(:first-child) {margin-top: 36px;}*/
-
-/*.section-nav-category {font-size: 18px}*/
 
 /* contents */
 
@@ -83,8 +53,8 @@
 /* chart */
 
 .section-chart{
-    margin: 30px;
-    padding: 50px;
+    margin: 55px;
+    /*padding: 50px;*/
     position:relative;
     align-content: center;
     width: 900px;
@@ -94,3 +64,7 @@ canvas.chart {
     width: 50%;
     height: 50%;
 }
+
+/*.chart{*/
+/*    width: 900px;*/
+/*}*/
