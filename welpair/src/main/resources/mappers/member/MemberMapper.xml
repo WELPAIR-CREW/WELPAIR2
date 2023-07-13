@@ -397,9 +397,9 @@
                     WHERE P.POINT_DATE BETWEEN (select add_months(sysdate,-6) from dual) AND sysdate
                 </if>
               GROUP BY P.EVENT_ID, P.POINT_REASON
---               ORDER BY P.EVENT_ID DESC
-             )
+             ) A
         WHERE rnum BETWEEN #{startRow} AND #{endRow}
+        ORDER BY A.EVENT_ID DESC
     </select>
 
     <!--  페이징처리를 위해 지급이력(요약) 총 항목수 조회  -->

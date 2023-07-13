@@ -20,7 +20,6 @@
 
 <!-- 검색 결과 시작 -->
 <section>
-
     <!-- 타이틀바디 -->
     <div class="section-content">
         <div class="section-title" th:text="${searchTerms}"></div>
@@ -100,18 +99,16 @@
 
         <!-- 페이징 -->
         <div class="paging">
-            <a th:if="${currentPage > 1}"
-               th:href="@{/search/search(pageNo=1, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
-                <span id="prevPage">&lt;</span>
+            <a th:href="@{/search/search(pageNo=${currentPage - 1}, title=${title}, categoryCode=${categoryCode}, refCategoryCode=${refCategoryCode}, productStatus=${productStatus}, pageSize=${pageSize})}">
+                <span id="prevPage"><</span>
             </a>
             <th:block th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
-                <a th:href="@{/search/search(pageNo=${pageNo}, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
+                <a th:href="@{/search/search(pageNo=${pageNo}, title=${title}, categoryCode=${categoryCode}, refCategoryCode=${refCategoryCode}, productStatus=${productStatus}, pageSize=${pageSize})}">
                     <span class="pageNum" th:text="${pageNo}"></span>
                 </a>
             </th:block>
-            <a th:if="${currentPage < totalPages}"
-               th:href="@{/search/search(pageNo=${pageNo}, title=${title}, categoryCode=${categoryCode},refCategoryCode=${refCategoryCode},productStatus=${productStatus},pageSize=${pageSize})}">
-                <span id="nextPage">&gt;</span>
+            <a th:href="@{/search/search(pageNo=${currentPage + 1}, title=${title}, categoryCode=${categoryCode}, refCategoryCode=${refCategoryCode}, productStatus=${productStatus}, pageSize=${pageSize})}">
+                <span id="nextPage">></span>
             </a>
         </div>
     </div>
@@ -121,8 +118,5 @@
 <!-- footer -->
 <div data-include-html="/consumer/footer" class="include"></div>
 <script src="/common/js/src/search.js"></script>
-<!--<script>-->
-<!--    ${searchTerms}-->
-<!--</script>-->
 </body>
 </html>

@@ -11,5 +11,7 @@ public interface AdminBoardService {
 
     int selectTotalCount();
 
+    public void MemberWriteSave(AdminBoardDTO adminBoardDTO) throws  BoardException;
+
 
 }

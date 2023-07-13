@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이페이지 메인</title>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <link rel="stylesheet" href="/common/css/header.css">
+  <link rel="stylesheet" href="/common/css/footer.css">
+  <link rel="stylesheet" href="/common/css/mypage.css">
+  <script src="/common/js/static/include.js"></script>
+
+  <style>
+    #menuCard {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+
+    .menu-card {
+      width: 180px;
+      height: 180px;
+      background-color: white;
+      box-shadow: 0 0 0 3px lightgray inset;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      text-decoration: none;
+      color: black;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 10px;
+    }
+
+    .menu-name {
+      text-align: center;
+    }
+
+    .menu-card:hover {
+      box-shadow: 0 0 0 3px #4f378b inset;
+      color: black;
+    }
+  </style>
+</head>
+
+<body>
+<!-- header -->
+<div data-include-html="/admin/header_admin" class="include"></div>
+
+<section>
+  <div id="menuCard">
+    <a href="/mypage/editMyInfo" class="menu-card">
+      <img class="menu-icon" src="/common/images/myinfo3.png" alt="User Icon">
+      <span class="menu-name">회원정보</span>
+    </a>
+    <a href="/mypage/myAddress" class="menu-card">
+      <img class="menu-icon" src="/common/images/address1.png" alt="Address Icon">
+      <span class="menu-name">배송지관리</span>
+    </a>
+    <a href="/mypage/myorder" class="menu-card">
+      <img class="menu-icon" src="/common/images/myorder.png" alt="Order Icon">
+      <span class="menu-name">주문내역</span>
+    </a>
+    <a href="/mypage/wishlist" class="menu-card">
+      <img class="menu-icon" src="/common/images/mywish1.png" alt="Wishlist Icon">
+      <span class="menu-name">위시리스트</span>
+    </a>
+    <a href="/mypage/myPoint" class="menu-card">
+      <img class="menu-icon" src="/common/images/mypoint2.png" alt="Point Icon">
+      <span class="menu-name">복지포인트</span>
+    </a>
+    <a href="/mypage/myPost" class="menu-card">
+      <img class="menu-icon" src="/common/images/mypost1.png" alt="Post Icon">
+      <span class="menu-name">내가쓴글</span>
+    </a>
+  </div>
+</section>
+
+<!-- footer -->
+<div data-include-html="/consumer/footer" class="include"></div>
+</body>
+</html>

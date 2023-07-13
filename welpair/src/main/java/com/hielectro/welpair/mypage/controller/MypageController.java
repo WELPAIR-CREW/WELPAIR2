@@ -1,15 +1,23 @@
 package com.hielectro.welpair.mypage.controller;
 
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.member.controller.PageHandler;
 import com.hielectro.welpair.member.controller.PointException;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
+import com.hielectro.welpair.member.model.dto.UserImpl;
 import com.hielectro.welpair.mypage.model.dto.AddressDTO;
+import com.hielectro.welpair.mypage.model.dto.WishlistSellProductDTO;
 import com.hielectro.welpair.mypage.model.service.MypageService;
+import com.hielectro.welpair.regist.model.dao.RegistDAO;
+import com.hielectro.welpair.regist.model.dto.RegistDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,32 +35,89 @@ public class MypageController {
 
 
     private final MypageService mypageService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public MypageController(MypageService mypageService) {
+    public MypageController(MypageService mypageService, PasswordEncoder passwordEncoder) {
         this.mypageService = mypageService;
+        this.passwordEncoder = passwordEncoder;
     }
 
-//1.
-    //회원정보 페이지로 이동시 본인(비밀번호) 인증 페이지
-    @GetMapping("/checkPwd")
-    public String checkPwd() {
 
-        return "consumer/mypage/myinfo1";
-    }
 
-    //회원정보수정페이지
+    //1. 헤더에서 회원정보(수정) 메뉴 클릭시
     @GetMapping("/editMyInfo")
     public String editMyInfo(AuthenticatedPrincipal auth) {
 
-        //로그인 체크 방법
-//        auth.getName() 널값이면(접속중이 아니면) 로그인 페이지로 돌려보낸다
+        //로그인 체크 방법 : auth.getName() 널값이면(접속중이 아니면) 로그인 페이지로 돌려보낸다
 
-        return "consumer/mypage/myinfo2";
+        if (auth.getName() != null) { //로그인 돼있는 경우 본인확인창 페이지로 이동시킨다
+//            return checkPwd();
+            return "consumer/mypage/checkPwd";
+
+        } else {                        //로그인 안돼있다면 로그인페이지로 보낸다
+            return "member/login";
+        }
     }
 
 
-//2.
+    //본인인증 페이지(비밀번호 입력창)로드
+    @GetMapping("/checkPwd")
+    public String checkPwd() {
+        return "consumer/mypage/myinfo1";
+    }
+
+
+    //비밀번호 입력 후 확인 버튼 클릭시의 ajax요청을 받는 핸들러메소드
+    @ResponseBody
+    @PostMapping("/checkPwd2")
+    public Map<String, String> checkPwd2(@AuthenticationPrincipal User user, @RequestParam String inputPassword) {
+
+        //입력한 비밀번호가 비밀번호 DB의 값과 같은지 비교하는 코드 작성...?
+
+        //현재 로그인한 유저 정보
+        String empNo = user.getUsername();
+        String userPwd = user.getPassword();
+        //입력한 비밀번호가 현재 로그인한 유저의 비밀번호와 같은지 비교
+        boolean isSame = userPwd == inputPassword;
+
+        if(isSame) {
+            //ajax 성공시 동작하는 get요청의 리다이렉트주소
+            Map<String, String> map = new HashMap<>();
+            map.put("locationroot", "/mypage/editMyInfoPage");  //수정 페이지
+            return map;
+
+        } else {
+            Map<String, String> map = new HashMap<>();
+            map.put("locationroot", "/mypage/checkPwd");
+            return map;
+        }
+    }
+
+    @GetMapping("/editMyInfoPage")
+    public String editMyInfoPage() {
+
+        //리턴하면서 아이디 등 기본값을 input태그에 뿌려줄 수 있게 데이터 전달
+        return "consumer/mypage/myinfo2";
+    }
+
+    //회원정보수정 버튼 클릭시의 post요청
+    @PostMapping("updateUserInfo")
+    public String updateUserInfo(@ModelAttribute RegistDTO registDTO, @AuthenticationPrincipal User user) {
+        System.out.println("-----------------회원정보update 메소드");
+        System.out.println("@ModelAttribute DTO인 RegistDTO 필드값 : " + registDTO);
+        System.out.println("@AuthenticationPrincipal 유저 : " + user);
+
+
+        //비밀번호는 암호화해서 업데이트
+        registDTO.setMemPwd(passwordEncoder.encode(registDTO.getMemPwd()));
+//        mypageService.updateUserInfo(registDTO);
+
+        return "redirect:/mypage/editMyInfoPage";
+    }
+
+
+    //2.
     //배송지목록
     @GetMapping("/myAddress")
     public ModelAndView myAddress(@RequestParam(required = false) String empNo, ModelAndView model) {
@@ -81,7 +146,6 @@ public class MypageController {
         map.put("locationroot", "/mypage/myAddress"); //ajax 성공시 동작하는 리다이렉트주소로 사용
         return map;
     }
-
 
 
     //배송지등록페이지
@@ -122,30 +186,34 @@ public class MypageController {
     }
 
 
-
-//3.
+    //3.
     //위시리스트 css수정필요
 //    @GetMapping("/wishlist")
 //    public String wishlist() {
 //
 //        return "consumer/mypage/wishlist";
 //    }
-
-
     @GetMapping("/wishlist")
-    public String wishlist() {
+    public ModelAndView getWishlistList(ModelAndView model) {
 
-        return "consumer/mypage/wishlist";
+        String empNo = "E00026";
+
+        String wishId = mypageService.getWishId(empNo);
+        System.out.println("회원 " + empNo + "의 wishId 값 조회 : " + wishId);
+
+        List<WishlistSellProductDTO> wishItemList = mypageService.getWishlistList(wishId);
+        System.out.println("리스트 출력 : " + wishItemList);
+
+        model.addObject("wishItemList", wishItemList);
+        model.setViewName("consumer/mypage/wishlist");
+        return model;
     }
 
 
-
-
-
-//4. 마이포인트
+    //4. 마이포인트
     @GetMapping("/myPoint")
-    public ModelAndView myPoint(@RequestParam(defaultValue="1") int page, ModelAndView model
-                               ,@RequestParam(value="type", required = false)String pointType) {
+    public ModelAndView myPoint(@RequestParam(defaultValue = "1") int page, ModelAndView model
+            , @RequestParam(value = "type", required = false) String pointType) {
 
         //@@@로그인하여 현재 접속중인 empNo값을 인자로 넘겨야할것
         //일단 인위적으로 설정
@@ -186,19 +254,30 @@ public class MypageController {
     }
 
 
-//5.
+    //5.
     //내가쓴글-문의목록
     //*****리뷰 페이지 html 재작성해야함
+//    @GetMapping("/myPost")
+//    public String myPost() {
+//
+//        return "consumer/mypage/myqna";
+//    }
     @GetMapping("/myPost")
-    public String myPost() {
+    public ModelAndView myPost(ModelAndView model) {
 
-        return "consumer/mypage/myqna";
+        String empNo = "T00015";
+        List<BoardDTO> myQnaList = mypageService.myQnaList(empNo);
+        System.out.println("myQnaList 출력 : " + myQnaList);
+        model.addObject("myQnaList", myQnaList);
+        model.setViewName("consumer/mypage/myqna");
+
+        return model;
     }
 
 
 
 
-//6. 주문내역
+    //6. 주문내역
     @GetMapping("/myorder")
     public String myorder() {
 
@@ -207,9 +286,12 @@ public class MypageController {
 
 
 
+    //7.마이페이지 메인화면 (우측 상단 MY 클릭시 진입)
+    @GetMapping("/mypageMain")
+    public String mypageMain() {
 
-
-
+        return "consumer/mypage/mypage-main";
+    }
 
 
 }

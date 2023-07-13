@@ -24,22 +24,63 @@
     <section>
         <div class="section-title">회원정보</div>
 
-        <div id="identify">
+        <form id="identify">
             <button><a href="마이페이지 첫 화면으로 이동하도록">×</a></button>
             <div>본인 인증</div>
-            <input type="password" name="identify" id="input-password" placeholder="비밀번호를 입력하세요">
-            <button id="button-password">
+            <input type="password" name="identify" id="input-password" placeholder="비밀번호를 입력하세요" required>
+            <button id="button-password" type="submit">
                 확인
             </button>
-            <!-- @ 버튼에 a태그 넣었을때 문제 발생...형제 요소에 적용한 css확인-->
 
-        </div>
+        </form>
     </section>
 
 
 
     <!-- footer -->
     <div data-include-html="/consumer/footer" class="include"></div>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#identify').submit(function(event) {
+                event.preventDefault(); //기본 제출 동작 중단
+                let inputPassword = $('#input-password').val();
+
+                $.ajax({
+                    url: '/mypage/checkPwd2',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        inputPassword: inputPassword,
+                    }),
+
+                    success: function (response) {
+                        console.log(response);
+                        location.href = response.locationroot;
+                    },
+
+                    error: function (error) {
+                        console.error(error);
+
+                        alert("본인인증 실패");
+                        window.location.reload();
+                    }
+                });
+            });
+        });
+
+
+
+
+
+    </script>
+
+
+
+
+
+
 
 </body>
 
