@@ -59,6 +59,10 @@ textarea{
     resize: none;
 }
 
+#write_third > span:first-child {
+    margin-left: 20px;
+}
+
 
 
 /* ************ 제목 부분 ********** */
@@ -72,14 +76,34 @@ textarea{
 .write_title{
     width: 980px;
     height: 34px;
-    color: #757575;
-    font-size: 20px;
+    color: #333;
+    font-size: 22px;
     padding-top: 10px;
     padding-left: 20px;
     outline-style: none;
+    font-weight: 500;
 
 }
 
+
+/* 작성자 */
+#writer_wrap{
+    height: 30px;
+    margin-left: 20px;
+    padding-top: 6px;
+}
+
+
+#postCate{
+    padding-left: 16px;
+}
+
+#date {
+    padding-left: 450px;
+}
+#postDate{
+    padding-left: 16px;
+}
 
 /* 카테고리 선택 부분 */
 
