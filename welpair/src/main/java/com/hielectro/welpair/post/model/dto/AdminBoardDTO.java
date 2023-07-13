@@ -5,7 +5,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -23,5 +23,9 @@ public class AdminBoardDTO {
     private String empNo;                       // 작성자 사번
     private String isPrivate;                   // 공개여부 > CHAR -> 'N'
 
+//    private AdminBoardTypeDTO boardType;        // 카테고리 타입
+
+    List<AdminBoardTypeDTO> typeList;
 
 }
+

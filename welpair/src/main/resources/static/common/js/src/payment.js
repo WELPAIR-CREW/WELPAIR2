@@ -138,42 +138,12 @@ function josnDataSet(){
 
                 if (this.status === 200) {
                     alert("결제에 성공하였습니다.")
-                    location.href = '/';
+                    location.href = "/mypage/myorder/detail/" + this.responseText;
                 }
             }
-            // location.href = '/payment/pay-success';
-
-            //
-            // const form = document.createElement('form');
-            // form.method = 'post';
-            // form.action = '/payment/pay-success';
-            //
-            // const input = document.createElement('input');
-            // input.name = 'order';
-            // input.type = 'hidden';
-            // input.value = JSON.stringify(order);
-            // // input.value = order;
-            // form.append(input);
-            //
-            // document.body.append(form);
-            // form.submit()
-
-
-            // $.ajax({
-            //     type:'post',
-            //     url:'/payment/payment.go',
-            //     contentType:"application/json",
-            //     data: JSON.stringify(order), //  결제요청 데이터 전송
-            //     success:function(response){
-            //         location.href = '/payment/pay-success';
-            //     },
-            //     error:function(e){
-            //         alert("결제요청 실패 : 응답 없음");
-            //     }
-            // });
 
         }
-    // }
+
 
     // ----- 카카오 -------
     // const KakaoPay_btn = document.getElementById("KakaoPay_btn");
