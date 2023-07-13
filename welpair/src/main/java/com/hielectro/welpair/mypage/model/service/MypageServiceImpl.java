@@ -65,6 +65,20 @@ public class MypageServiceImpl implements MypageService{
         return nextAddressId;
     }
 
+    //기존의 기본배송지 초기화
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void resetDefaultAddress(String empNo) throws Exception {
+        int result = mypageMapper.resetDefaultAddress(empNo);
+        if(result>0) {
+            System.out.println("기본배송지 초기화 성공");
+        } else {
+            System.out.println("기본배송지 초기화 실패");
+            throw new Exception("기본배송지 초기화 실패");
+        }
+    }
+
+
 
     //4. 마이포인트 이력 조회
     @Override
@@ -95,6 +109,7 @@ public class MypageServiceImpl implements MypageService{
     public List<WishlistSellProductDTO> getWishlistList(String wishId) {
         return mypageMapper.getWishlistList(wishId);
     }
+    //
 
 
 
@@ -104,6 +119,13 @@ public class MypageServiceImpl implements MypageService{
     public List<BoardDTO> myQnaList(String empNo) {
         return mypageMapper.myQnaList(empNo);
     }
+
+    //페이징처리를 위한 총 항목 수
+    @Override
+    public int myQnaCount(String empNo) {
+        return mypageMapper.myQnaCount(empNo);
+    }
+
 
 
 

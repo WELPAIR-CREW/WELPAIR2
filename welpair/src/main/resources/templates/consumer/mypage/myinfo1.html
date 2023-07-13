@@ -25,7 +25,7 @@
         <div class="section-title">회원정보</div>
 
         <form id="identify">
-            <button><a href="마이페이지 첫 화면으로 이동하도록">×</a></button>
+            <button><a href="/mypage/">×</a></button>
             <div>본인 인증</div>
             <input type="password" name="identify" id="input-password" placeholder="비밀번호를 입력하세요" required>
             <button id="button-password" type="submit">
@@ -44,20 +44,37 @@
     <script>
         $(document).ready(function() {
             $('#identify').submit(function(event) {
+
                 event.preventDefault(); //기본 제출 동작 중단
                 let inputPassword = $('#input-password').val();
 
+                // alert('입력한 비밀번호 출력 : ' + inputPassword);
+
+
+                //String하나를 넘길때는 JSON으로 변환하여 넘기지 않아도 된다
+                //JSON으로 넘기면 RequestParam으로 받으면 안된다(RequestBody로 받아야한다)
                 $.ajax({
                     url: '/mypage/checkPwd2',
                     type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        inputPassword: inputPassword,
-                    }),
-
+                    data: {
+                        inputPassword: inputPassword
+                    },
                     success: function (response) {
                         console.log(response);
-                        location.href = response.locationroot;
+                        // location.href = response.locationroot;
+
+
+                        if (response && response.locationroot) {
+                            if (response.locationroot.startsWith('forward:')) {
+                                const forwardUrl = response.locationroot.substring(8);
+                                window.location.href = forwardUrl;
+                            } else {
+                                window.location.href = response.locationroot;
+                            }
+                        } else {
+                            alert("서버 응답 실패");
+                        }
+
                     },
 
                     error: function (error) {

@@ -131,6 +131,9 @@
         <if test="product.productStatus != null and product.productStatus != ''">
             AND E.PRODUCT_STATUS = #{product.productStatus}
         </if>
+        <if test="category.refCategoryCode != null and category.refCategoryCode != ''">
+            AND F.REF_CATEGORY_CODE = #{category.refCategoryCode}
+        </if>
         <if test="minPrice != null and minPrice != ''">
             AND E.PRODUCT_PRICE * (1 - D.DISCOUNT) >= #{minPrice}
         </if>

@@ -22,6 +22,8 @@ public interface MypageMapper {
     int insertAddress(AddressDTO addressDTO);
     //배송지 아이디
     String nextAddressId();
+    //기본배송지 초기화
+    int resetDefaultAddress(String empNo);
 
 
     //4. 마이포인트 이력 조회
@@ -40,5 +42,7 @@ public interface MypageMapper {
     //5. 내가쓴글
     //문의글목록
     List<BoardDTO> myQnaList(String empNo);
+    //페이징처리를 위한 총 항목 수
+    int myQnaCount(String empNo);
 
 }
