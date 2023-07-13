@@ -3,9 +3,11 @@ package com.hielectro.welpair.member.controller;
 import com.hielectro.welpair.member.model.dto.EmployeeDTO;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
+import com.hielectro.welpair.member.model.dto.UserImpl;
 import com.hielectro.welpair.member.model.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,12 +40,22 @@ public class MemberController {
     @GetMapping("/member-view")
     public ModelAndView getMemberList(@RequestParam(defaultValue="1") int page, ModelAndView model
             , @RequestParam(value="type", required = false) String isExpired
-            , @RequestParam(value="keyword", required = false) String keyword) {
+            , @RequestParam(value="keyword", required = false) String keyword
+            , @AuthenticationPrincipal UserImpl user) {
+
 
         int pageSize = 10;
         int totalCnt;
         List<MemberDTO> memberList;
         Map<String, Object> map = new HashMap<>(); //쿼리 파라미터
+
+
+
+        if(user == null) { //로그인 안된 경우
+            model.setViewName("/member/login");
+            return model;
+        }
+
 
 
         map.put("isExpired", isExpired); //퇴사 버튼

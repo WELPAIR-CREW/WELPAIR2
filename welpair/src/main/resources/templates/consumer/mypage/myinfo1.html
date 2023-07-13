@@ -15,8 +15,6 @@
 
 <body>
     <!-- header -->
-<!--    <div data-include-html="/consumer/header_mypage" class="include"></div>-->
-<!--    <head th:replace="/consumer/header_mypage :: html-head"></head>-->
     <div th:replace="/consumer/header_mypage :: header"></div>
 
     <!-- @마이페이지 첫 화면 정하기 -->
@@ -24,7 +22,7 @@
     <section>
         <div class="section-title">회원정보</div>
 
-        <form id="identify">
+        <form id="identify" action="/mypage/checkPwd2" method="POST">
             <button><a href="/mypage/">×</a></button>
             <div>본인 인증</div>
             <input type="password" name="identify" id="input-password" placeholder="비밀번호를 입력하세요" required>
@@ -42,52 +40,98 @@
 
 
     <script>
-        $(document).ready(function() {
-            $('#identify').submit(function(event) {
 
-                event.preventDefault(); //기본 제출 동작 중단
-                let inputPassword = $('#input-password').val();
-
-                // alert('입력한 비밀번호 출력 : ' + inputPassword);
-
-
-                //String하나를 넘길때는 JSON으로 변환하여 넘기지 않아도 된다
-                //JSON으로 넘기면 RequestParam으로 받으면 안된다(RequestBody로 받아야한다)
-                $.ajax({
-                    url: '/mypage/checkPwd2',
-                    type: 'POST',
-                    data: {
-                        inputPassword: inputPassword
-                    },
-                    success: function (response) {
-                        console.log(response);
-                        // location.href = response.locationroot;
-
-
-                        if (response && response.locationroot) {
-                            if (response.locationroot.startsWith('forward:')) {
-                                const forwardUrl = response.locationroot.substring(8);
-                                window.location.href = forwardUrl;
-                            } else {
-                                window.location.href = response.locationroot;
-                            }
-                        } else {
-                            alert("서버 응답 실패");
-                        }
-
-                    },
-
-                    error: function (error) {
-                        console.error(error);
-
-                        alert("본인인증 실패");
-                        window.location.reload();
-                    }
-                });
-            });
-        });
-
-
+        // $(document).ready(function() {
+        //     $('#identify').submit(function(event) {
+        //
+        //         event.preventDefault(); //기본 제출 동작 중단
+        //         let inputPassword = $('#input-password').val();
+        //
+        //         // alert('입력한 비밀번호 출력 : ' + inputPassword);
+        //
+        //
+        //         //String하나를 넘길때는 JSON으로 변환하여 넘기지 않아도 된다
+        //         //JSON으로 넘기면 RequestParam으로 받으면 안된다(RequestBody로 받아야한다)
+        //         // $.ajax({
+        //         //     url: '/mypage/checkPwd2',
+        //         //     type: 'POST',
+        //         //     data: {
+        //         //         inputPassword: inputPassword
+        //         //     },
+        //         //     success: function (response) {
+        //         //         console.log(response);
+        //         //         // location.href = response.locationroot;
+        //         //
+        //         //
+        //         //         if (response && response.locationroot) {
+        //         //             if (response.locationroot.startsWith('forward:')) {
+        //         //                 const forwardUrl = response.locationroot.substring(8);
+        //         //                 window.location.href = forwardUrl;
+        //         //             } else {
+        //         //                 window.location.href = response.locationroot;
+        //         //             }
+        //         //         } else {
+        //         //             alert("서버 응답 실패");
+        //         //         }
+        //         //
+        //         //     },
+        //         //
+        //         //     error: function (error) {
+        //         //         console.error(error);
+        //         //
+        //         //         alert("본인인증 실패");
+        //         //         window.location.reload();
+        //         //     }
+        //         // });
+        //
+        //
+        //
+        //
+        //
+        //         $(document).ready(function() {
+        //             $('#identify').submit(function(event) {
+        //                 event.preventDefault(); // 기본 제출 동작 중단
+        //                 let inputPassword = $('#input-password').val();
+        //
+        //                 $.ajax({
+        //                     url: '/mypage/checkPwd2',
+        //                     type: 'POST',
+        //                     data: {
+        //                         inputPassword: inputPassword
+        //                     },
+        //                     success: function(response) {
+        //                         console.log(response);
+        //
+        //                         if (response && response.locationroot) {
+        //                             if (response.locationroot.startsWith('forward:')) {
+        //                                 const forwardUrl = response.locationroot.substring(8);
+        //                                 $.get(forwardUrl, function(data) {
+        //                                     // Load the content of the forwarded URL
+        //                                     $('#content-container').html(data);
+        //                                 });
+        //                             } else {
+        //                                 // Redirect to the specified URL
+        //                                 window.location.href = response.locationroot;
+        //                             }
+        //                         } else {
+        //                             alert("서버 응답 실패");
+        //                         }
+        //                     },
+        //                     error: function(error) {
+        //                         console.error(error);
+        //
+        //                         alert("본인인증 실패");
+        //                         window.location.reload();
+        //                     }
+        //                 });
+        //             });
+        //         });
+        //
+        //
+        //
+        //
+        //     });
+        // });
 
 
 
