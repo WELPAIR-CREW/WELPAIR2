@@ -27,11 +27,12 @@ public class CartController {
 
     private final CartService cartService;
 
-    private CartController(CartService cartService) {
+    public CartController(CartService cartService) {
         this.cartService = cartService;
     }
 
-    // 카트에 상품담기(임시)
+
+    // 카트에 상품담기()
     @GetMapping("/cart/add")
     public String addCart() {
         return "consumer/order/add";
@@ -44,6 +45,7 @@ public class CartController {
     public Map<String, String> addCart(@ModelAttribute CartSellProductDTO cartSellProduct,
                                        @AuthenticationPrincipal User user
     ) {
+
         // 카트별판매상품dto를 통해 매상품id와 수량 정보와, 회원정보ID가 넘어온다.
         System.out.println("선택상품 : " + cartSellProduct);
 
@@ -115,9 +117,7 @@ public class CartController {
             , @AuthenticationPrincipal User user
     ) {
 
-
         System.out.println("User =======================" + user);
-
 
         // 미로그인 사용자 null 처리
         if(user == null){
