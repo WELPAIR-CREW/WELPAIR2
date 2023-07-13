@@ -46,6 +46,9 @@ function cartAmountChange(amount, count) {
         success: function (response) {  // 요청이 성공한 경우 실행할 함수
             console.log("message");  // 서버로부터의 응답 데이터
             console.log(response);  // 서버로부터의 응답 데이터
+            if(response.responseText == "NOT-EXIST-USER"){
+                location.href = "/member/login"
+            }
             location.href = "cart";
         },
         error: function (error) {  // 요청이 실패한 경우 실행할 함수
@@ -135,6 +138,9 @@ $btn_del.addEventListener("click", (e => {
         .then(response => {
             console.log("전송완료");  // 서버로부터의 응답 데이터
             alert(response);
+            if(response.responseText == "NOT-EXIST-USER"){
+                location.href = "/member/login"
+            }
             location.href = 'cart';
         })
         .catch(error => {
