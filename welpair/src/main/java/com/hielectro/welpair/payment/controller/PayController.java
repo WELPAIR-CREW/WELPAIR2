@@ -57,8 +57,6 @@ public class PayController {
     @PostMapping("/payment.do")
     public String gotopay(@ModelAttribute("orderPrdList") OrderPayReqDTO orderPrdList, Model model
                                       , @AuthenticationPrincipal User user
-                          , HttpServletRequest request
-                          , HttpServletResponse response
                           ) throws Exception {
 
         System.out.println("========post mapping 들어옴===========");
@@ -72,7 +70,7 @@ public class PayController {
 
             SellProductDTO prd = payService.selectProductById(product.getSellProductId());
 
-            if (prd.getIsSell().equals("N")) {
+            if (prd.getIsSell().equals('N')) {
                 System.out.println("판매중인 상품이 아닙니다. 다시 주문해주세요.");
                 System.out.println("해당 상품 : " + product.getSellproduct());
                 model.addAttribute("suspendProduct", product.getSellproduct());
@@ -91,8 +89,9 @@ public class PayController {
         // 3-1. (아이디 -> 배송지 전체테이블, 멤버 포인트 )
         System.out.println("empNo=================" + user.getUsername());
         List<MemberDTO> memberAddressList = payService.selectMemberById(user.getUsername());
-        
+
         System.out.println(memberAddressList);
+
         model.addAttribute("memberAddressList", memberAddressList);
 
         return "/consumer/payment/payment";

@@ -134,9 +134,10 @@
                             <select  name="recipientAddress" id="recipientAddress" required>
                                 <div th:each="memberAddress, stat : ${memberAddressList}">
                                     <option placeholder="" selected disabled hidden>배송지&nbsp;선택</option>
+<!--                                    <option th:if="${memberAddress.address.size() == 0 and memberAddress.address.size() == null}" class="selectAddress" th:name="addressSelect" value="" text="기본배송지를 등록해주세요." selected disabled hidden></option>-->
                                     <div th:each="address, stat : ${memberAddress?.address}">
+<!--                                        <option th:if="${ NullPointerException }" class="selectAddress" th:name="addressSelect" th:value="${address?.addressId}" text="배송지를 입력해주세요."></option>-->
                                         <option class="selectAddress" th:name="addressSelect" th:value="${address?.addressId}" th:text="${stat?.count} + '-' + ${address?.addressName} "></option>
-
                                     </div>
 
                                 </div>
@@ -153,7 +154,7 @@
                                     placeholder=" 우편번호" readonly required>
                             <input type="button" id="searchZipCode" value="우편번호 찾기" >
                             <input type="text" class="inputbox_addBasic" id="address1" name="addBasic" readonly required>
-<!--                            <input type="checkbox"><label class="labelbox"> 기본배송지로&nbsp;등록</label>-->
+                            <input type="checkbox" id="addressRegist" checked><label class="addressRegist"> 기본배송지로&nbsp;등록</label>
                         </td>
                     </tr>
                     <tr>
