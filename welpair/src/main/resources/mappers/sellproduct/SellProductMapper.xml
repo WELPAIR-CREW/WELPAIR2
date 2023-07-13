@@ -486,6 +486,12 @@
            SET IS_PRIVATE
          WHERE BOARD_NO = #{ no }
     </update>
+
+    <update id="updatePrivate">
+        UPDATE T_SELL_PAGE
+           SET SELL_STATUS = 'Y'
+         WHERE SELL_PAGE_NO = #{ no }
+    </update>
     <delete id="deleteThumbnail">
         DELETE
           FROM T_THUMB_IMAGE

@@ -40,9 +40,9 @@
                         <div class="product-item">
                             <th:block>
                                 <div th:each="entry, stat : ${prdmap}">
-                                    <span><b th:utext="'<b>상품명 : </b>' +  ${entry.key}"></b></span>
-                                    <span><b th:utext="'<b>주문수량 : </b>' + ${entry.value.productAmount}"></b></span>
-                                    <span><b th:utext="'<b>상품금액 : </b>' + ${#numbers.formatDecimal(entry.value.productPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></b></span>
+                                    <span th:utext="'<b>상품명 : </b>' +  ${entry.key}"></span>
+                                    <span th:utext="'<b>주문수량 : </b>' + ${entry.value.productAmount}"></span>
+                                    <span th:utext="'<b>상품금액 : </b>' + ${#numbers.formatDecimal(entry.value.productPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></span>
                                 </div>
                             </th:block>
                         </div>
@@ -51,7 +51,7 @@
                 <div class="content-item1-item">
                     <div class="payment item1-item-item">
                         <h3>결제 상세</h3>
-                        <span><b th:utext="'<b>총 결제 금액 : </b>' + ${#numbers.formatDecimal(orderDetail.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></b></span><br>
+                        <span th:utext="'<b>총 결제 금액 : </b>' + ${#numbers.formatDecimal(orderDetail.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'"></span><br>
                         <span><b>결제 수단</b></span>
                         <th:block>
                             <div th:each="entry, stat : ${paymap}">

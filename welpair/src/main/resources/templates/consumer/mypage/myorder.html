@@ -23,9 +23,6 @@
     <section class="myorder">
         <div class="section-nav">
             <div class="section-nav-order"><b>주문 내역</b></div>
-            <div class="section-nav-order">
-                <a href="#">주문 상세 내역</a>
-            </div>
         </div>
         <div class="content">
             <div class="content-title">주문 내역</div>
@@ -104,6 +101,7 @@
                             <td th:text="${order.getDeliveryStatus()}"></td>
                             <td th:text="${order.getOrderType()}"></td>
                         </tr>
+                    </a>
                     </tbody>
                 </table>
             </div>
@@ -127,6 +125,7 @@
 
         const buttons = document.querySelectorAll(".search-date button");
         const startDate = document.querySelector("#startDate");
+        const trList = document.querySelectorAll('tr');
 
         [...buttons].forEach(button => {
             button.addEventListener('click', function () {
@@ -142,6 +141,13 @@
                     date.setHours(0, 0, 0, 0);
                     startDate.valueAsNumber = date;
                 }
+            })
+        });
+
+        [...trList].forEach(tr => {
+            tr.addEventListener('click', function() {
+                const orderNo = this.querySelector('td:nth-child(2)').textContent;
+                location.href = '/mypage/myorder/detail/' + orderNo;
             })
         })
     </script>
