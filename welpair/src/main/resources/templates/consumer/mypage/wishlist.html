@@ -38,11 +38,11 @@
     <div id="wishlist">
         <div th:each="item : ${wishItemList}" class="wishlist-item">
             <input type="checkbox">
-            <img src="/common/images/thumbnailbox.png" alt="썸네일">
+            <img th:src="|/common/images/thumbnail/${item.thumbnail}|" alt="썸네일">
             <!--                <img th:src="${item.sellProductDTO.product.productThumbnail}" alt="썸네일">-->
             <span>
-            <div th:text="${item.sellProductDTO.product.productName}">상품명</div>
-            <div th:text="${item.sellProductDTO.product.productPrice}">상품가격</div>
+            <div th:text="${item.productName}">상품명</div>
+            <div th:text="${item.price}">상품가격</div>
         </span>
             <span class="left-button2">
             <button>담기</button>

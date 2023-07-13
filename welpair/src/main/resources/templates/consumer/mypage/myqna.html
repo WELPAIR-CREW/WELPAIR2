@@ -28,9 +28,8 @@
 
         <div class="section-box qna">
 
-            <ul id="qna-list" th:each="qna:${myQnaList}">
-
-                <li class="each-qna1">
+            <ul id="qna-list">
+                <li class="each-qna1" th:each="qna:${myQnaList}">
                     <input type="checkbox">
                     <span class="each-qna2">
                         <a href="각 문의로 이동하는 링크">
@@ -46,86 +45,6 @@
                         </a>
                     </span>
                 </li>
-
-
-
-<!--                <li class="each-qna1">-->
-<!--                    <input type="checkbox">-->
-<!--                    <span class="each-qna2">-->
-<!--                        <a href="각 문의로 이동하는 링크">-->
-<!--                            <span class="qna-info">-->
-<!--                                <span class="qna-title">문의제목문의제목문의제목</span>-->
-<!--                                <span class="qna-right">-->
-<!--                                    <span class="qna-status">처리중</span>-->
-<!--                                    <span class="qna-date">2023.05.12</span>-->
-<!--                                    <span class="mark">&gt;</span>-->
-<!--                                </span>-->
-<!--                            </span>-->
-<!--                        </a>-->
-<!--                    </span>-->
-<!--                </li>-->
-<!--                <li class="each-qna1">-->
-<!--                    <input type="checkbox">-->
-<!--                    <span class="each-qna2">-->
-<!--                        <a href="각 문의로 이동하는 링크">-->
-<!--                            <span class="qna-info">-->
-<!--                                <span class="qna-title">문의제목문의제목문의제목</span>-->
-<!--                                <span class="qna-right">-->
-<!--                                    <span class="qna-status">처리중</span>-->
-<!--                                    <span class="qna-date">2023.05.12</span>-->
-<!--                                    <span class="mark">&gt;</span>-->
-<!--                                </span>-->
-<!--                            </span>-->
-<!--                        </a>-->
-<!--                    </span>-->
-<!--                </li>-->
-<!--                <li class="each-qna1">-->
-<!--                    <input type="checkbox">-->
-<!--                    <span class="each-qna2">-->
-<!--                        <a href="각 문의로 이동하는 링크">-->
-<!--                            <span class="qna-info">-->
-<!--                                <span class="qna-title">문의제목문의제목문의제목</span>-->
-<!--                                <span class="qna-right">-->
-<!--                                    <span class="qna-status">처리중</span>-->
-<!--                                    <span class="qna-date">2023.05.12</span>-->
-<!--                                    <span class="mark">&gt;</span>-->
-<!--                                </span>-->
-<!--                            </span>-->
-<!--                        </a>-->
-<!--                    </span>-->
-<!--                </li>-->
-<!--                <li class="each-qna1">-->
-<!--                    <input type="checkbox">-->
-<!--                    <span class="each-qna2">-->
-<!--                        <a href="각 문의로 이동하는 링크">-->
-<!--                            <span class="qna-info">-->
-<!--                                <span class="qna-title">문의제목문의제목문의제목</span>-->
-<!--                                <span class="qna-right">-->
-<!--                                    <span class="qna-status">읽음</span>-->
-<!--                                    <span class="qna-date">2023.05.12</span>-->
-<!--                                    <span class="mark">&gt;</span>-->
-<!--                                </span>-->
-<!--                            </span>-->
-<!--                        </a>-->
-<!--                    </span>-->
-<!--                </li>-->
-<!--                <li class="each-qna1">-->
-<!--                    <input type="checkbox">-->
-<!--                    <span class="each-qna2">-->
-<!--                        <a href="각 문의로 이동하는 링크">-->
-<!--                            <span class="qna-info">-->
-<!--                                <span class="qna-title">문의제목문의제목문의제목</span>-->
-<!--                                <span class="qna-right">-->
-<!--                                    <span class="qna-status">읽음</span>-->
-<!--                                    <span class="qna-date">2023.05.12</span>-->
-<!--                                    <span class="mark">&gt;</span>-->
-<!--                                </span>-->
-<!--                            </span>-->
-<!--                        </a>-->
-<!--                    </span>-->
-<!--                </li>-->
-
-
             </ul>
 
 
@@ -138,15 +57,26 @@
                     <button class="button-circle">검색</button>
                 </div>
 
-                <div class="paging">
-                    <span>&lt;</span>
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
-                    <span>4</span>
-                    <span>5</span>
-                    <span>&gt;</span>
+<!--                <div class="paging">-->
+<!--                    <span>&lt;</span>-->
+<!--                    <span>1</span>-->
+<!--                    <span>2</span>-->
+<!--                    <span>3</span>-->
+<!--                    <span>4</span>-->
+<!--                    <span>5</span>-->
+<!--                    <span>&gt;</span>-->
+<!--                </div>-->
 
+                <div class="paging">
+                    <a th:if="${pageHandler.showPrev}" th:href="@{/mypage/myPost(page=${pageHandler.beginPage - 1})}">이전</a>
+
+                    <span th:each="pageNumber : ${#numbers.sequence(pageHandler.beginPage, pageHandler.endPage)}" th:if="${pageNumber <= pageHandler.totalPage}" >
+                        <a th:href="@{/mypage/myPost(page=${pageNumber})}"
+                           th:text="${pageNumber == 0 ? 1 : pageNumber}"
+                           th:class="${pageNumber == pageHandler.page ? 'active-page' : ''}"></a>
+                    </span>
+
+                    <a th:if="${pageHandler.showNext}" th:href="@{/mypage/myPost(page=${pageHandler.endPage + 1})}">다음</a>
                 </div>
 
             </div>
