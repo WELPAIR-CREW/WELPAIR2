@@ -85,11 +85,10 @@
 <!-- 스크립트 시작-->
 <script src="/common/js/src/sales.js"></script>
 <script th:inline="javascript">
-        let monthlyList = /*[[${monthlyList}]]*/'';
+  let monthlyList = /*[[${monthlyList}]]*/'';
   if (monthlyList) {
     salesChart(monthlyList);
   }
-
 </script>
 </body>
 </html>

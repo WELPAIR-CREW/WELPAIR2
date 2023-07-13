@@ -123,6 +123,9 @@ public class SearchController {
         if(search != null){
             prodSearchList = searchService.searchDetailResult(search);
             System.out.println("prodSearchList = " + prodSearchList);
+            int totalItems = searchService.searchCount(search);
+
+            model.addAttribute("totalItems", totalItems);
             model.addAttribute("prodSearchList", prodSearchList);
 
         } else{
@@ -135,6 +138,7 @@ public class SearchController {
 
         model.addAttribute("searchTerms", createSearchTerms(sellPage.getTitle(), product.getCategoryCode(),
                 category.getRefCategoryCode(), product.getProductStatus()));
+
         System.out.println("------------- 상품 상세 검색 컨트롤러 2-2 out -------------");
         return prodSearchList;
     }

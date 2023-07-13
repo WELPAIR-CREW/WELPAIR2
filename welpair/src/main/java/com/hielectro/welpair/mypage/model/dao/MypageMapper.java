@@ -1,7 +1,9 @@
 package com.hielectro.welpair.mypage.model.dao;
 
+import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.mypage.model.dto.AddressDTO;
+import com.hielectro.welpair.mypage.model.dto.WishlistSellProductDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -28,4 +30,15 @@ public interface MypageMapper {
     int myPointListCount(String empNo);
     //포인트 잔액 조회
     int getPointBalance(String empNo);
+
+
+    //3. 위시리스트 목록 조회
+    String getWishId(String empNo);
+    List<WishlistSellProductDTO> getWishlistList(String wishId);
+
+
+    //5. 내가쓴글
+    //문의글목록
+    List<BoardDTO> myQnaList(String empNo);
+
 }

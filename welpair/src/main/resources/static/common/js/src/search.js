@@ -74,6 +74,7 @@ $('#searchForm').on('submit', function (event) {
                 });
 
                 const totalItems = data.length;
+                $(".section-count").text("TOTAL :  " + totalItems);
                 totalPages = Math.ceil(totalItems / rowsPerPage);
 
                 showPage(currentPage);
@@ -171,6 +172,7 @@ function sortResults(sortType) {
             });
 
             const totalItems = data.length;
+            $(".section-count").text("TOTAL :  " + totalItems);
             totalPages = Math.ceil(totalItems / rowsPerPage);
 
             showPage(currentPage);
@@ -194,26 +196,26 @@ function updatePaginationButtons() {
     $(".paging").empty();
 
     if (totalPages <= 1) {
-        $(".paging").append("<span id='prevPage'>&lt;</span><span class='pageNum'>1</span><span id='nextPage'>></span>");
+        $(".paging").append("<a><span id='prevPage'><</span></a><a class='pageNum'>1</a><a><span id='nextPage'>></span></a>");
         return;
     }
 
     const startPage = Math.floor((currentPage - 1) / 5) * 5 + 1;
     const endPage = Math.min(startPage + 4, totalPages);
 
-    if (startPage > 1) {
-        $(".paging").append("<span id='prevPage'><</span>");
+    if (startPage >= 1) {
+        $(".paging").append("<a><span id='prevPage'><</span></a>");
     }
 
     for (let i = startPage; i <= endPage; i++) {
         if (i === currentPage) {
-            $(".paging").append("<span class='currentPage' style='color: #4D4D4D;'>" + i + "</span>");
+            $(".paging").append("<a><span class='currentPage' style='color: #4D4D4D;'>" + i + "</span></a>");
         } else {
-            $(".paging").append("<span class='pageNum'>" + i + "</span>");
+            $(".paging").append("<a><span class='pageNum'>" + i + "</span></a>");
         }
     }
 
-    if (endPage < totalPages) {
-        $(".paging").append("<span id='nextPage'>&gt;</span>");
+    if (endPage <= totalPages) {
+        $(".paging").append("<a><span id='nextPage'>></span></a>");
     }
 }
