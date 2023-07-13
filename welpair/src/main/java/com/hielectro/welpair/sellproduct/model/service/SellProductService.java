@@ -35,4 +35,6 @@ public interface SellProductService {
     void modifySellProduct(SellProductDTO compareSellProduct, SellProductDTO sellProduct);
 
     boolean setPrivateBoard(List<BoardDTO> reviewList);
+
+    int updatePrivate(List<String> request);
 }
