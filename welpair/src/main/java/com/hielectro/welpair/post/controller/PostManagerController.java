@@ -46,7 +46,7 @@ public class PostManagerController {
         adminBoardServiceImpl.PostSave(adminBoardDTO);
         rttr.addFlashAttribute("message","게시글등록성공");
 
-        return "redirect:/post/admin/board_write";
+        return "redirect:/post/member/board_Notice";
     }
 
 
@@ -70,14 +70,44 @@ public class PostManagerController {
         * */
         SelectCriteria selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 
-        List<AdminBoardDTO> adminBoardList = adminBoardServiceImpl.selectBoardList(selectCriteria);
+        List<AdminBoardDTO> adminAskList = adminBoardServiceImpl.selectAskList(selectCriteria);
 
-        model.addObject("adminBoardList", adminBoardList);
+        model.addObject("adminAskList", adminAskList);
         model.addObject("selectCriteria", selectCriteria);
         model.setViewName("post/member/board_ask");
 
         return model;
     }
+
+    @GetMapping("/admin/board_ask")
+    public ModelAndView AdminAskBoardList(HttpServletRequest request,
+                                       @RequestParam(value = "currentPage", defaultValue = "1") int pageNo
+            , ModelAndView model){
+
+
+        int limit = 10;
+        int buttonAmount = 5;
+
+        int totalCount = adminBoardServiceImpl.selectTotalCount();
+
+        model.addObject("totalCount", totalCount);
+
+        /*  4. 리스트를 조회해 온다.
+         * */
+        SelectCriteria selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+
+        List<AdminBoardDTO> adminBoardList = adminBoardServiceImpl.selectBoardList(selectCriteria);
+
+        model.addObject("adminBoardList", adminBoardList);
+        model.addObject("selectCriteria", selectCriteria);
+        model.setViewName("post/admin/board_ask");
+
+        return model;
+    }
+
+
+
+
 
 
     /* *********************공지사항********************* */
@@ -166,6 +196,7 @@ public class PostManagerController {
 
         String boardNo = String.valueOf(request.getParameter("boardNo"));
         String boardCate = String.valueOf(request.getParameter("boardCate"));
+
 
         AdminBoardDTO boardDetail = adminBoardServiceImpl.selectBoardDetail(boardNo);
 //        AdminBoardTypeDTO boardType = adminBoardServiceImpl.selectBoardType(boardCate);

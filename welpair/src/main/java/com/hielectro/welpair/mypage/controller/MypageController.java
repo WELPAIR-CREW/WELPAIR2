@@ -30,8 +30,11 @@ import java.util.Map;
 @RequestMapping("/mypage")
 public class MypageController {
 
-    //로그인 체크할것!
 
+    //회원정보 수정페이지 해결하기
+    //위시리스트 페이지 css 보완
+    //T00015(로그인)의 포인트 사용이력 데이터넣어주기
+    //문의목록 페이지 css, 페이징, 누르면 해당 문의글로 이동하게, 문의하기, 삭제 기능
 
     private final MypageService mypageService;
     private final PasswordEncoder passwordEncoder;
@@ -52,18 +55,14 @@ public class MypageController {
 
     //1. 헤더에서 회원정보(수정) 메뉴 클릭시
     @GetMapping("/editMyInfo")
-    public String editMyInfo(@AuthenticationPrincipal User user) {
-
-        //로그인 체크 방법 : auth.getName() 널값이면(접속중이 아니면) 로그인 페이지로 돌려보낸다
+    public String editMyInfo(@AuthenticationPrincipal UserImpl user) {
 
         if (user != null) { //로그인 돼있는 경우 본인확인창 페이지로 이동시킨다
-//            return checkPwd();
             return "redirect:/mypage/checkPwd";
 
-        } else {                        //로그인 안돼있다면 로그인페이지로 보낸다
+        } else {  //로그인 안돼있다면 로그인페이지로 보낸다
             return "/member/login";
         }
-
     }
 
 
@@ -74,47 +73,61 @@ public class MypageController {
     }
 
 
-    //비밀번호 입력 후 확인 버튼 클릭시의 ajax요청을 받는 핸들러메소드
-    @ResponseBody
-    @PostMapping("/checkPwd2")
-    public Map<String, String> checkPwd2(@AuthenticationPrincipal UserImpl userImpl, @RequestParam String inputPassword) {
+    //폼태그 POST요청 받는 메소드
+    @PostMapping ("/checkPwd2")
+    public String checkPwd2(@AuthenticationPrincipal UserImpl userImpl, @RequestBody String inputPassword) {
 
         //현재 로그인한 유저 정보
         String empNo = userImpl.getEmpNo();
-//        String userPwd = user.getPassword(); //null
         String memPwd = userImpl.getMemPwd();
 
-        System.out.println("로그인한 empNo : " + empNo);
+        System.out.println("-----회원정보 본인인증-----로그인한 empNo : " + empNo);
         System.out.println("DB의 비밀번호 memPwd 확인 : " + memPwd);
 
-        System.out.println("입력한 비번 :  " + inputPassword); //ajax요청으로 전송된 데이터
+        //" identify= " 를 잘라내기
+        inputPassword = inputPassword.substring(inputPassword.indexOf("=") + 1);
 
+        System.out.println("입력한 비번 :  [" + inputPassword + "]");
 
         //입력한 비밀번호가 현재 로그인한 유저의 비밀번호와 같은지 비교
         boolean isSame = confirmUser(inputPassword, memPwd); //패스워드인코더의 메소드 이용하는 메소드
 
         System.out.println("isSame값 확인 : " + isSame);
 
-
         if(isSame) {
-            //ajax 성공시 동작하는 get요청의 리다이렉트주소
-            Map<String, String> map = new HashMap<>();
-            map.put("locationroot", "/mypage/editMyInfoPage");  //수정 페이지
-            return map;
+            return "redirect:/mypage/editMyInfoPage";
+//            return "forward:/mypage/editMyInfoPage";
 
         } else {
-            Map<String, String> map = new HashMap<>();
-            map.put("locationroot", "/mypage/checkPwd");
-            return map;
+            return "redirect:/mypage/checkPwd";
         }
     }
 
     @GetMapping("/editMyInfoPage")
-    public String editMyInfoPage() {
+    public ModelAndView editMyInfoPage(@AuthenticationPrincipal UserImpl user) {
+        ModelAndView modelAndView = new ModelAndView();
 
-        //리턴하면서 아이디 등 기본값을 input태그에 뿌려줄 수 있게 데이터 전달
-        return "consumer/mypage/myinfo2";
+        System.out.println("-----------회원정보 수정 페이지 진입----------");
+
+        //로그인한 객체의 정보를 불러올 수 있는지 확인
+        System.out.println("user의 정보 = " + user.toString());
+        System.out.println("userName : " + user.getUsername()); //사번이 조회됨
+//        System.out.println("memberPhone : " + user.getEmployee().getEmpPhone());
+
+
+        if (user == null) { // 로그인이 안된 경우
+            modelAndView.setViewName("member/login");
+            return modelAndView;
+        }
+
+        modelAndView.addObject("user", user); // 로그인한 사용자 정보를 전달
+        modelAndView.setViewName("consumer/mypage/myinfo2");
+        return modelAndView;
     }
+
+
+
+
 
     //회원정보수정 버튼 클릭시의 post요청
     @PostMapping("updateUserInfo")
@@ -135,9 +148,17 @@ public class MypageController {
     //2.
     //배송지목록
     @GetMapping("/myAddress")
-    public ModelAndView myAddress(@RequestParam(required = false) String empNo, ModelAndView model) {
+    public ModelAndView myAddress(@AuthenticationPrincipal UserImpl user, @RequestParam(required = false) String empNo, ModelAndView model) {
 
-        empNo = "E00062";
+        if(user == null) { //로그인 안된 경우
+            model.setViewName("member/login"); //로그인 페이지로 보낸다
+            return model;
+        }
+
+        //로그인한 사용자의 empNo를 불러온다
+        empNo = user.getEmpNo();
+        System.out.println("로그인한 사용자 : " + user);
+        System.out.println("로그인한 사용자의 empNo : " + user.getEmpNo());
 
         Map<String, String> map = new HashMap<>();
         map.put("empNo", empNo);
@@ -168,7 +189,9 @@ public class MypageController {
 
     //배송지등록페이지
     @PostMapping("/myAddress2")
-    public ModelAndView myAddress2(@RequestParam String empNo, ModelAndView model) {
+    public ModelAndView myAddress2(@AuthenticationPrincipal UserImpl user, ModelAndView model) {
+
+        String empNo = user.getEmpNo();
 
         System.out.println("배송지 등록 페이지---------------");
         System.out.println("empNo 확인 : " + empNo);
@@ -182,7 +205,7 @@ public class MypageController {
     //배송지 폼 등록하기 버튼(ajax요청을 받는 핸들러메소드)
     @ResponseBody
     @PostMapping("/registAddress")
-    public Map<String, String> registAddress(@RequestBody AddressDTO addressDTO) throws Exception {
+    public Map<String, String> registAddress(@AuthenticationPrincipal UserImpl user, @RequestBody AddressDTO addressDTO) throws Exception {
 
         System.out.println("-----------------------------배송지 등록 ajax요청 받는지 확인");
         System.out.println("컨트롤러로 들어온 addressDTO 확인 : " + addressDTO);
@@ -206,10 +229,12 @@ public class MypageController {
 
     //기존의 기본배송지 초기화
     @PostMapping("/resetDefaultAddress")
-    public void resetDefaultAddress(@RequestParam String empNo) throws Exception {
+//    public void resetDefaultAddress(@RequestParam String empNo) throws Exception {
+    public void resetDefaultAddress(@AuthenticationPrincipal UserImpl user) throws Exception {
 
         System.out.println("---------------------기본배송지 초기화 메소드 실행");
-        empNo = "E00062";
+        String empNo = user.getEmpNo();
+        System.out.println("로그인한 empNo : " + empNo);
 
         mypageService.resetDefaultAddress(empNo);
     }
@@ -222,18 +247,30 @@ public class MypageController {
 
     //3.
     //위시리스트 css수정필요
-//    @GetMapping("/wishlist")
-//    public String wishlist() {
-//
-//        return "consumer/mypage/wishlist";
-//    }
     @GetMapping("/wishlist")
-    public ModelAndView getWishlistList(ModelAndView model) {
+    public ModelAndView getWishlistList(@AuthenticationPrincipal UserImpl user, ModelAndView model) {
 
-        String empNo = "E00026";
+        if(user == null) { //로그인 안된 경우
+            model.setViewName("member/login"); //로그인 페이지로 보낸다
+            return model;
+        }
+
+        String empNo = user.getEmpNo();
+        System.out.println("위시리스트목록-----------로그인한 empNo : " + empNo);
 
         String wishId = mypageService.getWishId(empNo);
         System.out.println("회원 " + empNo + "의 wishId 값 조회 : " + wishId);
+
+
+        //@@@wishId가 null인 경우에 예외처리하기
+        //null인 경우 위시리스트 추가해주는 메소드 작성하기
+        /*
+        INSERT INTO T_WISH
+        VALUES
+        ('W'||LPAD(SEQ_WISH_ID.NEXTVAL,10,0)
+        ,'T00015'
+        ,SYSDATE );
+        * */
 
         List<WishlistSellProductDTO> wishItemList = mypageService.getWishlistList(wishId);
         System.out.println("리스트 출력 : " + wishItemList);
@@ -247,11 +284,19 @@ public class MypageController {
     //4. 마이포인트
     @GetMapping("/myPoint")
     public ModelAndView myPoint(@RequestParam(defaultValue = "1") int page, ModelAndView model
-            , @RequestParam(value = "type", required = false) String pointType) {
+            , @RequestParam(value = "type", required = false) String pointType
+            , @AuthenticationPrincipal UserImpl user) {
 
-        //@@@로그인하여 현재 접속중인 empNo값을 인자로 넘겨야할것
-        //일단 인위적으로 설정
-        String empNo = "E00026";
+
+
+        if(user == null) { //로그인 안된 경우
+            model.setViewName("member/login"); //로그인 페이지로 보낸다
+            return model;
+        }
+
+
+        String empNo = user.getEmpNo();
+        System.out.println("----------포인트조회-------- 로그인한 사용자의 empNo : " + empNo);
 
 
         //페이징-------------------------------------------------------------
@@ -291,15 +336,18 @@ public class MypageController {
     //5.
     //내가쓴글-문의목록
     //*****리뷰 페이지 html 재작성해야함
-//    @GetMapping("/myPost")
-//    public String myPost() {
-//
-//        return "consumer/mypage/myqna";
-//    }
     @GetMapping("/myPost")
-    public ModelAndView myPost(@RequestParam(defaultValue = "1") int page, ModelAndView model) {
+    public ModelAndView myPost(@AuthenticationPrincipal UserImpl user, @RequestParam(defaultValue = "1") int page, ModelAndView model) {
 
-        String empNo = "T00015";
+
+        if(user == null) { //로그인 안된 경우
+            model.setViewName("member/login"); //로그인 페이지로 보낸다
+            return model;
+        }
+
+
+        String empNo = user.getEmpNo();
+        System.out.println("-----------문의목록----------로그인한 empNo : " + empNo);
 
         //페이징-------------------------------------------------------------
         int pageSize = 10; //페이지당 항목 수
@@ -328,7 +376,11 @@ public class MypageController {
 
     //6. 주문내역
     @GetMapping("/myorder")
-    public String myorder() {
+    public String myorder(@AuthenticationPrincipal UserImpl user) {
+
+        if(user == null) { //로그인 안된 경우
+            return "/member/login";
+        }
 
         return "consumer/mypage/myorder";
     }
@@ -337,7 +389,13 @@ public class MypageController {
 
     //7.마이페이지 메인화면 (우측 상단 MY 클릭시 진입)
     @GetMapping({"/mypageMain", "/"})
-    public String mypageMain() {
+    public String mypageMain(@AuthenticationPrincipal UserImpl user) {
+
+        System.out.println("-----마이페이지 메인화면-----로그인여부 user 조회 : " + user);
+
+        if(user == null) { //로그인 안된 경우
+            return "/member/login";
+        }
 
         return "consumer/mypage/mypage-main";
     }

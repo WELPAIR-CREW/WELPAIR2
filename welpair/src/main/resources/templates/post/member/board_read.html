@@ -37,9 +37,16 @@
                 </div>
 
                 <div class="write_third">
-                    <div name="boardCategory" id="postCate" th:text="${ board.empNo }">
+                    <div id="writer_wrap">
 
+                        <span id="space"></span>
+                        <span id="writer">작성자</span>
+                        <span name="boardCategory" id="postCate" th:text="${ board.empNo }"></span>
+                        <span id="date">작성일</span>
+                        <span name="boardDate" id="postDate" th:text="${ #dates.format(board.boardDate, 'yyyy년 MM월 dd일 HH:mm:ss') }"></span>
                     </div>
+
+
 <!--                    <select name="isPrivate" id="postPrivate" class="boardPrivate">-->
 <!--                        <option value="0" selected disabled>글 공개 여부 선택</option>-->
 <!--                        <option value="Y">공개</option>-->
@@ -53,7 +60,7 @@
             </div>
             <div class="button">
                 <div class="bnt_go_list">
-                    <input type="button" value="목록으로"><a href="#"></a>
+                    <input type="button" value="목록으로" ><a href="#"></a>
                     <input class="update" type="submit" value="삭제하기"></a>
                 </div>
             </div>
