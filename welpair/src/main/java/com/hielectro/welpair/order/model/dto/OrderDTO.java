@@ -26,4 +26,6 @@ public class OrderDTO {
 
     private OrderPaymentDTO orderPayment; // 판매상품별주문 리스트
 
+    private MemberDTO member;
+
 }

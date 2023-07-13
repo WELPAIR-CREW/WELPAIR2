@@ -13,6 +13,7 @@
         <association property="sellProduct" resultMap="getSellProductResultMap"></association>
         <association property="product" resultMap="getProductResultMap"></association>
         <association property="category" resultMap="getCategoryResultMap"></association>
+
     </resultMap>
 
     <resultMap id="getSellPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">

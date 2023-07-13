@@ -1,5 +1,6 @@
 package com.hielectro.welpair.order.model.dto;
 
+import com.hielectro.welpair.delivery.model.dto.DeliveryDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import lombok.*;
 
@@ -21,4 +22,5 @@ public class ProductOrderDTO {
 
     // 판매상품 DTO
     private SellProductDTO Sellproduct; // 판매상품 dto
+    private DeliveryDTO delivery;
 }
