@@ -123,6 +123,12 @@
         VALUES
             ( 'PO' || LPAD(SEQ_PRODUCT_ORDER_NO.NEXTVAL, 6, '0'), #{orderNo}, #{sellProductId},
              #{productOrderAmount}, #{productOrderPrice}, #{deliveryDate})
+
+        <selectKey keyProperty="productOrderNo" keyColumn="CURRVAL" resultType="string" order="AFTER">
+            SELECT
+                ( 'PO' || LPAD(SEQ_PRODUCT_ORDER_NO.CURRVAL, 6, '0') CURRVAL
+            FROM DUAL
+        </selectKey>
     </insert>
 
     <!-- 포인트 사용이력 테이블 인서트  -->

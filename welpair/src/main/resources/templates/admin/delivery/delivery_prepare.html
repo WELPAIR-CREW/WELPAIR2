@@ -70,7 +70,7 @@
                     </thead>
 
                     <tbody>
-                    <tr th:each="delivery:${deliveryList}" th:if="${delivery.deliveryStatus == '상품준비중'}">
+                    <tr th:each="delivery:${notDeliveryList}">
                         <td class="checkbox-cell">
                             <input type="checkbox" name="chk" class="chk" onclick="chkClicked()"></td>
                         <!--                        <td th:text="${delivery.deliveryStatus}"></td>-->
@@ -78,7 +78,7 @@
                         <td th:text="${delivery.productOrderNo}"></td>
                         <td th:text="${delivery.productName}"></td>
 
-                        <td th:text="${delivery.amount}"></td>
+                        <td th:text="${delivery.productOrderAmount}"></td>
                         <td></td>
                         <!--                        <td th:text="${delivery.delivery.empEmail}"></td>-->
                         <td th:text="${delivery.deliveryDate }"></td>
@@ -106,7 +106,8 @@
         </form>
 
         <div>
-            <p style="text-align: center;">
+<!--            <p style="text-align: center;">-->
+            <div class="paging" style="text-align: center;">
                 <span>&lt;</span>
                 <span>1</span>
                 <span>2</span>
@@ -115,6 +116,7 @@
                 <span>5</span>
                 <span>&gt;</span>
             </p>
+        </div>
         </div>
         </div>
         </section>

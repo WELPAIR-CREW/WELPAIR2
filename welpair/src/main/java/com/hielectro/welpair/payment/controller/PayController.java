@@ -1,6 +1,7 @@
 
 package com.hielectro.welpair.payment.controller;
 
+import com.hielectro.welpair.delivery.controller.DeliveryController;
 import com.hielectro.welpair.inventory.model.dto.StockDTO;
 import com.hielectro.welpair.inventory.model.service.InventoryService;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
@@ -175,6 +176,7 @@ public class PayController {
 
 
 
+                // insert문 배송아이디, 고정된 배송기사, '배송준비중'
             } catch (SQLTransactionRollbackException e) {
                 System.out.println("!!!!!!!!!!productorder insert 실패!!!!!!!!!");
                 payService.deleteOrder(order.getOrderNo());
