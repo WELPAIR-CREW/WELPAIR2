@@ -217,7 +217,7 @@ public class SellProductController {
         return response;
     }
 
-    @PostMapping("er2")
+    @PostMapping("payment")
     @PreAuthorize("hasRole('MEMBER')")
     @ResponseBody
     public List<ProductOrderDTO> test(@ModelAttribute Search search) {

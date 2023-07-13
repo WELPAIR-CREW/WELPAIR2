@@ -1,7 +1,25 @@
 
 package com.hielectro.welpair.payment.controller;
 
-import com.hielectro.welpair.delivery.controller.DeliveryController;
+import java.sql.SQLTransactionRollbackException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.hielectro.welpair.inventory.model.dto.StockDTO;
 import com.hielectro.welpair.inventory.model.service.InventoryService;
 import com.hielectro.welpair.member.model.dto.MemberDTO;
@@ -14,20 +32,11 @@ import com.hielectro.welpair.payment.model.dto.PaymentDTO;
 import com.hielectro.welpair.payment.model.dto.PointPayDTO;
 import com.hielectro.welpair.payment.model.service.PayService;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.sql.SQLTransactionRollbackException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @Controller
@@ -48,7 +57,9 @@ public class PayController {
     @PostMapping("/payment.do")
     public String gotopay(@ModelAttribute("orderPrdList") OrderPayReqDTO orderPrdList, Model model
                                       , @AuthenticationPrincipal User user
-    ) throws Exception {
+                          , HttpServletRequest request
+                          , HttpServletResponse response
+                          ) throws Exception {
 
         System.out.println("========post mapping 들어옴===========");
         System.out.println(orderPrdList);
@@ -61,7 +72,7 @@ public class PayController {
 
             SellProductDTO prd = payService.selectProductById(product.getSellProductId());
 
-            if (prd.getIsSell().equals('N')) {
+            if (prd.getIsSell().equals("N")) {
                 System.out.println("판매중인 상품이 아닙니다. 다시 주문해주세요.");
                 System.out.println("해당 상품 : " + product.getSellproduct());
                 model.addAttribute("suspendProduct", product.getSellproduct());
@@ -80,6 +91,7 @@ public class PayController {
         // 3-1. (아이디 -> 배송지 전체테이블, 멤버 포인트 )
         System.out.println("empNo=================" + user.getUsername());
         List<MemberDTO> memberAddressList = payService.selectMemberById(user.getUsername());
+        
         System.out.println(memberAddressList);
         model.addAttribute("memberAddressList", memberAddressList);
 
