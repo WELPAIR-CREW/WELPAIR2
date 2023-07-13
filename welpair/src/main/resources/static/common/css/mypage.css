@@ -1,3 +1,4 @@
+
 /* 하이퍼링크 색 */
 a {
     text-decoration: none;
@@ -543,8 +544,8 @@ section {
 
 #qna-list {
     margin-top: 50px;
-
 }
+
 
 .each-qna1 {
     display: flex;
@@ -572,6 +573,8 @@ section {
     
     position: relative;
 }
+
+
 
 .qna-title {
     font-size: 16px;
@@ -654,3 +657,5 @@ section {
     /* margin-left: 270px; */
     font-size: 14px;
 }
+
+
