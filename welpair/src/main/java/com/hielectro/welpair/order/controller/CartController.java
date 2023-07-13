@@ -114,7 +114,16 @@ public class CartController {
     public String cartList(Model model
             , @AuthenticationPrincipal User user
     ) {
+
+
         System.out.println("User =======================" + user);
+
+
+        // 미로그인 사용자 null 처리
+        if(user == null){
+            return "consumer/order/cart-blank";
+
+        }
 
         // 1. 회원 정보 받아서 해당 회원의 장바구니 조회
 
@@ -233,7 +242,6 @@ public class CartController {
             exptDeliveryPrice += Integer.parseInt(expt.get(1));
             exptTotalPrice += Integer.parseInt(expt.get(2));
 
-        }
         }
 
         CartGeneralDTO expt = new CartGeneralDTO();
