@@ -78,12 +78,9 @@
                         <td th:text="${#dates.format(delivery.orderDate , 'yyyy.MM.dd')}"></td>
                         <td th:text="${delivery.productOrderNo}"></td>
                         <td th:text="${delivery.productName}"></td>
-
                         <td th:text="${delivery.amount}"></td>
-                        <td></td>
-<!--                        <td th:text="${delivery.delivery.empEmail}"></td>-->
+                        <td th:text="${delivery.addressName}"></td>
                         <td th:text="${delivery.deliveryDate}"></td>
-<!--                        <td th:text="${delivery.deliveryStatus}"></td>-->
                         <td th:text="${delivery.deliveryStatus}"></td>
 
                     </tr>
