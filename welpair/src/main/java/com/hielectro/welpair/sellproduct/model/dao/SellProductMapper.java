@@ -47,5 +47,7 @@ public interface SellProductMapper {
     int updateSellPage(SellPageDTO sellPage);
     int updateSellProduct(SellProductDTO sellProduct);
     int updateReview(BoardDTO review);
+    int updatePrivate(String no);
+
 }
 

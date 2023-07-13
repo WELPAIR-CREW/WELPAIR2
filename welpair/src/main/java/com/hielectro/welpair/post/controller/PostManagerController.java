@@ -2,6 +2,7 @@ package com.hielectro.welpair.post.controller;
 
 
 import com.hielectro.welpair.post.model.dto.AdminBoardDTO;
+import com.hielectro.welpair.post.model.dto.AdminBoardTypeDTO;
 import com.hielectro.welpair.post.model.service.AdminBoardService;
 import com.hielectro.welpair.post.model.service.AdminBoardServiceImpl;
 import org.springframework.stereotype.Controller;
@@ -135,26 +136,11 @@ public class PostManagerController {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /* ******************** 유저 글쓰기 ******************* */
     @GetMapping("/member/board_memberWrite")
     public String MemberWrite(Model model){
 
-        return "/post/member/board_memberWrite";
+        return "post/member/board_memberWrite";
     }
 
     @PostMapping("/member/board_memberWrite")
@@ -168,6 +154,27 @@ public class PostManagerController {
     }
 
 
+
+
+
+
+
+
+    /* *************************** 게시판 읽기 *********************** */
+    @GetMapping("/member/board_read")
+    public String selectBoardDetail(HttpServletRequest request, Model model){
+
+        String boardNo = String.valueOf(request.getParameter("boardNo"));
+        String boardCate = String.valueOf(request.getParameter("boardCate"));
+
+        AdminBoardDTO boardDetail = adminBoardServiceImpl.selectBoardDetail(boardNo);
+//        AdminBoardTypeDTO boardType = adminBoardServiceImpl.selectBoardType(boardCate);
+        model.addAttribute("board", boardDetail);
+//        model.addAttribute("boardType", boardType);
+
+        return "post/member/board_read";
+
+    }
 
 
 }

@@ -87,7 +87,7 @@
                             A.ORDER_NO AS "주문번호",
                             C.PRODUCT_NAME AS "주문명",
                             B.PRODUCT_ORDER_AMOUNT AS "수량",
-                            A.TOTAL_PRICE AS "주문금액",
+                            B.PRODUCT_ORDER_PRICE AS "주문금액",
                             D.DELIVERY_STATUS AS "배송상태",
                             A.ORDER_TYPE AS "주문유형"
                         FROM T_ORDER A
@@ -108,7 +108,7 @@
                         <if test='search.endDate != null'>
                           AND A.ORDER_DATE &lt;= #{search.endDate}
                         </if>
-                        ORDER BY 주문번호 ASC) A
+                        ORDER BY 주문번호 DESC) A
                 )
         WHERE 1=1
         <if test="pageNo != null and pageNo != ''">

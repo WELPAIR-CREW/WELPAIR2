@@ -13,6 +13,7 @@
         <association property="sellProduct" resultMap="getSellProductResultMap"></association>
         <association property="product" resultMap="getProductResultMap"></association>
         <association property="category" resultMap="getCategoryResultMap"></association>
+
     </resultMap>
 
     <resultMap id="getSellPageResultMap" type="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
@@ -169,6 +170,4 @@
           FROM T_THUMB_IMAGE
          WHERE SELL_PAGE_NO = #{no}
     </select>
-
-
 </mapper>

@@ -28,7 +28,7 @@
                 <div class="qna-title-top">Q&A</div>
                 <div class="qna-bnt">
 <!--                    <div class="qna-select">선택</div>-->
-                    <div class="qna-write"><a href="../member/board_memberWrite"></a>글쓰기</div>
+                    <div class="qna-write"><a href="../member/board_memberWrite">글쓰기</a></div>
                 </div>
             </div>
             <div class="qna-list">
@@ -40,7 +40,7 @@
                 <div th:each="postQna : ${ adminQnaList }">
                     <div class="qna-num" th:text="${ postQna.boardNo }"></div>
                     <div class="qna-title" th:text="${ postQna.boardTitle }"><a href="#"></a></div>
-                    <div class="qna-date" th:text="${ postQna.boardDate }">2023-10-10</div>
+                    <div class="qna-date" th:text="${#dates.format(postQna.boardDate, 'yy년 MM월 dd일')}">2023-10-10</div>
                 </div>
 <!--                <div>-->
 <!--                    <div class="qna-num">9</div>-->
@@ -89,7 +89,7 @@
 <!--                </div>-->
             </div>
 <!--            <div class="paging1"></div>-->
-            <!-- ㅠㅔ이지처리 -->
+            <!-- 페이징처리 -->
             <div class="pagingArea">
                 <!-- 이전 페이지 버튼 -->
                 <button th:onclick="'location.href=\'/membar/board_Qna?currentPage='+@{${selectCriteria.pageNo -1} + '\''"
@@ -102,7 +102,7 @@
                 </th:block>
                 <!-- 다음 페이지 -->
                 <button th:onclick="'location.href=\'/board/board_Qna?currentPage='+@{${selectCriteria.pageNo +1} + '\''"
-                        th:disabled="${selectCriteria.maxPage}"></button>
+                        th:disabled="${selectCriteria.maxPage}">></button>
 
             </div>
 

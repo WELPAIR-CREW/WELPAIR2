@@ -129,7 +129,7 @@ public class PayController {
     }
 
     @GetMapping("/pay-success")
-    public String paySuccess(@ModelAttribute("order") OrderDTO order
+    public String paySuccess(@ModelAttribute("order") OrderDTO order, RedirectAttributes rttr
 //                , @AuthenticationPrincipal User user
     ) throws Exception {
 
@@ -186,9 +186,6 @@ public class PayController {
         cartService.deleteCartProduct((ArrayList<String>) order.getProductOrderList()
                 .stream().map(item -> item.getSellProductId()).collect(Collectors.toList()), empNo);
 
-
-
-
         // 4. 자동 출고 등록
         List<StockDTO> stockList = new ArrayList<>();
         StockDTO stock = stockOutManager(order);
@@ -199,7 +196,6 @@ public class PayController {
             log.info("결과값 result : " + resultStock + "출고등록 실패");
             inventoryService.stockRegist(stockList);
         }
-
 
 
         // 5. 포인트 사용시
@@ -241,17 +237,25 @@ public class PayController {
 
         }
 
-        // 7. 시간되면 주문내역 뿌리기
+        // 카카오페이 리다이렉트
+        if(order.getOrderPayment().getPaymentList().stream()
+                .anyMatch(i -> i.getPaymentType().contains("카카오페이"))){
+            return "redirect:/mypage/myorder/detail/" + order.getOrderNo();
+        }
 
-        return "/consumer/payment/pay-success";
+        // 복지포인트 리다이렉트
+        rttr.addFlashAttribute("orderNo", order.getOrderNo());
+        return "redirect:/payment/point-use-redirect";
     }
 
+    // 복지포인트 리다이렉트
+    @GetMapping("point-use-redirect")
+    @ResponseBody
+    public String pointUseRedirect(@ModelAttribute("order") OrderDTO order, @ModelAttribute("orderNo") String orderNo){
 
-    @GetMapping("/refund-write")
-    public String refund(){
-        return "/consumer/payment/refund-write";
+        System.out.println("order222222 = " + order);
+        return orderNo;
     }
-
 
     // 출고관리 매니저
     public StockDTO stockOutManager(OrderDTO order){

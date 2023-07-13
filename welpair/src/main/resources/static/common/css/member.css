@@ -90,6 +90,8 @@ input[type=checkbox] {
 }
 
 
+
+
 .over-table {
     /*  플렉스 컨테이너의 시작 부분에 (교차축) 요소를 정렬 (수직 배치됨) */
     align-self: flex-start;

@@ -32,6 +32,12 @@
         <result property="boardDate" column="BOARD_DATE"/>
         <result property="empNo" column="EMP_NO"/>
         <result property="isPrivate" column="IS_PARIVATE"/>
+
+        <collection property="typeList" resultMap="boardTypeResultMap"/>
+    </resultMap>
+    <resultMap id="boardTypeResultMap" type="com.hielectro.welpair.post.model.dto.AdminBoardTypeDTO">
+        <id property="boardCate" column="BOARD_CATEGORY"/>
+        <result property="boardType" column="BOARD_TYPE"/>
     </resultMap>
 
 
@@ -79,6 +85,12 @@
         WHERE   IS_PRIVATE = 'Y'
     </select>
 
+    <select id="incrementBoardCount" resultType="_int">
+        SELECT  COUNT(*)
+        FROM    T_BOARD
+        WHERE   BOARD_NO = ${ boardNo }
+    </select>
+
     <select id="selectBoardList" resultMap="askBoardResultMap">
         SELECT
                 BOARD_NO
@@ -118,6 +130,23 @@
         FROM    T_BOARD
         WHERE   BOARD_CATEGORY = 'BORD_3'
           AND     IS_PRIVATE = 'Y'
+    </select>
+
+
+
+    <select id="selectBoardDetail" resultMap="askBoardResultMap">
+        SELECT
+                A.BOARD_NO
+            ,   A.BOARD_CATEGORY
+            ,   A.BOARD_TITLE
+            ,   A.BOARD_CONTENT
+            ,   A.BOARD_DATE
+            ,   A.EMP_NO
+            ,   A.IS_PRIVATE
+            ,   B.BOARD_TYPE
+        FROM    T_BOARD A
+            LEFT JOIN T_BOARD_TYPE B ON(A.BOARD_CATEGORY = B.BOARD_CATEGORY)
+        WHERE   BOARD_NO = ${ boardNo }
     </select>
 
 </mapper>

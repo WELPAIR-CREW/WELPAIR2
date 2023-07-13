@@ -169,6 +169,17 @@ public class SellProductController {
         return response;
     }
 
+    @PostMapping("updateSellPageByPrivate")
+    @ResponseBody
+    public int updatePrivate(@RequestBody List<String> request) {
+        System.out.println(request);
+        try {
+            return productService.updatePrivate(request);
+        } catch (Exception e) {
+            throw new IllegalStateException("error");
+        }
+    }
+
     @PostMapping("sellProductDeleteAPI")
     @ResponseBody
     public int sellProductDelete(@RequestBody List<String> request) {
