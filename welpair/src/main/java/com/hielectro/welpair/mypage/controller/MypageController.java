@@ -30,12 +30,6 @@ import java.util.Map;
 @RequestMapping("/mypage")
 public class MypageController {
 
-
-    //회원정보 수정페이지 해결하기
-    //위시리스트 페이지 css 보완
-    //T00015(로그인)의 포인트 사용이력 데이터넣어주기
-    //문의목록 페이지 css, 페이징, 누르면 해당 문의글로 이동하게, 문의하기, 삭제 기능
-
     private final MypageService mypageService;
     private final PasswordEncoder passwordEncoder;
 
@@ -133,12 +127,12 @@ public class MypageController {
     @PostMapping("updateUserInfo")
     public String updateUserInfo(@ModelAttribute RegistDTO registDTO, @AuthenticationPrincipal User user) {
         System.out.println("-----------------회원정보update 메소드");
-        System.out.println("@ModelAttribute DTO인 RegistDTO 필드값 : " + registDTO);
-        System.out.println("@AuthenticationPrincipal 유저 : " + user);
+        System.out.println("@ModelAttribute DTO인 RegistDTO 필드값 : " + registDTO); //null
+        System.out.println("@AuthenticationPrincipal 유저 : " + user); //들어옴
 
 
         //비밀번호는 암호화해서 업데이트
-        registDTO.setMemPwd(passwordEncoder.encode(registDTO.getMemPwd()));
+        registDTO.setMemPwd(passwordEncoder.encode(user.getPassword()));
 //        mypageService.updateUserInfo(registDTO);
 
         return "redirect:/mypage/editMyInfoPage";
@@ -248,7 +242,8 @@ public class MypageController {
     //3.
     //위시리스트 css수정필요
     @GetMapping("/wishlist")
-    public ModelAndView getWishlistList(@AuthenticationPrincipal UserImpl user, ModelAndView model) {
+    public ModelAndView getWishlistList(@RequestParam(defaultValue = "1") int page
+                                      , @AuthenticationPrincipal UserImpl user, ModelAndView model) {
 
         if(user == null) { //로그인 안된 경우
             model.setViewName("member/login"); //로그인 페이지로 보낸다
@@ -261,18 +256,23 @@ public class MypageController {
         String wishId = mypageService.getWishId(empNo);
         System.out.println("회원 " + empNo + "의 wishId 값 조회 : " + wishId);
 
+        //페이징-------------------------------------------------------------
+        int pageSize = 5; //페이지당 항목 수
+        int totalCnt = mypageService.wishItemCount(wishId);
+        System.out.println("db에서 조회한 총 마이포인트 목록 항목수 : " + totalCnt);
+        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
+        model.addObject("totalCnt", totalCnt);
 
-        //@@@wishId가 null인 경우에 예외처리하기
-        //null인 경우 위시리스트 추가해주는 메소드 작성하기
-        /*
-        INSERT INTO T_WISH
-        VALUES
-        ('W'||LPAD(SEQ_WISH_ID.NEXTVAL,10,0)
-        ,'T00015'
-        ,SYSDATE );
-        * */
+        Map<String, Object> map = new HashMap<>();
+        map.put("startRow", pageHandler.getStartRow());
+        map.put("endRow", pageHandler.getEndRow());
+        model.addObject("pageHandler", pageHandler);
+        //------------------------------------------------------------------
 
-        List<WishlistSellProductDTO> wishItemList = mypageService.getWishlistList(wishId);
+        map.put("wishId", wishId);
+
+
+        List<WishlistSellProductDTO> wishItemList = mypageService.getWishlistList(map);
         System.out.println("리스트 출력 : " + wishItemList);
 
         model.addObject("wishItemList", wishItemList);
@@ -287,13 +287,10 @@ public class MypageController {
             , @RequestParam(value = "type", required = false) String pointType
             , @AuthenticationPrincipal UserImpl user) {
 
-
-
         if(user == null) { //로그인 안된 경우
             model.setViewName("member/login"); //로그인 페이지로 보낸다
             return model;
         }
-
 
         String empNo = user.getEmpNo();
         System.out.println("----------포인트조회-------- 로그인한 사용자의 empNo : " + empNo);
@@ -319,7 +316,6 @@ public class MypageController {
         }
 
         System.out.println("pointType값 확인 : " + pointType);
-
 
         List<PointHistoryDTO> mypointList = mypageService.mypointList(map);
         model.addObject("mypointList", mypointList);
@@ -350,7 +346,7 @@ public class MypageController {
         System.out.println("-----------문의목록----------로그인한 empNo : " + empNo);
 
         //페이징-------------------------------------------------------------
-        int pageSize = 10; //페이지당 항목 수
+        int pageSize = 7; //페이지당 항목 수
         int totalCnt = mypageService.myQnaCount(empNo);
         System.out.println("db에서 조회한 총 마이포인트 목록 항목수 : " + totalCnt);
         PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
@@ -363,7 +359,7 @@ public class MypageController {
         //------------------------------------------------------------------
 
         map.put("empNo", empNo);
-        List<BoardDTO> myQnaList = mypageService.myQnaList(empNo);
+        List<BoardDTO> myQnaList = mypageService.myQnaList(map);
         System.out.println("myQnaList 출력 : " + myQnaList);
         model.addObject("myQnaList", myQnaList);
         model.setViewName("consumer/mypage/myqna");
