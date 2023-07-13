@@ -150,7 +150,7 @@ public class PostManagerController {
         adminBoardServiceImpl.MemberWriteSave(adminBoardDTO);
         rttr.addFlashAttribute("message","게시글등록성공");
 
-        return "redirect:/post/member/board_memberWrite";
+        return "redirect:/post/member/board_Notice";
     }
 
 
@@ -173,6 +173,40 @@ public class PostManagerController {
 //        model.addAttribute("boardType", boardType);
 
         return "post/member/board_read";
+
+    }
+
+
+
+    /* ***************** 어드민 게시판 *************** */
+    @GetMapping("/admin/board_manager")
+    public String AdminBoardManager(Model model){
+
+        return "post/admin/board_manager";
+    }
+
+    @PostMapping("/admin/board_manager")
+    public ModelAndView PostManager(HttpServletRequest request,
+                                   @RequestParam(value = "currentPage", defaultValue = "1") int pageNo
+            , ModelAndView model){
+
+        int limit = 10;
+        int buttonAmount = 5;
+
+        int totalCount = adminBoardServiceImpl.selectTotalCount();
+
+        model.addObject("totalCount", totalCount);
+
+        SelectCriteria selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+
+        List<AdminBoardDTO> adminNoticeManagerList = adminBoardServiceImpl.selectNoticeManagerList(selectCriteria);
+
+        model.addObject("adminNoticeManagerList", adminNoticeManagerList);
+        model.addObject("selectCriteria", selectCriteria);
+        model.setViewName("post/admin/board_manager");
+
+
+        return model;
 
     }
 

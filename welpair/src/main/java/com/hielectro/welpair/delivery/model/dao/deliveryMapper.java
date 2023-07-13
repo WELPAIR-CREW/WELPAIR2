@@ -2,10 +2,12 @@ package com.hielectro.welpair.delivery.model.dao;
 
 import com.hielectro.welpair.delivery.model.dto.DeliveryDTO;
 import com.hielectro.welpair.delivery.model.dto.DriverDTO;
+import com.hielectro.welpair.delivery.model.dto.NotDeliveryDTO;
 import com.hielectro.welpair.delivery.model.dto.OrderProductDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface deliveryMapper {
@@ -16,5 +18,7 @@ public interface deliveryMapper {
 
     List<OrderProductDTO> deliveryDelivery();
 
-    List<String> driverSelect();
+    List<NotDeliveryDTO> notDelivery(Map<String, Object> map);
+
+    int notDeliveryCount();
 }

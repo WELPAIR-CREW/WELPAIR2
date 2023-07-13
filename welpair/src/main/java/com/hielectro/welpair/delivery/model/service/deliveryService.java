@@ -3,10 +3,14 @@ package com.hielectro.welpair.delivery.model.service;
 import com.hielectro.welpair.delivery.model.dao.deliveryMapper;
 import com.hielectro.welpair.delivery.model.dto.DeliveryDTO;
 import com.hielectro.welpair.delivery.model.dto.DriverDTO;
+import com.hielectro.welpair.delivery.model.dto.NotDeliveryDTO;
 import com.hielectro.welpair.delivery.model.dto.OrderProductDTO;
+import com.hielectro.welpair.member.model.dto.MemberDTO;
+import com.hielectro.welpair.payment.model.dto.PointPayDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class deliveryService {
@@ -22,8 +26,12 @@ public class deliveryService {
         return delivery.deliveryDelivery();
     }
 
-    public List<DriverDTO> deliverydriver(){
-        return delivery.deliveryDriver();
+    public List<NotDeliveryDTO> notDelivery(Map<String, Object> map){
+        return delivery.notDelivery(map);
+    }
+
+    public int notDeliveryCount() { int notDelivery = delivery.notDeliveryCount();
+        return notDelivery;
     }
 
 }
