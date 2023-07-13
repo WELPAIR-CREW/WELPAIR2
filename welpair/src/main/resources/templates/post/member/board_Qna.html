@@ -22,6 +22,8 @@
             <div class="notice nav-top"><a href="../member/board_Notice">공지사항</a></div>
             <div class="ask"><a href="../member/board_ask">자주묻는질문</a></div>
             <div class="qna"><a href="../member/board_Qna"></a>Q&A</div>
+            <div class="wirte"><a href="../admin/board_write">게시글작성</a></div>
+
         </div>
         <div class="list-wrap">
             <div class="list-qna-top">
@@ -37,8 +39,8 @@
                     <div class="qna-title">제목</div>
                     <div class="qna-date">날짜</div>
                 </div>
-                <div th:each="postQna : ${ adminQnaList }">
-                    <div class="qna-num" th:text="${ postQna.boardNo }"></div>
+                <div th:each="postQna : ${ adminQnaList }" id="cate">
+                    <div class="qna-num" th:text="${ postQna.boardNo }" id="boardNo"></div>
                     <div class="qna-title" th:text="${ postQna.boardTitle }"><a href="#"></a></div>
                     <div class="qna-date" th:text="${#dates.format(postQna.boardDate, 'yy년 MM월 dd일')}">2023-10-10</div>
                 </div>
@@ -73,5 +75,18 @@
 <script>
     $('.header1').load('/consumer/header_consumer');
     $('.footer1').load('/consumer/footer');
+
+
+    if (document.querySelectorAll("#cate")) {
+        const $tds = document.querySelectorAll("#cate");
+        const $tds1 = document.querySelectorAll("#boardNo")
+
+        $tds.forEach(td => {
+            td.addEventListener('click', function() {
+                const boardNo = this.children[0].innerText;
+                location.href = "/post/member/board_read?boardNo=" + boardNo;
+            })
+        })
+    }
 </script>
 </html>

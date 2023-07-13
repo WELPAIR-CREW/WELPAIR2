@@ -22,7 +22,7 @@
             <div class="notice nav-top"><a href="../member/board_Notice">공지사항</a></div>
             <div class="ask"><a href="../member/board_ask">자주묻는질문</a></div>
             <div class="qna"><a href="../member/board_Qna">Q&A</a></div>
-            <div class="wirte"><a href="../member/board_memberWrite">게시글작성</a></div>
+            <div class="wirte"><a href="../admin/board_write">게시글작성</a></div>
         </div>
         <div class="list-wrap">
             <div class="list-qna-top">
@@ -58,7 +58,7 @@
                 </th:block>
                 <!-- 다음 페이지 -->
                 <button th:onclick="'location.href=\'/board/board_Notice?currentPage='+@{${selectCriteria.pageNo +1} + '\''"
-                        th:disabled="${selectCriteria.maxPage}"></button>
+                        th:disabled="${selectCriteria.maxPage}">></button>
 
             </div>
 
