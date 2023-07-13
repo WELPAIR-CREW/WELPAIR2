@@ -35,20 +35,13 @@
         <div class="padding">
         <form>
 
-<!--            <select name="delivery">-->
-<!--                <option value="del2">상품준비중</option>-->
-<!--                <option value="del3">배송중</option>-->
-<!--                <option value="del4">배송완료</option>-->
-<!--                <option value="etc" selected>기타</option>-->
-<!--            </select>-->
-
             <select name="delivery">
+                <option value="del2">상품준비중</option>
+                <option value="del3">배송중</option>
+                <option value="del4">배송완료</option>
                 <option value="etc" selected>기타</option>
-                <option th:each="delivery : ${deliveryList}"
-                        th:value="${delivery.deliveryStatus}"
-                        th:text="${delivery.deliveryStatus}">
-                </option>
             </select>
+
 
             <input type="submit" value="변경">
 
