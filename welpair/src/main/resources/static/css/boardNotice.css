@@ -100,7 +100,8 @@ a{
 
 }
 .qna-num{
-    width: 15%;
+    width: 10%;
+    margin-left: -43px;
 
 }
 
@@ -110,6 +111,7 @@ a{
 
 .qna-date{
     width: 10%;
+    white-space: nowrap;
 }
 
 .top > .on {

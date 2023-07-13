@@ -21,7 +21,7 @@
         <div class="nav-wrap">
             <div class="notice nav-top"><a href="../member/board_Notice">공지사항</a></div>
             <div class="ask"><a href="../member/board_ask">자주묻는질문</a></div>
-            <div class="qna"><a href="../member/board_Qna"></a>Q&A</div>
+            <div class="qna"><a href="../member/board_Qna">Q&A</a></div>
         </div>
         <div class="list-wrap">
             <div class="list-qna-top">
@@ -31,16 +31,16 @@
 <!--                    <div class="qna-write"><a href="../member/board_memberWrite"></a>글쓰기</div>-->
                 </div>
             </div>
-            <div class="qna-list">
+            <div class="qna-list" id="list">
                 <div class="qna-top">
                     <div class="qna-num">글번호</div>
                     <div class="qna-title">제목</div>
                     <div class="qna-date">날짜</div>
                 </div>
-                <div th:each="postNotice : ${ adminNoticeList }">
-                    <div class="qna-num" th:text="${ postNotice.boardNo }"></div>
-                    <div class="qna-title" th:text="${ postNotice.boardTitle }"><a href="#"></a></div>
-                    <div class="qna-date" th:text="${ postNotice.boardDate }">2023-10-10</div>
+                <div th:each="postNotice : ${ adminNoticeList }" id="cate">
+                    <div class="qna-num" th:text="${ postNotice.boardNo }" id="boardNo" ></div>
+                    <div class="qna-title" th:text="${ postNotice.boardTitle }" ><a href="#"></a></div>
+                    <div class="qna-date" th:text="${#dates.format(postNotice.boardDate, 'yy년 MM월 dd일') }">2023-10-10</div>
                 </div>
 
             </div>
@@ -72,5 +72,28 @@
 <script>
     $('.header1').load('/consumer/header_consumer');
     $('.footer1').load('/consumer/footer');
+
+    // let message = '[[${message}]]';
+    //
+    // if(message != null && message !== 'null') {
+    //     alert(message);
+    // }
+    //
+    // /*]]>*/
+
+    /* 게시글 리스트에서 해당 게시글에 마우스를 올릴 떄에 대한 스타일 처리 */
+    if (document.querySelectorAll("#cate")) {
+        const $tds = document.querySelectorAll("#cate");
+        const $tds1 = document.querySelectorAll("#boardNo")
+
+        $tds.forEach(td => {
+            td.addEventListener('click', function() {
+                const boardNo = this.children[0].innerText;
+                location.href = "/post/member/board_read?boardNo=" + boardNo;
+            })
+        })
+    }
 </script>
+
+
 </html>
