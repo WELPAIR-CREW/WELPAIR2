@@ -9,8 +9,9 @@ import com.hielectro.welpair.order.model.service.CartService;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 // 고치기
-import static com.hielectro.welpair.common.PriceCalculator.empNo;
-
-
 @Slf4j
 @Controller
+@PreAuthorize("hasRole('MEMBER')")
 @RequestMapping({"/order"})
 public class CartController {
 
@@ -42,10 +41,9 @@ public class CartController {
     // 장바구니 상품 담기 인서트용
     @ResponseBody
     @PostMapping(value = "/cart/add", produces = "application/json; charset=utf-8")
-    public Map<String, String> addCart(@ModelAttribute CartSellProductDTO cartSellProduct
-//            , @RequestParam("empNo") Object empNo1
+    public Map<String, String> addCart(@ModelAttribute CartSellProductDTO cartSellProduct,
+                                       @AuthenticationPrincipal User user
     ) {
-
         // 카트별판매상품dto를 통해 매상품id와 수량 정보와, 회원정보ID가 넘어온다.
         System.out.println("선택상품 : " + cartSellProduct);
 
@@ -70,15 +68,15 @@ public class CartController {
         else {
 
             // 회원정보를 조회하여 카트가 생성되어있으면 카트번호를 조회해온다. 없는 경우 생성한다.
-            CartDTO cart = cartService.checkoutCartByMemberId(empNo);
+            CartDTO cart = cartService.checkoutCartByMemberId(user.getUsername());
             log.info("cart");
 
             // 장바구니 미생성 회원
             if (cart == null) {
                 // 장바구니 테이블을 생성한다.
-                cartService.makeCart(empNo);
+                cartService.makeCart(user.getUsername());
                 // 다시 장바구니 정보 조회
-                cart = cartService.checkoutCartByMemberId(empNo);
+                cart = cartService.checkoutCartByMemberId(user.getUsername());
                 // 장바구니(카트) 넘버를 세팅한다.
                 cartSellProduct.setCartNo(cart.getCartNo());
             }
@@ -115,16 +113,22 @@ public class CartController {
     @GetMapping("cart")
     public String cartList(Model model
             , @AuthenticationPrincipal User user
-//            , @RequestParam(value = "empNo", required = false) String empNo
     ) {
 
+
+        System.out.println("User =======================" + user);
+
+
+        // 미로그인 사용자 null 처리
+        if(user == null){
+            return "consumer/order/cart-blank";
+
+        }
+
         // 1. 회원 정보 받아서 해당 회원의 장바구니 조회
-//        System.out.println(user);
-//        System.out.println(user.getUsername());
-        System.out.println(empNo);
 
         // 2. 장바구니 관련 테이블 리스트로 받아옴
-        List<CartGeneralDTO> cartList = cartService.cartAllInfoSelect(empNo);
+        List<CartGeneralDTO> cartList = cartService.cartAllInfoSelect(user.getUsername());
 
         List<ThumbnailImageDTO> thumbnail = new ArrayList<>();
 
@@ -148,25 +152,21 @@ public class CartController {
 
     }
 
-    // {
-    // 장바구니에 담긴 최신거 하나만 결제로 넘기기....???
-    //
-    // return 결제페이지 }
-
-
     // 수량변경
     @ResponseBody
     @PostMapping("/cart/amount-change")
-    public String cartAmountChange(@ModelAttribute CartSellProductDTO cartSellProduct, Model model
+    public String cartAmountChange(@ModelAttribute CartSellProductDTO cartSellProduct, Model model,
+                                   @AuthenticationPrincipal User user
     ) {
+
+        String response = "";
 
         System.out.println("수량변경 컨트롤러");
         System.out.println(cartSellProduct);
 
         cartSellProduct.setCart(new CartDTO());
-        cartSellProduct.getCart().setEmpNo(empNo);
+        cartSellProduct.getCart().setEmpNo(user.getUsername());
         boolean result = cartService.cartAmountChange(cartSellProduct);
-        String response = "";
 
         System.out.println(result);
         if(result){
@@ -182,14 +182,14 @@ public class CartController {
     // 선택상품 삭제
     @ResponseBody
     @PostMapping(value = "cart/delete")
-    public String deleteCart(Model model, @RequestBody ArrayList<String> productList
-//                            , @RequestParam("empNo") String empNo
+    public String deleteCart(Model model, @RequestBody ArrayList<String> productList, @AuthenticationPrincipal User user
     ){
+        String response = "";
+
         System.out.println("컨트롤러 들어옴 cart/delete");
         System.out.println(productList);
 
-        boolean result = cartService.deleteCartProduct(productList, empNo);
-        String response = "";
+        boolean result = cartService.deleteCartProduct(productList, user.getUsername());
 
         if(result){
             response = "선택상품 삭제 성공";
