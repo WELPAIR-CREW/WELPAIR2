@@ -14,6 +14,8 @@ public interface AdminBoardService {
 
     public void MemberWriteSave(AdminBoardDTO adminBoardDTO) throws  BoardException;
 
+    public void MemberAskWriteSave(AdminBoardDTO adminBoardDTO) throws  BoardException;
+
 
     @Transactional
     AdminBoardDTO selectBoardDetail(String boardNo);

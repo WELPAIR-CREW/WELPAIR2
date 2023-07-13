@@ -118,6 +118,20 @@
         AND     IS_PRIVATE = 'Y'
     </select>
 
+    <select id="selectAskList" resultMap="askBoardResultMap">
+        SELECT
+            BOARD_NO
+             ,   BOARD_CATEGORY
+             ,   BOARD_TITLE
+             ,   BOARD_CONTENT
+             ,   BOARD_DATE
+             ,   EMP_NO
+             ,   IS_PRIVATE
+        FROM    T_BOARD
+        WHERE   BOARD_CATEGORY = 'BORD_4'
+          AND     IS_PRIVATE = 'Y'
+    </select>
+
     <select id="selectNoticeList" resultMap="askBoardResultMap">
         SELECT
             BOARD_NO

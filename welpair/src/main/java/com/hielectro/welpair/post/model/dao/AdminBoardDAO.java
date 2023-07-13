@@ -26,6 +26,8 @@ public interface AdminBoardDAO {
 
     List<AdminBoardDTO> selectNoticeList(SelectCriteria selectCriteria);
 
+    List<AdminBoardDTO> selectAskList(SelectCriteria selectCriteria);
+
     
     int incrementBoardCount(String boardNo);
 

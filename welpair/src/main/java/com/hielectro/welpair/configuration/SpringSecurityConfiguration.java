@@ -39,7 +39,7 @@ public class SpringSecurityConfiguration {
     @Bean
     public WebSecurityCustomizer configure(){
 
-        return (web) -> web.ignoring().antMatchers("/common/**");
+        return (web) -> web.ignoring().antMatchers("/common/**", "/css/**");
     }
 
     /* HTTP 요청에 대한 권한 설정 */
@@ -49,6 +49,8 @@ public class SpringSecurityConfiguration {
 
         return http.csrf().disable()
                 .authorizeRequests()  // 요청에 대한 권한 체크를 어떻게 할것인지 지정
+                .antMatchers("/sellproduct/payment","/order/**","/payment/**","/mypage/**").hasRole("MEMBER")
+                .antMatchers("/sellproduct/**", "/inventory/**", "/delivery/**", "/sales/**", "/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()     // 등록되지 않은 경로는 누구나 접근 가능  // 나중에 경로 접근권한 추가해야함.///////////////////
                 .and()
                 .formLogin()        // 로그인 form을 따로 이용해 로그인 처리할 것이다.
