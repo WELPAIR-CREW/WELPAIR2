@@ -116,7 +116,7 @@
                 $('#input-addressDetail').val(addressDetail);
 
                 //기본배송지로 설정하기 checkbox input태그 체크됐다면 Y, 아니면 N
-                // let isDefaultAddress = $('input[name="isDefaultAddress"]').is(':checked') ? 'Y' : 'N';
+                let isDefaultAddress = $('input[name="isDefaultAddress"]').is(':checked') ? 'Y' : 'N';
 
                 //form 데이터 가져오기
                 // let formData = new FormData(this); //this : form요소
@@ -128,10 +128,18 @@
                     // addressFirst: $('input[name="addressFirst"]').val(),
                     // addressSecond: $('input[name="addressSecond"]').val(),
                     addressDetail: $('input[name="addressDetail"]').val(),
-                    isDefaultAddress: $('input[name="isDefaultAddress"]').is(':checked') ? 'Y' : 'N',
+                    // isDefaultAddress: $('input[name="isDefaultAddress"]').is(':checked') ? 'Y' : 'N',
+                    isDefaultAddress: isDefaultAddress,
 
                     empNo: $('input[name="empNo"]').val()
                 };
+
+
+                //기본 배송지로 설정된 경우, 기존의 기본 배송지를 일반 배송지로 변경 ----> 작동되지 않고 있음
+                if (isDefaultAddress == 'Y') {
+                    // alert('if문에 들어옴');
+                    resetDefaultAddress(formData.empNo);
+                }
 
 
                 //ajax 요청으로 form 데이터 전송
@@ -162,8 +170,33 @@
                         alert('배송지 등록에 실패했습니다.');
                     }
                 });
+
             });
         });
+
+
+
+        //기본 배송지 초기화
+        function resetDefaultAddress(empNo) {
+
+            // alert("초기화 메소드 ajax요청 직전");
+
+            $.ajax({
+                url: '/mypage/resetDefaultAddress',
+                type: 'POST',
+                data: {
+                    empNo: empNo
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+
+
     </script>
 
 </body>

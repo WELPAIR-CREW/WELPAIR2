@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <header>
     <img src="/common/images/title.png" class="title">
     <div class="icons">
@@ -11,7 +14,17 @@
             </a>
         </div>
         <div class="my-info">
-            <a href="#">MY</a>
+            <a href="/mypage/mypageMain">MY</a>
+            <th:block sec:authorize="isAnonymous()">  <!-- 인증되지 않은 경우(로그인 전) -->
+                <button onclick="location.href='/member/login'">로그인</button>
+            </th:block>
+
+
+            <th:block sec:authorize="isAuthenticated()"> <!-- 인즌된 경우(로그인 후) -->
+                <h3><span sec:authentication="principal.empNo"></span>님 </h3>
+                <button onclick="location.href='/member/logout'">로그아웃</button>
+                <span><a href="/mypage">MY</a></span>
+            </th:block>
         </div>
 
         <div class="cart">
