@@ -1,6 +1,7 @@
 package com.hielectro.welpair.configuration;
 
 import com.hielectro.welpair.member.model.service.MemberService;
+import com.hielectro.welpair.security.handler.CustomAuthenticationEntryPoint;
 import com.hielectro.welpair.security.handler.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -56,6 +57,9 @@ public class SpringSecurityConfiguration {
                 .passwordParameter("memPwd")
                 .successHandler(new CustomAuthenticationSuccessHandler())     // 성공 시 페이지 설정
                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))  // 로그아웃 시 요청 경로
                 .logoutSuccessUrl("/")
