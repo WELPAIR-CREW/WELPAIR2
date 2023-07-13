@@ -10,8 +10,9 @@ import java.util.function.Supplier;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,8 @@ import com.hielectro.welpair.common.Pagination;
 import com.hielectro.welpair.common.Search;
 import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
+import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
+import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
 
@@ -46,36 +49,42 @@ public class SellProductController {
         this.productService = productService;
     }
 
-    @GetMapping("{url}")
-    public String defaultLocation(@PathVariable String url) {
-        return "admin/sellproduct/" + url;
-    }
-
+    @GetMapping({"/","product"})
+    @PreAuthorize("hasRole('ADMIN')")
+    public String defaultLocation(@AuthenticationPrincipal User user) {
+        System.out.println("User +================ " + user);
+        return "/admin/sellproduct/product";
+    };
     @PostMapping("optionList")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public List<ProductDTO> selectOptionList(@RequestBody ProductDTO product) {
         return productService.selectOptionList(product);
     }
 
     @PostMapping("categoryList")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public List<CategoryDTO> selectCategoryList() {
         return productService.selectCategoryList();
     }
 
     @PostMapping("statusList")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public List<ProductDTO> selectProductList() {
         return productService.selectProductStatus();
     }
 
     @PostMapping("productNameList")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public List<ProductDTO> selectProductName(@RequestBody ProductDTO product) {
         return productService.selectProductNameList(product);
     }
 
     @GetMapping("review")
+    @PreAuthorize("hasRole('ADMIN')")
     public String reviewLocation(HttpServletRequest request, Model model,
                                  @ModelAttribute Search search,
                                  @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
@@ -93,6 +102,7 @@ public class SellProductController {
     }
 
     @PostMapping({"review/private", "QnA/private"})
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     private Map<String, String> setPrivateReview(HttpServletRequest request, HttpServletResponse response, List<BoardDTO> boardList) throws IOException {
         Map<String, String> map = new HashMap<>();
@@ -114,6 +124,7 @@ public class SellProductController {
 
 
     @GetMapping("QnA")
+    @PreAuthorize("hasRole('ADMIN')")
     public String qnaLocation(HttpServletRequest request, Model model,
                               @ModelAttribute Search search,
                               @RequestParam(required = false, defaultValue = "1") int currentPageNo) {
@@ -152,6 +163,7 @@ public class SellProductController {
     }
 
     @PostMapping(value = "sellProductListAPI", produces = "application/json;charset=utf-8")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public List<SellProductDetailDTO> sellProductList(@RequestBody Map<String, String> request) {
         System.out.println("request : " + request);
@@ -161,6 +173,7 @@ public class SellProductController {
     }
 
     @PostMapping(value = "sellProductCountAPI", produces = "application/json;charset=utf-8")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public Map<String, Integer> sellProductCount(@RequestBody(required = false) Map<String, String> request) {
         int result = productService.sellProductSearchCount(request);
@@ -170,6 +183,7 @@ public class SellProductController {
     }
 
     @PostMapping("updateSellPageByPrivate")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public int updatePrivate(@RequestBody List<String> request) {
         System.out.println(request);
@@ -181,6 +195,7 @@ public class SellProductController {
     }
 
     @PostMapping("sellProductDeleteAPI")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public int sellProductDelete(@RequestBody List<String> request) {
         System.out.println(request);
@@ -203,6 +218,7 @@ public class SellProductController {
     }
 
     @PostMapping("er2")
+    @PreAuthorize("hasRole('MEMBER')")
     @ResponseBody
     public List<ProductOrderDTO> test(@ModelAttribute Search search) {
         List<ProductOrderDTO> list = new ArrayList<>();
