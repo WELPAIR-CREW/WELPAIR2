@@ -51,7 +51,7 @@ public class SpringSecurityConfiguration {
                 .loginPage("/member/login")  // login Page로 로그인페이지에서 submit요청하는 경로로 지정하겠다.
                 .usernameParameter("empNo")
                 .passwordParameter("memPwd")
-                .successForwardUrl("/member/test")      // 성공 시 페이지 설정
+                .successForwardUrl("/index")      // 성공 시 페이지 설정
                .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))  // 로그아웃 시 요청 경로
