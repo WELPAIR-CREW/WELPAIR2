@@ -50,11 +50,11 @@
                     <button class="delete-button" type=button th:if="${address.isDefaultAddress eq 'N'}">삭제</button>
                 </span>
             </div>
-
         </div>
 
-
     </div>
+
+
 
 </section>
 
@@ -65,26 +65,31 @@
 
 <script>
 
-    //배송지 추가하기(이미지) 클릭시
-    const addButton = document.getElementById("addButton");
-    const shippingList = document.getElementById("shippingList");
 
-    addButton.addEventListener("click", () => {
 
-        const newCard = document.createElement("div");
-        newCard.classList.add("shippingCard");
-        newCard.innerHTML = `
-            <h3>이름</h3>
-            <p>전화번호</p>
-            <p>주소</p>
-            `;
-        shippingList.appendChild(newCard);
+    //@기본배송지인 배송지 카드를 두번째 자식 요소로 이동 (위치 고정시키기)
+    $(document).ready(function() {
+        const defaultAddressCard = $('.shippingCard.default-address');
+        const shippingList = $('#shippingList');
+        const secondChild = shippingList.children().eq(1);
+        defaultAddressCard.insertAfter(secondChild);
     });
 
 
-
     //배송지 등록 버튼
-    $('#addButton').click(function() {
+    $('#addButton').click(function(event) {
+
+        event.preventDefault(); // 기본 폼 제출 동작 방지
+
+        const addressCards = document.querySelectorAll(".shippingCard:not(.add)"); // 배송지 카드들을 선택
+        const maxAddressCount = 3; //최대 배송지 개수
+
+        //현재 등록된 배송지 개수가 최대 개수(3개)인지 확인
+        if (addressCards.length >= maxAddressCount) {
+            alert("최대 3개의 배송지까지 등록할 수 있습니다.");
+            return; //함수 종료
+        }
+
         let empNo = $('.emp-no').val();
         console.log("empNo 확인 : " + empNo);
 
@@ -139,6 +144,7 @@
             }
         });
     }
+
 
 
 </script>
