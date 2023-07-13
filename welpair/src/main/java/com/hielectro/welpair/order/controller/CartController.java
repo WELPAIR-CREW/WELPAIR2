@@ -9,8 +9,9 @@ import com.hielectro.welpair.order.model.service.CartService;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 // 고치기
-
-
 @Slf4j
 @Controller
+@PreAuthorize("hasRole('MEMBER')")
 @RequestMapping({"/order"})
 public class CartController {
 
@@ -49,12 +49,6 @@ public class CartController {
 
         // 결과 메세지 전달 map 객체
         Map<String, String> resultMap = new HashMap<>();
-
-        // null 체크 해서 로그인 알림
-        if(user == null){
-            resultMap.put("message", "로그인이 되어있지않습니다.");
-            return resultMap;
-        }
 
         // 판매상품 조회 메소드 결과객체
         SellProductDTO sellProduct =
@@ -120,11 +114,7 @@ public class CartController {
     public String cartList(Model model
             , @AuthenticationPrincipal User user
     ) {
-
-        // null 체크 해서 로그인화면 리다이렉트 시키기
-        if(user == null){
-            return "redirect:/member/login";
-        }
+        System.out.println("User =======================" + user);
 
         // 1. 회원 정보 받아서 해당 회원의 장바구니 조회
 
@@ -153,12 +143,6 @@ public class CartController {
 
     }
 
-    // {
-    // 장바구니에 담긴 최신거 하나만 결제로 넘기기....???
-    //
-    // return 결제페이지 }
-
-
     // 수량변경
     @ResponseBody
     @PostMapping("/cart/amount-change")
@@ -167,12 +151,6 @@ public class CartController {
     ) {
 
         String response = "";
-
-        // null 체크 해서 로그인화면 리다이렉트 시키기
-        if(user == null){
-            response = "NOT-EXIST-USER";
-            return response;
-        }
 
         System.out.println("수량변경 컨트롤러");
         System.out.println(cartSellProduct);
@@ -198,14 +176,6 @@ public class CartController {
     public String deleteCart(Model model, @RequestBody ArrayList<String> productList, @AuthenticationPrincipal User user
     ){
         String response = "";
-
-
-        // null 체크 해서 로그인화면 리다이렉트 시키기
-        if(user == null){
-            response = "NOT-EXIST-USER";
-            return response;
-        }
-
 
         System.out.println("컨트롤러 들어옴 cart/delete");
         System.out.println(productList);
@@ -263,6 +233,7 @@ public class CartController {
             exptDeliveryPrice += Integer.parseInt(expt.get(1));
             exptTotalPrice += Integer.parseInt(expt.get(2));
 
+        }
         }
 
         CartGeneralDTO expt = new CartGeneralDTO();

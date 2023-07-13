@@ -19,10 +19,6 @@ import javax.servlet.http.HttpSession;
 public class KakaoPayController {
     private final KakaoPayService kakaoPayService;
 
-//    private String tid;
-//    private String pgToken;
-
-
     public KakaoPayController(KakaoPayService kakaoPayService){
         this.kakaoPayService = kakaoPayService;
     }

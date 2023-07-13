@@ -14,6 +14,7 @@ import com.hielectro.welpair.payment.model.dto.PointPayDTO;
 import com.hielectro.welpair.payment.model.service.PayService;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
+@PreAuthorize("hasRole('MEMBER')")
 @RequestMapping({"/payment"})
 public class PayController {
 
@@ -47,11 +49,6 @@ public class PayController {
     public String gotopay(@ModelAttribute("orderPrdList") OrderPayReqDTO orderPrdList, Model model
                                       , @AuthenticationPrincipal User user
     ) throws Exception {
-
-        // null 체크 해서 로그인화면 리다이렉트 시키기
-        if(user.getUsername() == null){
-            return "redirect:/member/login";
-        }
 
         System.out.println("========post mapping 들어옴===========");
         System.out.println(orderPrdList);
@@ -95,11 +92,6 @@ public class PayController {
                                       , @AuthenticationPrincipal User user
     ) throws Exception {
 
-        // null 체크 해서 로그인화면 리다이렉트 시키기
-        if(user.getUsername() == null){
-            return "redirect:/member/login";
-        }
-
         log.info("리다이렉트용 매핑 컨트롤러 들어옴");
 
         // ORDER테이블에 데이터 넣어서 주문번호 orderNo 바로 받아오기
@@ -142,11 +134,6 @@ public class PayController {
     public String paySuccess(@ModelAttribute("order") OrderDTO order, RedirectAttributes rttr
                 , @AuthenticationPrincipal User user
     ) throws Exception {
-
-        // null 체크 해서 로그인화면 리다이렉트 시키기
-        if(user.getUsername() == null){
-            return "redirect:/member/login";
-        }
 
         log.info("pay-success 매핑들어옴===> " + order);
         // 1. payment 테이블 insert // paymentNo 가져옴 ---> 2. orderPayment 테이블 insert 동시진행
