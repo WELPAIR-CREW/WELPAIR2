@@ -1,11 +1,13 @@
 package com.hielectro.welpair.configuration;
 
 import com.hielectro.welpair.member.model.service.MemberService;
+import com.hielectro.welpair.security.handler.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -15,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity   // 시큐리티 설정을 다루는 클래스임을 선언(권한 및 경로 포함)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)  // 메서드에서 권한점검을 먼저하고
 public class SpringSecurityConfiguration {
 
     private MemberService memberService;
@@ -51,7 +54,7 @@ public class SpringSecurityConfiguration {
                 .loginPage("/member/login")  // login Page로 로그인페이지에서 submit요청하는 경로로 지정하겠다.
                 .usernameParameter("empNo")
                 .passwordParameter("memPwd")
-                .successForwardUrl("/index")      // 성공 시 페이지 설정
+                .successHandler(new CustomAuthenticationSuccessHandler())     // 성공 시 페이지 설정
                .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))  // 로그아웃 시 요청 경로

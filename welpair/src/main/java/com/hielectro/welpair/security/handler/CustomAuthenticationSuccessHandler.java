@@ -33,7 +33,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             return "/admin/index";
-        } else if (authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+        } else if (authorities.contains(new SimpleGrantedAuthority("ROLE_MEMBER"))) {
             return "/index";
         } else {
             throw new IllegalStateException("잘못된 권한");

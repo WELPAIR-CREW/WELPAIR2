@@ -23,7 +23,7 @@
             <th:block sec:authorize="isAuthenticated()"> <!-- 인즌된 경우(로그인 후) -->
                 <h3><span sec:authentication="principal.empNo"></span>님 </h3>
                 <button onclick="location.href='/member/logout'">로그아웃</button>
-                <span><a href="/member/test">MY</a></span>
+                <span><a href="/mypage">MY</a></span>
             </th:block>
         </div>
 

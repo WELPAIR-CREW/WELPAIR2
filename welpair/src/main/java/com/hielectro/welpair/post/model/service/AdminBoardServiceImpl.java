@@ -78,6 +78,13 @@ public class AdminBoardServiceImpl implements AdminBoardService{
         return  adminNoticeList;
     }
 
+    public List<AdminBoardDTO> selectNoticeManagerList(SelectCriteria selectCriteria) {
+
+        List<AdminBoardDTO> adminNoticeList = adminBoardDAO.selectNoticeManagerList(selectCriteria);
+
+        return  adminNoticeList;
+    }
+
     @Override
     @Transactional
     public AdminBoardDTO selectBoardDetail(String boardNo){
