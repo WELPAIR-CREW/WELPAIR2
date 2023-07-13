@@ -31,16 +31,15 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
-@PreAuthorize("hasRole('MEMBER')")
 @RequestMapping({"/payment"})
+@PreAuthorize("hasRole('MEMBER')")
 public class PayController {
 
     private final PayService payService;
     private final CartService cartService;
-
     private final InventoryService inventoryService;
 
-    private PayController(PayService payService, CartService cartService, InventoryService inventoryService) {
+    public PayController(PayService payService, CartService cartService, InventoryService inventoryService) {
         this.payService = payService;
         this.cartService = cartService;
         this.inventoryService = inventoryService;
