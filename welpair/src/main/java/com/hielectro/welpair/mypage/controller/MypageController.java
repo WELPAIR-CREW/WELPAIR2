@@ -14,7 +14,6 @@ import com.hielectro.welpair.mypage.model.service.MypageService;
 import com.hielectro.welpair.regist.model.dao.RegistDAO;
 import com.hielectro.welpair.regist.model.dto.RegistDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,20 +43,27 @@ public class MypageController {
     }
 
 
+    //DB에 저장된 비밀번호와 입력한 비밀번호가 일치하는지 확인하는 메소드
+    public boolean confirmUser(String password, String dbPassword) {
+        return passwordEncoder.matches(password, dbPassword);
+    }
+
+
 
     //1. 헤더에서 회원정보(수정) 메뉴 클릭시
     @GetMapping("/editMyInfo")
-    public String editMyInfo(AuthenticatedPrincipal auth) {
+    public String editMyInfo(@AuthenticationPrincipal User user) {
 
         //로그인 체크 방법 : auth.getName() 널값이면(접속중이 아니면) 로그인 페이지로 돌려보낸다
 
-        if (auth.getName() != null) { //로그인 돼있는 경우 본인확인창 페이지로 이동시킨다
+        if (user != null) { //로그인 돼있는 경우 본인확인창 페이지로 이동시킨다
 //            return checkPwd();
-            return "consumer/mypage/checkPwd";
+            return "redirect:/mypage/checkPwd";
 
         } else {                        //로그인 안돼있다면 로그인페이지로 보낸다
-            return "member/login";
+            return "/member/login";
         }
+
     }
 
 
@@ -71,15 +77,24 @@ public class MypageController {
     //비밀번호 입력 후 확인 버튼 클릭시의 ajax요청을 받는 핸들러메소드
     @ResponseBody
     @PostMapping("/checkPwd2")
-    public Map<String, String> checkPwd2(@AuthenticationPrincipal User user, @RequestParam String inputPassword) {
-
-        //입력한 비밀번호가 비밀번호 DB의 값과 같은지 비교하는 코드 작성...?
+    public Map<String, String> checkPwd2(@AuthenticationPrincipal UserImpl userImpl, @RequestParam String inputPassword) {
 
         //현재 로그인한 유저 정보
-        String empNo = user.getUsername();
-        String userPwd = user.getPassword();
+        String empNo = userImpl.getEmpNo();
+//        String userPwd = user.getPassword(); //null
+        String memPwd = userImpl.getMemPwd();
+
+        System.out.println("로그인한 empNo : " + empNo);
+        System.out.println("DB의 비밀번호 memPwd 확인 : " + memPwd);
+
+        System.out.println("입력한 비번 :  " + inputPassword); //ajax요청으로 전송된 데이터
+
+
         //입력한 비밀번호가 현재 로그인한 유저의 비밀번호와 같은지 비교
-        boolean isSame = userPwd == inputPassword;
+        boolean isSame = confirmUser(inputPassword, memPwd); //패스워드인코더의 메소드 이용하는 메소드
+
+        System.out.println("isSame값 확인 : " + isSame);
+
 
         if(isSame) {
             //ajax 성공시 동작하는 get요청의 리다이렉트주소
@@ -122,8 +137,11 @@ public class MypageController {
     @GetMapping("/myAddress")
     public ModelAndView myAddress(@RequestParam(required = false) String empNo, ModelAndView model) {
 
+        empNo = "E00062";
+
         Map<String, String> map = new HashMap<>();
         map.put("empNo", empNo);
+
         List<AddressDTO> addressList = mypageService.getAddressList(map);
         model.addObject("addressList", addressList);
         model.setViewName("consumer/mypage/myaddress1");
@@ -184,6 +202,22 @@ public class MypageController {
         map.put("locationroot", "/mypage/myAddress"); //ajax 성공시 동작하는 리다이렉트주소로 사용
         return map;
     }
+
+
+    //기존의 기본배송지 초기화
+    @PostMapping("/resetDefaultAddress")
+    public void resetDefaultAddress(@RequestParam String empNo) throws Exception {
+
+        System.out.println("---------------------기본배송지 초기화 메소드 실행");
+        empNo = "E00062";
+
+        mypageService.resetDefaultAddress(empNo);
+    }
+
+
+
+
+
 
 
     //3.
@@ -263,9 +297,24 @@ public class MypageController {
 //        return "consumer/mypage/myqna";
 //    }
     @GetMapping("/myPost")
-    public ModelAndView myPost(ModelAndView model) {
+    public ModelAndView myPost(@RequestParam(defaultValue = "1") int page, ModelAndView model) {
 
         String empNo = "T00015";
+
+        //페이징-------------------------------------------------------------
+        int pageSize = 10; //페이지당 항목 수
+        int totalCnt = mypageService.myQnaCount(empNo);
+        System.out.println("db에서 조회한 총 마이포인트 목록 항목수 : " + totalCnt);
+        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
+        model.addObject("totalCnt", totalCnt);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("startRow", pageHandler.getStartRow());
+        map.put("endRow", pageHandler.getEndRow());
+        model.addObject("pageHandler", pageHandler);
+        //------------------------------------------------------------------
+
+        map.put("empNo", empNo);
         List<BoardDTO> myQnaList = mypageService.myQnaList(empNo);
         System.out.println("myQnaList 출력 : " + myQnaList);
         model.addObject("myQnaList", myQnaList);
@@ -287,7 +336,7 @@ public class MypageController {
 
 
     //7.마이페이지 메인화면 (우측 상단 MY 클릭시 진입)
-    @GetMapping("/mypageMain")
+    @GetMapping({"/mypageMain", "/"})
     public String mypageMain() {
 
         return "consumer/mypage/mypage-main";

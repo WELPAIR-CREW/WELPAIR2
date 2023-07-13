@@ -29,146 +29,12 @@
 
 
 <!--  위시리스트  -->
-    <resultMap id="mywishlistResultMap" type="com.hielectro.welpair.mypage.model.dto.WishlistDTO">
-        <id property="wishId" column="WISH_ID"/>
-        <result property="empNo" column="EMP_NO"/>
-        <result property="wishDate" column="WISH_DATE"/>
-        <collection property="wishlistSellProductList" ofType="com.hielectro.welpair.mypage.model.dto.WishlistSellProductDTO">
-            <id property="sellProductId" column="SELL_PRODUCT_ID" />
-            <association property="sellProductDTO" javaType="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
-                <id property="id" column="SELL_PRODUCT_ID" />
-                <result property="code" column="PRODUCT_CODE" />
-            </association>
-            <association property="sellItemPageDTO" javaType="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
-                <result property="no" column="SELL_PAGE_NO" />
-                <result property="id" column="SELL_PRODUCT_ID" />
-                <association property="sellPage" javaType="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
-                    <result property="no" column="SELL_PAGE_NO" />
-                    <result property="title" column="PAGE_TITLE" />
-                </association>
-                <association property="thumbnailImageDTO" javaType="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
-                    <result property="no" column="SELL_PAGE_NO" />
-                    <result property="thumbnailImageFileName" column="THUMBNAIL_IMAGE_FILE_NAME" />
-                    <result property="thumbnailImageOriginFileName" column="THUMBNAIL_IMAGE_ORIGIN_FILE_NAME" />
-                </association>
-            </association>
-        </collection>
-    </resultMap>
-
-<!--    <resultMap id="wishSellProductResultMap" type="com.hielectro.welpair.mypage.model.dto.WishlistSellProductDTO">-->
-<!--        <id property="sellProductId" column="SELL_PRODUCT_ID"></id>-->
-<!--        <result property="wishId" column="WISH_ID"></result>-->
-
-<!--        <association property="sellProductDTO" javaType="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO"></association>-->
-<!--        <association property="sellItemPageDTO" javaType="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO"></association>-->
-<!--        <association property="sellPageDTO" javaType="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO"></association>-->
-<!--        <association property="thumbnailImageDTO" javaType="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO"></association>-->
-<!--        <association property="productDTO" javaType="com.hielectro.welpair.inventory.model.dto.ProductDTO"></association>-->
-<!--    </resultMap>-->
-
     <resultMap id="wishSellProductResultMap" type="com.hielectro.welpair.mypage.model.dto.WishlistSellProductDTO">
         <id property="sellProductId" column="SELL_PRODUCT_ID" />
         <result property="wishId" column="WISH_ID" />
-        <association property="sellProductDTO" javaType="com.hielectro.welpair.sellproduct.model.dto.SellProductDTO">
-            <id property="id" column="SELL_PRODUCT_ID" />
-            <result property="code" column="PRODUCT_CODE" />
-            <result property="discount" column="DISCOUNT" />
-            <result property="isSell" column="IS_SELL" />
-
-            <association property="product" javaType="com.hielectro.welpair.inventory.model.dto.ProductDTO">
-                <result property="productCode" column="PRODUCT_CODE" />
-                <result property="productName" column="PRODUCT_NAME" />
-                <result property="productStatus" column="PRODUCT_STATUS" />
-                <result property="productAmount" column="PRODUCT_AMOUNT" />
-                <result property="productPrice" column="PRODUCT_PRICE" />
-                <result property="productOption" column="PRODUCT_OPTION" />
-                <result property="productNation" column="PRODUCT_NATION" />
-                <result property="categoryCode" column="CATEGORY_CODE" />
-
-                <association property="category" javaType="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
-                    <result property="categoryCode" column="CATEGORY_CODE" />
-                </association>
-            </association>
-
-            <association property="sellItemPage" javaType="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
-                <result property="no" column="SELL_PAGE_NO" />
-                <result property="id" column="SELL_PRODUCT_ID" />
-
-                <association property="sellPage" javaType="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
-                    <result property="no" column="SELL_PAGE_NO" />
-                    <result property="title" column="PAGE_TITLE" />
-                    <result property="detailImageFileName" column="DETAIL_IMAGE_FILE_NAME" />
-                    <result property="detailImageOriginFileName" column="DETAIL_IMAGE_ORIGIN_FILE_NAME" />
-                    <result property="path" column="PAGE_PATH" />
-                    <result property="createDate" column="CREATE_DATE" />
-                    <result property="sellStatus" column="SELL_STATUS" />
-
-                    <collection property="thumbnailImageList" ofType="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
-                        <result property="no" column="SELL_PAGE_NO" />
-                        <result property="thumbnailImageFileName" column="THUMBNAIL_IMAGE_FILE_NAME" />
-                        <result property="thumbnailImageOriginFileName" column="THUMBNAIL_IMAGE_ORIGIN_FILE_NAME" />
-                    </collection>
-                </association>
-            </association>
-        </association>
-
-        <association property="sellItemPageDTO" javaType="com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO">
-            <result property="no" column="SELL_PAGE_NO" />
-            <result property="id" column="SELL_PRODUCT_ID" />
-
-            <association property="sellPage" javaType="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
-                <result property="no" column="SELL_PAGE_NO" />
-                <result property="title" column="PAGE_TITLE" />
-                <result property="detailImageFileName" column="DETAIL_IMAGE_FILE_NAME" />
-                <result property="detailImageOriginFileName" column="DETAIL_IMAGE_ORIGIN_FILE_NAME" />
-                <result property="path" column="PAGE_PATH" />
-                <result property="createDate" column="CREATE_DATE" />
-                <result property="sellStatus" column="SELL_STATUS" />
-
-                <collection property="thumbnailImageList" ofType="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
-                    <result property="no" column="SELL_PAGE_NO" />
-                    <result property="thumbnailImageFileName" column="THUMBNAIL_IMAGE_FILE_NAME" />
-                    <result property="thumbnailImageOriginFileName" column="THUMBNAIL_IMAGE_ORIGIN_FILE_NAME" />
-                </collection>
-            </association>
-        </association>
-
-        <association property="sellPageDTO" javaType="com.hielectro.welpair.sellproduct.model.dto.SellPageDTO">
-            <result property="no" column="SELL_PAGE_NO" />
-            <result property="title" column="PAGE_TITLE" />
-            <result property="detailImageFileName" column="DETAIL_IMAGE_FILE_NAME" />
-            <result property="detailImageOriginFileName" column="DETAIL_IMAGE_ORIGIN_FILE_NAME" />
-            <result property="path" column="PAGE_PATH" />
-            <result property="createDate" column="CREATE_DATE" />
-            <result property="sellStatus" column="SELL_STATUS" />
-
-            <collection property="thumbnailImageList" ofType="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
-                <result property="no" column="SELL_PAGE_NO" />
-                <result property="thumbnailImageFileName" column="THUMBNAIL_IMAGE_FILE_NAME" />
-                <result property="thumbnailImageOriginFileName" column="THUMBNAIL_IMAGE_ORIGIN_FILE_NAME" />
-            </collection>
-        </association>
-
-        <association property="thumbnailImageDTO" javaType="com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO">
-            <result property="no" column="SELL_PAGE_NO" />
-            <result property="thumbnailImageFileName" column="THUMBNAIL_IMAGE_FILE_NAME" />
-            <result property="thumbnailImageOriginFileName" column="THUMBNAIL_IMAGE_ORIGIN_FILE_NAME" />
-        </association>
-
-        <association property="productDTO" javaType="com.hielectro.welpair.inventory.model.dto.ProductDTO">
-            <result property="productCode" column="PRODUCT_CODE" />
-            <result property="productName" column="PRODUCT_NAME" />
-            <result property="productStatus" column="PRODUCT_STATUS" />
-            <result property="productAmount" column="PRODUCT_AMOUNT" />
-            <result property="productPrice" column="PRODUCT_PRICE" />
-            <result property="productOption" column="PRODUCT_OPTION" />
-            <result property="productNation" column="PRODUCT_NATION" />
-            <result property="categoryCode" column="CATEGORY_CODE" />
-
-            <association property="category" javaType="com.hielectro.welpair.inventory.model.dto.CategoryDTO">
-                <result property="categoryCode" column="CATEGORY_CODE" />
-            </association>
-        </association>
+        <result property="productName" column="SELL_PAGE_TITLE"/>
+        <result property="price" column="PRODUCT_PRICE"/>
+        <result property="thumbnail" column="SELL_THUMB_IMAGE_FILE_NAME"/>
     </resultMap>
 
 <!-- 내가쓴글 - 문의글 목록 조회 -->
@@ -184,14 +50,11 @@
     </resultMap>
 
 
-
-
-
     <!-- 배송지 목록 조회   -->
     <select id="getAddressList" resultMap="addressListResultMap">
         select *
         from T_ADDRESS
-        where EMP_NO = 'E00062'
+        where EMP_NO = #{empNo}
     </select>
 
 <!--  배송지 삭제 버튼  -->
@@ -218,6 +81,15 @@
         SELECT SEQ_ADDRESS_ID.NEXTVAL FROM DUAL
     </select>
 
+<!-- 기존의 기본배송지를 N으로 업데이트 -->
+    <update id="resetDefaultAddress" parameterType="String">
+        UPDATE T_ADDRESS SET IS_DEFAULT_ADDRESS = 'N'
+        WHERE ADDRESS_ID = (SELECT ADDRESS_ID FROM T_ADDRESS WHERE EMP_NO = #{empNo} AND IS_DEFAULT_ADDRESS = 'Y')
+    </update>
+
+
+
+
 <!-- 마이포인트 이력 조회  -->
     <select id="mypointList" resultMap="mypointListResultMap">
         SELECT *
@@ -243,26 +115,14 @@
 
 
 <!-- 위시리스트 -->
-<!--    <select id="getWishId" resultMap="mywishlistResultMap">-->
-<!--        SELECT * FROM T_WISH WHERE EMP_NO = #{ empNo }-->
-<!--    </select>-->
     <select id="getWishId" resultType="String">
         SELECT WISH_ID FROM T_WISH WHERE EMP_NO = #{ empNo }
     </select>
 
-<!--    <select id="getWishlistList" resultMap="wishSellProductResultMap">-->
-<!--        SELECT WS.SELL_PRODUCT_ID, P.PRODUCT_CODE, P.PRODUCT_NAME, P.PRODUCT_PRICE-->
-<!--        FROM T_WISH_SELL_PRODUCT WS-->
-<!--         JOIN T_SELL_PRODUCT SP ON (WS.SELL_PRODUCT_ID = SP.SELL_PRODUCT_ID)-->
-<!--         JOIN T_PRODUCT P ON(SP.PRODUCT_CODE = P.PRODUCT_CODE)-->
-<!--         JOIN T_SELL_ITEM_PAGE SIP ON (SP.SELL_PRODUCT_ID = SIP.SELL_PRODUCT_ID)-->
-<!--         JOIN T_SELL_PAGE SPG ON (SIP.SELL_PAGE_NO = SPG.SELL_PAGE_NO)-->
-<!--        WHERE WS.WISH_ID = #{ wishId }-->
-<!--    </select>-->
     <select id="getWishlistList" resultMap="wishSellProductResultMap">
         SELECT WS.SELL_PRODUCT_ID,
                P.PRODUCT_CODE,
-               P.PRODUCT_NAME,
+               SPG.SELL_PAGE_TITLE,
                P.PRODUCT_PRICE,
                TI.SELL_THUMB_IMAGE_FILE_NAME
         FROM T_WISH_SELL_PRODUCT WS
@@ -270,7 +130,9 @@
          JOIN T_PRODUCT P ON (SP.PRODUCT_CODE = P.PRODUCT_CODE)
          JOIN T_SELL_ITEM_PAGE SIP ON (SP.SELL_PRODUCT_ID = SIP.SELL_PRODUCT_ID)
          JOIN T_SELL_PAGE SPG ON (SIP.SELL_PAGE_NO = SPG.SELL_PAGE_NO)
-         LEFT JOIN T_THUMB_IMAGE TI ON (SPG.SELL_PAGE_NO = TI.SELL_PAGE_NO)
+         LEFT JOIN (SELECT SELL_PAGE_NO, MIN(SELL_THUMB_IMAGE_FILE_NAME) AS SELL_THUMB_IMAGE_FILE_NAME
+                       FROM T_THUMB_IMAGE
+                      GROUP BY SELL_PAGE_NO) TI ON (SPG.SELL_PAGE_NO = TI.SELL_PAGE_NO)
         WHERE WS.WISH_ID = #{ wishId }
           AND TI.SELL_THUMB_IMAGE_FILE_NAME IS NOT NULL
     </select>
@@ -279,6 +141,11 @@
 <!-- 내가쓴글 - 문의글목록 -->
     <select id="myQnaList" resultMap="myBoardListResultMap">
         SELECT * FROM T_BOARD
+        WHERE EMP_NO = #{empNo}
+        AND BOARD_CATEGORY = 'BORD_1'
+    </select>
+    <select id="myQnaCount" resultType="_int">
+        SELECT COUNT(*) FROM T_BOARD
         WHERE EMP_NO = #{empNo}
         AND BOARD_CATEGORY = 'BORD_1'
     </select>
