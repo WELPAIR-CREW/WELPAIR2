@@ -18,4 +18,7 @@ public class NotDeliveryDTO {
         private String addressName;
         private String productName;
         private String deliveryStatus;
+
+        private String updateStatus;
+
 }

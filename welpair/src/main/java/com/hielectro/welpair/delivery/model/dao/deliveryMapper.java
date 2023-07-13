@@ -7,6 +7,7 @@ import com.hielectro.welpair.delivery.model.dto.OrderProductDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface deliveryMapper {
@@ -17,6 +18,7 @@ public interface deliveryMapper {
 
     List<OrderProductDTO> deliveryDelivery();
 
-    List<NotDeliveryDTO> notDelivery();
+    List<NotDeliveryDTO> notDelivery(Map<String, Object> map);
 
+    int notDeliveryCount();
 }

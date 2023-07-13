@@ -10,6 +10,7 @@ import com.hielectro.welpair.payment.model.dto.PointPayDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class deliveryService {
@@ -25,9 +26,12 @@ public class deliveryService {
         return delivery.deliveryDelivery();
     }
 
-    public List<NotDeliveryDTO> notDelivery(){
-        return delivery.notDelivery();
+    public List<NotDeliveryDTO> notDelivery(Map<String, Object> map){
+        return delivery.notDelivery(map);
     }
 
+    public int notDeliveryCount() { int notDelivery = delivery.notDeliveryCount();
+        return notDelivery;
+    }
 
 }
