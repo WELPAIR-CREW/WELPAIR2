@@ -235,11 +235,13 @@ public class PayController {
 
         }
 
+        // 카카오페이 리다이렉트
         if(order.getOrderPayment().getPaymentList().stream()
                 .anyMatch(i -> i.getPaymentType().contains("카카오페이"))){
             return "redirect:/mypage/myorder/detail/" + order.getOrderNo();
         }
 
+        // 복지포인트 리다이렉트
         rttr.addFlashAttribute("orderNo", order.getOrderNo());
         return "redirect:/payment/point-use-redirect";
     }
