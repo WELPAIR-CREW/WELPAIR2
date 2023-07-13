@@ -86,23 +86,22 @@ function checkboxTrueList(){
     // checke true인 경우만 가져온다.
     const checkboxTrueList = Array.from(document.querySelectorAll('input[class^="cart_select"]:checked'));
     // 가격부분은 data-value 속성을 사용해 html내에서 value를 숨기고 가져온다.
-    let selectValue = checkboxTrueList.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value.split('/'));
-
     let price1 = 0;
     let price2 = 0;
     let price3 = 0;
 
-    for(let i = 0; i < selectValue.length; i++){
+    let selectValue = checkboxTrueList
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value.split('/'));
 
+    for(let i = 0; i < selectValue.length; i++){
             price1 += Number(selectValue[i][0]);
             price2 += Number(selectValue[i][1]);
             price3 += Number(selectValue[i][2]);
     }
-
     exptPrice.value = new Intl.NumberFormat().format(price1);
     exptDeliveryPrice.value = new Intl.NumberFormat().format(price2);
     exptTotalPrice.value = new Intl.NumberFormat().format(price3);
-
 }
 
 

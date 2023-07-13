@@ -126,7 +126,7 @@
 
         <selectKey keyProperty="productOrderNo" keyColumn="CURRVAL" resultType="string" order="AFTER">
             SELECT
-                ( 'PO' || LPAD(SEQ_PRODUCT_ORDER_NO.CURRVAL, 6, '0') CURRVAL
+                 'PO' || LPAD(SEQ_PRODUCT_ORDER_NO.CURRVAL, 6, '0') CURRVAL
             FROM DUAL
         </selectKey>
     </insert>

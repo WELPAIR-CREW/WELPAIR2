@@ -82,11 +82,8 @@
                                     <a th:if="${cart?.sellPage?.no != null}" th:href="'/products/' + ${cart.sellPage.no}">
                                     <!-- 상품썸네일 구역 -->
                                     <div class="cart_thumb_box">
-                                        <!-- 상품썸네일 이미지-->
-<!--                                        <span class="cart_thumb_img" name="thumbImage">-->
                                             <img th:if="${cart?.sellPage?.thumbnailImageList.get(0).thumbnailImageFileName != null }" th:src="${cart.sellPage.path + 'thumbnail/' + cart?.sellPage?.thumbnailImageList.get(0).thumbnailImageFileName}" class="thumbimg">
                                             <img th:unless="${cart?.sellPage?.thumbnailImageList.get(0).thumbnailImageFileName != null}" src="/common/images/thumbnailbox.png" class="thumbimg" alt="thumbnail">
-<!--                                          </span>-->
                                     </div>
                                     <!-- 상품이름 작성구역  -->
                                     <div class="prd_name">
@@ -162,10 +159,6 @@
                         <input class="exptpay_price1" id="exptPrice" name="exptPrice" readonly ></input>
                         <input class="exptpay_price2" id="exptpay_del" name="exptDeliveryPrice" readonly ></input>
                         <input class="exptpay_price3" id="exptTotalPrice" name="exptTotalPrice" readonly ></input>
-
-<!--                        <div class="exptpay_price1" name="exptPrice" th:text="${#numbers.formatDecimal(exptPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">0원</div>-->
-<!--                        <div id="exptpay_del" name="exptDeliveryPrice" th:text="${#numbers.formatDecimal(exptDeliveryPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">0원</div>-->
-<!--                        <div class="exptpay_price3" name="exptTotalPrice"  th:text="${#numbers.formatDecimal(exptTotalPrice, 0, 'COMMA', 0, 'POINT')} + ' 원'">0원</div>-->
 
                     </div>
                 </div>
