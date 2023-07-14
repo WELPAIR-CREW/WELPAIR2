@@ -35,11 +35,11 @@ import net.coobird.thumbnailator.Thumbnails;
 @Slf4j
 public class ThumbnailController {
     private final SellProductServiceImpl productService;
-    private String rootPath = "C:/upload/";
-    private String originalImageDir = "original";
-    private String thumbnailImageDir = "thumbnail";
-    private String absoluteOriginalImageDir = rootPath + originalImageDir;
-    private String absoluteThumbnailImageDir = rootPath + thumbnailImageDir;
+    private final String rootPath = "C:/upload/";
+    private final String originalImageDir = "original";
+    private final String thumbnailImageDir = "thumbnail";
+    private final String absoluteOriginalImageDir = rootPath + originalImageDir;
+    private final String absoluteThumbnailImageDir = rootPath + thumbnailImageDir;
 
     public ThumbnailController(SellProductServiceImpl productService) {
         this.productService = productService;
@@ -60,9 +60,6 @@ public class ThumbnailController {
             throw new IllegalStateException("상품 이미지는 최대 6개까지 등록 가능합니다.");
         }
 
-        System.out.println("--------------------- add SellStatus ---------------------");
-        System.out.println(sellStatus);
-        System.out.println("--------------------- add SellStatus ---------------------");
         File dir = new File(absoluteOriginalImageDir);
         File dir2 = new File(absoluteThumbnailImageDir);
 
@@ -114,10 +111,6 @@ public class ThumbnailController {
                                     @RequestParam String sellStatus,
                                     @ModelAttribute List<MultipartFile> uploadFiles,
                                     @ModelAttribute MultipartFile uploadDetailFile) {
-
-        System.out.println("--------------------- modify SellStatus ---------------------");
-        System.out.println(sellStatus);
-        System.out.println("--------------------- modify SellStatus ---------------------");
 
         /* 이전에 저장되었던 Session의 결과값과 비교하여 수정된 부분이 있다면 Update 실행 */
         HttpSession session = request.getSession();
