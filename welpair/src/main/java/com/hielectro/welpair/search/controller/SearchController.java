@@ -32,7 +32,7 @@ public class SearchController {
      * 1-1. 상품명 검색 시, 검색한 단어가 포함된 상품 리스트 출력
      */
     @GetMapping("search")
-    public String searchResultMain(Model model, @RequestParam(value = "title", required = false) String title
+    public String searchResultMain(Model model, @RequestParam(value = "title", required = false, defaultValue = "") String title
                                             ,@RequestParam(value = "categoryCode", required = false) String categoryCode
                                             ,@RequestParam(value = "refCategoryCode", required = false) String refCategoryCode
                                             ,@RequestParam(value = "productStatus", required = false) String productStatus
