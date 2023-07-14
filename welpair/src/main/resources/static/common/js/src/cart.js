@@ -133,7 +133,10 @@ $btn_del.addEventListener("click", (e => {
         // })
         .then(response => {
             console.log("전송완료");  // 서버로부터의 응답 데이터
-            alert(response);
+            return response.json();
+        })
+        .then(message => {
+            alert(message.message);
             location.href = 'cart';
         })
         .catch(error => {
