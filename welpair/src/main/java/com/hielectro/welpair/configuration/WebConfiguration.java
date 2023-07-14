@@ -7,10 +7,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
-    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = { "classpath:/META-INF/resources/",
+    private final String[] CLASSPATH_RESOURCE_LOCATIONS = { "classpath:/META-INF/resources/",
             "classpath:/resources/", "classpath:/static/", "classpath:/public/" };
-
-    private static String RESOURCE_IMAGE_LOCATION = "file:///C:/upload/";
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -18,6 +16,6 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
 
         registry.addResourceHandler("/common/images/**")
-                .addResourceLocations(RESOURCE_IMAGE_LOCATION);
+                .addResourceLocations("file:///C:/upload/");
     }
 }

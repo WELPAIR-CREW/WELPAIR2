@@ -51,7 +51,7 @@ public class SearchController {
         System.out.println("productStatus = " + productStatus);
         System.out.println("pageNo = " + pageNo);
 
-        sellPage.setTitle(title);
+        sellPage.setTitle(title.toUpperCase());
         product.setCategoryCode(categoryCode);
         product.setProductStatus(productStatus);
         category.setRefCategoryCode(refCategoryCode);
