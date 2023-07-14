@@ -182,8 +182,9 @@ public class CartController {
     // 선택상품 삭제
     @ResponseBody
     @PostMapping(value = "cart/delete")
-    public String deleteCart(Model model, @RequestBody ArrayList<String> productList, @AuthenticationPrincipal User user
+    public Map<String, String> deleteCart(Model model, @RequestBody ArrayList<String> productList, @AuthenticationPrincipal User user
     ){
+        Map<String, String> map = new HashMap<>();
         String response = "";
 
         System.out.println("컨트롤러 들어옴 cart/delete");
@@ -197,7 +198,9 @@ public class CartController {
         else {
             response = "선택상품 삭제 실패";
         }
-        return response;
+
+        map.put("message", response);
+        return map;
     }
 
 
