@@ -267,11 +267,6 @@ public class MemberController {
         model.addObject("totalCnt", totalCnt);
         model.setViewName("admin/member/member-givePoint");
 
-//        //선택된 체크박스의 수
-//        int selectedElementsCnt = 0;
-//        System.out.println("선택된 체크박스의 수 : " + selectedElementsCnt);
-//       // model.addObject("selectedElementsCnt", selectedElementsCnt);
-
         System.out.println(memberList);
         return model;
     }
@@ -360,13 +355,6 @@ public class MemberController {
         model.addObject("pointHistoryDetailList", pointHistoryDetailList);
         model.addObject("pageHandler", pageHandler);
         model.setViewName("admin/member/member-givePointHistory2");
-
-
-        //지급일, 지급사유
-//        Date pointDate = pointHistoryDTO.getPointDate2();
-//        String pointReason = pointHistoryDTO.getPointReason();
-//        model.addObject("pointDate", pointDate);
-//        model.addObject("pointReason",pointReason);
 
         return model;
     }
