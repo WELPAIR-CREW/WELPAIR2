@@ -53,6 +53,19 @@ public class AdminBoardServiceImpl implements AdminBoardService{
 
 
 
+    @Override
+    @Transactional
+    public void MemberAskWriteSave(AdminBoardDTO adminBoardDTO) throws BoardException {
+
+        int result = adminBoardDAO.insertPost(adminBoardDTO);
+
+        if(!(result > 0)){
+            throw new BoardException("게시글등록에 실패");
+        }
+    }
+
+
+
 
     public List<AdminBoardDTO> selectBoardList(SelectCriteria selectCriteria){
 
@@ -68,6 +81,11 @@ public class AdminBoardServiceImpl implements AdminBoardService{
         List<AdminBoardDTO> adminQnaList = adminBoardDAO.selectQnaList(selectCriteria);
 
         return  adminQnaList;
+    }
+
+    public  List<AdminBoardDTO> selectAskList(SelectCriteria selectCriteria){
+        List<AdminBoardDTO> adminAskList = adminBoardDAO.selectAskList(selectCriteria);
+        return  adminAskList;
     }
 
 

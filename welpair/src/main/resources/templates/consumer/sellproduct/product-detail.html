@@ -88,26 +88,7 @@
     </section>
     <section class="product-random-review">
         <div class="random-review-list container">
-            <div class="random-review-1 item">
-                별 0~5<br>
-                사원번호? 23.05.10 상품명<br>
-                블라 블ㄹ라 어쩌구 저쩌구
-            </div>
-            <div class="random-review-2 item">
-                별 0~5<br>
-                사원번호? 23.05.10 상품명<br>
-                블라 블ㄹ라 어쩌구 저쩌구
-            </div>
-            <div class="random-review-3 item">
-                별 0~5<br>
-                사원번호? 23.05.10 상품명<br>
-                블라 블ㄹ라 어쩌구 저쩌구
-            </div>
-            <div class="random-review-4 item">
-                별 0~5<br>
-                사원번호? 23.05.10 상품명<br>
-                블라 블ㄹ라 어쩌구 저쩌구
-            </div>
+
         </div>
     </section>
 
@@ -211,8 +192,7 @@
                 alert(data.message);
             })
             .catch(error => {
-                console.log(error);
-                return Promise.reject(error);
+                alert('로그인이 필요합니다.');
             })
     })
 
@@ -223,7 +203,7 @@
         formData.append('amount', count.value);
         formData.append('code', code);
 
-        fetch('/sellproduct/er2', {
+        fetch('/sellproduct/payment', {
             method: 'post',
             body: formData
             })
@@ -239,6 +219,9 @@
                 console.dir(form);
                 document.body.append(form);
                 form.submit();
+            })
+            .catch(error => {
+                alert('로그인이 필요합니다.')
             })
     })
 

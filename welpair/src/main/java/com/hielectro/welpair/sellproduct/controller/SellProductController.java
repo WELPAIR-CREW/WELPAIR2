@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,16 +33,11 @@ import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDetailDTO;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Controller
 @RequestMapping("/sellproduct")
-@Slf4j
 public class SellProductController {
     private final SellProductServiceImpl productService;
-
     private final int limit = 10;
-//    @Value("${image.image-dir}")
 
     public SellProductController(SellProductServiceImpl productService) {
         this.productService = productService;
@@ -55,6 +49,7 @@ public class SellProductController {
         System.out.println("User +================ " + user);
         return "/admin/sellproduct/product";
     };
+
     @PostMapping("optionList")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
@@ -111,6 +106,7 @@ public class SellProductController {
 
         if(!result) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Update Failed!");
+            return null;
         }
 
         if (requestURI.contains("review")) {
@@ -166,7 +162,6 @@ public class SellProductController {
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public List<SellProductDetailDTO> sellProductList(@RequestBody Map<String, String> request) {
-        System.out.println("request : " + request);
         List<SellProductDetailDTO> sellProductList = productService.selectProductList(request);
         System.out.println(sellProductList);
         return sellProductList;
@@ -186,7 +181,6 @@ public class SellProductController {
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public int updatePrivate(@RequestBody List<String> request) {
-        System.out.println(request);
         try {
             return productService.updatePrivate(request);
         } catch (Exception e) {
@@ -198,7 +192,6 @@ public class SellProductController {
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public int sellProductDelete(@RequestBody List<String> request) {
-        System.out.println(request);
         try {
             return productService.sellProductDelete(request);
         } catch (Exception e) {
@@ -217,19 +210,19 @@ public class SellProductController {
         return response;
     }
 
-    @PostMapping("er2")
+    @PostMapping("payment")
     @PreAuthorize("hasRole('MEMBER')")
     @ResponseBody
     public List<ProductOrderDTO> test(@ModelAttribute Search search) {
         List<ProductOrderDTO> list = new ArrayList<>();
         list.add(new ProductOrderDTO());
-        System.out.println(search);
-//        System.out.println(id);
+
         SellProductDTO sellProduct = productService.selectOneSellProduct(search.getCode());
         list.get(0).setSellProductId(search.getId());
         list.get(0).setProductOrderAmount(search.getAmount());
         list.get(0).setProductOrderPrice((int) (sellProduct.getProduct().getProductPrice() * (1 - sellProduct.getDiscount())));
         list.get(0).setSellproduct(sellProduct);
+
         return list;
     }
 }

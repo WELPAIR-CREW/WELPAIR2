@@ -21,9 +21,11 @@ public class MainController {
         this.mainService = mainService;
     }
 
-    @RequestMapping({"consumer/header_consumer", "admin/header_admin", "admin/index"})
+    @RequestMapping({"consumer/header_consumer"})
     public void header() {}
 
+    @RequestMapping({ "admin/header_admin", "admin/index"})
+    public void adminHeader() {}
     @GetMapping({"/", "index"})
     public String defaultConsumerPage(Model model) {
         List<SellProductDetailDTO> list = mainService.selectProductList();

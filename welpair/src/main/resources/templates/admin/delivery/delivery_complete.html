@@ -36,19 +36,11 @@
         <div class="padding">
             <form>
 
-<!--                <select name="delivery">-->
-<!--                    <option value="del2">상품준비중</option>-->
-<!--                    <option value="del3">배송중</option>-->
-<!--                    <option value="del4">배송완료</option>-->
-<!--                    <option value="etc" selected>기타</option>-->
-<!--                </select>-->
-
                 <select name="delivery">
+                    <option value="del2">상품준비중</option>
+                    <option value="del3">배송중</option>
+                    <option value="del4">배송완료</option>
                     <option value="etc" selected>기타</option>
-                    <option th:each="delivery : ${deliveryList}"
-                            th:value="${delivery.deliveryStatus}"
-                            th:text="${delivery.deliveryStatus}">
-                    </option>
                 </select>
 
                 <input type="submit" value="변경">
@@ -79,10 +71,8 @@
                             <td th:text="${#dates.format(delivery.orderDate , 'yyyy.MM.dd')}"></td>
                             <td th:text="${delivery.productOrderNo}"></td>
                             <td th:text="${delivery.productName}"></td>
-
                             <td th:text="${delivery.amount}"></td>
-                            <td></td>
-                            <!--                        <td th:text="${delivery.delivery.empEmail}"></td>-->
+                            <td th:text="${delivery.addressName}"></td>
                             <td th:text="${delivery.deliveryDate}"></td>
                             <td th:text="${delivery.deliveryStatus}"></td>
                         </tr>

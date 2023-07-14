@@ -73,9 +73,9 @@
              , A.ADDRESS_NAME
              , A.ADDRESS_PHONE
         FROM T_MEMBER M
-        JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
-        JOIN T_ADDRESS A ON (A.EMP_NO = M.EMP_NO)
-        WHERE A.EMP_NO = #{ empNo }
+        LEFT JOIN T_EMPLOYEE E ON (M.EMP_NO = E.EMP_NO)
+        LEFT JOIN T_ADDRESS A ON (A.EMP_NO = M.EMP_NO)
+        WHERE M.EMP_NO = #{ empNo }
     </select>
 
 

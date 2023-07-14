@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
->
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <header>
     <img src="/common/images/title.png" class="title">
     <div class="icons">
-
-        <a href="/admin/index">ADMIN</a>
 
         <div class="search-bar">
             <input type="text" class="search-box" name="title" placeholder="검색어 입력">
@@ -15,6 +12,7 @@
             </a>
         </div>
         <div class="my-info">
+            <a href="/mypage/mypageMain">MY</a>
             <th:block sec:authorize="isAnonymous()">  <!-- 인증되지 않은 경우(로그인 전) -->
                 <button onclick="location.href='/member/login'">로그인</button>
             </th:block>

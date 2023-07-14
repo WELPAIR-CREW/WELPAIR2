@@ -208,10 +208,7 @@
     <!--  2. 회원등록  -->
     <select id="getEmployeeList" resultMap="employeeListResultMap" parameterType="hashmap">
         select * from
-            (SELECT
---            row_number() OVER (ORDER BY E.EMP_NO DESC) AS rnum
---            위는 버튼 확인을 위해 일부러 정렬 순서를 바꾼것. 원래 입사일 내림차순이 맞음
-                 row_number() OVER (ORDER BY E.HIRE_DATE DESC) AS rnum
+            (SELECT row_number() OVER (ORDER BY E.HIRE_DATE DESC) AS rnum
                   ,E.EMP_NO
                   ,E.EMP_NAME
                   ,E.EMP_EMAIL

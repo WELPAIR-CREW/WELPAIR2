@@ -17,7 +17,9 @@ public class WishlistSellProductDTO {
 
     private String wishId;
     private String sellProductId;
-
+    private String productName;
+    private String price;
+    private String thumbnail;
 
     //위시리스트별판매상품
     private SellProductDTO sellProductDTO; //판매상품dto

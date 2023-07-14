@@ -12,19 +12,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
-import static com.hielectro.welpair.common.PriceCalculator.empNo;
 @Slf4j
 @Controller
 @RequestMapping("/payment/kakaopay")
 public class KakaoPayController {
     private final KakaoPayService kakaoPayService;
-
-//    private String tid;
-//    private String pgToken;
-
 
     public KakaoPayController(KakaoPayService kakaoPayService){
         this.kakaoPayService = kakaoPayService;

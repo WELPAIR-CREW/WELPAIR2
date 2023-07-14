@@ -7,6 +7,9 @@ import com.hielectro.welpair.order.model.dto.OrderDTO;
 import com.hielectro.welpair.order.model.dto.ProductOrderDTO;
 import com.hielectro.welpair.payment.model.dto.PaymentDTO;
 import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
-
-import static com.hielectro.welpair.common.PriceCalculator.empNo;
-
 @Controller
 @RequestMapping("/mypage/myorder")
+@PreAuthorize("hasRole('MEMBER')")
 public class OrderDetailController {
 
     private final OrderDetailService orderDetailService;
@@ -29,11 +30,11 @@ public class OrderDetailController {
     }
 
     @GetMapping("detail/{orderNo}")
-    public String orderDetail(@PathVariable(value="orderNo") String orderNo, Model model){
+    public String orderDetail(@PathVariable(value="orderNo") String orderNo, Model model, @AuthenticationPrincipal User user){
 
         System.out.println("orderNo = " + orderNo);
 
-        List<OrderDetailDTO> orderList = orderDetailService.selectOrderDetail(orderNo, empNo);
+        List<OrderDetailDTO> orderList = orderDetailService.selectOrderDetail(orderNo, user.getUsername());
 
         System.out.println("orderList = " + orderList);
 
