@@ -1,7 +1,4 @@
 package com.hielectro.welpair.mypage.controller;
-
-import static com.hielectro.welpair.common.PriceCalculator.empNo;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +7,8 @@ import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,12 +38,13 @@ public class OrderListController {
     public String myOrderList(HttpServletRequest request, Model model,
                               @ModelAttribute Search search,
                               @RequestParam(required = false, defaultValue = "1") int currentPageNo,
-                              @RequestParam(required = false) String criteria) {
+                              @RequestParam(required = false) String criteria,
+                              @AuthenticationPrincipal User user) {
         String queryString = search.toString();
         String url = String.valueOf(request.getRequestURL()) + queryString;
         Map<String, Object> map = new HashMap<>();
         map.put("pageNo", currentPageNo);
-        map.put("empNo", empNo);
+        map.put("empNo", user.getUsername());
         map.put("search", search);
         map.put("criteria", criteria);
 

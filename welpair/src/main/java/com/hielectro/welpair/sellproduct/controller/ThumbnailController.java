@@ -2,14 +2,23 @@ package com.hielectro.welpair.sellproduct.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
@@ -35,7 +44,6 @@ public class ThumbnailController {
     public ThumbnailController(SellProductServiceImpl productService) {
         this.productService = productService;
     }
-
 
     @GetMapping("add")
     public String addSellProduct() {
@@ -79,14 +87,15 @@ public class ThumbnailController {
         } catch (IllegalStateException | IOException e) {
             handleImageUploadFailure(e, sellPage);
         }
+
         return "redirect:/products/" + sellPage.getNo();
     }
 
     @GetMapping("modify/{sellPageNo}")
     public String modifySellProduct(Model model, HttpServletRequest request, @PathVariable String sellPageNo) {
         Map<String, String> map = new HashMap<>();
-
         map.put("sellPageNo", sellPageNo);
+
         SellProductDTO sellProduct = productService.selectOneSellProduct(sellPageNo);
         model.addAttribute("productInfo", sellProduct);
 
@@ -94,6 +103,7 @@ public class ThumbnailController {
         HttpSession session = request.getSession();
         session.setAttribute("productInfo", sellProduct);
         System.out.println(session.getAttribute("productInfo"));
+
         return "admin/sellproduct/admin-modify-product";
     }
 
@@ -124,8 +134,6 @@ public class ThumbnailController {
             return "redirect:/products/" + sellPage.getNo();
         }
 
-        System.out.println("uploadFilesSize : " + uploadFiles.size() + "--------------------------------");
-
         try {
             sellPage.setTitle(title);
             sellPage.setSellStatus(sellStatus);
@@ -143,7 +151,7 @@ public class ThumbnailController {
 
             // 2. 상세 이미지가 업로드 되었을 시 기존 상세 이미지 삭제
             if (!uploadDetailFile.isEmpty()) {
-                int cnt = deleteImageFile(compareSellPage.getDetailImageFileName()) ? 1 : 0;
+                deleteImageFile(compareSellPage.getDetailImageFileName());
                 log.info("[ThumbnailController] DetailImage 삭제 완료!");
             }
 
@@ -183,7 +191,7 @@ public class ThumbnailController {
             String savedFileName = null;
             String thumbnailSize360x = null;
 
-            if (file.getOriginalFilename() != null && !file.getOriginalFilename().equals("")) {
+            if (file.getOriginalFilename() != null && !file.getOriginalFilename().isEmpty()) {
                 originFileName = file.getOriginalFilename();
                 ext = originFileName.substring(originFileName.lastIndexOf("."));
                 savedFileName = UUID.randomUUID().toString().replace("-", "");
@@ -228,6 +236,5 @@ public class ThumbnailController {
         int cnt = deleteImageFiles(sellPage.getThumbnailImageList());
         cnt += deleteImageFile(sellPage.getDetailImageFileName()) ? 1 : 0;
         log.info("[ThumbnailController] 업로드에 실패한 모든 사진 삭제 완료! (" + cnt + "개)");
-
     }
 }

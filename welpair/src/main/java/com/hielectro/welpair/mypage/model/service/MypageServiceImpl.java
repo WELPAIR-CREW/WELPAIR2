@@ -106,18 +106,26 @@ public class MypageServiceImpl implements MypageService{
         return mypageMapper.getWishId(empNo);
     }
     @Override
-    public List<WishlistSellProductDTO> getWishlistList(String wishId) {
-        return mypageMapper.getWishlistList(wishId);
+    public List<WishlistSellProductDTO> getWishlistList(Map<String, Object> map) {
+        return mypageMapper.getWishlistList(map);
     }
-    //
 
+    @Override
+    public int wishItemCount(String wishId) {
+        return mypageMapper.wishItemCount(wishId);
+    }
 
 
     //5. 내가쓴글
     //문의글목록
+//    @Override
+//    public List<BoardDTO> myQnaList(String empNo) {
+//        return mypageMapper.myQnaList(empNo);
+//    }
+    //페이징
     @Override
-    public List<BoardDTO> myQnaList(String empNo) {
-        return mypageMapper.myQnaList(empNo);
+    public List<BoardDTO> myQnaList(Map<String, Object> map) {
+        return mypageMapper.myQnaList(map);
     }
 
     //페이징처리를 위한 총 항목 수

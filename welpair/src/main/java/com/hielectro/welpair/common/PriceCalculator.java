@@ -20,10 +20,6 @@ public class PriceCalculator {
     private int totalPrice;
     private int amount;
 
-    // 나중에 삭제해야함
-    static public String empNo = "E00017";
-
-
     // 단품 금액 생성 메소드
     public int oneOfPrice(int price, double discount) {
 

@@ -30,14 +30,6 @@ import java.util.Map;
 @RequestMapping("/mypage")
 public class MypageController {
 
-
-    //@@@마이페이지 메인, 마이페이지의 세부 페이지들 전부 로그인 체크하여 null일때에는 로그인페이지로 이동하도록 하기
-    //회원정보 수정페이지 해결하기
-    //위시리스트 페이지 css 보완
-    //T00015(로그인)의 포인트 사용이력 데이터넣어주기
-    //문의목록 페이지 css, 페이징, 누르면 해당 문의글로 이동하게, 문의하기, 삭제 기능
-
-
     private final MypageService mypageService;
     private final PasswordEncoder passwordEncoder;
 
@@ -57,7 +49,7 @@ public class MypageController {
 
     //1. 헤더에서 회원정보(수정) 메뉴 클릭시
     @GetMapping("/editMyInfo")
-    public String editMyInfo(@AuthenticationPrincipal User user) {
+    public String editMyInfo(@AuthenticationPrincipal UserImpl user) {
 
         if (user != null) { //로그인 돼있는 경우 본인확인창 페이지로 이동시킨다
             return "redirect:/mypage/checkPwd";
@@ -75,65 +67,72 @@ public class MypageController {
     }
 
 
-    //비밀번호 입력 후 확인 버튼 클릭시의 ajax요청을 받는 핸들러메소드
-    @ResponseBody
-    @PostMapping("/checkPwd2")
-    public Map<String, String> checkPwd2(@AuthenticationPrincipal UserImpl userImpl, @RequestParam String inputPassword) {
+    //폼태그 POST요청 받는 메소드
+    @PostMapping ("/checkPwd2")
+    public String checkPwd2(@AuthenticationPrincipal UserImpl userImpl, @RequestBody String inputPassword) {
 
         //현재 로그인한 유저 정보
         String empNo = userImpl.getEmpNo();
         String memPwd = userImpl.getMemPwd();
 
-        System.out.println("로그인한 empNo : " + empNo);
+        System.out.println("-----회원정보 본인인증-----로그인한 empNo : " + empNo);
         System.out.println("DB의 비밀번호 memPwd 확인 : " + memPwd);
 
-        System.out.println("입력한 비번 :  " + inputPassword); //ajax요청으로 전송된 데이터
+        //" identify= " 를 잘라내기
+        inputPassword = inputPassword.substring(inputPassword.indexOf("=") + 1);
 
+        System.out.println("입력한 비번 :  [" + inputPassword + "]");
 
         //입력한 비밀번호가 현재 로그인한 유저의 비밀번호와 같은지 비교
         boolean isSame = confirmUser(inputPassword, memPwd); //패스워드인코더의 메소드 이용하는 메소드
 
         System.out.println("isSame값 확인 : " + isSame);
 
-
         if(isSame) {
-            //ajax 성공시 동작하는 get요청의 리다이렉트주소
-            Map<String, String> map = new HashMap<>();
-//            map.put("locationroot", "/mypage/editMyInfoPage");  //수정 페이지
-            map.put("locationroot", "forward:/mypage/editMyInfoPage");
-            return map;
+            return "redirect:/mypage/editMyInfoPage";
+//            return "forward:/mypage/editMyInfoPage";
 
         } else {
-            Map<String, String> map = new HashMap<>();
-            map.put("locationroot", "/mypage/checkPwd");
-            return map;
+            return "redirect:/mypage/checkPwd";
         }
     }
 
-
     @GetMapping("/editMyInfoPage")
-    public String editMyInfoPage(@AuthenticationPrincipal UserImpl user) {
+    public ModelAndView editMyInfoPage(@AuthenticationPrincipal UserImpl user) {
+        ModelAndView modelAndView = new ModelAndView();
 
-        String empNo = user.getEmpNo();
-        String memPwd = user.getMemPwd();
-        String userName = user.getUsername();
-        String userEmail = user.getEmployee().getEmpEmail();
-        String userPhone = user.getEmployee().getEmpPhone();
-        System.out.println("user정보 출력 : " + user.toString());
+        System.out.println("-----------회원정보 수정 페이지 진입----------");
 
-        return "consumer/mypage/myinfo2";
+        //로그인한 객체의 정보를 불러올 수 있는지 확인
+        System.out.println("user의 정보 = " + user.toString());
+        System.out.println("userName : " + user.getUsername()); //사번이 조회됨
+//        System.out.println("memberPhone : " + user.getEmployee().getEmpPhone());
+
+
+        if (user == null) { // 로그인이 안된 경우
+            modelAndView.setViewName("member/login");
+            return modelAndView;
+        }
+
+        modelAndView.addObject("user", user); // 로그인한 사용자 정보를 전달
+        modelAndView.setViewName("consumer/mypage/myinfo2");
+        return modelAndView;
     }
+
+
+
+
 
     //회원정보수정 버튼 클릭시의 post요청
     @PostMapping("updateUserInfo")
     public String updateUserInfo(@ModelAttribute RegistDTO registDTO, @AuthenticationPrincipal User user) {
         System.out.println("-----------------회원정보update 메소드");
-        System.out.println("@ModelAttribute DTO인 RegistDTO 필드값 : " + registDTO);
-        System.out.println("@AuthenticationPrincipal 유저 : " + user);
+        System.out.println("@ModelAttribute DTO인 RegistDTO 필드값 : " + registDTO); //null
+        System.out.println("@AuthenticationPrincipal 유저 : " + user); //들어옴
 
 
         //비밀번호는 암호화해서 업데이트
-        registDTO.setMemPwd(passwordEncoder.encode(registDTO.getMemPwd()));
+        registDTO.setMemPwd(passwordEncoder.encode(user.getPassword()));
 //        mypageService.updateUserInfo(registDTO);
 
         return "redirect:/mypage/editMyInfoPage";
@@ -243,7 +242,8 @@ public class MypageController {
     //3.
     //위시리스트 css수정필요
     @GetMapping("/wishlist")
-    public ModelAndView getWishlistList(@AuthenticationPrincipal UserImpl user, ModelAndView model) {
+    public ModelAndView getWishlistList(@RequestParam(defaultValue = "1") int page
+                                      , @AuthenticationPrincipal UserImpl user, ModelAndView model) {
 
         if(user == null) { //로그인 안된 경우
             model.setViewName("member/login"); //로그인 페이지로 보낸다
@@ -256,18 +256,23 @@ public class MypageController {
         String wishId = mypageService.getWishId(empNo);
         System.out.println("회원 " + empNo + "의 wishId 값 조회 : " + wishId);
 
+        //페이징-------------------------------------------------------------
+        int pageSize = 5; //페이지당 항목 수
+        int totalCnt = mypageService.wishItemCount(wishId);
+        System.out.println("db에서 조회한 총 마이포인트 목록 항목수 : " + totalCnt);
+        PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
+        model.addObject("totalCnt", totalCnt);
 
-        //@@@wishId가 null인 경우에 예외처리하기
-        //null인 경우 위시리스트 추가해주는 메소드 작성하기
-        /*
-        INSERT INTO T_WISH
-        VALUES
-        ('W'||LPAD(SEQ_WISH_ID.NEXTVAL,10,0)
-        ,'T00015'
-        ,SYSDATE );
-        * */
+        Map<String, Object> map = new HashMap<>();
+        map.put("startRow", pageHandler.getStartRow());
+        map.put("endRow", pageHandler.getEndRow());
+        model.addObject("pageHandler", pageHandler);
+        //------------------------------------------------------------------
 
-        List<WishlistSellProductDTO> wishItemList = mypageService.getWishlistList(wishId);
+        map.put("wishId", wishId);
+
+
+        List<WishlistSellProductDTO> wishItemList = mypageService.getWishlistList(map);
         System.out.println("리스트 출력 : " + wishItemList);
 
         model.addObject("wishItemList", wishItemList);
@@ -282,13 +287,10 @@ public class MypageController {
             , @RequestParam(value = "type", required = false) String pointType
             , @AuthenticationPrincipal UserImpl user) {
 
-
-
         if(user == null) { //로그인 안된 경우
             model.setViewName("member/login"); //로그인 페이지로 보낸다
             return model;
         }
-
 
         String empNo = user.getEmpNo();
         System.out.println("----------포인트조회-------- 로그인한 사용자의 empNo : " + empNo);
@@ -314,7 +316,6 @@ public class MypageController {
         }
 
         System.out.println("pointType값 확인 : " + pointType);
-
 
         List<PointHistoryDTO> mypointList = mypageService.mypointList(map);
         model.addObject("mypointList", mypointList);
@@ -345,7 +346,7 @@ public class MypageController {
         System.out.println("-----------문의목록----------로그인한 empNo : " + empNo);
 
         //페이징-------------------------------------------------------------
-        int pageSize = 10; //페이지당 항목 수
+        int pageSize = 7; //페이지당 항목 수
         int totalCnt = mypageService.myQnaCount(empNo);
         System.out.println("db에서 조회한 총 마이포인트 목록 항목수 : " + totalCnt);
         PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
@@ -358,7 +359,7 @@ public class MypageController {
         //------------------------------------------------------------------
 
         map.put("empNo", empNo);
-        List<BoardDTO> myQnaList = mypageService.myQnaList(empNo);
+        List<BoardDTO> myQnaList = mypageService.myQnaList(map);
         System.out.println("myQnaList 출력 : " + myQnaList);
         model.addObject("myQnaList", myQnaList);
         model.setViewName("consumer/mypage/myqna");
@@ -386,7 +387,7 @@ public class MypageController {
     @GetMapping({"/mypageMain", "/"})
     public String mypageMain(@AuthenticationPrincipal UserImpl user) {
 
-        System.out.println("로그인여부 user 조회 : " + user);
+        System.out.println("-----마이페이지 메인화면-----로그인여부 user 조회 : " + user);
 
         if(user == null) { //로그인 안된 경우
             return "/member/login";

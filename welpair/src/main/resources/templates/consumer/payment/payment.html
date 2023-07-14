@@ -89,7 +89,7 @@
                             <td>
                                 <div class="labelbox">이름</div>
                             </td>
-                            <td><input type="text" class="inputbox_name" id="ordererName" name="ordererName" th:value="${memberAddressList.get(0).employee.empName}" placeholder=" 이름을 입력하세요."
+                            <td><input type="text" class="inputbox_name" id="ordererName" name="ordererName" th:value="${memberAddressList != null and memberAddressList.size() > 0 ? memberAddressList[0].employee?.empName : ''}" placeholder=" 이름을 입력하세요."
                                     required></td>
                         </tr>
                         <tr>
@@ -97,7 +97,7 @@
                                 <div class="labelbox">휴대폰번호</div>
                             </td>
                             <td><input type="number" class="inputbox_phone" id="ordererPhone" name="ordererPhone"
-                                       th:value="${#strings.replace(memberAddressList.get(0).employee.empPhone, '-', '')}" placeholder=" 휴대폰 번호를 입력하세요.(숫자만 입력)" required></td>
+                                       th:value="${memberAddressList != null and memberAddressList.size() > 0 ? #strings.replace(memberAddressList[0]?.employee?.empPhone, '-', '') : ''}" placeholder=" 휴대폰 번호를 입력하세요.(숫자만 입력)" required></td>
                         </tr>
                     </table>
                 </div>
@@ -134,8 +134,8 @@
                             <select  name="recipientAddress" id="recipientAddress" required>
                                 <div th:each="memberAddress, stat : ${memberAddressList}">
                                     <option placeholder="" selected disabled hidden>배송지&nbsp;선택</option>
-                                    <div th:each="address, stat : ${memberAddress.address}">
-                                        <option class="selectAddress" th:name="addressSelect" th:value="${address.addressId}" th:text="${stat.count} + '-' + ${address.addressName} "></option>
+                                    <div th:each="address, stat : ${memberAddress?.address}">
+                                        <option class="selectAddress" th:name="addressSelect" th:value="${address?.addressId}" th:text="${stat?.count} + '-' + ${address?.addressName} "></option>
 
                                     </div>
 
@@ -203,7 +203,9 @@
                                 <div class="paybox_existpoint">복지 포인트</div>
                             </td>
                             <td>
-                                <div class="totalPoint" name="totalPoint" id="existPoint" th:value="${memberAddressList[0].pointBalance}" th:text="${#numbers.formatDecimal(memberAddressList[0].pointBalance, 0, 'COMMA', 0, 'POINT')}"></div>
+                                <div class="totalPoint" name="totalPoint" id="existPoint" th:if="${memberAddressList != null and memberAddressList.size() > 0}"
+                                     th:value="${memberAddressList[0].pointBalance}"
+                                     th:text="${#numbers.formatDecimal(memberAddressList[0].pointBalance, 0, 'COMMA', 0, 'POINT')}"></div>
                             </td>
                             <td>
                                 <div class="paybox_existpoint">&nbsp;원</div>
@@ -215,8 +217,8 @@
                                 <div class="paybox_availpoint">사용가능한 포인트</div>
                             </td>
                             <td>
-                                <div class="availablePoint"  id="availablePoint" th:text="${#numbers.formatDecimal(memberAddressList[0].pointBalance, 0, 'COMMA', 0, 'POINT')}"></div>
-                                <input type="hidden"  th:value="${memberAddressList[0].pointBalance}" id="availablePointHidden">
+                                <div class="availablePoint"  id="availablePoint" th:if="${memberAddressList != null and memberAddressList.size() > 0}" th:text="${#numbers.formatDecimal(memberAddressList[0].pointBalance, 0, 'COMMA', 0, 'POINT')}">0</div>
+                                <input type="hidden" th:if="${memberAddressList != null and memberAddressList.size() > 0}" th:value="${memberAddressList[0].pointBalance}" id="availablePointHidden">
                             </td>
                             <td>
                                 <div class="paybox_availpoint">&nbsp;원</div>
@@ -304,7 +306,7 @@
         }
 
     //---------------------- 배송지 선택 js 함수 호출--------------------------
-        let addressList = /*[[${memberAddressList[0].address}]]*/'';
+        let addressList = /*[[${memberAddressList != null and memberAddressList.size() > 0 ? memberAddressList[0].address : ''}]]*/'';
         if (addressList) {
         addressFunc(addressList);
         }

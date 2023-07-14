@@ -211,8 +211,7 @@
                 alert(data.message);
             })
             .catch(error => {
-                console.log(error);
-                return Promise.reject(error);
+                alert('로그인이 필요합니다.');
             })
     })
 
@@ -223,7 +222,7 @@
         formData.append('amount', count.value);
         formData.append('code', code);
 
-        fetch('/sellproduct/er2', {
+        fetch('/sellproduct/payment', {
             method: 'post',
             body: formData
             })
@@ -239,6 +238,9 @@
                 console.dir(form);
                 document.body.append(form);
                 form.submit();
+            })
+            .catch(error => {
+                alert('로그인이 필요합니다.')
             })
     })
 
