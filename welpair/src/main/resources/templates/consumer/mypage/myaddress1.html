@@ -43,7 +43,13 @@
                 </div>
 
                 <p th:text="${address.addressPhone}">전화번호: 987-654-3210</p>
-                <p th:text="${address.addressDetail}">주소: 456 Elm Street</p>
+<!--                <p th:text="${address.addressDetail}">주소: 456 Elm Street</p>-->
+                <div>
+                <div th:with="addressParts=${address.addressDetail.split('/')}">
+                    <p th:each="part : ${addressParts}" th:text="${part}"></p>
+                </div>
+                </div>
+
 
                 <!-- 기본배송지가 아닌 경우에만 표시 -->
                 <span class="delete-span">
