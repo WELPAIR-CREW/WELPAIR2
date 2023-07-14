@@ -92,15 +92,18 @@
 
 <!-- 마이포인트 이력 조회  -->
     <select id="mypointList" resultMap="mypointListResultMap">
-        SELECT *
-        FROM T_POINT_HISTORY PH
-        WHERE PH.EMP_NO = #{empNo}
-        <if test='pointType != null and pointType.equals("earn")'>
-            AND PH.POINT_TYPE = '적립'
-        </if>
-        <if test='pointType != null and pointType.equals("used")'>
-            AND PH.POINT_TYPE = '사용'
-        </if>
+        SELECT * FROM
+            (SELECT row_number() OVER (ORDER BY PH.EMP_NO) AS rnum,
+            PH.POINT_NO, PH.EMP_NO, PH.POINT_DATE, PH.POINT_AMOUNT, PH.POINT_TYPE,PH.POINT_REASON
+            FROM T_POINT_HISTORY PH
+            WHERE PH.EMP_NO = #{empNo}
+            <if test='pointType != null and pointType.equals("earn")'>
+                AND PH.POINT_TYPE = '적립'
+            </if>
+            <if test='pointType != null and pointType.equals("used")'>
+                AND PH.POINT_TYPE = '사용'
+            </if>)
+        WHERE rnum BETWEEN #{startRow} AND #{endRow}
     </select>
     <select id="myPointListCount" resultType="_int" parameterType="string">
         SELECT COUNT(*)
@@ -120,7 +123,9 @@
     </select>
 
     <select id="getWishlistList" resultMap="wishSellProductResultMap">
-        SELECT WS.SELL_PRODUCT_ID,
+        SELECT * FROM
+        (SELECT row_number() OVER (ORDER BY SP.SELL_PRODUCT_ID) AS rnum,
+               WS.SELL_PRODUCT_ID,
                P.PRODUCT_CODE,
                SPG.SELL_PAGE_TITLE,
                P.PRODUCT_PRICE,
@@ -134,15 +139,39 @@
                        FROM T_THUMB_IMAGE
                       GROUP BY SELL_PAGE_NO) TI ON (SPG.SELL_PAGE_NO = TI.SELL_PAGE_NO)
         WHERE WS.WISH_ID = #{ wishId }
-          AND TI.SELL_THUMB_IMAGE_FILE_NAME IS NOT NULL
+          AND TI.SELL_THUMB_IMAGE_FILE_NAME IS NOT NULL)
+        WHERE rnum BETWEEN #{startRow} AND #{endRow}
+    </select>
+
+    <select id="wishItemCount" resultType="_int">
+        SELECT COUNT(*) FROM
+            (SELECT WS.SELL_PRODUCT_ID,
+               P.PRODUCT_CODE,
+               SPG.SELL_PAGE_TITLE,
+               P.PRODUCT_PRICE,
+               TI.SELL_THUMB_IMAGE_FILE_NAME
+                FROM T_WISH_SELL_PRODUCT WS
+                 JOIN T_SELL_PRODUCT SP ON (WS.SELL_PRODUCT_ID = SP.SELL_PRODUCT_ID)
+                 JOIN T_PRODUCT P ON (SP.PRODUCT_CODE = P.PRODUCT_CODE)
+                 JOIN T_SELL_ITEM_PAGE SIP ON (SP.SELL_PRODUCT_ID = SIP.SELL_PRODUCT_ID)
+                 JOIN T_SELL_PAGE SPG ON (SIP.SELL_PAGE_NO = SPG.SELL_PAGE_NO)
+                 LEFT JOIN (SELECT SELL_PAGE_NO, MIN(SELL_THUMB_IMAGE_FILE_NAME) AS SELL_THUMB_IMAGE_FILE_NAME
+                FROM T_THUMB_IMAGE
+                GROUP BY SELL_PAGE_NO) TI ON (SPG.SELL_PAGE_NO = TI.SELL_PAGE_NO)
+        WHERE WS.WISH_ID = #{ wishId }
+          AND TI.SELL_THUMB_IMAGE_FILE_NAME IS NOT NULL)
     </select>
 
 
 <!-- 내가쓴글 - 문의글목록 -->
     <select id="myQnaList" resultMap="myBoardListResultMap">
-        SELECT * FROM T_BOARD
+        SELECT * FROM
+        (SELECT row_number() OVER (ORDER BY B.BOARD_DATE DESC) AS rnum,
+            B.BOARD_NO, B.BOARD_CATEGORY, B.BOARD_TITLE, B.BOARD_CONTENT, B.BOARD_DATE
+        FROM T_BOARD B
         WHERE EMP_NO = #{empNo}
-        AND BOARD_CATEGORY = 'BORD_1'
+        AND BOARD_CATEGORY = 'BORD_1') A
+        WHERE rnum BETWEEN #{startRow} AND #{endRow}
     </select>
     <select id="myQnaCount" resultType="_int">
         SELECT COUNT(*) FROM T_BOARD

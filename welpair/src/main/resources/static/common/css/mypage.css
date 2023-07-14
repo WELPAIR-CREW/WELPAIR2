@@ -221,7 +221,7 @@ section {
 }
 
 .shippingCard-info *:not(:last-child) {
-    margin-bottom: 10px;
+    margin-bottom: 7px;
 }
 
 .shippingCard-header {
@@ -256,9 +256,9 @@ section {
     color: gray;
     background: none;
     border: none;
-    font-size: 14px;
+    font-size: 15px;
 
-    margin-bottom: -10px;
+    margin-bottom: -12px;
     cursor: pointer;
 }
 
@@ -376,6 +376,10 @@ section {
 
     height: 80px;
     font-size: 16px;
+
+
+    align-items: center;
+    justify-content: space-between;
 }
 
 .wishlist-item>img {
@@ -385,13 +389,27 @@ section {
 
 .left-button2 {
     margin-left: 460px;
+
+
+    display: flex;
+    gap: 5px;
 }
+
 
 #wishlist> :not(:first-child) {
     margin-top: 10px;
 }
 
+.left-button2 button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
 
+
+    margin-left : 15px;
+}
 
 
 /* mypoint */
@@ -651,11 +669,12 @@ section {
     background: #ffffff;
     border: 2px solid #d9d9d9;
     border-radius: 6px;
-    padding: 3px;
+    padding: 5px;
     cursor: pointer;
 
-    /* margin-left: 270px; */
+     /*margin-left: 270px;*/
     font-size: 14px;
 }
+
 
 
