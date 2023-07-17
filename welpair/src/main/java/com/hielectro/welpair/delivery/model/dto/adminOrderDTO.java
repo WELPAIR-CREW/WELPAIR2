@@ -1,9 +1,10 @@
 package com.hielectro.welpair.delivery.model.dto;
 
-import com.hielectro.welpair.order.model.dto.OrderDTO;
-import lombok.*;
-
-import java.sql.Timestamp;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor

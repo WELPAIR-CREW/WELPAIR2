@@ -1,8 +1,8 @@
 package com.hielectro.welpair.member.model.dao;
 
-import com.hielectro.welpair.member.model.dto.EmployeeDTO;
-import com.hielectro.welpair.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
+
+import com.hielectro.welpair.member.model.dto.MemberDTO;
 
 @Mapper
 public interface MemberDAO {

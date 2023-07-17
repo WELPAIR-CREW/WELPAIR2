@@ -1,9 +1,5 @@
 package com.hielectro.welpair.member.controller;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 public class Pagenation {
 
     //검색어 없는 경우의 페이징 처리

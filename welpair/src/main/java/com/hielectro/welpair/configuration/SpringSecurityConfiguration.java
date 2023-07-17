@@ -1,11 +1,6 @@
 package com.hielectro.welpair.configuration;
 
-import com.hielectro.welpair.member.model.service.MemberService;
-import com.hielectro.welpair.security.handler.CustomAuthenticationEntryPoint;
-import com.hielectro.welpair.security.handler.CustomAuthenticationSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -17,13 +12,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.hielectro.welpair.member.model.service.MemberService;
+import com.hielectro.welpair.security.handler.CustomAuthenticationEntryPoint;
+import com.hielectro.welpair.security.handler.CustomAuthenticationSuccessHandler;
+
 @EnableWebSecurity   // 시큐리티 설정을 다루는 클래스임을 선언(권한 및 경로 포함)
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)  // 메서드에서 권한점검을 먼저하고
 public class SpringSecurityConfiguration {
 
     private MemberService memberService;
 
-    @Autowired
     public SpringSecurityConfiguration(MemberService memberService){
         this.memberService = memberService;
     }
@@ -48,7 +46,7 @@ public class SpringSecurityConfiguration {
 
 
         return http.csrf().disable()
-                .authorizeRequests()  // 요청에 대한 권한 체크를 어떻게 할것인지 지정
+                .authorizeHttpRequests()  // 요청에 대한 권한 체크를 어떻게 할것인지 지정
                 .antMatchers("/sellproduct/payment","/order/**","/payment/**","/mypage/**").hasRole("MEMBER")
                 .antMatchers("/sellproduct/**", "/inventory/**", "/delivery/**", "/sales/**", "/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()     // 등록되지 않은 경로는 누구나 접근 가능  // 나중에 경로 접근권한 추가해야함.///////////////////

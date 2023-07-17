@@ -1,30 +1,31 @@
 package com.hielectro.welpair.mypage.controller;
 
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.member.controller.PageHandler;
-import com.hielectro.welpair.member.controller.PointException;
-import com.hielectro.welpair.member.model.dto.EmployeeDTO;
-import com.hielectro.welpair.member.model.dto.MemberDTO;
 import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.member.model.dto.UserImpl;
 import com.hielectro.welpair.mypage.model.dto.AddressDTO;
 import com.hielectro.welpair.mypage.model.dto.WishlistSellProductDTO;
 import com.hielectro.welpair.mypage.model.service.MypageService;
-import com.hielectro.welpair.regist.model.dao.RegistDAO;
 import com.hielectro.welpair.regist.model.dto.RegistDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/mypage")
@@ -33,7 +34,6 @@ public class MypageController {
     private final MypageService mypageService;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public MypageController(MypageService mypageService, PasswordEncoder passwordEncoder) {
         this.mypageService = mypageService;
         this.passwordEncoder = passwordEncoder;

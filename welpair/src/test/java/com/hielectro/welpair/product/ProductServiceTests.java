@@ -2,21 +2,20 @@ package com.hielectro.welpair.product;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.hielectro.welpair.inventory.model.dto.ProductDTO;
-import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.parameters.P;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.hielectro.welpair.configuration.MybatisConfiguration;
 import com.hielectro.welpair.configuration.WelpairApplication;
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
+import com.hielectro.welpair.sellproduct.model.dao.SellProductMapper;
 import com.hielectro.welpair.sellproduct.model.service.SellProductServiceImpl;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @SpringBootTest
 @ContextConfiguration(classes = {MybatisConfiguration.class, WelpairApplication.class})

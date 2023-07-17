@@ -1,31 +1,33 @@
 package com.hielectro.welpair.inventory.controller;
-import com.hielectro.welpair.inventory.model.dto.ProductDTO;
-import com.hielectro.welpair.inventory.model.dto.StockDTO;
-import com.hielectro.welpair.inventory.model.service.InventoryService;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.fileupload.RequestContext;
-import org.apache.logging.log4j.message.Message;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.RequestContextUtils;
 import org.thymeleaf.exceptions.TemplateInputException;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import com.hielectro.welpair.inventory.model.dto.ProductDTO;
+import com.hielectro.welpair.inventory.model.dto.StockDTO;
+import com.hielectro.welpair.inventory.model.service.InventoryService;
 
 @Controller
-@Slf4j
 @RequestMapping("/inventory/")
 public class InventoryController {
     private final InventoryService inventoryService;
     private final MessageSource messageSource;
 
-    @Autowired
     public InventoryController(InventoryService inventoryService, MessageSource messageSource) {
         this.inventoryService = inventoryService;
         this.messageSource = messageSource;
@@ -184,15 +186,11 @@ public class InventoryController {
 
         System.out.println("-------------컨트롤러 3-1-2 -------------");
         List<StockDTO> stockList = null;
-        if (stock != null) {
-            stockList = inventoryService.historySearch(stock);
-            System.out.println("stockList = " + stockList);
+        stockList = inventoryService.historySearch(stock);
+        System.out.println("stockList = " + stockList);
 
-            model.addAttribute("stockList", stockList);
-            System.out.println("-------------컨트롤러 3-1-2 out -------------");
-        } else {
-            model.addAttribute("stockList", Collections.emptyList());
-        }
+        model.addAttribute("stockList", stockList);
+        System.out.println("-------------컨트롤러 3-1-2 out -------------");
         return stockList;
     }
 

@@ -1,13 +1,13 @@
 package com.hielectro.welpair.mypage.model.dto;
 
-import com.hielectro.welpair.sellproduct.model.dto.SellItemPageDTO;
-import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
-import com.hielectro.welpair.sellproduct.model.dto.SellProductDTO;
-import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
-import lombok.*;
-
 import java.util.Date;
 import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor

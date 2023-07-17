@@ -1,11 +1,10 @@
 package com.hielectro.welpair.inventory.model.service;
 
 
+import java.util.List;
+
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.inventory.model.dto.StockDTO;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 public interface InventoryService {
 

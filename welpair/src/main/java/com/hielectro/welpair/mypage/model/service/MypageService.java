@@ -1,13 +1,12 @@
 package com.hielectro.welpair.mypage.model.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.hielectro.welpair.board.model.dto.BoardDTO;
 import com.hielectro.welpair.member.model.dto.PointHistoryDTO;
 import com.hielectro.welpair.mypage.model.dto.AddressDTO;
-import com.hielectro.welpair.mypage.model.dto.WishlistDTO;
 import com.hielectro.welpair.mypage.model.dto.WishlistSellProductDTO;
-
-import java.util.List;
-import java.util.Map;
 
 public interface MypageService {
 

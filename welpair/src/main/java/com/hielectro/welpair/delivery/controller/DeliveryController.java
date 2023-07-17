@@ -1,21 +1,19 @@
 package com.hielectro.welpair.delivery.controller;
 
-import com.hielectro.welpair.common.Pagination;
-import com.hielectro.welpair.delivery.model.dto.DeliveryDTO;
-import com.hielectro.welpair.delivery.model.dto.DriverDTO;
-import com.hielectro.welpair.delivery.model.dto.NotDeliveryDTO;
-import com.hielectro.welpair.delivery.model.dto.OrderProductDTO;
-import com.hielectro.welpair.delivery.model.service.deliveryService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
+import com.hielectro.welpair.common.Pagination;
+import com.hielectro.welpair.delivery.model.dto.NotDeliveryDTO;
+import com.hielectro.welpair.delivery.model.dto.OrderProductDTO;
+import com.hielectro.welpair.delivery.model.service.deliveryService;
 
 @Controller
 @RequestMapping("/delivery")

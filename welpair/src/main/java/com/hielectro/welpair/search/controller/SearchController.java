@@ -1,19 +1,23 @@
 package com.hielectro.welpair.search.controller;
 
-import com.hielectro.welpair.common.Pagination;
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.hielectro.welpair.inventory.model.dto.CategoryDTO;
 import com.hielectro.welpair.inventory.model.dto.ProductDTO;
 import com.hielectro.welpair.search.model.dto.SearchDTO;
 import com.hielectro.welpair.search.model.service.SearchService;
 import com.hielectro.welpair.sellproduct.model.dto.SellPageDTO;
-import com.hielectro.welpair.sellproduct.model.dto.ThumbnailImageDTO;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.function.Supplier;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
